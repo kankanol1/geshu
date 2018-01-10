@@ -4,21 +4,18 @@ import styles from './IndexPage.less';
 
 import TopMenu from '../components/menus/TopMenu';
 import LeftSideMenu from '../components/menus/LeftSideMenu';
-import RouteWithSubRoutes from './RouteWithSubRoutes';
 
 import { Layout, Menu, Breadcrumb, Icon } from 'antd';
 
 const { SubMenu } = Menu;
 const { Header, Content, Sider } = Layout;
 
-function IndexPage({routes}) {  
+function IndexPage() {  
   return (
     <Layout style={{height:'100%'}}>
     <TopMenu/>
     <Layout style={{height: '100%'}}>
-    {routes.map((route, i) => (
-      <RouteWithSubRoutes key={i} {...route}/>
-    ))}
+      <LeftSideMenu/>
       <Layout style={{ padding: '0',  height: '100%' }}>
         <Breadcrumb style={{ margin: '16px' }}>
           <Breadcrumb.Item>Home</Breadcrumb.Item>
@@ -37,4 +34,4 @@ function IndexPage({routes}) {
 IndexPage.propTypes = {
 };
 
-export default connect((props) => props)(IndexPage);
+export default connect()(IndexPage);

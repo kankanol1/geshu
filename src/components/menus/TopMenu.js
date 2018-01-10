@@ -1,5 +1,6 @@
 import { Layout, Menu, Icon} from 'antd';
 import styles from './TopMenu.less'
+import Link from 'dva/router'
 
 const { Header} = Layout;
 

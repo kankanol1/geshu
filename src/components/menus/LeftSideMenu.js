@@ -19,8 +19,9 @@ const LeftSideMenu = ({dispatch, collapsed}) => {
         collapsible
         collapsed={collapsed}
         onCollapse={handleCollapse}
-        width={180} style={{ background: '#fff' }}>
+        width={180} style={{ background: '#fff', height: '100%' }}>
         <Menu
+          theme="dark"
           mode="inline"
           defaultSelectedKeys={['1']}
           defaultOpenKeys={['sub1']}
