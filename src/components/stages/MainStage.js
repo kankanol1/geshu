@@ -1,4 +1,0 @@
-
-const MainStage = () => {
-    return 
-}
