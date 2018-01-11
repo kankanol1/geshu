@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types';
-import { Layout, Menu, Icon } from 'antd';
+import { Layout, Menu, Icon, Breadcrumb } from 'antd';
 import { connect } from 'dva';
 
 const { SubMenu } = Menu;
-const { Sider } = Layout;
+const { Sider, Content } = Layout;
 
 const LeftSideMenu = ({dispatch, collapsed}) => {
 
@@ -14,6 +14,7 @@ const LeftSideMenu = ({dispatch, collapsed}) => {
     }
     
     return (
+    <Layout style={{height: '100%'}}>
         <Sider  
         collapsedWidth={80}
         collapsible
@@ -45,6 +46,18 @@ const LeftSideMenu = ({dispatch, collapsed}) => {
           </SubMenu>
         </Menu>
       </Sider>
+      
+      <Layout style={{ padding: '0',  height: '100%' }}>
+        <Breadcrumb style={{ margin: '16px' }}>
+          <Breadcrumb.Item>Home</Breadcrumb.Item>
+          <Breadcrumb.Item>List</Breadcrumb.Item>
+          <Breadcrumb.Item>App</Breadcrumb.Item>
+        </Breadcrumb>
+        <Content style={{ background: '#fff', padding: 24, margin: 0, minHeight: 280 }}>
+          Content
+        </Content>
+      </Layout>
+      </Layout>
     )
 }
 

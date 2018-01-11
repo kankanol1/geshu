@@ -1,6 +1,6 @@
 import { Layout, Menu, Icon} from 'antd';
 import styles from './TopMenu.less'
-import Link from 'dva/router'
+import {Link} from 'dva/router'
 
 const { Header} = Layout;
 
@@ -14,8 +14,8 @@ const TopMenu = () => {
             mode="horizontal"
             defaultSelectedKeys={['overview']}
             >
-            <Menu.Item key="overview"><Icon type="table" />数据概览</Menu.Item>
-            <Menu.Item key="workspace"><Icon type="codepen" />开发中心</Menu.Item>
+            <Menu.Item key="overview"><Link to="/dataview"><Icon type="table" />数据概览</Link></Menu.Item>
+            <Menu.Item key="workspace"><Link to="/devcenter"><Icon type="codepen" />开发中心</Link></Menu.Item>
             <Menu.Item key="jobs"><Icon type="profile" />作业管理</Menu.Item>
             <Menu.Item key="users"><Icon type="contacts" />用户管理</Menu.Item>
             </Menu>
