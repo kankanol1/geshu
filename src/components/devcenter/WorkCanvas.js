@@ -27,7 +27,7 @@ const boxTarget = {
     canDrop: monitor.canDrop(),
     offset: monitor.getSourceClientOffset(),
 }))
-export default class WorkCanvas extends Component {
+class WorkCanvas extends Component {
 	static propTypes = {
 		connectDropTarget: PropTypes.func.isRequired,
 		isOver: PropTypes.bool.isRequired,
@@ -55,3 +55,5 @@ export default class WorkCanvas extends Component {
 		)
 	}
 }
+
+export default WorkCanvas;

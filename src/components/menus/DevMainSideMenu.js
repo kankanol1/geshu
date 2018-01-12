@@ -3,8 +3,8 @@ import React from 'react';
 import { Layout, Menu, Icon } from 'antd';
 import { connect } from 'dva';
 import SearchableTree from '../devcenter/SearchableTree';
-import DrageableTest from '../devcenter/DrageableTest';
-import WorkCanvas from '../devcenter/WorkCanvas';
+import DraggableTest from '../devcenter/DraggableTest';
+import DagCanvas from '../devcenter/DagCanvas';
 import { DragDropContext } from 'react-dnd'
 import HTML5Backend from 'react-dnd-html5-backend'
 
@@ -14,25 +14,20 @@ const { Sider, Content } = Layout;
 @DragDropContext(HTML5Backend)
 class DevMainSideMenu extends React.Component {
 
-  constructor({dispatch, collapsed}){
-    super();
-    this.dispatch = dispatch;
-    this.collapsed = collapsed;
-  }
-
     handleCollapse = () => {
-        this.dispatch({
+        this.props.dispatch({
             type: 'left_side_menu/collapse'
         })
     }
     
     render(){
+      console.log(this.props);
     return (
       <Layout style={{height: '100%'}}>
         <Sider  
         collapsedWidth={80}
         collapsible
-        collapsed={this.collapsed}
+        collapsed={this.props.collapsed}
         onCollapse={this.handleCollapse}
         width={180} style={{ background: '#fff', height: '100%' }}>
         <Menu
@@ -63,10 +58,10 @@ class DevMainSideMenu extends React.Component {
 
       <Layout style={{ padding: '0',  height: '100%' }} theme='light'>
         <Sider style={{background: 'transparent'}}>
-          <DrageableTest/>
+          
         </Sider>
-        <Content style={{ background: '#fff', padding: 24, margin: 0, minHeight: 280 }}>
-          <WorkCanvas/>
+        <Content style={{ background: '#fff', padding: 0, margin: 0, height: '100%', width: '100%'}}>
+          <DagCanvas/>
         </Content>
       </Layout>
       

@@ -13,7 +13,8 @@
     "react": "^16.2.0",
     "react-dnd": "^2.5.4",
     "react-dnd-html5-backend": "^2.5.4",
-    "react-dom": "^16.2.0"
+    "react-dom": "^16.2.0",
+    "react-draggable": "^3.0.4"
   },
   "devDependencies": {
     "babel-plugin-dva-hmr": "^0.3.2",
