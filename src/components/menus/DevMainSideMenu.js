@@ -6,12 +6,12 @@ import SearchableTree from '../devcenter/SearchableTree';
 import DraggableTest from '../devcenter/DraggableTest';
 import DagCanvas from '../devcenter/DagCanvas';
 import { DragDropContext } from 'react-dnd'
-import HTML5Backend from 'react-dnd-html5-backend'
+import MouseBackEnd from 'react-dnd-mouse-backend'
 
 const { SubMenu } = Menu;
 const { Sider, Content } = Layout;
 
-@DragDropContext(HTML5Backend)
+@DragDropContext(MouseBackEnd)
 class DevMainSideMenu extends React.Component {
 
     handleCollapse = () => {

@@ -1,6 +1,7 @@
 import React from 'react';
 import {DragSource} from 'react-dnd';
 import {PropTypes} from 'prop-types';
+import DragLayer from './DragPreview';
 
 const styles = {
     fill:'red', stroke:'black', strokeWidth:1, opacity:0.5, cursor: 'move'
@@ -9,13 +10,14 @@ const styles = {
 const BoxSource = {
 	beginDrag(props) {
         const{x, y} = props
+        console.log("begin drag", props);
 		return {x, y}
 	},
 }
 
 @DragSource('dag', BoxSource, (connect, monitor) => ({
-	connectDragSource: connect.dragSource(),
-	connectDragPreview: connect.dragPreview(),
+    connectDragSource: connect.dragSource(),
+    connectDragPreview: connect.dragPreview(),
 	isDragging: monitor.isDragging(),
 }))
 class DagNode extends React.Component{
@@ -28,10 +30,10 @@ class DagNode extends React.Component{
     }
 
     render(){
-        const {isDragging, connectDragSource} = this.props
+        const {isDragging, connectDragSource, connectDragPreview} = this.props
         const opacity = isDragging ? 0.4 : 1
         console.log("isDragging", isDragging)
-        return connectDragSource( <rect x={this.props.x} y={this.props.y} rx="10" ry="10" width="100" height="40" 
+        return connectDragSource(<rect x={this.props.x} y={this.props.y} rx="10" ry="10" width="100" height="40" 
                 style={{...styles, opacity}} />
             )
     }
