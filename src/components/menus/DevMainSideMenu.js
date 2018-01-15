@@ -24,7 +24,6 @@ class DevMainSideMenu extends React.Component {
     }
     
     render(){
-      console.log(this.props);
       let container = <ContainerCanvas/>;
     return (
       <Layout style={{height: '100%'}}>

@@ -3,6 +3,7 @@ import { connect } from 'dva';
 import DraggableNode from './DraggableNode';
 import Draggable from 'react-draggable';
 import DagComponent from './DagComponent';
+import SvgComponent from './SvgComponent';
 
 const styles = {
     fill:'#722ed1', stroke:'#22075e', strokeWidth:1, opacity:1, cursor: 'move'
@@ -16,12 +17,34 @@ class ContainerCanvas extends React.Component{
     
 
     render(){
+
         return (<div style={{width: '100%', height: '100%'}} className="dev-canvas">
         <svg style={{background: '#fafafa', height: '100%', width: '100%'}}>
         
         <DagComponent onDrag={this.handleDrag} onDragStop={this.handleDragStop}/>
 
-        <rect x={100} y={100} rx="10" ry="10" width="100" height="40" 
+        {this.props.components.map((component, i) => 
+                <SvgComponent model={component} 
+                        dragging={this.props.dragging}
+                        draggingSource = {this.props.draggingSource}
+                        draggingTarget = {this.props.draggingTarget}
+                        draggingComponent = {this.props.draggingComponent}
+                        draggingPoint = {this.props.draggingPoint}
+                        dispatch = {this.props.dispatch}
+                        components = {this.props.components}
+                        key = {i}
+                         />)}
+
+
+
+
+        
+        </svg></div>
+        )
+    }
+}
+/**
+ * <rect x={100} y={100} rx="10" ry="10" width="100" height="40" 
                 style={{...styles}} />
         
         <circle cx="200" cy="120" r="4" stroke="#22075e" strokeWidth="1" fill="#b37feb" />
@@ -51,9 +74,5 @@ class ContainerCanvas extends React.Component{
         <polyline points="400,320 410,320 410,390 290,390 290,410 300,410"
   style={{fill:'none',stroke:'#00474f',strokeWidth:1}} />
 
-        </svg></div>
-        )
-    }
-}
-
+ */
 export default connect(({container_canvas}) => container_canvas) (ContainerCanvas);
