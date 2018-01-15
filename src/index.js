@@ -15,6 +15,7 @@ console.log(app._store)
 // 3. Model
 // app.model(require('./models/example').default);
 app.model(require('./models/menus/leftsidemenu').default);
+app.model(require('./models/container_canvas').default);
 
 // 4. Router
 app.router(require('./router').default);

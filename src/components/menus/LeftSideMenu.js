@@ -32,7 +32,7 @@ const LeftSideMenu = ({dispatch, collapsed}) => {
             <Icon type="pie-chart" />
             <span>数据总览</span>
         </Menu.Item>
-          <SubMenu key="sub1" title={<span><Icon type="file" /><span>共有数据库</span></span>}>
+          <SubMenu key="sub1" title={<span><Icon type="file" /><span>共享数据库</span></span>}>
             <Menu.Item key="1">图数据库</Menu.Item>
             <Menu.Item key="2">基础数据库</Menu.Item>
           </SubMenu>

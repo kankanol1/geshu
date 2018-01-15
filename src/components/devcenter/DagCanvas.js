@@ -2,6 +2,7 @@ import React from 'react';
 import DagNode from './DagNode';
 import { DropTarget } from 'react-dnd'
 import PropTypes from 'prop-types'
+import DragPreview from './DragPreview';
 
 const boxTarget = {
 	drop(props, monitor, component) {
@@ -47,6 +48,7 @@ class DagCanvas extends React.Component{
         return connectDropTarget(<div style={{width: '100%', height: '100%'}}>
             <svg style={{background: "#888", height: '100%', width: '100%'}}>
             <DagNode x={this.state.x} y = {this.state.y} />
+            <DragPreview/>
             </svg>
         </div>)
     }
