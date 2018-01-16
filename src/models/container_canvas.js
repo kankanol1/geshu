@@ -1,34 +1,6 @@
 import key from 'keymaster'
 import {message} from 'antd'
-
-const calculatePointCenter = (x, y, width, height, xIndex, yIndex) => {
-    let p_x = 0, p_y = 0;
-    switch (xIndex) {
-        case 0:
-            /*top*/
-            p_x = x + yIndex * width
-            p_y = y
-            break
-        case 1: 
-            /*right*/
-            p_x = x + width
-            p_y = y +height * yIndex
-            break;
-        case 2:
-            /**bottom */
-            p_x = x + height * yIndex
-            p_y = y
-            break;
-        case 3:
-            /**left */
-            p_x = x
-            p_y = y + height * yIndex
-            break;
-        default:
-            break;
-    }
-    return {p_x, p_y}
-}
+import {calculatePointCenter} from '../utils/PositionCalculation'
 
 export default {
     namespace: 'container_canvas',
@@ -127,11 +99,79 @@ export default {
         scaleCenter: {
             x: 0,
             y: 0,
+        },
+        runtime: {
+            dragging: false,
+            startX: 0,
+            startY: 0,
+            stopX: 0,
+            stopY: 0,
         }
     },
 
     reducers: {
+        dragCanvas(state, {startX, startY, currentX, currentY}) {
+            console.log("stratX, startY", startX, startY, currentX, currentY)
+            if (! state.runtime.dragging) {
+                return Object.assign({}, {...state, ...{runtime: {
+                    dragging: true,
+                    startX: startX,
+                    startY: startY,
+                    stopX: currentX + startX,
+                    stopY: currentY + startY
+                }}} )
+            } else {
+                return Object.assign({}, {...state, ...{runtime: {
+                    ...state.runtime,
+                    stopX: currentX,
+                    stopY: currentY
+                }}} )
+            }
+        }
+        ,
 
+        canvasDragStop(state) {
+            // calculate selection area.
+            const{startX, startY, stopX, stopY} = state.runtime;
+            const {xMin, xMax} = startX > stopX ? {xMin: stopX, xMax:startX} : {xMin: startX, xMax: stopX}
+            const {yMin, yMax} = startY > stopY ? {yMin: stopY, yMax: startY} : {yMin: startY, yMax: stopY}
+            // first filter components in range.
+            let selectedComponents = state.components.filter(
+                component => {
+                    return component.x > xMin && component.y > yMin && 
+                        component.width + component.x < xMax && 
+                        component.height + component.y < yMax
+                }
+            )
+            //TODO fix. this.
+            let containedComponents = selectedComponents.map( c => c.id)
+            
+            let newSelection = []
+            selectedComponents.forEach(
+                component => {
+                    component.connect_to.forEach(
+                        line => {
+                            if (containedComponents.includes(line.component)) {
+                                // add this line.
+                                newSelection.push({type: 'line', from: line.output, to: line.input, source: component.id, target: line.component})
+                            }
+                        }
+                    )
+                    // add this component.
+                    newSelection.push({type:'component', id: component.id})
+                }
+            )
+            console.log('newSelection', newSelection)
+            return Object.assign({}, {...state, ...{runtime: {
+                    dragging:false,
+                    startX: 0,
+                    startY: 0,
+                    stopX: 0,
+                    stopY: 0
+                }, selection: newSelection
+                }})
+        }
+        ,
         deleteCurrentSelection(state) {
             let selection = state.selection
             console.log("delete", selection)
@@ -147,7 +187,7 @@ export default {
                                 // filter in connect_to
                                 let newConnectTo = component.connect_to.map(
                                     item => {
-                                        if (item.output === select.from && item.input === select.to) {
+                                        if (item.output === select.from && item.input === select.to && select.target === item.component) {
                                             return null
                                         } else return item
                                     }
@@ -157,7 +197,7 @@ export default {
                                 // filter in connected_from
                                 let newConnectedFrom = component.connected_from.map(
                                     item => {
-                                        if (item.output === select.from && item.input === select.to) {
+                                        if (item.output === select.from && item.input === select.to && select.source === item.component) {
                                             return null
                                         } else return item
                                     }
@@ -203,14 +243,6 @@ export default {
                 else return component;
             })
             return Object.assign({}, {...state, ...{components: nr}})
-        },
-
-        removeLine(state, from_id, from_point, to_id, to_point){
-            
-        },
-
-        deleteComponent(state, id){
-
         },
 
         draggingLine(state, {componentId, pointId, draggingSource, draggingTarget, draggingType}){

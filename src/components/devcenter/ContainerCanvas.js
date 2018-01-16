@@ -1,41 +1,58 @@
 import React from 'react';
 import ReactDOM from 'react-dom'
 import { connect } from 'dva';
-import { DropTarget } from 'react-dnd'
 import DagComponent from './DagComponent';
 import SvgComponent from './SvgComponent';
+import { DraggableCore } from 'react-draggable';
 
 const styles = {
     fill:'#722ed1', stroke:'#22075e', strokeWidth:1, opacity:1, cursor: 'move'
 }
 
-const boxTarget = {
-	drop(props, monitor, component) {
-		const item = monitor.getItem()
-                const delta = monitor.getClientOffset()
-                const origin = monitor.getSourceClientOffset()
-                const d = monitor.getDifferenceFromInitialOffset()
-                console.log('item.x', item.x, item.y);
-                console.log('after', delta);
-                console.log('origin', origin)
-                console.log('d', d)
-                const left = Math.round(d.x + item.x)
-                const top = Math.round(d.y + item.y)
-		// component.moveBox(left, top)
-	},
+
+const maskStyles = {
+        fill:'#fff', stroke:'#22075e', strokeWidth:1, opacity:0.3,
 }
 
 class ContainerCanvas extends React.Component{
 
-        handleClick(e){
-                console.log('click on svg')
+        constructor(props) {
+                super(props)
+                this.handleDrag = this.handleDrag.bind(this)
+                this.handleDragStop = this.handleDragStop.bind(this)
         }
-    
+
+        handleDrag(e, draggableData) {
+                // update selection rect.
+                console.log('svg', e)
+                console.log('svg',draggableData)
+                console.log('props', this.props.runtime)
+                console.log('delta', draggableData.deltaX, draggableData.deltaY)
+                this.props.dispatch({
+                        type: 'container_canvas/dragCanvas',
+                        startX: e.offsetX,
+                        startY: e.offsetY,
+                        currentX: this.props.runtime.stopX + draggableData.deltaX,
+                        currentY: this.props.runtime.stopY + draggableData.deltaY,
+                })
+        }
+
+        handleDragStop() {
+                this.props.dispatch({
+                        type: 'container_canvas/canvasDragStop'
+                })
+        }
+
+        handleDragStart() {
+                console.log('svg drag start')
+        }
 
     render(){
+            const {dragging, startX, startY, stopX, stopY} = this.props.runtime;
         return (<div style={{width: '100%', height: '100%'}} className="dev-canvas">
-        <svg style={{background: '#fafafa', height: '100%', width: '100%'}} onClick={this.handleClick}>
-        
+        <DraggableCore onDrag={this.handleDrag} onStop={this.handleDragStop} onStart={this.handleDragStart}>
+        <svg style={{background: '#fafafa', height: '100%', width: '100%'}}>
+
         {this.props.components.map((component, i) => 
                 <SvgComponent model={component} 
                         dragging={this.props.dragging}
@@ -49,7 +66,15 @@ class ContainerCanvas extends React.Component{
                         mode = {this.props.mode}
                         selection = {this.props.selection}
                          />)}
-        </svg></div>
+        {
+                dragging ? 
+                        <rect x={startX < stopX ? startX : stopX} y = {startY < stopY? startY: stopY} 
+                                width={Math.abs(stopX - startX)} height={Math.abs(stopY - startY)} style={{...maskStyles}}/>
+                : null
+        }
+        </svg>
+        </DraggableCore>
+        </div>
         )
     }
 }

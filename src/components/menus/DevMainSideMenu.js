@@ -28,6 +28,7 @@ class DevMainSideMenu extends React.Component {
   constructor(props) {
     super(props)
     this.handleItemDragged = this.handleItemDragged.bind(this)
+    this.handleItemDragged2 = this.handleItemDragged2.bind(this)
   }
 
     handleCollapse = () => {
@@ -61,6 +62,56 @@ class DevMainSideMenu extends React.Component {
                     hint: 'b', // occurs when hover
                     x: 3,
                     y: 0.5,
+                }
+            ],
+            outputs: [
+                /*output circles */
+                {
+                    id:'o-1',
+                    label: 'a',
+                    hint: 'b', // occurs when hover
+                    x: 1,
+                    y: 0.5,
+                }
+            ],
+            connect_to: [],
+            connected_from: []
+        }
+        })
+      }
+    }
+
+    handleItemDragged2(dragTarget, dragClientTarget) {
+      const {x, y, width, height} = ReactDOM.findDOMNode(this.canvasRef).getBoundingClientRect()
+      console.log("dragTarget", dragClientTarget)
+      console.log("rect range", x, y, width, height)
+      if (dragClientTarget.x > x && dragClientTarget.y > y && 
+        dragClientTarget.x < width +x && dragClientTarget.y < height + y) {
+        console.log("yahaha" )
+        // add new component.
+        this.props.dispatch({
+          type: 'container_canvas/newComponent',
+          component: {
+            id:'generated-' + gen(),
+            x: dragClientTarget.x - x,
+            y: dragClientTarget.y - y,
+            width: 100,
+            height: 40,
+            inputs: [
+                /*input circles*/
+                {
+                    id:'i-1',
+                    label: 'a',
+                    hint: 'b', // occurs when hover
+                    x: 3,
+                    y: 0.3,
+                },
+                {
+                    id:'i-2',
+                    label: 'a',
+                    hint: 'b', // occurs when hover
+                    x: 3,
+                    y: 0.7,
                 }
             ],
             outputs: [
@@ -120,6 +171,10 @@ class DevMainSideMenu extends React.Component {
           <DraggableWithPreview onItemDragged={this.handleItemDragged} preview={<div style={{width:'100px', 
               background: '#999', height: '40px', cursor: 'move'}}>This is preview</div>}>
             <div style={{cursor: 'move'}}>Test</div>
+            </DraggableWithPreview>
+          <DraggableWithPreview onItemDragged={this.handleItemDragged2} preview={<div style={{width:'100px', 
+              background: '#999', height: '40px', cursor: 'move'}}>This is another preview</div>}>
+            <div style={{cursor: 'move'}}>Test Different shape</div>
             </DraggableWithPreview>
         </Sider>
         <Content style={{ background: '#fff', padding: 0, margin: 0, height: '100%', width: '100%'}}>

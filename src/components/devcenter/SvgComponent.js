@@ -44,7 +44,14 @@ class SvgComponent extends React.Component{
         })
     }
 
+    handleDragStart(e){
+        // stop propagation to parent.
+        e.stopPropagation()
+        console.log('child drag start')
+    }
+
     handleDrag(e, draggableData){
+        
         console.log(e)
         console.log(draggableData)
         switch (draggableData.node.tagName){
@@ -135,7 +142,7 @@ class SvgComponent extends React.Component{
         }
 
         return <React.Fragment>
-            <DraggableCore onDrag={this.handleDrag}>
+            <DraggableCore onDrag={this.handleDrag} onStart={this.handleDragStart}>
                 <rect x={x} y={y} rx='10' ry='10' width={width} height={height}
                     style={{...styles}} onClick={this.handleRectClick}/>
             </DraggableCore>
@@ -146,7 +153,7 @@ class SvgComponent extends React.Component{
                 this.props.model.inputs.map(
                     (point, i) => {
                         const {p_x, p_y} = calculatePointCenter(x, y, width, height, point.x, point.y)
-                        return <DraggableCore key={i} onDrag={this.handleDrag} onStop={this.handleDragStop}>
+                        return <DraggableCore key={i} onDrag={this.handleDrag} onStop={this.handleDragStop} onStart={this.handleDragStart}>
                             <circle cx={p_x} cy={p_y} r="4" 
                             stroke="#22075e" strokeWidth="1" fill="#b37feb" id={point.id} pointtype='input'/>
                         </DraggableCore>
@@ -159,7 +166,7 @@ class SvgComponent extends React.Component{
                     (point, i) => {
                         const {p_x, p_y} = calculatePointCenter(x, y, width, height, point.x, point.y)
                         outputPoints.push({p_x: p_x, p_y: p_y, id: point.id})
-                        return <DraggableCore key={i} onDrag={this.handleDrag} onStop={this.handleDragStop}>
+                        return <DraggableCore key={i} onDrag={this.handleDrag} onStop={this.handleDragStop} onStart={this.handleDragStart}>
                             <circle cx={p_x} cy={p_y} r="4" 
                             stroke="#22075e" strokeWidth="1" fill="#b37feb" id={point.id} pointtype='output'/>
                         </DraggableCore>
