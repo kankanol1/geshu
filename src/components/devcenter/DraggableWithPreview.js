@@ -28,6 +28,7 @@ class DraggableWithPreview extends React.Component {
     }
 
     handleStop(e, draggableData) {
+        this.props.onItemDragged(this.state.dragging, {x: e.clientX, y: e.clientY})
         this.setState({
             draggingView: undefined,
             dragging:{

@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom'
 import { connect } from 'dva';
 import { DropTarget } from 'react-dnd'
 import DagComponent from './DagComponent';
@@ -24,24 +25,14 @@ const boxTarget = {
 	},
 }
 
-@DropTarget('dag', boxTarget, (connect, monitor) => ({
-	connectDropTarget: connect.dropTarget(),
-	isOver: monitor.isOver(),
-    canDrop: monitor.canDrop()
-}))
 class ContainerCanvas extends React.Component{
-
-        componentDidMount(){
-                // upate state.
-        }
     
 
     render(){
-        const {connectDropTarget} = this.props
-        return connectDropTarget(<div style={{width: '100%', height: '100%'}} className="dev-canvas">
+        return (<div style={{width: '100%', height: '100%'}} className="dev-canvas">
         <svg style={{background: '#fafafa', height: '100%', width: '100%'}}>
         
-        <DagComponent onDrag={this.handleDrag} onDragStop={this.handleDragStop}/>
+        <DagComponent/>
 
         {this.props.components.map((component, i) => 
                 <SvgComponent model={component} 

@@ -108,19 +108,17 @@ export default {
         },
         /* should be input or output. */
         draggingType: null,
-        display: {
-            // 
-            workarea: {
-                xMin: 1,
-                xMax: 1,
-                yMin: 1,
-                yMax: 1
-            }
-            
-        }
     },
 
     reducers: {
+
+        newComponent(state, {component}) {
+            console.log('new component', component) 
+            let components = Object.assign([], state.components)
+            components.push(component)
+            return Object.assign({}, {...state, ...{components: components}})
+        },
+
         moveComponent(state, {id, x, y}){
             console.log('id', id)
             console.log('move to ', x, y)
@@ -207,8 +205,20 @@ export default {
                                     return component
                                 }
                             } else {
+                                // dragging type = input.
                                 // the other way round.
-                                return component
+                                // add connect_from to draggingSource.
+                                if (component.id === state.draggingComponent) {
+                                    let connected_from = Object.assign([], component.connected_from)
+                                    connected_from.push({component: candidate.componentId, output: candidate.pointId, input: state.draggingPoint})
+                                    return Object.assign({}, {...component, ...{connected_from: connected_from}})
+                                } else if (component.id === candidate.componentId) {
+                                    let connect_to = Object.assign([], component.connect_to)
+                                    connect_to.push({component: state.draggingComponent, input: state.draggingPoint, output: candidate.pointId})
+                                    return Object.assign({}, {...component, ...{connect_to: connect_to}} )
+                                } else {
+                                    return component
+                                }
                             }
                         }
                     )

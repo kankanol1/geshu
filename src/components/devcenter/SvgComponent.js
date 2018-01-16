@@ -13,7 +13,6 @@ class SvgComponent extends React.Component{
         this.handleDrag = this.handleDrag.bind(this)
         this.handleDragStop = this.handleDragStop.bind(this)
     }
-
     
     handleDragStop(e, draggableData) {
         this.props.dispatch({

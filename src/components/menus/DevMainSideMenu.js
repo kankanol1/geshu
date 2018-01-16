@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import ReactDOM from 'react-dom'
 import { Layout, Menu, Icon } from 'antd';
 import { connect } from 'dva';
 import SearchableTree from '../devcenter/SearchableTree';
@@ -15,19 +16,73 @@ import ComponentItem from '../devcenter/ComponentItem';
 const { SubMenu } = Menu;
 const { Sider, Content } = Layout;
 
+let i =0;
+
+function gen() {
+  return i++;
+}
+
 @DragDropContext(HTML5Backend)
 class DevMainSideMenu extends React.Component {
+
+  constructor(props) {
+    super(props)
+    this.handleItemDragged = this.handleItemDragged.bind(this)
+  }
 
     handleCollapse = () => {
         this.props.dispatch({
             type: 'left_side_menu/collapse'
         })
     }
+
+
+    handleItemDragged(dragTarget, dragClientTarget) {
+      const {x, y, width, height} = ReactDOM.findDOMNode(this.canvasRef).getBoundingClientRect()
+      console.log("dragTarget", dragClientTarget)
+      console.log("rect range", x, y, width, height)
+      if (dragClientTarget.x > x && dragClientTarget.y > y && 
+        dragClientTarget.x < width +x && dragClientTarget.y < height + y) {
+        console.log("yahaha" )
+        // add new component.
+        this.props.dispatch({
+          type: 'container_canvas/newComponent',
+          component: {
+            id:'generated-' + gen(),
+            x: dragClientTarget.x - x,
+            y: dragClientTarget.y - y,
+            width: 100,
+            height: 40,
+            inputs: [
+                /*input circles*/
+                {
+                    id:'i-1',
+                    label: 'a',
+                    hint: 'b', // occurs when hover
+                    x: 3,
+                    y: 0.5,
+                }
+            ],
+            outputs: [
+                /*output circles */
+                {
+                    id:'o-1',
+                    label: 'a',
+                    hint: 'b', // occurs when hover
+                    x: 1,
+                    y: 0.5,
+                }
+            ],
+            connect_to: [],
+            connected_from: []
+        }
+        })
+      }
+    }
     
     render(){
-      let container = <ContainerCanvas/>;
     return (
-      <Layout style={{height: '100%'}}>
+      <Layout style={{height: '100%'}} >
         <Sider  
         collapsedWidth={80}
         collapsible
@@ -62,12 +117,12 @@ class DevMainSideMenu extends React.Component {
 
       <Layout style={{ padding: '0',  height: '100%' }} theme='light'>
         <Sider style={{background: 'transparent'}}>
-          <DraggableWithPreview>
+          <DraggableWithPreview onItemDragged={this.handleItemDragged}>
             <div>Test</div>
             </DraggableWithPreview>
         </Sider>
         <Content style={{ background: '#fff', padding: 0, margin: 0, height: '100%', width: '100%'}}>
-          {container}
+          <ContainerCanvas ref={e=> {this.canvasRef = e; console.log(this.canvasRef)}}/>
         </Content>
       </Layout>
       
