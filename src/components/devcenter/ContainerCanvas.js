@@ -4,6 +4,7 @@ import { connect } from 'dva';
 import DagComponent from './DagComponent';
 import SvgComponent from './SvgComponent';
 import { DraggableCore } from 'react-draggable';
+import key from 'keymaster'
 
 const styles = {
     fill:'#722ed1', stroke:'#22075e', strokeWidth:1, opacity:1, cursor: 'move'
@@ -20,6 +21,7 @@ class ContainerCanvas extends React.Component{
                 super(props)
                 this.handleDrag = this.handleDrag.bind(this)
                 this.handleDragStop = this.handleDragStop.bind(this)
+                this.handleDragStart = this.handleDragStart.bind(this)
         }
 
         handleDrag(e, draggableData) {
@@ -44,7 +46,11 @@ class ContainerCanvas extends React.Component{
         }
 
         handleDragStart() {
-                console.log('svg drag start')
+                console.log('svg drag start', key.isPressed('space'))
+                this.props.dispatch({
+                        type: 'container_canvas/modeChange',
+                        isMoveMode: key.isPressed('space')
+                })
         }
 
     render(){

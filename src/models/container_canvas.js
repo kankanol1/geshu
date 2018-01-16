@@ -110,22 +110,51 @@ export default {
     },
 
     reducers: {
+        modeChange(state, {isMoveMode}) {
+            return Object.assign({}, {...state, ...{mode: isMoveMode ? 'move': 'select'}})
+        }
+        ,
+        
         dragCanvas(state, {startX, startY, currentX, currentY}) {
             console.log("stratX, startY", startX, startY, currentX, currentY)
-            if (! state.runtime.dragging) {
-                return Object.assign({}, {...state, ...{runtime: {
-                    dragging: true,
-                    startX: startX,
-                    startY: startY,
-                    stopX: currentX + startX,
-                    stopY: currentY + startY
-                }}} )
-            } else {
-                return Object.assign({}, {...state, ...{runtime: {
-                    ...state.runtime,
-                    stopX: currentX,
-                    stopY: currentY
-                }}} )
+            switch(state.mode) {
+                case 'move':
+                console.log('move offset')
+                if (!state.runtime.dragging) {
+                    return Object.assign({}, {...state, ...{runtime: {
+                        dragging: false,
+                        startX: startX,
+                        startY: startY,
+                        stopX: currentX + startX,
+                        stopY: currentY + startY
+                    }}} )
+                } else {
+                    return Object.assign({}, {...state, ...{runtime: {
+                        ...state.runtime,
+                        stopX: currentX,
+                        stopY: currentY
+                    }}} )
+                }
+                return state;
+                break;
+                case 'select':
+                default:
+                if (!state.runtime.dragging) {
+                    return Object.assign({}, {...state, ...{runtime: {
+                        dragging: true,
+                        startX: startX,
+                        startY: startY,
+                        stopX: currentX + startX,
+                        stopY: currentY + startY
+                    }}} )
+                } else {
+                    return Object.assign({}, {...state, ...{runtime: {
+                        ...state.runtime,
+                        stopX: currentX,
+                        stopY: currentY
+                    }}} )
+                }
+                break;
             }
         }
         ,
@@ -348,10 +377,6 @@ export default {
                 return dispatch( {
                 type: 'deleteCurrentSelection',
             } )})
-            key('q', () => {
-                console.log('q')
-            })
-            key('a', function(){ console.log('a'); alert('you pressed a!') });
         }
     }
 }
