@@ -34,8 +34,8 @@ class ContainerCanvas extends React.Component{
                         type: 'container_canvas/dragCanvas',
                         startX: e.offsetX,
                         startY: e.offsetY,
-                        currentX: this.props.runtime.stopX + draggableData.deltaX,
-                        currentY: this.props.runtime.stopY + draggableData.deltaY,
+                        currentX: draggableData.deltaX,
+                        currentY: draggableData.deltaY,
                 })
         }
 
@@ -56,6 +56,7 @@ class ContainerCanvas extends React.Component{
     render(){
             const {dragging, startX, startY, stopX, stopY} = this.props.runtime;
         return (<div style={{width: '100%', height: '100%'}} className="dev-canvas">
+        <div>offset: ({this.props.offset.x}, {this.props.offset.y})</div>
         <DraggableCore onDrag={this.handleDrag} onStop={this.handleDragStop} onStart={this.handleDragStart}>
         <svg style={{background: '#fafafa', height: '100%', width: '100%'}}>
 
@@ -71,6 +72,7 @@ class ContainerCanvas extends React.Component{
                         key = {i}
                         mode = {this.props.mode}
                         selection = {this.props.selection}
+                        offset = {this.props.offset}
                          />)}
         {
                 dragging ? 

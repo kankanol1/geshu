@@ -127,13 +127,20 @@ export default {
                         startY: startY,
                         stopX: currentX + startX,
                         stopY: currentY + startY
+                    },
+                    offset: {
+                        x: state.offset.x + currentX,
+                        y: state.offset.y + currentY
                     }}} )
                 } else {
                     return Object.assign({}, {...state, ...{runtime: {
                         ...state.runtime,
-                        stopX: currentX,
-                        stopY: currentY
-                    }}} )
+                        stopX: currentX + state.runtime.stopX,
+                        stopY: currentY + state.runtime.stopY,
+                    }, offset: {
+                        x: state.offset.x + currentX,
+                        y: state.offset.y + currentY,
+                    }} } )
                 }
                 return state;
                 break;
@@ -150,8 +157,8 @@ export default {
                 } else {
                     return Object.assign({}, {...state, ...{runtime: {
                         ...state.runtime,
-                        stopX: currentX,
-                        stopY: currentY
+                        stopX: currentX + state.runtime.stopX,
+                        stopY: currentY + state.runtime.stopY,
                     }}} )
                 }
                 break;
@@ -161,15 +168,16 @@ export default {
 
         canvasDragStop(state) {
             // calculate selection area.
+            const offset = state.offset
             const{startX, startY, stopX, stopY} = state.runtime;
             const {xMin, xMax} = startX > stopX ? {xMin: stopX, xMax:startX} : {xMin: startX, xMax: stopX}
             const {yMin, yMax} = startY > stopY ? {yMin: stopY, yMax: startY} : {yMin: startY, yMax: stopY}
             // first filter components in range.
             let selectedComponents = state.components.filter(
                 component => {
-                    return component.x > xMin && component.y > yMin && 
-                        component.width + component.x < xMax && 
-                        component.height + component.y < yMax
+                    return component.x + offset.x > xMin && component.y + offset.y > yMin && 
+                        component.width + component.x + offset.x < xMax  && 
+                        component.height + component.y + offset.y < yMax 
                 }
             )
             //TODO fix. this.
@@ -256,9 +264,10 @@ export default {
         },
 
         newComponent(state, {component}) {
+            const offset = state.offset;
             console.log('new component', component) 
             let components = Object.assign([], state.components)
-            components.push(component)
+            components.push({...component, ...{x: component.x - offset.x, y: component.y - offset.y}})
             return Object.assign({}, {...state, ...{components: components}})
         },
 
@@ -290,6 +299,7 @@ export default {
 
         endDrag(state) {
             const R = 5
+            const offset = state.offset
             console.log('end drag')
             // detect overlapping with other points.
             let overlapped = []
@@ -297,13 +307,13 @@ export default {
                 const {x, y, width, height} = component
                 component.inputs.forEach(input => {
                     const {p_x, p_y} = calculatePointCenter(x, y, width, height, input.x, input.y)
-                    if (Math.abs(p_x - state.draggingTarget.x) <= R && Math.abs(p_y - state.draggingTarget.y) <=R ) {
+                    if (Math.abs(p_x + offset.x - state.draggingTarget.x) <= R && Math.abs(p_y + offset.y - state.draggingTarget.y) <=R ) {
                         overlapped.push({componentId: component.id, pointId: input.id, type: 'input'})
                     }
                 })
                 component.outputs.forEach(output => {
                     const {p_x, p_y} = calculatePointCenter(x, y, width, height, output.x, output.y)
-                    if (Math.abs(p_x - state.draggingTarget.x) <= R && Math.abs(p_y - state.draggingTarget.y) <=R ) {
+                    if (Math.abs(p_x + offset.x - state.draggingTarget.x) <= R && Math.abs(p_y + offset.y - state.draggingTarget.y) <=R ) {
                         overlapped.push({componentId: component.id, pointId: output.id, type: 'output'})
                     }
                 })
