@@ -44,10 +44,9 @@ class DraggableWithPreview extends React.Component {
         let child = React.Children.only(this.props.children)
         let preview = null
         if (this.state.draggingView !== undefined) {
-            let translate = `translate(${this.state.dragging.x}px,${this.state.dragging.y}px)`;;
-            console.log("",{style: {...child.props.style, ...{transform: translate} }});
+            
             // preview = React.cloneElement(child, {style: {...child.props.style, ...{transform: translate} }})
-            preview = React.cloneElement(child, {style: {...child.props.style, ...{position:'absolute', 
+            preview = React.cloneElement(this.props.preview, {style: {...this.props.preview.props.style, ...{position:'absolute', 
             left:this.state.dragging.x+'px', top: this.state.dragging.y+'px'} }})
         }
         return (

@@ -117,8 +117,9 @@ class DevMainSideMenu extends React.Component {
 
       <Layout style={{ padding: '0',  height: '100%' }} theme='light'>
         <Sider style={{background: 'transparent'}}>
-          <DraggableWithPreview onItemDragged={this.handleItemDragged}>
-            <div>Test</div>
+          <DraggableWithPreview onItemDragged={this.handleItemDragged} preview={<div style={{width:'100px', 
+              background: '#999', height: '40px', cursor: 'move'}}>This is preview</div>}>
+            <div style={{cursor: 'move'}}>Test</div>
             </DraggableWithPreview>
         </Sider>
         <Content style={{ background: '#fff', padding: 0, margin: 0, height: '100%', width: '100%'}}>
