@@ -1,3 +1,6 @@
+import key from 'keymaster'
+import {message} from 'antd'
+
 const calculatePointCenter = (x, y, width, height, xIndex, yIndex) => {
     let p_x = 0, p_y = 0;
     switch (xIndex) {
@@ -57,12 +60,12 @@ export default {
                     }
                 ],
                 connect_to: [
-                    // {
-                    // /*connects to */
-                    // component: 'preprocess-1',
-                    // input: 'i-1',
-                    // output: 'o-1'
-                    // }
+                    {
+                    /*connects to */
+                    component: 'preprocess-1',
+                    input: 'i-1',
+                    output: 'o-1',
+                    }
                 ],
                 connected_from: []
             }, {
@@ -108,9 +111,80 @@ export default {
         },
         /* should be input or output. */
         draggingType: null,
+        /**mode: select; move; */
+        mode: 'select',
+        selection: [
+            // store selection. 
+            // e.g. {type: 'component', id: 'component-id'} => select single component.
+            {type: 'line', from: 'o-1', to: 'i-1', source: 'input', target: 'preprocess-1',}
+            // {type: 'component', id: 'input'}
+        ],
+        offset: {
+            x: 0,
+            y: 0
+        },
+        scale: 1.0,
+        scaleCenter: {
+            x: 0,
+            y: 0,
+        }
     },
 
     reducers: {
+
+        deleteCurrentSelection(state) {
+            let selection = state.selection
+            console.log("delete", selection)
+            let originComponent = Object.assign([], state.components)
+            let newComponents = originComponent.map(
+                component => {
+                    let ret = component;
+                    selection.forEach(
+                        select => {
+                            if (select.type ==='component' && select.id === component.id) {
+                                ret = null
+                            } else if (select.type === 'line' && select.source === component.id) {
+                                // filter in connect_to
+                                let newConnectTo = component.connect_to.map(
+                                    item => {
+                                        if (item.output === select.from && item.input === select.to) {
+                                            return null
+                                        } else return item
+                                    }
+                                )
+                                ret = Object.assign({}, {...component, ...{connect_to: newConnectTo.filter( a => a != null)}})
+                            } else if (select.type === 'line' && select.target === component.id) {
+                                // filter in connected_from
+                                let newConnectedFrom = component.connected_from.map(
+                                    item => {
+                                        if (item.output === select.from && item.input === select.to) {
+                                            return null
+                                        } else return item
+                                    }
+                                )
+                                ret = Object.assign({}, {...component, ...{connected_from: newConnectedFrom.filter( a => a != null)}})
+                            }
+                        }
+                    )
+                    return ret
+                }
+            )
+            let newState = Object.assign({}, {... state, ...{components: newComponents.filter( a => a != null), selection: []}})
+            console.log('after deletion',newState)
+            return newState;
+        },
+
+        updateComponentSelection(state, {id}) {
+            console.log('update component selection', id)
+            return Object.assign({}, {...state, ...{selection: [{type: 'component', id: id}]}})
+        },
+
+        updateLineSelection(state, params) {
+            console.log('update line selection', params)
+            let after= Object.assign({}, {...state, ...{selection: [{...params, type: 'line'}]}})
+            console.log(after)
+            return after
+        },
 
         newComponent(state, {component}) {
             console.log('new component', component) 
@@ -120,8 +194,6 @@ export default {
         },
 
         moveComponent(state, {id, x, y}){
-            console.log('id', id)
-            console.log('move to ', x, y)
             let newState = Object.assign({}, state)
             
             let nr = newState.components.map( (component) => {
@@ -130,13 +202,7 @@ export default {
                 }
                 else return component;
             })
-            console.log(newState)
-            console.log(Object.assign({}, {...state, ...{components: nr}}))
             return Object.assign({}, {...state, ...{components: nr}})
-        },
-        
-        addLine(state, from_id, from_point, to_id, to_point){
-            
         },
 
         removeLine(state, from_id, from_point, to_id, to_point){
@@ -228,9 +294,11 @@ export default {
                         console.log(n)
                         return n;
                 } else {
+                    message.info('Can not add line to the same type of point!');
                     console.log("Error! can not add line to the same type of point.")
                 }
             } else {
+                // message.info('Please drag the target on one of the target points.');
                 console.log("Error! no overlapping point, will not add new line.")
             }
 
@@ -238,5 +306,20 @@ export default {
                 draggingTarget: {x: null, y: null}, draggingSource: {x: null, y: null}}} )
         },
 
+    },
+
+    subscriptions: {
+        keyboardWatcher({dispatch}) {
+            console.log('ssss')
+            key('del, delete', () => {
+                console.log('delete')
+                return dispatch( {
+                type: 'deleteCurrentSelection',
+            } )})
+            key('q', () => {
+                console.log('q')
+            })
+            key('a', function(){ console.log('a'); alert('you pressed a!') });
+        }
     }
 }

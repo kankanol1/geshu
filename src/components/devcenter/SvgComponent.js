@@ -5,6 +5,9 @@ import {calculatePointCenter} from '../../utils/PositionCalculation'
 const styles = {
     fill:'#722ed1', stroke:'#22075e', strokeWidth:1, opacity:1, cursor: 'move'
 }
+const selectionStyles = {
+    fill:'#fff', stroke:'#22075e', strokeWidth:1, opacity:1, cursor: 'move'
+}
 
 class SvgComponent extends React.Component{
 
@@ -12,11 +15,32 @@ class SvgComponent extends React.Component{
         super(props)
         this.handleDrag = this.handleDrag.bind(this)
         this.handleDragStop = this.handleDragStop.bind(this)
+        this.handleRectClick = this.handleRectClick.bind(this)
     }
-    
+
     handleDragStop(e, draggableData) {
+        console.log(e)
+        console.log(draggableData)
+        console.log('end drag')
         this.props.dispatch({
             type: 'container_canvas/endDrag'
+        })
+    }
+
+    handleRectClick(e) {
+        // e.preventDefault()
+        console.log('cliecked', e)
+        this.props.dispatch({
+            type: 'container_canvas/updateComponentSelection',
+            id: this.props.model.id,
+        })
+    }
+
+    handleLineClick(e, params) {
+        console.log('line click', e)
+        this.props.dispatch({
+            type: 'container_canvas/updateLineSelection',
+            ...params
         })
     }
 
@@ -54,6 +78,7 @@ class SvgComponent extends React.Component{
                     y: this.props.model.y + draggableData.deltaY
                     
                 })
+                console.log("update component selection")
                 console.log('dispatch', this.props.model.x + draggableData.deltaX,
                     this.props.model.y + draggableData.deltaY)
                     
@@ -83,11 +108,38 @@ class SvgComponent extends React.Component{
                 draggingSource.y, draggingTarget.x, draggingTarget.y)}
                 style={{fill:'none',stroke:'#391085',strokeWidth:1}} />
         }
+
+        let rectSelectionView = null;
+        if (this.props.mode == 'select') {
+            // find selection.
+            this.props.selection.forEach(
+                select => {
+                    if (select.type === 'component' && select.id === this.props.model.id) {
+                        // render selection.
+                        const size=2;
+                        rectSelectionView = (
+                            <React.Fragment>
+                                <rect x={x-size} y={y-size} width={size *2} height={size*2} 
+                                    style={{...selectionStyles}}/>
+                                <rect x={x+width-size} y={y-size} width={size *2} height={size*2} 
+                                    style={{...selectionStyles}}/>
+                                <rect x={x-size} y={y+height-size} width={size *2} height={size*2} 
+                                style={{...selectionStyles}}/>
+                                <rect x={x+width-size} y={y+height-size} width={size *2} height={size*2} 
+                                style={{...selectionStyles}}/>
+                            </React.Fragment>
+                        )
+                    } 
+                }
+            )
+        }
+
         return <React.Fragment>
             <DraggableCore onDrag={this.handleDrag}>
                 <rect x={x} y={y} rx='10' ry='10' width={width} height={height}
-                    style={{...styles}} />
+                    style={{...styles}} onClick={this.handleRectClick}/>
             </DraggableCore>
+            {rectSelectionView}
             { draggingView }
             {
                 /* create input points. */
@@ -119,6 +171,8 @@ class SvgComponent extends React.Component{
                 this.props.model.connect_to.map(
                     (line, i) => {
                         let res = null;
+                        let lineSelectionView = null;
+                        let invisibleListener = null;
                         this.props.components.forEach(
                             (c,i) => {
                                 if (c.id === line.component) {
@@ -134,6 +188,37 @@ class SvgComponent extends React.Component{
                                                             res = <polyline key={i} points={this.calculateLineStr(p_x, 
                                                                 p_y, o_x, o_y)}
                                                                 style={{fill:'none',stroke:'#391085',strokeWidth:1}} />
+                                                            invisibleListener = <polyline key={'inv-'+i} points={this.calculateLineStr(p_x, 
+                                                                p_y, o_x, o_y)}
+                                                                style={{fill:'none',stroke:'#fff',strokeWidth:40, opacity:0}}
+                                                                onClick={e => this.handleLineClick(e, {
+                                                                    source: this.props.model.id,
+                                                                    target: c.id,
+                                                                    from: id,
+                                                                    to: input.id
+                                                                })} />
+                                                            if (this.props.mode === 'select') {
+                                                                // find selection.
+                                                                this.props.selection.forEach(
+                                                                    select => {
+                                                                        if (select.type === 'line' && 
+                                                                            select.source === this.props.model.id && select.from === id &&
+                                                                            select.target === c.id && select.to === input.id ) {
+                                                                            // render selection.
+                                                                            const size=6;
+                                                                            lineSelectionView = (
+                                                                                <React.Fragment>
+                                                                                    <rect x={p_x-size} y={p_y-size} width={size *2} height={size*2} 
+                                                                                        style={{...selectionStyles}}/>
+                                                                                        
+                                                                                    <rect x={o_x-size} y={o_y-size} width={size *2} height={size*2} 
+                                                                                        style={{...selectionStyles}}/>
+                                                                                </React.Fragment>
+                                                                            )
+                                                                        } 
+                                                                    }
+                                                                )
+                                                            }
                                                         }
                                                     }
                                                 )
@@ -144,7 +229,7 @@ class SvgComponent extends React.Component{
                             }
                         )
                         console.log(res)
-                        return res;
+                        return <React.Fragment key={i}>{res}{invisibleListener}{lineSelectionView}</React.Fragment>;
                     }
                 )
             }

@@ -26,14 +26,16 @@ const boxTarget = {
 }
 
 class ContainerCanvas extends React.Component{
+
+        handleClick(e){
+                console.log('click on svg')
+        }
     
 
     render(){
         return (<div style={{width: '100%', height: '100%'}} className="dev-canvas">
-        <svg style={{background: '#fafafa', height: '100%', width: '100%'}}>
+        <svg style={{background: '#fafafa', height: '100%', width: '100%'}} onClick={this.handleClick}>
         
-        <DagComponent/>
-
         {this.props.components.map((component, i) => 
                 <SvgComponent model={component} 
                         dragging={this.props.dragging}
@@ -44,6 +46,8 @@ class ContainerCanvas extends React.Component{
                         dispatch = {this.props.dispatch}
                         components = {this.props.components}
                         key = {i}
+                        mode = {this.props.mode}
+                        selection = {this.props.selection}
                          />)}
         </svg></div>
         )
