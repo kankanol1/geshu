@@ -108,6 +108,16 @@ export default {
         },
         /* should be input or output. */
         draggingType: null,
+        display: {
+            // 
+            workarea: {
+                xMin: 1,
+                xMax: 1,
+                yMin: 1,
+                yMax: 1
+            }
+            
+        }
     },
 
     reducers: {

@@ -35,7 +35,8 @@ class DraggableWithPreview extends React.Component {
                 y: 0
             }
         })
-        console.log(ReactDOM.findDOMNode(this.props.dragTarget));
+        console.log(e);
+        console.log(draggableData)
     }
 
     render() {

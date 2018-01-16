@@ -6,15 +6,16 @@ import SearchableTree from '../devcenter/SearchableTree';
 import DraggableTest from '../devcenter/DraggableTest';
 import DagCanvas from '../devcenter/DagCanvas';
 import { DragDropContext } from 'react-dnd'
-import MouseBackEnd from 'react-dnd-mouse-backend'
 import ContainerCanvas from '../devcenter/ContainerCanvas';
 import DraggableItem from '../devcenter/DraggableItem';
 import DraggableWithPreview from '../devcenter/DraggableWithPreview';
+import HTML5Backend from 'react-dnd-html5-backend'
+import ComponentItem from '../devcenter/ComponentItem';
 
 const { SubMenu } = Menu;
 const { Sider, Content } = Layout;
 
-@DragDropContext(MouseBackEnd)
+@DragDropContext(HTML5Backend)
 class DevMainSideMenu extends React.Component {
 
     handleCollapse = () => {
@@ -61,9 +62,9 @@ class DevMainSideMenu extends React.Component {
 
       <Layout style={{ padding: '0',  height: '100%' }} theme='light'>
         <Sider style={{background: 'transparent'}}>
-          <DraggableWithPreview dragTraget={container}>
-              <div>Hi, Drag me</div>
-          </DraggableWithPreview>
+          <DraggableWithPreview>
+            <div>Test</div>
+            </DraggableWithPreview>
         </Sider>
         <Content style={{ background: '#fff', padding: 0, margin: 0, height: '100%', width: '100%'}}>
           {container}
