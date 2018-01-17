@@ -56,7 +56,7 @@ class ContainerCanvas extends React.Component{
     render(){
             const {dragging, startX, startY, stopX, stopY} = this.props.runtime;
         return (<div style={{width: '100%', height: '100%'}} className="dev-canvas">
-        <div>offset: ({this.props.offset.x}, {this.props.offset.y})</div>
+        <div style={{position:'absolute'}}>offset: ({this.props.offset.x}, {this.props.offset.y})</div>
         <DraggableCore onDrag={this.handleDrag} onStop={this.handleDragStop} onStart={this.handleDragStart}>
         <svg style={{background: '#fafafa', height: '100%', width: '100%'}}>
 
