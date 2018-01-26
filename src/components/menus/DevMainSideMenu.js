@@ -12,6 +12,8 @@ import DraggableItem from '../devcenter/DraggableItem';
 import DraggableWithPreview from '../devcenter/DraggableWithPreview';
 import HTML5Backend from 'react-dnd-html5-backend'
 import ComponentItem from '../devcenter/ComponentItem';
+import WorkCanvas from '../../routes/WorkSpace/WorkCanvas/WorkCanvas';
+import WorkArea from '../../routes/WorkSpace/WorkArea';
 
 const { SubMenu } = Menu;
 const { Sider, Content } = Layout;
@@ -167,7 +169,15 @@ class DevMainSideMenu extends React.Component {
       </Sider>
 
       <Layout style={{ padding: '0',  height: '100%' }} theme='light'>
-        <Sider style={{background: 'transparent'}}>
+        <WorkArea/>
+      </Layout>
+      
+      </Layout>
+    )
+  }
+}
+
+{/* <Sider style={{background: 'transparent'}}>
           <DraggableWithPreview onItemDragged={this.handleItemDragged} preview={<div style={{width:'100px', 
               background: '#999', height: '40px', cursor: 'move'}}>This is preview</div>}>
             <div style={{cursor: 'move'}}>Test</div>
@@ -178,14 +188,10 @@ class DevMainSideMenu extends React.Component {
             </DraggableWithPreview>
         </Sider>
         <Content style={{ background: '#fff', padding: 0, margin: 0, height: '100%', width: '100%'}}>
-          <ContainerCanvas ref={e=> {this.canvasRef = e; console.log(this.canvasRef)}}/>
-        </Content>
-      </Layout>
-      
-      </Layout>
-    )
-  }
-}
+          <WorkCanvas/>
+        </Content> */}
+
+//<ContainerCanvas ref={e=> {this.canvasRef = e; console.log(this.canvasRef)}}/>
 
 DevMainSideMenu.propTypes = {
     collapsed: PropTypes.bool
