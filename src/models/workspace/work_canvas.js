@@ -223,7 +223,7 @@ export default {
                     if (select.type === 'component') {
                         componentSelectionSet.push(select.id);
                     } else if(select.type === 'line'){
-                        lineSelectionSet.push(select.source+'-'+select.from);
+                        lineSelectionSet.push(select.source+'-'+select.from+'-'+select.target+'-'+select.to);
                     }
                 }
             )
@@ -238,11 +238,11 @@ export default {
                         // not included, needs to check the lines.
                         let newConnectTo = component.connect_to.map(
                             item => {
-                                if (lineSelectionSet.includes(component.id+'-'+item.output)) {
+                                if (lineSelectionSet.includes(component.id+'-'+item.output+'-'+item.component+"-"+item.input)) {
                                     return null;
                                 } else if (componentSelectionSet.includes(item.component)) {
                                     return null;
-                                }
+                                } else return item;
                             }
                         )
                         return Object.assign({}, {...component, ...{connect_to: newConnectTo.filter( a => a != null)}});
@@ -269,16 +269,39 @@ export default {
             return updateCache(Object.assign({}, {...state, ...{components: components}}))
         },
 
-        moveComponent(state, {id, x, y}){
-            let newState = Object.assign({}, state)
-            
-            let nr = newState.components.map( (component) => {
-                if (component.id === id) {
-                    return Object.assign({}, {...component, ...{x: x, y: y}})
+        moveComponent(state, {id, deltaX, deltaY, originX, originY}){
+            // get selected components.
+            console.log('move', id, deltaX, deltaY, originX, originY);
+            let selectedComponents = []
+            state.selection.forEach(
+                select => {
+                    if (select.type === 'component') {
+                        selectedComponents.push(select.id);
+                    }
+                }
+            )
+            let selection = null;
+            let nr = state.components.map( (component) => {
+                if (selectedComponents.length === 0 &&component.id === id) {
+                    // also update the selection.
+                    selection = [{type: 'component', id: id}];
+                    return Object.assign({}, {...component, ...{
+                        x: originX + deltaX, y: originY + deltaY
+                    }})
+                } else if(selectedComponents.includes(component.id)){
+                    return Object.assign({}, {...component, ...{
+                        x: component.x + deltaX, y: component.y + deltaY
+                    }})
                 }
                 else return component;
             })
-            return updateCache(Object.assign({}, {...state, ...{components: nr}}))
+            console.log('after update: ', nr);
+
+            if (selection == null) {
+                return updateCache(Object.assign({}, {...state, ...{components: nr}}))
+            } else {
+                return updateCache(Object.assign({}, {...state, ...{components: nr, selection: selection}}))
+            }
         },
 
         draggingLine(state, {componentId, pointId, draggingSource, draggingTarget, draggingType}){
@@ -295,7 +318,7 @@ export default {
 
         endDrag(state) {
             // the round range of judgement.
-            const R = 5
+            const R = 10
             const offset = state.offset
             // detect overlapping with other points.
             let overlapped = []

@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import ReactDOM from 'react-dom'
-import { Layout, Menu, Icon } from 'antd';
+import { Layout, Menu, Icon, Tabs } from 'antd';
 import { connect } from 'dva';
 import SearchableTree from '../devcenter/SearchableTree';
 import DraggableTest from '../devcenter/DraggableTest';
@@ -16,7 +16,8 @@ import WorkCanvas from '../../routes/WorkSpace/WorkCanvas/WorkCanvas';
 import WorkArea from '../../routes/WorkSpace/WorkArea';
 
 const { SubMenu } = Menu;
-const { Sider, Content } = Layout;
+const { Sider, Content, Header } = Layout;
+const TabPane = Tabs.TabPane;
 
 let i =0;
 
@@ -169,7 +170,21 @@ class DevMainSideMenu extends React.Component {
       </Sider>
 
       <Layout style={{ padding: '0',  height: '100%' }} theme='light'>
+        <Header style={{padding:'0px',height:'47px', lineHeight:'47px', background:'#eee'}}>
+          <Menu
+          style={{padding:'0px', background:'transparent'}}
+              theme="light"
+              mode="horizontal"
+              defaultSelectedKeys={['overview']}
+              >
+              <Menu.Item key="overview"><Icon type="codepen" />设计器</Menu.Item>
+              <Menu.Item key="workspace"><Icon type="table" />数据视图</Menu.Item>
+              <Menu.Item key="jobs"><Icon type="profile" />日志查看</Menu.Item>
+            </Menu>
+        </Header>
+        <Layout style={{ padding: '0',  height: '100%' }} theme='light'>
         <WorkArea/>
+        </Layout>
       </Layout>
       
       </Layout>

@@ -4,6 +4,7 @@ import { connect } from 'dva';
 import { Layout, Menu, Icon } from 'antd';
 import SiderComponentList from './SiderComponentList';
 import WorkCanvas from './WorkCanvas/WorkCanvas';
+import ComponentSettings from './ComponentSettings';
 
 const { Sider, Content } = Layout;
 
@@ -133,6 +134,7 @@ class WorkArea extends React.PureComponent {
                 <Content style={{ background: '#fff', padding: 0, margin: 0, height: '100%', width: '100%'}}>
                     <WorkCanvas ref={e=> {this.canvasRef = e; console.log(this.canvasRef)}}/>
                 </Content>
+                <ComponentSettings/>
             </React.Fragment>
     }
 }
