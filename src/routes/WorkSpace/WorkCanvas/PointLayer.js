@@ -1,5 +1,6 @@
 import React from 'react';
 import {DraggableCore} from 'react-draggable';
+import { calculatePointPositionDict } from '../../../utils/PositionCalculation'
 
 
 const R = {normal: 8, large: 12};
@@ -70,7 +71,9 @@ class PointLayer extends React.PureComponent {
 
     render() {
         const points = this.props.model.points;
-        const pointDict = this.props.positionDict[this.props.model.id];
+        const pointDict = this.props.pointDict === undefined ? 
+            calculatePointPositionDict(this.props.model)
+            : this.props.positionDict[this.props.model.id];
 
         return <React.Fragment>
                 {

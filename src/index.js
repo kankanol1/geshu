@@ -17,6 +17,7 @@ console.log(app._store)
 app.model(require('./models/menus/leftsidemenu').default);
 app.model(require('./models/container_canvas').default);
 app.model(require('./models/workspace/work_canvas').default);
+app.model(require('./models/workspace/work_component_list').default);
 
 // 4. Router
 app.router(require('./router').default);

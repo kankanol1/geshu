@@ -71,6 +71,18 @@ const calculateLineStr = (srcX, srcY, desX, desY) => {
     return calculateLineStrStraightly(srcX, srcY, desX, desY);
 }
 
+const calculatePointPositionDict = (component) => {
+    let pointDict = {}
+    const {x, y, width, height} = component;
+    component.points.forEach(
+        (point) => {
+            const {p_x, p_y} = calculatePointCenter(x, y, width, height, point.x, point.y)
+            pointDict[point.id] = {x: p_x, y: p_y};
+        }
+    )
+    return pointDict;
+}
+
 const updateCache = (state) => {
     const componentDict = {} // store: componentid: {x, y}
         const componentPointPosition = {} // store: componentid: {pointid: {x, y}}
@@ -78,15 +90,8 @@ const updateCache = (state) => {
         (component) => {
             componentDict[component.id] = {x: component.x, y: component.y, 
                 height: component.height, width: component.width};
-            let pointDict = {}
-            const {x, y, width, height} = component;
-            component.points.forEach(
-                (point) => {
-                    const {p_x, p_y} = calculatePointCenter(x, y, width, height, point.x, point.y)
-                    pointDict[point.id] = {x: p_x, y: p_y};
-                }
-            )
-            componentPointPosition[component.id] = pointDict
+            
+            componentPointPosition[component.id] = calculatePointPositionDict(component)
             
         }
     )
@@ -98,4 +103,11 @@ const updateCache = (state) => {
     return a;
 }
 
-export {calculatePointCenter, calculateLineStr, updateCache}
+const fillDefaultSize = (component) => {
+    return Object.assign({}, {...component, ...{
+        x: 10, y: 0,
+        width: 120, height: 60
+    }})
+}
+
+export {calculatePointCenter, calculateLineStr, updateCache, calculatePointPositionDict, fillDefaultSize}
