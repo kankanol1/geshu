@@ -186,7 +186,7 @@ export default {
                         component.height + component.y + offset.y < yMax 
                 }
             )
-            //TODO fix. this.
+
             let containedComponents = selectedComponents.map( c => c.id)
             
             let newSelection = []
@@ -282,7 +282,7 @@ export default {
             )
             let selection = null;
             let nr = state.components.map( (component) => {
-                if (selectedComponents.length === 0 &&component.id === id) {
+                if (selectedComponents.length === 0 && component.id === id) {
                     // also update the selection.
                     selection = [{type: 'component', id: id}];
                     return Object.assign({}, {...component, ...{
@@ -292,8 +292,13 @@ export default {
                     return Object.assign({}, {...component, ...{
                         x: component.x + deltaX, y: component.y + deltaY
                     }})
-                }
-                else return component;
+                } else if (component.id === id){
+                    // change selection & move.
+                    selection = [{type: 'component', id: id}];
+                    return Object.assign({}, {...component, ...{
+                        x: originX + deltaX, y: originY + deltaY
+                    }})
+                } else return component;
             })
             console.log('after update: ', nr);
 
@@ -336,9 +341,12 @@ export default {
 
             if (overlapped.length !== 0) {
                 const candidate = overlapped[0]
-                if (candidate.connects.includes(state.draggingType)) {
+                if (candidate.componentId === state.draggingComponent) {
+                    message.info('暂不能将同一组件首位相连');
+                } else if (candidate.connects.includes(state.draggingType)) {
                     let newComponents = null;
                     if (candidate.metatype === 'input') {
+                        console.log('candidate input')
                         // add connect_to to the dragging point.
                         newComponents = state.components.map(
                             (component) => {
@@ -352,10 +360,11 @@ export default {
                             }
                         )
                     } else if (candidate.metatype === 'output'){
+                        console.log('candidate output')
                         // the other way round.
                         newComponents = state.components.map(
                             (component) => {
-                                if (component.id === candidate.componentId) {
+                                if (component.id === state.draggingComponent) {
                                     let connect_to = Object.assign([], component.connect_to)
                                     connect_to.push({component: candidate.componentId, input: candidate.pointId, output: state.draggingPoint})
                                     return Object.assign({}, {...component, ...{connect_to: connect_to}} )
@@ -369,7 +378,7 @@ export default {
                         draggingTarget: {x: null, y: null}, draggingSource: {x: null, y: null}}} )
                     return n;
                 } else {
-                    message.info('Can not add line to the same type of point!');
+                    message.info('无法连接具有相同类型的点');
                 }
             return Object.assign({}, {...state, ...{dragging: false, 
                 draggingTarget: {x: null, y: null}, draggingSource: {x: null, y: null}}} )

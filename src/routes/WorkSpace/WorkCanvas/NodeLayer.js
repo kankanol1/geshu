@@ -15,30 +15,30 @@ class NodeLayer extends React.PureComponent {
     constructor(props) {
         super(props)
         this.handleDrag = this.handleDrag.bind(this)
-        // this.handleDragStop = this.handleDragStop.bind(this)
-        this.handleRectClick = this.handleRectClick.bind(this)
-    }
-
-    handleRectClick(e) {
-        // e.preventDefault()
-        console.log('clicked', e)
-        // this.props.dispatch({
-        //     type: 'work_canvas/updateComponentSelection',
-        //     id: this.props.model.id,
-        // })
+        this.handleDragStop = this.handleDragStop.bind(this)
+        this.handleDragStart = this.handleDragStart.bind(this)
+        this.hasDrag = true;
     }
 
     handleDragStart(e){
         // stop propagation to parent.
         e.stopPropagation()
         console.log('child drag start')
+        this.hasDrag = false;
     }
 
     handleDragStop(e) {
         console.log('drag stop.')
+        if (!this.hasDrag) {
+            this.props.dispatch({
+                type: 'work_canvas/updateComponentSelection',
+                id: this.props.model.id,
+            })
+        }
     }
 
     handleDrag(e, draggableData){
+        this.hasDrag = true;
         console.log(e)
         console.log(draggableData)
         console.log("rect", this.props.model.x)
@@ -62,13 +62,12 @@ class NodeLayer extends React.PureComponent {
         return  <React.Fragment><DraggableCore 
             onStop={this.handleDragStop} onDrag={this.handleDrag} onStart={this.handleDragStart}> 
             <rect x={x} y={y} rx='10' ry='10' width={width} height={height}
-                style={{...styles}} onClick={this.handleRectClick}/>
+                style={{...styles}}/>
         </DraggableCore>
         <DraggableCore
             onStop={this.handleDragStop}  onDrag={this.handleDrag} onStart={this.handleDragStart}>
             <text x={x + width/2} y={y + height/2} alignmentBaseline="middle" 
-                textAnchor="middle" fill="white" style={{cursor:'move'}}
-                onClick={this.handleRectClick} >{name}</text>
+                textAnchor="middle" fill="white" style={{cursor:'move'}}>{name}</text>
         </DraggableCore>
         </React.Fragment>
     }
