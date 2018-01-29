@@ -5,6 +5,9 @@ import { Layout, Menu, Icon } from 'antd';
 import SiderComponentList from './SiderComponentList';
 import WorkCanvas from './WorkCanvas/WorkCanvas';
 import ComponentSettings from './ComponentSettings';
+import WorkAreaMenu from './WorkAreaMenu';
+const SubMenu = Menu.SubMenu;
+const MenuItemGroup = Menu.ItemGroup;
 
 const { Sider, Content } = Layout;
 
@@ -132,7 +135,10 @@ class WorkArea extends React.PureComponent {
         return <React.Fragment>
                 <SiderComponentList onItemDragged={this.handleItemDragged} onItemDragged2={this.handleItemDragged2}/>
                 <Content style={{ background: '#fff', padding: 0, margin: 0, height: '100%', width: '100%'}}>
-                    <WorkCanvas ref={e=> {this.canvasRef = e; console.log(this.canvasRef)}}/>
+                    <WorkAreaMenu/>
+                    
+                    <WorkCanvas ref={e=> {this.canvasRef = e; console.log(this.canvasRef)}} style={{height:'calc(100%-46px)'}}/>
+                    
                 </Content>
                 <ComponentSettings/>
             </React.Fragment>

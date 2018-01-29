@@ -55,7 +55,7 @@ class WorkCanvas extends React.PureComponent {
         // avoid first render. we need to wait for the cache ready.
         if (Object.keys(componentDict).length === 0) return null;
         return <DraggableCore onDrag={this.handleDrag} onStop={this.handleDragStop} onStart={this.handleDragStart}>
-            <svg style={{width: '100%', height: '99%'}} className="work-canvas">
+            <svg style={{width: '100%', height: 'calc(100% - 64px)'}} className="work-canvas">
                 {
                     /*1. node layer*/
                     this.props.components.map(
