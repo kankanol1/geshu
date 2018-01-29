@@ -82,7 +82,9 @@ class PointLayer extends React.PureComponent {
                             {
                                 // 1.  point background.
                             }
-                            <circle cx={x} cy={y} r={r} stroke="#22075e" strokeWidth="1" fill="#b37feb" />
+                            <circle cx={x} cy={y} r={r} stroke="#22075e" strokeWidth="1" fill="#b37feb" >
+                                <title>{point.hint}</title>
+                            </circle>
                             {
                                 // 2. text.
                             }
