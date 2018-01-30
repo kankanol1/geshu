@@ -17,6 +17,7 @@ class NodeLayer extends React.PureComponent {
         this.handleDrag = this.handleDrag.bind(this)
         this.handleDragStop = this.handleDragStop.bind(this)
         this.handleDragStart = this.handleDragStart.bind(this)
+        this.handleContextMenu = this.handleContextMenu.bind(this)
         this.hasDrag = true;
     }
 
@@ -55,6 +56,17 @@ class NodeLayer extends React.PureComponent {
         console.log('dispatch', this.props.model.x + draggableData.deltaX,
             this.props.model.y + draggableData.deltaY)
     }
+
+    handleContextMenu(e) {
+        e.preventDefault();
+        console.log('context menu', e.clientX, e.clientY)
+        this.props.dispatch({
+            type: 'work_canvas/openContextMenu',
+            component: this.props.model,
+            x: e.clientX,
+            y: e.clientY
+        })
+    }
     
     render() {
         console.log("styles:", styles.input);
@@ -62,11 +74,13 @@ class NodeLayer extends React.PureComponent {
         return  <React.Fragment><DraggableCore 
             onStop={this.handleDragStop} onDrag={this.handleDrag} onStart={this.handleDragStart}> 
             <rect x={x} y={y} rx='10' ry='10' width={width} height={height}
+            onContextMenu={this.handleContextMenu}
                 style={{...styles}}/>
         </DraggableCore>
         <DraggableCore
             onStop={this.handleDragStop}  onDrag={this.handleDrag} onStart={this.handleDragStart}>
             <text x={x + width/2} y={y + height/2} alignmentBaseline="middle" 
+            onContextMenu={this.handleContextMenu}
                 textAnchor="middle" fill="white" style={{cursor:'move'}}>{name}</text>
         </DraggableCore>
         </React.Fragment>

@@ -6,6 +6,7 @@ import NodeLayer from './NodeLayer';
 import PointLayer from './PointLayer';
 import LineLayer from './LineLayer';
 import SelectionLayer from './SelectionLayer';
+import ContextMenu from './ContextMenu';
 
 class WorkCanvas extends React.PureComponent {
 
@@ -54,8 +55,16 @@ class WorkCanvas extends React.PureComponent {
         const componentPointPosition = this.props.cache.pointDict; // store: componentid: {pointid: {x, y}}
         // avoid first render. we need to wait for the cache ready.
         if (Object.keys(componentDict).length === 0) return null;
-        return <DraggableCore onDrag={this.handleDrag} onStop={this.handleDragStop} onStart={this.handleDragStart}>
-            <svg style={{width: '100%', height: 'calc(100% - 64px)'}} className="work-canvas">
+
+        let contextMenuView = null;
+        if (this.props.contextmenu.show) {
+            const {x, y, component} = this.props.contextmenu;
+            contextMenuView =  <ContextMenu top={y} left={x}/>
+        }
+
+        return  <div style={{width: '100%', height: 'calc(100% - 64px)'}}>
+        <DraggableCore onDrag={this.handleDrag} onStop={this.handleDragStop} onStart={this.handleDragStart}>
+            <svg style={{width: '100%', height: '100%'}} className="work-canvas">
                 {
                     /*1. node layer*/
                     this.props.components.map(
@@ -89,6 +98,10 @@ class WorkCanvas extends React.PureComponent {
                 }
             </svg>
             </DraggableCore>
+            {
+                contextMenuView
+            }
+        </div>
     }
 
 }

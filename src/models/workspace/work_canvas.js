@@ -114,6 +114,12 @@ export default {
             componentDict: {},
             // store: componentid: {pointid: {x, y}}
             pointDict: {},
+        },
+        contextmenu: {
+            show: false,
+            component: null,
+            x: 0,
+            y: 0
         }
     },
 
@@ -121,8 +127,27 @@ export default {
         init(state) {
             return updateCache(state);
         },
+
+        openContextMenu(state, {component, x, y}) {
+            return Object.assign({}, {...state, ...{
+                contextmenu: {
+                    show: true,
+                    component: component,
+                    x: x, 
+                    y: y
+                }
+            }})
+        }
+        ,
         modeChange(state, {isMoveMode}) {
-            return Object.assign({}, {...state, ...{mode: isMoveMode ? 'move': 'select'}})
+            return Object.assign({}, {...state, ...{mode: isMoveMode ? 'move': 'select', 
+                contextmenu: {
+                    show: false,
+                    component: null,
+                    x: 0,
+                    y: 0
+                }
+            }})
         }
         ,
         
@@ -254,11 +279,25 @@ export default {
         },
 
         updateComponentSelection(state, {id}) {
-            return Object.assign({}, {...state, ...{selection: [{type: 'component', id: id}]}})
+            return Object.assign({}, {...state, ...{selection: [{type: 'component', id: id}],
+            contextmenu: {
+                show: false,
+                component: null,
+                x: 0,
+                y: 0
+            }
+        }})
         },
 
         updateLineSelection(state, params) {
-            let after= Object.assign({}, {...state, ...{selection: [{...params, type: 'line'}]}})
+            let after= Object.assign({}, {...state, ...{selection: [{...params, type: 'line'}],
+            contextmenu: {
+                show: false,
+                component: null,
+                x: 0,
+                y: 0
+            }
+        }})
             return after
         },
 
@@ -303,9 +342,24 @@ export default {
             console.log('after update: ', nr);
 
             if (selection == null) {
-                return updateCache(Object.assign({}, {...state, ...{components: nr}}))
+                return updateCache(Object.assign({}, {...state, ...{components: nr, 
+                    contextmenu: {
+                        show: false,
+                        component: null,
+                        x: 0,
+                        y: 0
+                    }
+                }}))
+
             } else {
-                return updateCache(Object.assign({}, {...state, ...{components: nr, selection: selection}}))
+                return updateCache(Object.assign({}, {...state, ...{components: nr, 
+                    contextmenu: {
+                        show: false,
+                        component: null,
+                        x: 0,
+                        y: 0
+                    },
+                    selection: selection}}))
             }
         },
 
