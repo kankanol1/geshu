@@ -29,13 +29,19 @@ class NodeLayer extends React.PureComponent {
     }
 
     handleDragStop(e) {
-        console.log('drag stop.')
+        console.log('drag stop...')
         if (!this.hasDrag) {
             this.props.dispatch({
                 type: 'work_canvas/updateComponentSelection',
                 id: this.props.model.id,
             })
         }
+        console.log('fetch...')
+        /**change settings on the right side  */
+        this.props.dispatch({
+            type: 'work_component_settings/fetchComponentSetting',
+            id: this.props.model.id,
+        })
     }
 
     handleDrag(e, draggableData){
