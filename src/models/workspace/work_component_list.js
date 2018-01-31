@@ -1,3 +1,5 @@
+import componentAPI from "../../services/WorkSpace/componentAPI";
+
 export default {
     namespace: 'work_component_list',
     
@@ -6,12 +8,13 @@ export default {
             // component group.
             {
                 name: '输入组件',
-                key: 'input-group',
+                key: 'source',
                 components: [
                     // component. 
                     {
                         name: 'csv输入',
                         type: 'source',
+                        code: 'csv-source',
                         points: [
                             {
                                 id:'o-1',
@@ -29,11 +32,12 @@ export default {
             },
             {
                 name: '数据转换组件',
-                key: 'transform-group',
+                key: 'transform',
                 components: [
                     {
                         name: '列转换',
                         type: 'preprocessor',
+                        code: 'column-transform',
                         points: [
                              /*input circles*/
                             {
@@ -66,7 +70,32 @@ export default {
 
     reducers: {
 
-    }
+        replaceComponentList(state, {data}) {
+            console.log('data,', data)
+            const activekeys = data.groups.map(
+                (group) => group.key
+            )
+            let ns =  Object.assign({}, {...state, ...{groups: data.groups, activekeys} })
+            console.log('after:', ns)
+            return ns
+        }
+    },
 
+    effects: {
+        *featchComponentList({payload}, {call, put}) {
+            console.log('featching component list')
+            const {data} = yield call(componentAPI.fetchComponentList);
+            console.log('fetched component list', data)
+            yield put({type: 'replaceComponentList', data: data.data })
+        }
+    },
+
+    subscriptions: {
+        setup({history, dispatch}, done) {
+            dispatch({
+                type: 'featchComponentList'
+            });
+        }
+    }
 
 }

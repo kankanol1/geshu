@@ -3,11 +3,11 @@ const component_list = {
         {
             name: '输入组件',
             key: 'input-group',
-            component: [
+            components: [
                 // component. 
                 {
                     name: 'csv输入',
-                    id: 'csv-source',
+                    code: 'csv-source',
                     type: 'source',
                     points: [
                         {
@@ -25,7 +25,7 @@ const component_list = {
                 // component. 
                 {
                     name: 'txt输入',
-                    id: 'txt-source',
+                    code: 'csv-source',
                     type: 'source',
                     points: [
                         {
@@ -48,7 +48,7 @@ const component_list = {
             components: [
                 {
                     name: '列转换',
-                    id: 'column-convert',
+                    code: 'column-convert',
                     type: 'preprocessor',
                     points: [
                          /*input circles*/
@@ -76,7 +76,7 @@ const component_list = {
                 },
                 {
                     name: '行转换',
-                    id: 'row-convert',
+                    code: 'row-convert',
                     type: 'preprocessor',
                     points: [
                          /*input circles*/

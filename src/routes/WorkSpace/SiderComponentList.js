@@ -46,7 +46,7 @@ class SiderComponentList extends React.PureComponent {
                                             onItemDragged={(from, to) => this.props.onItemDragged(from, to, sizedComponent)} 
                                             onPreviewChanged={this.handlePreviewChange}
                                             preview={<ComponentPreview component={sizedComponent} />}>
-                                            <div style={{cursor: 'move'}}> {component.name} </div>
+                                            <div style={{cursor: 'default', textAlign: 'center', paddingTop: '5px', paddingBottom: '5px'}}> {component.name} </div>
                                             </DraggableWithPreview>
                                     }
                                 )

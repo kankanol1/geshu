@@ -4,4 +4,8 @@ const fetchComponentSetting = (id) => {
     return request(`/api/workspace/component_param/${id}`)
 }
 
-export default {fetchComponentSetting}
+const fetchComponentList = () => {
+    return request('/api/workspace/component_list')
+}
+
+export default {fetchComponentSetting, fetchComponentList}

@@ -10,6 +10,7 @@ export default {
             {
                 id:'input',
                 name: 'CSV输入',
+                code: 'csv-source',
                 x: 150,
                 y: 100,
                 width: 120,
@@ -40,6 +41,7 @@ export default {
             }, {
                 id:'preprocess-1',
                 name: '列转换',
+                code: 'column-transform',
                 x: 400,
                 y: 100,
                 width: 120,
@@ -443,6 +445,12 @@ export default {
     },
 },
 
+    effects: {
+        *moveComponentAndDisplaySettingsIfNeeded({payload}, {put}) {
+            
+        }
+    }
+    ,
     subscriptions: {
         keyboardWatcher({dispatch}) {
             key('del, delete', () => {
