@@ -17,12 +17,12 @@ export default {
     },
 
     reducers: {
-        addToComponentMetaDict(state, {component, code}) {
-            const componentMetaDict =  state.componentMetaDict;
+        initComponentSettingsWithMeta(state, {component, code, id, name}) {
+            const {componentMetaDict, componentSettings} =  state;
             componentMetaDict[code] = component;
-            return Object.assign({}, {...state, 
-                ...{ componentMetaDict }
-            })
+            componentSettings.push({...component, id, name})
+            // 3. don't forget to change the selection.
+            return Object.assign({}, {...state, componentMetaDict, componentSettings, currentComponent: id})
         },
 
         initComponentSettingsForId(state, {id, code, name}) {
@@ -42,17 +42,21 @@ export default {
             // we assume that we have all the data already. just change current component.
             console.log("current state", state)
             return Object.assign({}, {...state, currentComponent: id});
+        },
+
+        resetCurrentComponent(state) {
+            return Object.assign({}, {...state, currentComponent: undefined})
         }
     },
 
     effects: {
-        *fetchComponentSettings( {code}, {call, put}) {
+        *fetchComponentSettings( {code, id, name}, {call, put}) {
             console.log("fetched...", code);
             const state = yield select((state) => state.work_component_settings);
             console.log(state)
             const {data} = yield call(componentAPI.fetchComponentSetting, code)
             console.log('fetched data, ', data)
-            yield put({type: 'addToComponentMetaDict', component: data, code: code})
+            yield put({type: 'initComponentSettingsWithMeta', component: data, code, id, name})
         },
 
         /**
@@ -80,10 +84,11 @@ export default {
             } else {
                 if (componentMetaDict[component.type] === undefined) {
                     console.log('prepare to fetch', component.code);
-                    yield put({type: 'fetchComponentSettings', code: component.code})
-                }
-                yield put({type: 'initComponentSettingsForId', 
+                    yield put({type: 'fetchComponentSettings', code: component.code, id: component.id, name: component.name})
+                } else {
+                    yield put({type: 'initComponentSettingsForId', 
                     id: component.id, code: component.code, name: component.name})
+                }
             }
 
         }

@@ -446,7 +446,13 @@ export default {
 },
 
     effects: {
-        *moveComponentAndDisplaySettingsIfNeeded({component, deltaX, deltaY, originX, originY}, {call, put, select}) {
+
+        *updateComponentSelectionAndDisplaySettings({component}, {put}) {
+            yield put({type: 'updateComponentSelection', id: component.id})
+            yield put({type: 'work_component_settings/displayComponentSetting', component})
+        },
+
+        *moveComponentAndDisplaySettingsIfNeeded({component, deltaX, deltaY, originX, originY}, {put, select}) {
             console.log("move and display settings if needed", {id: component.id, deltaX, deltaY, originX, originY})
             yield put({type: 'moveComponent', id: component.id, deltaX, deltaY, originX, originY})
             let currentState = yield select( (state) => state.work_canvas)
@@ -468,7 +474,7 @@ export default {
                      component})
             }
 
-        }
+        },
     }
     ,
     subscriptions: {
