@@ -1,4 +1,5 @@
 import fetch from 'dva/fetch';
+import {message} from 'antd';
 
 function parseJSON(response) {
   return response.json();
@@ -14,6 +15,23 @@ function checkStatus(response) {
   throw error;
 }
 
+function errorFilter(response) {
+  if (response.error !== undefined) {
+    if (response.error) {
+      const error = new Error(response.message);
+      error.responseData = response;
+      throw error;
+    } else {
+      return response.data;
+    }
+  }
+  return response;
+}
+
+function globalErrorTip(err) {
+  message.error(err.message);
+}
+
 /**
  * Requests a URL, returning a promise.
  *
@@ -25,6 +43,10 @@ export default function request(url, options) {
   return fetch(url, options)
     .then(checkStatus)
     .then(parseJSON)
+    .then(errorFilter)
     .then(data => ({ data }))
-    .catch(err => ({ err }));
+    .catch(err => {
+      globalErrorTip(err)
+      return err
+    });
 }

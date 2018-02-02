@@ -84,7 +84,7 @@ export default {
     effects: {
         *featchComponentList({payload}, {call, put}) {
             console.log('featching component list')
-            const {data} = yield call(componentAPI.fetchComponentList);
+            const data = yield call(componentAPI.fetchComponentList);
             console.log('fetched component list', data)
             yield put({type: 'replaceComponentList', data: data.data })
         }

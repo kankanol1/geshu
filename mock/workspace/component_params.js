@@ -4,15 +4,15 @@ const allComponents = {
     'csv-source': {
         required: [
             {
-                key: 'path',
-                description: 'csv文件',
+                name: 'path',
+                description: 'csv文件路径',
                 type: 'string',
                 validator: '(s) => true',
             }
         ],
         optional: [
             {
-                key: 'spliter',
+                name: 'spliter',
                 description: '分隔符',
                 type: 'string',
                 validator: '(s) => s.length === 1',

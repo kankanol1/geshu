@@ -446,8 +446,28 @@ export default {
 },
 
     effects: {
-        *moveComponentAndDisplaySettingsIfNeeded({payload}, {put}) {
-            
+        *moveComponentAndDisplaySettingsIfNeeded({component, deltaX, deltaY, originX, originY}, {call, put, select}) {
+            console.log("move and display settings if needed", {id: component.id, deltaX, deltaY, originX, originY})
+            yield put({type: 'moveComponent', id: component.id, deltaX, deltaY, originX, originY})
+            let currentState = yield select( (state) => state.work_canvas)
+            console.log("select", currentState)
+            // visit the num of selected components.
+            let count = 0;
+            currentState.selection.forEach(
+                select => {
+                    if (select.type === 'component') {
+                        count = 1 + count;
+                    }
+                }
+            )
+            // check if only one component is being selected.
+            if (count === 1) {
+                // means we can update the selection.
+                console.log("update component settings")
+                yield put({type: 'work_component_settings/displayComponentSetting',
+                     component})
+            }
+
         }
     }
     ,

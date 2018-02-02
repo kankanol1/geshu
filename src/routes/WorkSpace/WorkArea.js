@@ -20,7 +20,6 @@ function gen() {
 
 class WorkArea extends React.PureComponent {
 
-
     constructor(props) {
         super(props)
         this.handleItemDragged = this.handleItemDragged.bind(this)
@@ -33,18 +32,14 @@ class WorkArea extends React.PureComponent {
         console.log("rect range", x, y, width, height)
         if (dragClientTarget.x > x && dragClientTarget.y > y && 
           dragClientTarget.x < width +x && dragClientTarget.y < height + y) {
-          console.log("yahaha" )
           // add new component.
           this.props.dispatch({
             type: 'work_canvas/newComponent',
             component: {
               id:'generated-' + component.name + gen(),
-              name: component.name,
+              ...component,
               x: dragClientTarget.x - x,
               y: dragClientTarget.y - y,
-              width: component.width,
-              height: component.height,
-              points: component.points,
               connect_to: []
           }
           })

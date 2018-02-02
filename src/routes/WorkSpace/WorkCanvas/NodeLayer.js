@@ -36,7 +36,6 @@ class NodeLayer extends React.PureComponent {
                 id: this.props.model.id,
             })
         }
-        console.log('fetch...')
         /**change settings on the right side  */
         this.props.dispatch({
             type: 'work_component_settings/fetchComponentSetting',
@@ -50,8 +49,8 @@ class NodeLayer extends React.PureComponent {
         console.log(draggableData)
         console.log("rect", this.props.model.x)
         this.props.dispatch({
-            type: 'work_canvas/moveComponent',
-            id: this.props.model.id,
+            type: 'work_canvas/moveComponentAndDisplaySettingsIfNeeded',
+            component: this.props.model,
             deltaX: draggableData.deltaX,
             deltaY: draggableData.deltaY,
             originX: this.props.model.x,

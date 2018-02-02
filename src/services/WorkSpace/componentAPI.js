@@ -1,7 +1,7 @@
 import request from '../../utils/request'
 
-const fetchComponentSetting = (id) => {
-    return request(`/api/workspace/component_param/${id}`)
+const fetchComponentSetting = (code) => {
+    return request(`/api/workspace/component_param/${code}`)
 }
 
 const fetchComponentList = () => {
