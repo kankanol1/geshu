@@ -170,7 +170,7 @@ class DevMainSideMenu extends React.Component {
       </Sider>
 
       <Layout style={{ padding: '0',  height: '100%' }} theme='light'>
-        <Header style={{padding:'0px',height:'47px', lineHeight:'47px', background:'#eee'}}>
+        <Header style={{padding:'0px',height:'48px', lineHeight:'46px', background:'#eee'}}>
           <Menu
           style={{padding:'0px', background:'transparent'}}
               theme="light"
