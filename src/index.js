@@ -1,27 +1,34 @@
+import '@babel/polyfill';
+import 'url-polyfill';
 import dva from 'dva';
-import './index.less';
-import initilizations from './initialize'
 
+import createHistory from 'history/createHashHistory';
+// user BrowserHistory
+// import createHistory from 'history/createBrowserHistory';
+import createLoading from 'dva-loading';
+import 'moment/locale/zh-cn';
+import FastClick from 'fastclick';
+import './rollbar';
+
+import './index.less';
 // 1. Initialize
 const app = dva({
-    initialState: initilizations
+  history: createHistory(),
 });
 
-console.log(app._store)
-
 // 2. Plugins
-// app.use({});
+app.use(createLoading());
 
-// 3. Model
-// app.model(require('./models/example').default);
-app.model(require('./models/menus/leftsidemenu').default);
-app.model(require('./models/container_canvas').default);
-app.model(require('./models/workspace/work_canvas').default);
-app.model(require('./models/workspace/work_component_list').default);
-app.model(require('./models/workspace/work_component_settings').default);
+// 3. Register global model
+app.model(require('./models/global').default);
 
 // 4. Router
 app.router(require('./router').default);
 
 // 5. Start
 app.start('#root');
+
+
+FastClick.attach(document.body);
+
+export default app._store;  // eslint-disable-line

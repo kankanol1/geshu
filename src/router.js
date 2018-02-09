@@ -1,32 +1,39 @@
 import React from 'react';
-import { Router, Route, Switch } from 'dva/router';
-import IndexPage from './routes/IndexPage';
-import LeftSideMenu from './components/menus/LeftSideMenu';
-import DevMainSideMenu from './components/menus/DevMainSideMenu';
-import RouteWithSubRoutes from './routes/RouteWithSubRoutes';
+import { routerRedux, Route, Switch } from 'dva/router';
+import { LocaleProvider, Spin } from 'antd';
+import zhCN from 'antd/lib/locale-provider/zh_CN';
+import dynamic from 'dva/dynamic';
+import { getRouterData } from './common/router';
+import Authorized from './utils/Authorized';
+import styles from './index.less';
 
-const routes = [
-  { path: '/', component: IndexPage,
-    routes: [
-      {
-        path: '/dataview', component: LeftSideMenu
-      },
-      {
-        path: '/devcenter', component: DevMainSideMenu
-      }
-    ]
-  }
-]
+const { ConnectedRouter } = routerRedux;
+const { AuthorizedRoute } = Authorized;
+dynamic.setDefaultLoadingComponent(() => {
+  return <Spin size="large" className={styles.globalSpin} />;
+});
 
-function RouterConfig({ history }) {
+function RouterConfig({ history, app }) {
+  const routerData = getRouterData(app);
+  const UserLayout = routerData['/user'].component;
+  const BasicLayout = routerData['/'].component;
   return (
-    <Router history={history}>
-    <div style={{height: '100%'}}>
-      {routes.map((route, i) => (
-        <RouteWithSubRoutes key={i} {...route}/>
-      ))}
-      </div>
-    </Router>
+    <LocaleProvider locale={zhCN}>
+      <ConnectedRouter history={history}>
+        <Switch>
+          <Route
+            path="/user"
+            component={UserLayout}
+          />
+          <AuthorizedRoute
+            path="/"
+            render={props => <BasicLayout {...props} />}
+            authority={['admin', 'user']}
+            redirectPath="/user/login"
+          />
+        </Switch>
+      </ConnectedRouter>
+    </LocaleProvider>
   );
 }
 
