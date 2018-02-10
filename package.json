@@ -45,7 +45,10 @@
     "react-document-title": "^2.0.3",
     "react-dom": "^16.2.0",
     "react-fittext": "^1.0.0",
-    "url-polyfill": "^1.0.10"
+    "url-polyfill": "^1.0.10",
+    "react-custom-scrollbars": "^4.2.1",
+    "react-draggable": "^3.0.4",
+    "keymaster": "^1.6.2"
   },
   "devDependencies": {
     "babel-eslint": "^8.1.2",

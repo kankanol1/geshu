@@ -20,6 +20,11 @@
     "react/jsx-no-bind": [0],
     "react/prop-types": [0],
     "react/prefer-stateless-function": [0],
+    "react/no-array-index-key": [0],
+    "react/no-find-dom-node": [1],
+    "camelcase": [1],
+    "no-unused-vars": [1],
+    "no-plusplus": [0],
     "react/jsx-wrap-multilines": ["error", {
       "declaration": "parens-new-line",
       "assignment": "parens-new-line",

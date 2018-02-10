@@ -73,6 +73,18 @@ export const getRouterData = (app) => {
     '/': {
       component: dynamicWrapper(app, ['user', 'login'], () => import('../layouts/BasicLayout')),
     },
+    '/project/workspace': {
+      component: dynamicWrapper(app, ['workspace/work_canvas', 'workspace/work_component_list', 'workspace/work_component_settings'], () => import('../layouts/WorkspaceLayout')),
+    },
+    '/project/workspace/editor': {
+      component: dynamicWrapper(app, [], () => import('../routes/Project/WorkspaceEditor')),
+    },
+    '/project/workspace/dataview': {
+      component: dynamicWrapper(app, [], () => import('../routes/Project/WorkspaceDataView')),
+    },
+    '/project/workspace/logview': {
+      component: dynamicWrapper(app, [], () => import('../routes/Project/WorkspaceLogView')),
+    },
     '/dashboard/analysis': {
       component: dynamicWrapper(app, ['chart'], () => import('../routes/Dashboard/Analysis')),
     },
