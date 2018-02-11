@@ -249,7 +249,7 @@ export default {
       const newSelection = [];
       selectedComponents.forEach(
         (component) => {
-          component.connect_to.forEach(
+          component.connectTo.forEach(
             (line) => {
               if (containedComponents.includes(line.component)) {
                 // add this line.
@@ -298,7 +298,7 @@ export default {
             return null;
           } else {
             // not included, needs to check the lines.
-            const newConnectTo = component.connect_to.map(
+            const newConnectTo = component.connectTo.map(
               (item) => {
                 if (lineSelectionSet.includes(`${component.id}-${item.output}-${item.component}-${item.input}`)) {
                   return null;
@@ -308,7 +308,7 @@ export default {
               }
             );
             return Object.assign({}, { ...component,
-              ...{ connect_to: newConnectTo.filter(a => a != null) } });
+              ...{ connectTo: newConnectTo.filter(a => a != null) } });
           }
         }
       );
@@ -480,7 +480,7 @@ export default {
         } else if (candidate.connects.includes(state.draggingType)) {
           let newComponents = null;
           if (candidate.metatype === 'input') {
-            // add connect_to to the dragging point.
+            // add connectTo to the dragging point.
             newComponents = state.components.map(
               (component) => {
                 if (component.id === state.draggingComponent) {
@@ -500,7 +500,7 @@ export default {
             newComponents = state.components.map(
               (component) => {
                 if (component.id === state.draggingComponent) {
-                  const connectTo = Object.assign([], component.connect_to);
+                  const connectTo = Object.assign([], component.connectTo);
                   connectTo.push({ component: candidate.componentId,
                     input: candidate.pointId,
                     output: state.draggingPoint,

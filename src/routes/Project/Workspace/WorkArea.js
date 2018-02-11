@@ -35,7 +35,7 @@ class WorkArea extends React.PureComponent {
           ...component,
           x: dragClientTarget.x - x,
           y: dragClientTarget.y - y,
-          connect_to: [],
+          connectTo: [],
         },
       });
     }
