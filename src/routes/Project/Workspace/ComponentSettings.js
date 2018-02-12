@@ -34,7 +34,7 @@ class ComponentSettings extends React.PureComponent {
       return null;
     }
     return (
-      <Sider style={{ background: 'transparent' }} width="400">
+      <div style={{ background: 'transparent', float: 'right', minWidth: '400px' }}>
         <div style={{ padding: '8px', background: '#fafafa', borderLeft: '1px solid #e8e8e8' }}>
           <Button type="danger" size={size} onClick={this.onCloseClicked}>关闭</Button>
         </div>
@@ -79,7 +79,7 @@ class ComponentSettings extends React.PureComponent {
             }
           </Panel>
         </Collapse>
-      </Sider>
+      </div>
     );
   }
 }

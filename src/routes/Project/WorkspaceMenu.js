@@ -8,7 +8,7 @@ export default class WorkspaceMenu extends Component {
     const selectedKey = path.substr(path.lastIndexOf('/') + 1, path.length);
     return (
       <Menu
-        style={{ padding: '0px', background: 'transparent' }}
+        style={{ padding: '0px', background: 'transparent', float: 'right' }}
         theme="light"
         mode="horizontal"
         defaultSelectedKeys={[selectedKey]}

@@ -26,7 +26,7 @@ class SiderComponentList extends React.PureComponent {
 
   render() {
     return (
-      <Sider style={{ background: 'transparent', height: '100%' }}>
+      <Sider style={{ background: 'transparent', height: '100%', float: 'left' }}>
         <Scrollbars>
           <Collapse
             defaultActiveKey={this.props.work_component_list.activekeys}

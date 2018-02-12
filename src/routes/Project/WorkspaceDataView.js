@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Layout } from 'antd';
 import WorkSpaceMenu from './WorkspaceMenu';
-
 const { Header } = Layout;
 
 export default class WorkspaceDataView extends Component {

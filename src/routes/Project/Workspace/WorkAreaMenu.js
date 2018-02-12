@@ -10,7 +10,7 @@ class WorkAreaMenu extends React.PureComponent {
         onClick={this.handleClick}
         selectedKeys={[]}
         mode="horizontal"
-        style={{ background: '#fafafa' }}
+        style={{ background: 'transparent', float: 'left' }}
       >
         <SubMenu title={<span>文件</span>}>
           <Menu.Item key="save">存储</Menu.Item>

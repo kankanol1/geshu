@@ -63,7 +63,7 @@ class WorkCanvas extends React.PureComponent {
     }
 
     return (
-      <div style={{ width: '100%', height: 'calc(100% - 64px)' }}>
+      <div style={{ width: '100%', height: '99%' }}>
         <DraggableCore
           onDrag={this.handleDrag}
           onStop={this.handleDragStop}

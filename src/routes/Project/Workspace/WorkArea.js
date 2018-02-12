@@ -46,10 +46,7 @@ class WorkArea extends React.PureComponent {
       <React.Fragment>
         <SiderComponentList onItemDragged={this.handleItemDragged} />
         <Content style={{ background: '#fff', padding: 0, margin: 0, height: '100%', width: '100%' }}>
-          <WorkAreaMenu />
-
-          <WorkCanvas ref={(e) => { this.canvasRef = e; }} style={{ height: 'calc(100%-46px)' }} />
-
+          <WorkCanvas ref={(e) => { this.canvasRef = e; }} style={{ height: '100%' }} />
         </Content>
         <ComponentSettings />
       </React.Fragment>
