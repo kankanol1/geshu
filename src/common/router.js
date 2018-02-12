@@ -73,6 +73,12 @@ export const getRouterData = (app) => {
     '/': {
       component: dynamicWrapper(app, ['user', 'login'], () => import('../layouts/BasicLayout')),
     },
+    '/dashboard/overview': {
+      component: dynamicWrapper(app, [], () => import('../routes/Dashboard/Overview')),
+    },
+    '/project/list': {
+      component: dynamicWrapper(app, ['project'], () => import('../routes/Project/ProjectList')),
+    },
     '/project/workspace': {
       component: dynamicWrapper(app, ['workspace/work_canvas', 'workspace/work_component_list', 'workspace/work_component_settings'], () => import('../layouts/WorkspaceLayout')),
     },
@@ -85,6 +91,33 @@ export const getRouterData = (app) => {
     '/project/workspace/logview': {
       component: dynamicWrapper(app, [], () => import('../routes/Project/WorkspaceLogView')),
     },
+
+    /**
+     * The followings are used by our project. Adapted from ant-design-pro.
+     */
+    '/exception/403': {
+      component: dynamicWrapper(app, [], () => import('../routes/Exception/403')),
+    },
+    '/exception/404': {
+      component: dynamicWrapper(app, [], () => import('../routes/Exception/404')),
+    },
+    '/exception/500': {
+      component: dynamicWrapper(app, [], () => import('../routes/Exception/500')),
+    },
+    '/exception/trigger': {
+      component: dynamicWrapper(app, ['error'], () => import('../routes/Exception/triggerException')),
+    },
+    '/user': {
+      component: dynamicWrapper(app, [], () => import('../layouts/UserLayout')),
+    },
+    '/user/login': {
+      component: dynamicWrapper(app, ['login'], () => import('../routes/User/Login')),
+    },
+
+    /**
+     *  The followings are not used by our project. Should be deleted latter.
+     */
+
     '/dashboard/analysis': {
       component: dynamicWrapper(app, ['chart'], () => import('../routes/Dashboard/Analysis')),
     },
@@ -92,7 +125,7 @@ export const getRouterData = (app) => {
       component: dynamicWrapper(app, ['monitor'], () => import('../routes/Dashboard/Monitor')),
     },
     '/dashboard/workplace': {
-      component: dynamicWrapper(app, ['project', 'activities', 'chart'], () => import('../routes/Dashboard/Workplace')),
+      component: dynamicWrapper(app, ['antdproject', 'activities', 'chart'], () => import('../routes/Dashboard/Workplace')),
       // hideInBreadcrumb: true,
       // name: '工作台',
       // authority: 'admin',
@@ -147,24 +180,6 @@ export const getRouterData = (app) => {
     },
     '/result/fail': {
       component: dynamicWrapper(app, [], () => import('../routes/Result/Error')),
-    },
-    '/exception/403': {
-      component: dynamicWrapper(app, [], () => import('../routes/Exception/403')),
-    },
-    '/exception/404': {
-      component: dynamicWrapper(app, [], () => import('../routes/Exception/404')),
-    },
-    '/exception/500': {
-      component: dynamicWrapper(app, [], () => import('../routes/Exception/500')),
-    },
-    '/exception/trigger': {
-      component: dynamicWrapper(app, ['error'], () => import('../routes/Exception/triggerException')),
-    },
-    '/user': {
-      component: dynamicWrapper(app, [], () => import('../layouts/UserLayout')),
-    },
-    '/user/login': {
-      component: dynamicWrapper(app, ['login'], () => import('../routes/User/Login')),
     },
     '/user/register': {
       component: dynamicWrapper(app, ['register'], () => import('../routes/User/Register')),

@@ -70,18 +70,18 @@ const members = [
   },
 ];
 
-@connect(({ project, activities, chart, loading }) => ({
-  project,
+@connect(({ antdproject, activities, chart, loading }) => ({
+  antdproject,
   activities,
   chart,
-  projectLoading: loading.effects['project/fetchNotice'],
+  projectLoading: loading.effects['antdproject/fetchNotice'],
   activitiesLoading: loading.effects['activities/fetchList'],
 }))
 export default class Workplace extends PureComponent {
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
-      type: 'project/fetchNotice',
+      type: 'antdproject/fetchNotice',
     });
     dispatch({
       type: 'activities/fetchList',

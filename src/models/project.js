@@ -1,28 +1,55 @@
-import { queryProjectNotice } from '../services/api';
+import { queryProjects, queryProjectLabels } from '../services/projectAPI';
 
 export default {
   namespace: 'project',
 
   state: {
-    notice: [],
-  },
-
-  effects: {
-    *fetchNotice(_, { call, put }) {
-      const response = yield call(queryProjectNotice);
-      yield put({
-        type: 'saveNotice',
-        payload: Array.isArray(response) ? response : [],
-      });
+    data: {
+      list: [],
+      pagination: {},
+      labels: [],
     },
   },
 
   reducers: {
-    saveNotice(state, action) {
+    saveProjectList(state, { payload }) {
       return {
         ...state,
-        notice: action.payload,
+        data: {
+          ...payload,
+        },
       };
     },
+
+    saveLabelsList(state, { payload }) {
+      return {
+        ...state,
+        data: {
+          labels: payload.list,
+        },
+      };
+    },
+  },
+
+  effects: {
+    *fetchProjectList({ payload }, { call, put }) {
+      const response = yield call(queryProjects, payload);
+      console.log('project list', response);
+      yield put({
+        type: 'saveProjectList',
+        payload: response,
+      });
+    },
+
+    *fetchLabelsList({ payload }, { call, put }) {
+      const response = yield call(queryProjectLabels, payload);
+      yield put({
+        type: 'saveLabelsList',
+        payload: response,
+      });
+    },
+  },
+
+  subscriptions: {
   },
 };
