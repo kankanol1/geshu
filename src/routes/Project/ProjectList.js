@@ -1,7 +1,7 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
 import moment from 'moment';
-import { Tag, Row, Col, Card, Form, Input, Select, Icon, Button, Dropdown, Menu, InputNumber, DatePicker, Modal, message, Badge, Divider } from 'antd';
+import { Popconfirm, Tag, Row, Col, Card, Form, Input, Select, Icon, Button, Dropdown, Menu, InputNumber, DatePicker, Modal, message, Badge, Divider } from 'antd';
 import StandardTable from '../../components/StandardTable';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 
@@ -38,45 +38,6 @@ const CreateForm = Form.create()((props) => {
 });
 
 const getValue = obj => Object.keys(obj).map(key => obj[key]).join(',');
-const columns = [
-  {
-    title: '编号',
-    dataIndex: 'id',
-  },
-  {
-    title: '项目名',
-    dataIndex: 'name',
-  },
-  {
-    title: '项目描述',
-    dataIndex: 'description',
-  },
-  {
-    title: '标签',
-    dataIndex: 'labels',
-    width: '400px',
-    render: val => (
-      <div>{val.map(
-        (label) => {
-          return (<Tag color="blue">{label}</Tag>);
-        }
-      )}
-      </div>
-    ),
-  },
-  {
-    title: '更新时间',
-    dataIndex: 'updatedAt',
-    sorter: true,
-    render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
-  },
-  {
-    title: '创建时间',
-    dataIndex: 'createdAt',
-    sorter: true,
-    render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
-  },
-];
 
 @connect(({ project, loading }) => ({
   project,
@@ -86,7 +47,7 @@ const columns = [
 export default class ProjectList extends PureComponent {
   state = {
     selectedRows: [],
-    formValues: [],
+    // formValues: [],
   }
 
   componentDidMount() {
@@ -96,6 +57,75 @@ export default class ProjectList extends PureComponent {
     });
     dispatch({
       type: 'project/fetchProjectLabels',
+    });
+  }
+
+  columns = [
+    {
+      title: '编号',
+      dataIndex: 'id',
+    },
+    {
+      title: '项目名',
+      dataIndex: 'name',
+    },
+    {
+      title: '项目描述',
+      dataIndex: 'description',
+    },
+    {
+      title: '标签',
+      dataIndex: 'labels',
+      render: val => (
+        <div>{val.map(
+          (label) => {
+            return (<Tag color="blue" key={label}>{label}</Tag>);
+          }
+        )}
+        </div>
+      ),
+    },
+    {
+      title: '更新时间',
+      dataIndex: 'updatedAt',
+      sorter: true,
+      render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
+    },
+    {
+      title: '创建时间',
+      dataIndex: 'createdAt',
+      sorter: true,
+      render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
+    },
+    {
+      title: '操作',
+      render: (text, record) => (
+        <Fragment>
+          <a onClick={() => this.handleEdit(record)} >编辑</a>
+          <Divider type="vertical" />
+          <a onClick={() => this.handleOpen(record)}>打开</a>
+          <Divider type="vertical" />
+          <span>
+            <Popconfirm title="确认删除吗?" onConfirm={() => this.handleRecordDelete(record)}>
+              <a>删除</a>
+            </Popconfirm>
+          </span>
+        </Fragment>
+      ),
+    },
+  ];
+
+  refreshParams = {}
+
+  handleRecordDelete = (record) => {
+    console.log('remove id: ', record.id);
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'project/removeProject',
+      payload: {
+        id: record.id,
+        refreshParams: this.refreshParams,
+      },
     });
   }
 
@@ -123,6 +153,8 @@ export default class ProjectList extends PureComponent {
       type: 'project/fetchProjectList',
       payload: params,
     });
+
+    this.refreshParams = params;
   }
 
   renderSimpleForm() {
@@ -136,6 +168,22 @@ export default class ProjectList extends PureComponent {
                 <Input placeholder="请输入" />
               )}
             </FormItem>
+          </Col>
+          <Col md={8} sm={24}>
+            <FormItem label="标签名">
+              {getFieldDecorator('label')(
+                <Input placeholder="请输入" />
+              )}
+            </FormItem>
+          </Col>
+          <Col md={8} sm={24}>
+            <span>
+              <Button type="primary" htmlType="submit">查询</Button>
+              <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>重置</Button>
+              <a style={{ marginLeft: 8 }} onClick={this.toggleForm}>
+                展开 <Icon type="down" />
+              </a>
+            </span>
           </Col>
         </Row>
       </Form>
@@ -153,7 +201,7 @@ export default class ProjectList extends PureComponent {
             selectedRows={selectedRows}
             loading={loading}
             data={data}
-            columns={columns}
+            columns={this.columns}
             onSelectRow={this.handleSelectRows}
             onChange={this.handleStandardTableChange}
           />

@@ -1,4 +1,4 @@
-import { queryProjects, queryProjectLabels } from '../services/projectAPI';
+import { queryProjects, queryProjectLabels, removeProject } from '../services/projectAPI';
 
 export default {
   namespace: 'project',
@@ -46,6 +46,14 @@ export default {
       yield put({
         type: 'saveLabelsList',
         payload: response,
+      });
+    },
+
+    *removeProject({ payload }, { call, put }) {
+      const response = yield call(removeProject, { id: payload.id });
+      yield put({
+        type: 'fetchProjectList',
+        payload: payload.refreshParams,
       });
     },
   },

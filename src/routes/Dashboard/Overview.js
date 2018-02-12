@@ -7,7 +7,6 @@ import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 
 export default class Overview extends PureComponent {
   render() {
-
     const pageHeaderContent = (
       <div className={styles.pageHeaderContent}>
         <div className={styles.avatar}>
