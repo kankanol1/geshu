@@ -17,7 +17,9 @@ export default {
         height: 60,
         /** type means */
         type: 'source',
-        points: [
+        inputs: [
+        ],
+        outputs: [
           /* input circles */
           {
             id: 'o-1',
@@ -25,12 +27,10 @@ export default {
             hint: 'data output', // occurs when hover
             x: 1,
             y: 0.5,
-            type: 'datasource-output',
-            metatype: 'output',
             connects: ['datasource-input'],
           },
         ],
-        connectTo: [
+        connectFrom: [
           {
             /* connects to */
             component: 'preprocess-1',
@@ -48,18 +48,17 @@ export default {
         width: 120,
         height: 60,
         type: 'preprocessor',
-        points: [
-          /* input circles */
+        inputs: [
           {
             id: 'i-1',
             label: 'i',
             hint: 'b', // occurs when hover
             x: 3,
             y: 0.5,
-            type: 'datasource-input',
-            metatype: 'input',
             connects: ['datasource-output'],
           },
+        ],
+        outputs: [
           {
             id: 'o-1',
             label: 'o',
@@ -67,26 +66,31 @@ export default {
             x: 1,
             y: 0.5,
             type: 'datasource-output',
-            metatype: 'output',
-            connects: ['datasource-input'],
-          },
+          }
         ],
-        connectTo: [],
+        connectFrom: [],
       },
     ],
-    dragging: false,
-    draggingComponent: null,
-    draggingPoint: null,
-    draggingSource: {
-      x: null,
-      y: null,
+    // this state is used for detect line connection dragging event.
+    lineDraggingState: {
+      dragging: false,
+      draggingComponent: null,
+      draggingPoint: null,
+      draggingSource: {
+        x: null,
+        y: null,
+      },
+      draggingTarget: {
+        x: null,
+        y: null,
+      },
+      /** should be the output type if metatype is output, otherwise null */
+      draggingType: null,
+      /** should be the available input types if metatype is input, otherwise empty*/
+      draggingConnects: [],
+      /* should be input or output. */
+      draggingMetaType: null,
     },
-    draggingTarget: {
-      x: null,
-      y: null,
-    },
-    /* should be input or output. */
-    draggingType: null,
     /** mode: select; move; */
     mode: 'select',
     selection: [
@@ -429,22 +433,27 @@ export default {
       }
     },
 
-    draggingLine(state, { componentId, pointId, draggingSource, draggingTarget, draggingType }) {
-      if (!state.dragging) {
+    draggingLine(state, { componentId, pointId, draggingSource, 
+        draggingTarget, draggingType, draggingConnects, draggingMetaType }) {
+          console.log('connects, type,', draggingConnects, draggingType)
+      if (!state.lineDraggingState.dragging) {
         const newState = Object.assign({}, {
           ...state,
-          ...{
+          lineDraggingState: {
             dragging: true,
             draggingSource,
             draggingComponent: componentId,
             draggingPoint: pointId,
             draggingTarget,
             draggingType,
+            draggingConnects,
+            draggingMetaType
           },
         });
         return newState;
       } else {
-        const newState = Object.assign({}, { ...state, ...{ draggingTarget } });
+        const newState = Object.assign({}, { ...state,
+          lineDraggingState: { ...state.lineDraggingState, draggingTarget } });
         return newState;
       }
     },
@@ -454,90 +463,109 @@ export default {
       const R = 10;
       const { offset } = state;
       // detect overlapping with other points.
-      const overlapped = [];
+      const overlappedOutputs = [];
+      const overlappedInputs = [];
+
+      const { draggingComponent, draggingPoint, draggingSource,
+        draggingTarget, draggingType,
+        draggingConnects, draggingMetaType } = state.lineDraggingState;
+
+      const pointIterationFunc = (input, overlapped, component) =>  {
+        const { x, y, width, height } = component;
+        const { px, py } = calculatePointCenter(x, y, width, height, input.x, input.y);
+        if (Math.abs((px + offset.x) - draggingTarget.x) <=
+          R && Math.abs((py + offset.y) - draggingTarget.y) <= R) {
+          overlapped.push({
+            componentId: component.id,
+            pointId: input.id,
+            type: input.type,
+            connects: input.connects,
+            metatype: input.metatype,
+          });
+        }
+      };
 
       state.components.forEach((component) => {
-        const { x, y, width, height } = component;
-        component.points.forEach((input) => {
-          const { px, py } = calculatePointCenter(x, y, width, height, input.x, input.y);
-          if (Math.abs((px + offset.x) - state.draggingTarget.x) <=
-            R && Math.abs((py + offset.y) - state.draggingTarget.y) <= R) {
-            overlapped.push({
-              componentId: component.id,
-              pointId: input.id,
-              type: input.type,
-              connects: input.connects,
-              metatype: input.metatype,
-            });
-          }
-        });
+        component.inputs.forEach((input) => pointIterationFunc(input, overlappedInputs, component));
+        component.outputs.forEach((input) => pointIterationFunc(input, overlappedOutputs, component));
       });
 
-      if (overlapped.length !== 0) {
-        const candidate = overlapped[0];
-        if (candidate.componentId === state.draggingComponent) {
-          message.info('暂不能将同一组件首位相连');
-        } else if (candidate.connects.includes(state.draggingType)) {
-          let newComponents = null;
-          if (candidate.metatype === 'input') {
-            // add connectTo to the dragging point.
+      let newComponents = null;
+      if (overlappedInputs.length !== 0) {
+          if (draggingMetaType === 'output') {
+            const candidate = overlappedInputs[0];
+            // candidate is input, meaning dragging source should be an output.
+            // add connectFrom to the candidate point.
             newComponents = state.components.map(
               (component) => {
-                if (component.id === state.draggingComponent) {
-                  const connectTo = Object.assign([], component.connectTo);
-                  connectTo.push({ component: candidate.componentId,
-                    input: candidate.pointId,
-                    output: state.draggingPoint,
+                if (component.id === candidate.componentId) {
+                  const connectFrom = Object.assign([], component.connectFrom);
+                  connectFrom.push({ component: draggingComponent,
+                    input: draggingPoint,
+                    output: candidate.pointId,
                   });
-                  return Object.assign({}, { ...component, ...{ connectTo } });
+                  return Object.assign({}, { ...component, ...{ connectFrom } });
                 } else {
                   return component;
                 }
               }
             );
-          } else if (candidate.metatype === 'output') {
-            // the other way round.
-            newComponents = state.components.map(
-              (component) => {
-                if (component.id === state.draggingComponent) {
-                  const connectTo = Object.assign([], component.connectTo);
-                  connectTo.push({ component: candidate.componentId,
-                    input: candidate.pointId,
-                    output: state.draggingPoint,
-                  });
-                  return Object.assign({}, { ...component, ...{ connectTo } });
-                } else {
-                  return component;
-                }
-              }
-            );
+          } else {
+            message.info("needs to be connected with an input point");
           }
-          const n = Object.assign({}, {
-            ...state,
-            ...{
-              components: newComponents,
-              dragging: false,
-              draggingTarget: { x: null, y: null },
-              draggingSource: { x: null, y: null },
-            },
-          });
-          return n;
+      }
+      if (overlappedOutputs.length !== 0) {
+        if (draggingMetaType === 'input') {
+          const candidate = overlappedOutputs[0];
+          // candidate is output, meansing dragging source should be an input.
+          // the other way round.
+          if (candidate.componentId === draggingComponent) {
+            message.info('暂不能将同一组件首位相连');
+          } else if(draggingConnects.includes(candidate.type)){
+            newComponents = state.components.map(
+              (component) => {
+                if (component.id === draggingComponent) {
+                  const connectFrom = Object.assign([], component.connectFrom);
+                  connectFrom.push({ component: candidate.componentId,
+                    input: candidate.pointId,
+                    output: draggingPoint,
+                  });
+                  return Object.assign({}, { ...component, ...{ connectFrom } });
+                } else {
+                  return component;
+                }
+              }
+            );
+          } else {
+            message.info("not compatiable");
+          }
         } else {
-          message.info('无法连接具有相同类型的点');
+          message.info("needs to be connected with an output point");
         }
+        
+      }
+
+      if (newComponents !== null) {
         return Object.assign({}, {
           ...state,
           ...{
-            dragging: false,
-            draggingTarget: { x: null, y: null },
-            draggingSource: { x: null, y: null },
+            components: newComponents,
+            lineDraggingState: {
+              ...state.lineDraggingState,
+              dragging: false,
+              draggingTarget: { x: null, y: null },
+              draggingSource: { x: null, y: null },
+            }
           },
         });
       }
+      
 
+      // return.
       return Object.assign({}, {
         ...state,
-        ...{
+        lineDraggingState: {
+          ...state.lineDraggingState,
           dragging: false,
           draggingTarget: { x: null, y: null },
           draggingSource: { x: null, y: null },

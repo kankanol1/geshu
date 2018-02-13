@@ -15,7 +15,7 @@ const maskStyles = {
  */
 class SelectionLayer extends React.PureComponent {
   render() {
-    const { dragging, draggingSource, draggingTarget } = this.props;
+    const { dragging, draggingSource, draggingTarget } = this.props.lineDraggingState;
 
     let draggingView = null;
 

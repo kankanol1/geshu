@@ -14,7 +14,7 @@ class LineLayer extends React.PureComponent {
     return (
       <React.Fragment>
         {
-          this.props.model.connectTo.map(
+          this.props.model.connectFrom.map(
             (line, i) => {
               const from = this.props.positionDict[this.props.model.id][line.output];
               const to = this.props.positionDict[line.component][line.input];
