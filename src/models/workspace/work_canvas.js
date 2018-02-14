@@ -86,7 +86,7 @@ export default {
       },
       /** should be the output type if metatype is output, otherwise null */
       draggingType: null,
-      /** should be the available input types if metatype is input, otherwise empty*/
+      /** should be the available input types if metatype is input, otherwise empty */
       draggingConnects: [],
       /* should be input or output. */
       draggingMetaType: null,

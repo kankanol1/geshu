@@ -4,6 +4,7 @@ import moment from 'moment';
 import { Popconfirm, Tag, Row, Col, Card, Form, Input, Select, Icon, Button, Dropdown, Menu, InputNumber, DatePicker, Modal, message, Badge, Divider } from 'antd';
 import StandardTable from '../../components/StandardTable';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
+import styles from './ProjectList.less';
 
 const FormItem = Form.Item;
 
@@ -118,7 +119,6 @@ export default class ProjectList extends PureComponent {
   refreshParams = {}
 
   handleRecordDelete = (record) => {
-    console.log('remove id: ', record.id);
     const { dispatch } = this.props;
     dispatch({
       type: 'project/removeProject',
@@ -126,6 +126,12 @@ export default class ProjectList extends PureComponent {
         id: record.id,
         refreshParams: this.refreshParams,
       },
+    });
+  }
+
+  handleSelectRows = (rows) => {
+    this.setState({
+      selectedRows: rows,
     });
   }
 
@@ -193,10 +199,25 @@ export default class ProjectList extends PureComponent {
   render() {
     const { project: { data }, loading } = this.props;
     const { selectedRows } = this.state;
+
     return (
       <PageHeaderLayout>
         <Card>
-          {this.renderSimpleForm()}
+          <div className={styles.tableList}>
+            <div className={styles.tableListForm}>
+              {this.renderSimpleForm()}
+            </div>
+            <div className={styles.tableListOperator}>
+              <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>
+                新建
+              </Button>
+              {
+                selectedRows.length > 0 && (
+                  <Button onClick={this.handleMultiDelete}>批量删除</Button>
+                )
+              }
+            </div>
+          </div>
           <StandardTable
             selectedRows={selectedRows}
             loading={loading}
