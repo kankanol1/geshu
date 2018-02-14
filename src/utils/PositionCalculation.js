@@ -74,11 +74,15 @@ const calculateLineStr = (srcX, srcY, desX, desY) => {
 const calculatePointPositionDict = (component) => {
   const pointDict = {};
   const { x, y, width, height } = component;
-  component.points.forEach(
-    (point) => {
-      const { px, py } = calculatePointCenter(x, y, width, height, point.x, point.y);
-      pointDict[point.id] = { x: px, y: py };
-    }
+  const calculatePoint = (point) => {
+    const { px, py } = calculatePointCenter(x, y, width, height, point.x, point.y);
+    pointDict[point.id] = { x: px, y: py };
+  }
+  component.inputs.forEach(
+    (point) => calculatePoint(point)
+  );
+  component.outputs.forEach(
+    (point) => calculatePoint(point)
   );
   return pointDict;
 };

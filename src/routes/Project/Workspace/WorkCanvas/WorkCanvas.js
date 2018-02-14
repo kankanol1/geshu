@@ -101,7 +101,7 @@ class WorkCanvas extends React.PureComponent {
                       key={i}
                       model={component}
                       dispatch={this.props.dispatch}
-                      draggingTarget={this.props.draggingTarget}
+                      draggingTarget={this.props.lineDraggingState.draggingTarget}
                       positionDict={componentPointPosition}
                     />
                   );

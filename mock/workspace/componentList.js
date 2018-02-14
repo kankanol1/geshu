@@ -9,7 +9,10 @@ const componentList = {
           name: 'csv输入',
           code: 'csv-source',
           type: 'source',
-          points: [
+          inputs: [
+
+          ],
+          outputs: [
             {
               id: 'o-1',
               label: 'o',
@@ -17,8 +20,6 @@ const componentList = {
               x: 1,
               y: 0.5,
               type: 'datasource-output',
-              metatype: 'output',
-              connects: ['datasource-input'],
             },
           ],
         },
@@ -27,7 +28,10 @@ const componentList = {
           name: 'txt输入',
           code: 'csv-source',
           type: 'source',
-          points: [
+          inputs: [
+
+          ],
+          outputs: [
             {
               id: 'o-1',
               label: 'o',
@@ -35,8 +39,6 @@ const componentList = {
               x: 1,
               y: 0.5,
               type: 'datasource-output',
-              metatype: 'output',
-              connects: ['datasource-input'],
             },
           ],
         },
@@ -50,20 +52,20 @@ const componentList = {
           name: '列转换',
           code: 'column-convert',
           type: 'preprocessor',
-          points: [
-            /*
-            * input circles
-            */
+          inputs: [
             {
+              /*
+              * input circles
+              */
               id: 'i-1',
               label: 'i',
               hint: 'b', // occurs when hover
               x: 3,
               y: 0.5,
-              type: 'datasource-input',
-              metatype: 'input',
               connects: ['datasource-output'],
             },
+          ],
+          outputs: [
             {
               id: 'o-1',
               label: 'o',
@@ -71,8 +73,6 @@ const componentList = {
               x: 1,
               y: 0.5,
               type: 'datasource-output',
-              metatype: 'output',
-              connects: ['datasource-input'],
             },
           ],
         },
@@ -80,7 +80,7 @@ const componentList = {
           name: '行转换',
           code: 'row-convert',
           type: 'preprocessor',
-          points: [
+          inputs: [
             /*
             * input circles
             */
@@ -90,10 +90,10 @@ const componentList = {
               hint: 'b', // occurs when hover
               x: 3,
               y: 0.5,
-              type: 'datasource-input',
-              metatype: 'input',
               connects: ['datasource-output'],
             },
+          ],
+          outputs: [
             {
               id: 'o-1',
               label: 'o',
@@ -101,8 +101,6 @@ const componentList = {
               x: 1,
               y: 0.5,
               type: 'datasource-output',
-              metatype: 'output',
-              connects: ['datasource-input'],
             },
           ],
         },
