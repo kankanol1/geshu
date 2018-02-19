@@ -12,14 +12,20 @@ class WorkAreaMenu extends React.PureComponent {
         mode="horizontal"
         style={{ background: 'transparent', float: 'left' }}
       >
-        <SubMenu title={<span>文件</span>}>
-          <Menu.Item key="save">存储</Menu.Item>
+        <SubMenu title={<span>项目</span>}>
           <Menu.Item key="open">打开</Menu.Item>
           <Menu.Item key="close">关闭</Menu.Item>
-          <Menu.Item key="import">导入</Menu.Item>
-          <Menu.Item key="export">导出</Menu.Item>
+          <SubMenu title={<span>最近打开的项目</span>}>
+            <Menu.Item key="recent-1">项目1</Menu.Item>
+            <Menu.Item key="recent-2">项目2</Menu.Item>
+            <Menu.Item key="recent-3">项目3</Menu.Item>
+          </SubMenu>
         </SubMenu>
-        <SubMenu title={<span>项目</span>}>
+        <SubMenu title={<span>调试</span>}>
+          <Menu.Item key="sampledata">取样执行</Menu.Item>
+          <Menu.Item key="samplepipeline">执行至指定组件</Menu.Item>
+        </SubMenu>
+        <SubMenu title={<span>部署</span>}>
           <Menu.Item key="submit">提交运行</Menu.Item>
         </SubMenu>
         <Menu.Item key="help">

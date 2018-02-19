@@ -66,7 +66,7 @@ export default {
             x: 1,
             y: 0.5,
             type: 'datasource-output',
-          }
+          },
         ],
         connectFrom: [],
       },
@@ -433,9 +433,8 @@ export default {
       }
     },
 
-    draggingLine(state, { componentId, pointId, draggingSource, 
-        draggingTarget, draggingType, draggingConnects, draggingMetaType }) {
-          console.log('connects, type,', draggingConnects, draggingType)
+    draggingLine(state, { componentId, pointId, draggingSource,
+      draggingTarget, draggingType, draggingConnects, draggingMetaType }) {
       if (!state.lineDraggingState.dragging) {
         const newState = Object.assign({}, {
           ...state,
@@ -447,7 +446,7 @@ export default {
             draggingTarget,
             draggingType,
             draggingConnects,
-            draggingMetaType
+            draggingMetaType,
           },
         });
         return newState;
@@ -470,7 +469,7 @@ export default {
         draggingTarget, draggingType,
         draggingConnects, draggingMetaType } = state.lineDraggingState;
 
-      const pointIterationFunc = (input, overlapped, component) =>  {
+      const pointIterationFunc = (input, overlapped, component) => {
         const { x, y, width, height } = component;
         const { px, py } = calculatePointCenter(x, y, width, height, input.x, input.y);
         if (Math.abs((px + offset.x) - draggingTarget.x) <=
@@ -486,33 +485,37 @@ export default {
       };
 
       state.components.forEach((component) => {
-        component.inputs.forEach((input) => pointIterationFunc(input, overlappedInputs, component));
-        component.outputs.forEach((input) => pointIterationFunc(input, overlappedOutputs, component));
+        component.inputs.forEach((input) => {
+          pointIterationFunc(input, overlappedInputs, component);
+        });
+        component.outputs.forEach((input) => {
+          pointIterationFunc(input, overlappedOutputs, component);
+        });
       });
 
       let newComponents = null;
       if (overlappedInputs.length !== 0) {
-          if (draggingMetaType === 'output') {
-            const candidate = overlappedInputs[0];
-            // candidate is input, meaning dragging source should be an output.
-            // add connectFrom to the candidate point.
-            newComponents = state.components.map(
-              (component) => {
-                if (component.id === candidate.componentId) {
-                  const connectFrom = Object.assign([], component.connectFrom);
-                  connectFrom.push({ component: draggingComponent,
-                    input: draggingPoint,
-                    output: candidate.pointId,
-                  });
-                  return Object.assign({}, { ...component, ...{ connectFrom } });
-                } else {
-                  return component;
-                }
+        if (draggingMetaType === 'output') {
+          const candidate = overlappedInputs[0];
+          // candidate is input, meaning dragging source should be an output.
+          // add connectFrom to the candidate point.
+          newComponents = state.components.map(
+            (component) => {
+              if (component.id === candidate.componentId) {
+                const connectFrom = Object.assign([], component.connectFrom);
+                connectFrom.push({ component: draggingComponent,
+                  input: draggingPoint,
+                  output: candidate.pointId,
+                });
+                return Object.assign({}, { ...component, ...{ connectFrom } });
+              } else {
+                return component;
               }
-            );
-          } else {
-            message.info("needs to be connected with an input point");
-          }
+            }
+          );
+        } else {
+          message.info('needs to be connected with an input point');
+        }
       }
       if (overlappedOutputs.length !== 0) {
         if (draggingMetaType === 'input') {
@@ -521,7 +524,7 @@ export default {
           // the other way round.
           if (candidate.componentId === draggingComponent) {
             message.info('暂不能将同一组件首位相连');
-          } else if(draggingConnects.includes(candidate.type)){
+          } else if (draggingConnects.includes(candidate.type)) {
             newComponents = state.components.map(
               (component) => {
                 if (component.id === draggingComponent) {
@@ -537,12 +540,11 @@ export default {
               }
             );
           } else {
-            message.info("not compatiable");
+            message.info('not compatiable');
           }
         } else {
-          message.info("needs to be connected with an output point");
+          message.info('needs to be connected with an output point');
         }
-        
       }
 
       if (newComponents !== null) {
@@ -555,11 +557,10 @@ export default {
               dragging: false,
               draggingTarget: { x: null, y: null },
               draggingSource: { x: null, y: null },
-            }
+            },
           },
         });
       }
-      
 
       // return.
       return Object.assign({}, {
