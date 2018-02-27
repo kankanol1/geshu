@@ -92,12 +92,12 @@ export function postProject(req, res, u, b) {
   }
 
   const body = (b && b.body) || req.body;
-  const { method, id, description } = body;
+  const { method, ids, description } = body;
 
   switch (method) {
     /* eslint no-case-declarations:0 */
     case 'delete':
-      projectListDataSource = projectListDataSource.filter(item => item.id !== id);
+      projectListDataSource = projectListDataSource.filter(item => !ids.includes(item.id));
       break;
     case 'post':
       const i = gen();

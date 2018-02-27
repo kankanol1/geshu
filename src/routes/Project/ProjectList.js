@@ -7,31 +7,80 @@ import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './ProjectList.less';
 
 const FormItem = Form.Item;
+const { Option } = Select;
+const { RangePicker } = DatePicker;
+const { TextArea } = Input;
+
+const buildTagSelect = (options, tagMode = false) => {
+  const children = [];
+  for (let i = 0; i < options.length; i++) {
+    children.push(<Option key={i.toString(options.length)}>{options[i]}</Option>);
+  }
+  return (
+    <Select
+      mode={tagMode ? 'tags' : 'multiple'}
+      style={{ width: '100%' }}
+      placeholder="选择标签"
+      tokenSeparators={[',']}
+    >
+      {children}
+    </Select>
+  );
+};
+
+/** the creation form. */
 
 const CreateForm = Form.create()((props) => {
   const { modalVisible, form, handleAdd, handleModalVisible } = props;
   const okHandle = () => {
     form.validateFields((err, fieldsValue) => {
       if (err) return;
-      handleAdd(fieldsValue);
+      console.log(fieldsValue);
+      // handleAdd(fieldsValue);
     });
   };
+
+  const { data, currentRecord } = props;
   return (
     <Modal
-      title="新建规则"
+      title={currentRecord === undefined ? '新建项目' : '编辑项目'}
       visible={modalVisible}
       onOk={okHandle}
-      onCancel={() => handleModalVisible()}
+      onCancel={() => { form.resetFields(); handleModalVisible(); }}
     >
+      <FormItem
+        labelCol={{ span: 5 }}
+        wrapperCol={{ span: 15 }}
+        label="名称"
+      >
+        {form.getFieldDecorator('name', {
+          rules: [{ required: true, message: '项目名称' }],
+          initialValue: currentRecord === undefined ? '' : currentRecord.name,
+        })(
+          <Input placeholder="请输入" />
+        )}
+      </FormItem>
       <FormItem
         labelCol={{ span: 5 }}
         wrapperCol={{ span: 15 }}
         label="描述"
       >
         {form.getFieldDecorator('desc', {
-          rules: [{ required: true, message: 'Please input some description...' }],
+          rules: [{ required: true, message: '项目描述' }],
+          initialValue: currentRecord === undefined ? '' : currentRecord.description,
         })(
-          <Input placeholder="请输入" />
+          <TextArea placeholder="请输入" rows={2} />
+        )}
+      </FormItem>
+      <FormItem
+        labelCol={{ span: 5 }}
+        wrapperCol={{ span: 15 }}
+        label="标签"
+      >
+        {form.getFieldDecorator('label', {
+          initialValue: currentRecord === undefined ? [] : currentRecord.labels,
+        })(
+          buildTagSelect(data.labels, true)
         )}
       </FormItem>
     </Modal>
@@ -47,17 +96,17 @@ const getValue = obj => Object.keys(obj).map(key => obj[key]).join(',');
 @Form.create()
 export default class ProjectList extends PureComponent {
   state = {
+    modalVisible: false,
     selectedRows: [],
+    expendForm: false,
+    currentRecord: undefined,
     // formValues: [],
   }
 
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
-      type: 'project/fetchProjectList',
-    });
-    dispatch({
-      type: 'project/fetchProjectLabels',
+      type: 'project/init',
     });
   }
 
@@ -118,12 +167,21 @@ export default class ProjectList extends PureComponent {
 
   refreshParams = {}
 
+  handleEdit = (record) => {
+    // handle record edit.
+    this.setState({
+      ...this.state,
+      currentRecord: record,
+      modalVisible: true,
+    });
+  }
+
   handleRecordDelete = (record) => {
     const { dispatch } = this.props;
     dispatch({
       type: 'project/removeProject',
       payload: {
-        id: record.id,
+        ids: [record.id],
         refreshParams: this.refreshParams,
       },
     });
@@ -131,6 +189,7 @@ export default class ProjectList extends PureComponent {
 
   handleSelectRows = (rows) => {
     this.setState({
+      ...this.state,
       selectedRows: rows,
     });
   }
@@ -163,8 +222,39 @@ export default class ProjectList extends PureComponent {
     this.refreshParams = params;
   }
 
+  handleModalVisible = (visible) => {
+    this.setState({ ...this.state,
+      modalVisible: !!visible,
+      currentRecord: undefined,
+    });
+  }
+
+  handleMultiDelete = () => {
+    const { dispatch } = this.props;
+    const ids = this.state.selectedRows.map(record => record.id);
+    dispatch({
+      type: 'project/removeProject',
+      payload: {
+        ids,
+        refreshParams: this.refreshParams,
+      },
+    });
+    // update selection.
+    this.setState({
+      ...this.state,
+      selectedRows: [],
+    });
+  }
+
+  toggleForm = () => {
+    this.setState({
+      expandForm: !this.state.expandForm,
+    });
+  }
+
   renderSimpleForm() {
     const { getFieldDecorator } = this.props.form;
+    const { project: { data } } = this.props;
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
@@ -178,7 +268,7 @@ export default class ProjectList extends PureComponent {
           <Col md={8} sm={24}>
             <FormItem label="标签名">
               {getFieldDecorator('label')(
-                <Input placeholder="请输入" />
+                buildTagSelect(data.labels)
               )}
             </FormItem>
           </Col>
@@ -196,26 +286,89 @@ export default class ProjectList extends PureComponent {
     );
   }
 
+  renderForm() {
+    return this.state.expandForm ? this.renderAdvancedForm() : this.renderSimpleForm();
+  }
+
+  renderAdvancedForm() {
+    const { getFieldDecorator } = this.props.form;
+    const { project: { data } } = this.props;
+    return (
+      <Form onSubmit={this.handleSearch} layout="inline">
+        <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
+          <Col md={8} sm={24}>
+            <FormItem label="项目名">
+              {getFieldDecorator('name')(
+                <Input placeholder="请输入" />
+              )}
+            </FormItem>
+          </Col>
+          <Col md={16} sm={24}>
+            <FormItem label="标签名">
+              {getFieldDecorator('label')(
+                buildTagSelect(data.labels)
+              )}
+            </FormItem>
+          </Col>
+        </Row>
+        <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
+          <Col md={8} sm={24}>
+            <FormItem label="创建时间">
+              {getFieldDecorator('date')(
+                <RangePicker style={{ width: '100%' }} placeholder={['开始日期', '结束日期']} />
+              )}
+            </FormItem>
+          </Col>
+          <Col md={8} sm={24}>
+            <FormItem label="更新时间">
+              {getFieldDecorator('date')(
+                <RangePicker style={{ width: '100%' }} placeholder={['开始日期', '结束日期']} />
+              )}
+            </FormItem>
+          </Col>
+          <Col md={8} sm={24}>
+            <span>
+              <Button type="primary" htmlType="submit">查询</Button>
+              <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>重置</Button>
+              <a style={{ marginLeft: 8 }} onClick={this.toggleForm}>
+                收起 <Icon type="up" />
+              </a>
+            </span>
+          </Col>
+        </Row>
+      </Form>
+    );
+  }
+
   render() {
     const { project: { data }, loading } = this.props;
-    const { selectedRows } = this.state;
+    const { selectedRows, modalVisible, currentRecord } = this.state;
+
+    const parentMethods = {
+      data,
+      handleAdd: this.handleAdd,
+      handleModalVisible: this.handleModalVisible,
+      currentRecord,
+    };
 
     return (
       <PageHeaderLayout>
         <Card>
           <div className={styles.tableList}>
             <div className={styles.tableListForm}>
-              {this.renderSimpleForm()}
+              {this.renderForm()}
             </div>
             <div className={styles.tableListOperator}>
               <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>
                 新建
               </Button>
-              {
-                selectedRows.length > 0 && (
-                  <Button onClick={this.handleMultiDelete}>批量删除</Button>
-                )
-              }
+              <Popconfirm title="确认删除吗?" onConfirm={() => this.handleMultiDelete()}>
+                {
+                  selectedRows.length > 0 && (
+                    <Button>批量删除</Button>
+                  )
+                }
+              </Popconfirm>
             </div>
           </div>
           <StandardTable
@@ -227,6 +380,10 @@ export default class ProjectList extends PureComponent {
             onChange={this.handleStandardTableChange}
           />
         </Card>
+        <CreateForm
+          {...parentMethods}
+          modalVisible={modalVisible}
+        />
       </PageHeaderLayout>
     );
   }

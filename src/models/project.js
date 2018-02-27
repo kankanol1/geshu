@@ -16,6 +16,7 @@ export default {
       return {
         ...state,
         data: {
+          ...state.data,
           ...payload,
         },
       };
@@ -25,6 +26,7 @@ export default {
       return {
         ...state,
         data: {
+          ...state.data,
           labels: payload.list,
         },
       };
@@ -34,7 +36,6 @@ export default {
   effects: {
     *fetchProjectList({ payload }, { call, put }) {
       const response = yield call(queryProjects, payload);
-      console.log('project list', response);
       yield put({
         type: 'saveProjectList',
         payload: response,
@@ -50,10 +51,19 @@ export default {
     },
 
     *removeProject({ payload }, { call, put }) {
-      const response = yield call(removeProject, { id: payload.id });
+      const response = yield call(removeProject, { ids: payload.ids });
       yield put({
         type: 'fetchProjectList',
         payload: payload.refreshParams,
+      });
+    },
+
+    *init({ payload }, { put }) {
+      yield put({
+        type: 'fetchProjectList',
+      });
+      yield put({
+        type: 'fetchLabelsList',
       });
     },
   },
