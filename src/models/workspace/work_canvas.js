@@ -253,7 +253,7 @@ export default {
       const newSelection = [];
       selectedComponents.forEach(
         (component) => {
-          component.connectTo.forEach(
+          component.connectFrom.forEach(
             (line) => {
               if (containedComponents.includes(line.component)) {
                 // add this line.
@@ -302,7 +302,7 @@ export default {
             return null;
           } else {
             // not included, needs to check the lines.
-            const newConnectTo = component.connectTo.map(
+            const newConnectFrom = component.connectFrom.map(
               (item) => {
                 if (lineSelectionSet.includes(`${component.id}-${item.output}-${item.component}-${item.input}`)) {
                   return null;
@@ -312,7 +312,7 @@ export default {
               }
             );
             return Object.assign({}, { ...component,
-              ...{ connectTo: newConnectTo.filter(a => a != null) } });
+              ...{ connectFrom: newConnectFrom.filter(a => a != null) } });
           }
         }
       );
@@ -597,14 +597,15 @@ export default {
           }
         }
       );
-      // check if only one component is being selected.
-      if (count === 1) {
-        // means we can update the selection.
-        yield put({
-          type: 'work_component_settings/displayComponentSetting',
-          component,
-        });
-      }
+      // we don't want to enable this right now.
+      // check if only one component is being selected and it's not being dragged somewhere.
+      // if (count === 1 && deltaX === 0 && deltaY === 0) {
+      //   // means we can update the selection.
+      //   yield put({
+      //     type: 'work_component_settings/displayComponentSetting',
+      //     component,
+      //   });
+      // }
     },
   },
 

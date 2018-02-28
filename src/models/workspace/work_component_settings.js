@@ -12,6 +12,8 @@ export default {
 
     ],
     currentComponent: undefined,
+
+    loading: false,
   },
 
   reducers: {

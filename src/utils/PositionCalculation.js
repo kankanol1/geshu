@@ -28,9 +28,9 @@ const calculatePointCenter = (x, y, width, height, xIndex, yIndex) => {
   return { px, py };
 };
 
-// const calculateLineStrDirectly = (srcX, srcY, desX, desY) => {
-//   return `${srcX}, ${srcY} ${desX}, ${desY}`;
-// }
+const calculateLineStrDirectly = (srcX, srcY, desX, desY) => {
+  return `${srcX}, ${srcY} ${desX}, ${desY}`;
+};
 
 const calculateLineStrStraightly = (srcX, srcY, desX, desY) => {
   let str = `${srcX}, ${srcY}`;
@@ -67,8 +67,8 @@ const calculateLineStrStraightly = (srcX, srcY, desX, desY) => {
 };
 
 const calculateLineStr = (srcX, srcY, desX, desY) => {
-  // return calculateLineStrDirectly(srcX, srcY, desX, desY);
-  return calculateLineStrStraightly(srcX, srcY, desX, desY);
+  return calculateLineStrDirectly(srcX, srcY, desX, desY);
+  // return calculateLineStrStraightly(srcX, srcY, desX, desY);
 };
 
 const calculatePointPositionDict = (component) => {
@@ -77,12 +77,12 @@ const calculatePointPositionDict = (component) => {
   const calculatePoint = (point) => {
     const { px, py } = calculatePointCenter(x, y, width, height, point.x, point.y);
     pointDict[point.id] = { x: px, y: py };
-  }
+  };
   component.inputs.forEach(
-    (point) => calculatePoint(point)
+    (point) => { calculatePoint(point); }
   );
   component.outputs.forEach(
-    (point) => calculatePoint(point)
+    (point) => { calculatePoint(point); }
   );
   return pointDict;
 };

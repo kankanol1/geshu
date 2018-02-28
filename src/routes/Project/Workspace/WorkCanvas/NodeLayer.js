@@ -33,6 +33,14 @@ class NodeLayer extends React.PureComponent {
         component: this.props.model,
       });
     }
+    // we don't want to enable this right now.
+    // else {
+    //   // only display settings
+    //   this.props.dispatch({
+    //     type: 'work_component_settings/displayComponentSetting',
+    //     component: this.props.model,
+    //   });
+    // }
   }
 
   handleDrag(e, draggableData) {
