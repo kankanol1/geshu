@@ -237,7 +237,6 @@ export default class ProjectList extends PureComponent {
 
   handleUpdate = (fieldsValue, currentRecord) => {
     const { project: { data }, dispatch } = this.props;
-    console.log(fieldsValue.labels);
     const labels = fieldsValue.labels
       && fieldsValue.labels.map((l) => {
         const intL = parseInt(l, 10);

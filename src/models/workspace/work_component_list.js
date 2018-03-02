@@ -46,7 +46,7 @@ export default {
                 x: 3,
                 y: 0.5,
                 connects: ['datasource-output'],
-              }
+              },
             ],
             outputs: [
               {
@@ -57,7 +57,7 @@ export default {
                 y: 0.5,
                 type: 'datasource-output',
               },
-            ]
+            ],
           },
         ],
       },
@@ -83,10 +83,5 @@ export default {
   },
 
   subscriptions: {
-    setup({ dispatch }) {
-      dispatch({
-        type: 'featchComponentList',
-      });
-    },
   },
 };

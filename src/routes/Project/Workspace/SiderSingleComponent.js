@@ -1,0 +1,47 @@
+import React from 'react';
+import Radium from 'radium';
+import DraggableWithPreview from '../../../components/DraggableWithPreview';
+import ComponentPreview from './ComponentPreview';
+import { fillDefaultSize } from '../../../utils/PositionCalculation';
+
+class SiderSingleComponent extends React.PureComponent {
+  render() {
+    // data.
+    const { kei, name, component } = this.props;
+    // handler
+    const { handlePreviewChange, onItemDragged } = this.props;
+    const sizedComponent = fillDefaultSize(component);
+    return (
+      <DraggableWithPreview
+        key={`${kei}-preview`}
+        onItemDragged={
+          (from, to) => onItemDragged(from, to, sizedComponent)
+        }
+        onPreviewChanged={handlePreviewChange}
+        preview={<ComponentPreview component={sizedComponent} />}
+      >
+        <div
+          key={`${kei}-display`}
+          style={{
+            cursor: 'default',
+            textAlign: 'center',
+            paddingTop: '2px',
+            paddingBottom: '2px',
+            marginTop: '5px',
+            marginBottom: '5px',
+            border: '1px solid #bfbfbf',
+            ':hover': {
+              background: '#1890FF',
+              color: 'white',
+              cursor: 'move',
+            },
+          }}
+        >
+          {name}
+        </div>
+      </DraggableWithPreview>
+    );
+  }
+}
+
+export default Radium(SiderSingleComponent);

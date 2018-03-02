@@ -23,6 +23,7 @@ class WorkCanvas extends React.PureComponent {
   }
 
   handleDrag(e, draggableData) {
+    e.preventDefault();
     // update selection rect.
     this.props.dispatch({
       type: 'work_canvas/dragCanvas',
@@ -33,13 +34,15 @@ class WorkCanvas extends React.PureComponent {
     });
   }
 
-  handleDragStop() {
+  handleDragStop(e) {
+    e.preventDefault();
     this.props.dispatch({
       type: 'work_canvas/canvasDragStop',
     });
   }
 
-  handleDragStart() {
+  handleDragStart(e) {
+    e.preventDefault();
     this.props.dispatch({
       type: 'work_canvas/modeChange',
       isMoveMode: key.isPressed('space'),

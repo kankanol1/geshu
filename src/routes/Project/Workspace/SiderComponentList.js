@@ -1,13 +1,12 @@
 import React from 'react';
 import { connect } from 'dva';
-import { Layout, Collapse } from 'antd';
+import { Layout, Collapse, Input } from 'antd';
 import { Scrollbars } from 'react-custom-scrollbars';
-import DraggableWithPreview from '../../../components/DraggableWithPreview';
-import ComponentPreview from './ComponentPreview';
-import { fillDefaultSize } from '../../../utils/PositionCalculation';
+import SiderSingleComponent from './SiderSingleComponent';
 
 const { Sider } = Layout;
 const { Panel } = Collapse;
+const { Search } = Input;
 
 class SiderComponentList extends React.PureComponent {
   constructor(props) {
@@ -16,6 +15,14 @@ class SiderComponentList extends React.PureComponent {
       preview: null,
     };
     this.handlePreviewChange = this.handlePreviewChange.bind(this);
+  }
+
+  componentDidMount() {
+    // fetch data.
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'work_component_list/featchComponentList',
+    });
   }
 
   handlePreviewChange(preview) {
@@ -27,6 +34,11 @@ class SiderComponentList extends React.PureComponent {
   render() {
     return (
       <Sider style={{ background: 'transparent', height: '100%', float: 'left' }}>
+        <Search
+          placeholder="Filter"
+          onSearch={value => console.log(value)}
+          style={{ width: 200, padding: '5px' }}
+        />
         <Scrollbars>
           <Collapse
             defaultActiveKey={this.props.work_component_list.activekeys}
@@ -40,27 +52,15 @@ class SiderComponentList extends React.PureComponent {
                       {
                         group.components.map(
                           (component, i) => {
-                            const sizedComponent = fillDefaultSize(component);
                             return (
-                              <DraggableWithPreview
-                                key={i}
-                                onItemDragged={
-                                  (from, to) => this.props.onItemDragged(from, to, sizedComponent)
-                                }
-                                onPreviewChanged={this.handlePreviewChange}
-                                preview={<ComponentPreview component={sizedComponent} />}
-                              >
-                                <div
-                                  style={{
-                                    cursor: 'default',
-                                    textAlign: 'center',
-                                    paddingTop: '5px',
-                                    paddingBottom: '5px',
-                                  }}
-                                >
-                                  {component.name}
-                                </div>
-                              </DraggableWithPreview>
+                              <SiderSingleComponent
+                                key={`${group.key}-${i}`}
+                                kei={`${group.key}-${i}`}
+                                name={component.name}
+                                component={component}
+                                onItemDragged={this.props.onItemDragged}
+                                handlePreviewChange={this.handlePreviewChange}
+                              />
                             );
                           }
                         )

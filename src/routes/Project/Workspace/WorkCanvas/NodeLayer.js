@@ -21,12 +21,14 @@ class NodeLayer extends React.PureComponent {
   }
 
   handleDragStart(e) {
+    e.preventDefault();
     // stop propagation to parent.
     e.stopPropagation();
     this.hasDrag = false;
   }
 
-  handleDragStop() {
+  handleDragStop(e) {
+    e.preventDefault();
     if (!this.hasDrag) {
       this.props.dispatch({
         type: 'work_canvas/updateComponentSelectionAndDisplaySettings',
@@ -44,6 +46,7 @@ class NodeLayer extends React.PureComponent {
   }
 
   handleDrag(e, draggableData) {
+    e.preventDefault();
     this.hasDrag = true;
     this.props.dispatch({
       type: 'work_canvas/moveComponentAndDisplaySettingsIfNeeded',

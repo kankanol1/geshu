@@ -16,6 +16,7 @@ class DraggableWithPreview extends React.Component {
   }
 
   handleDrag(e, draggableData) {
+    e.preventDefault();
     this.setState({
       draggingView: true,
       dragging: {
@@ -38,6 +39,7 @@ class DraggableWithPreview extends React.Component {
   }
 
   handleStop(e) {
+    e.preventDefault();
     this.props.onItemDragged(this.state.dragging, {
       x: e.clientX,
       y: e.clientY,
