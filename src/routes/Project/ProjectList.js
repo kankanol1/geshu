@@ -20,6 +20,7 @@ const buildTagSelect = (options, tagMode = false) => {
     <Select
       mode={tagMode ? 'tags' : 'multiple'}
       style={{ width: '100%' }}
+      labelInValue={true}
       placeholder="选择标签"
       tokenSeparators={[',']}
     >
@@ -77,7 +78,7 @@ const CreateForm = Form.create()((props) => {
         wrapperCol={{ span: 15 }}
         label="标签"
       >
-        {form.getFieldDecorator('label', {
+        {form.getFieldDecorator('labels', {
           initialValue: currentRecord === undefined ? [] : currentRecord.labels,
         })(
           buildTagSelect(data.labels, true)
@@ -100,7 +101,7 @@ export default class ProjectList extends PureComponent {
     selectedRows: [],
     expendForm: false,
     currentRecord: undefined,
-    // formValues: [],
+    formValues: [],
   }
 
   componentDidMount() {
@@ -194,9 +195,46 @@ export default class ProjectList extends PureComponent {
     });
   }
 
+  handleSearch = (e) => {
+    e.preventDefault();
+
+    const { dispatch, form } = this.props;
+
+    form.validateFields((err, fieldsValue) => {
+      if (err) return;
+
+      const labels = fieldsValue.labels && fieldsValue.labels.map(l => l.label);
+      console.log(fieldsValue.updatedAt);
+      const updatedAt = fieldsValue.updatedAt
+        && fieldsValue.updatedAt.map(m => m.format('YYYYMMDD')).join();
+
+      const createdAt = fieldsValue.createdAt
+        && fieldsValue.createdAt.map(m => m.format('YYYYMMDD')).join();
+
+      const values = {
+        ...fieldsValue,
+        labels: labels && labels.join(),
+        updatedAt,
+        createdAt,
+      };
+
+      console.log(values);
+
+
+      this.setState({
+        formValues: values,
+      });
+
+      dispatch({
+        type: 'project/fetchProjectList',
+        payload: values,
+      });
+    });
+  }
+
   handleStandardTableChange = (pagination, filtersArg, sorter) => {
     const { dispatch } = this.props;
-    // const { formValues } = this.state;
+    const { formValues } = this.state;
 
     const filters = Object.keys(filtersArg).reduce((obj, key) => {
       const newObj = { ...obj };
@@ -207,7 +245,7 @@ export default class ProjectList extends PureComponent {
     const params = {
       currentPage: pagination.current,
       pageSize: pagination.pageSize,
-      // ...formValues,
+      ...formValues,
       ...filters,
     };
     if (sorter.field) {
@@ -246,6 +284,18 @@ export default class ProjectList extends PureComponent {
     });
   }
 
+  handleFormReset = () => {
+    const { form, dispatch } = this.props;
+    form.resetFields();
+    this.setState({
+      formValues: {},
+    });
+    dispatch({
+      type: 'project/fetchProjectList',
+      payload: {},
+    });
+  }
+
   toggleForm = () => {
     this.setState({
       expandForm: !this.state.expandForm,
@@ -267,7 +317,7 @@ export default class ProjectList extends PureComponent {
           </Col>
           <Col md={8} sm={24}>
             <FormItem label="标签名">
-              {getFieldDecorator('label')(
+              {getFieldDecorator('labels')(
                 buildTagSelect(data.labels)
               )}
             </FormItem>
@@ -305,7 +355,7 @@ export default class ProjectList extends PureComponent {
           </Col>
           <Col md={16} sm={24}>
             <FormItem label="标签名">
-              {getFieldDecorator('label')(
+              {getFieldDecorator('labels')(
                 buildTagSelect(data.labels)
               )}
             </FormItem>
@@ -314,14 +364,14 @@ export default class ProjectList extends PureComponent {
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
             <FormItem label="创建时间">
-              {getFieldDecorator('date')(
+              {getFieldDecorator('createdAt')(
                 <RangePicker style={{ width: '100%' }} placeholder={['开始日期', '结束日期']} />
               )}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
             <FormItem label="更新时间">
-              {getFieldDecorator('date')(
+              {getFieldDecorator('updatedAt')(
                 <RangePicker style={{ width: '100%' }} placeholder={['开始日期', '结束日期']} />
               )}
             </FormItem>

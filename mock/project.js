@@ -1,3 +1,4 @@
+import moment from 'moment';
 import { getUrlParams } from './utils';
 
 /**
@@ -14,6 +15,28 @@ const allLabels = [
   '数据上线项目',
 ];
 
+const generatedLabels = [
+  [
+    '测试',
+    '模型项目',
+  ],
+  [
+    '开发中',
+    '模型项目',
+  ],
+  [
+    '测试',
+    '数据上线项目',
+  ],
+  [
+    '数据上线项目',
+  ],
+  [
+    '开发中',
+    'ETL项目',
+  ],
+];
+
 let projectListDataSource = [];
 
 let num = 1000;
@@ -27,9 +50,9 @@ for (let i = 0; i < 66; i += 1) {
     key: i,
     id: i,
     description: '项目描述',
-    createdAt: new Date(`2018-01-${Math.floor(i / 3) + 1}`),
-    updatedAt: new Date(`2018-02-${Math.floor(i / 3) + 1}`),
-    labels: allLabels,
+    createdAt: moment(`2018-01-0${Math.floor(i / 3) + 1}`, 'YYYY-MM-DD'),
+    updatedAt: moment(`2018-02-0${Math.floor(i / 3) + 1}`, 'YYYY-MM-DD'),
+    labels: generatedLabels[i % 5],
   });
 }
 
@@ -53,8 +76,42 @@ export function getProject(req, res, u) {
     });
   }
 
-  if (params.no) {
-    dataSource = dataSource.filter(data => data.no.indexOf(params.no) > -1);
+  if (params.name) {
+    dataSource = dataSource.filter(data => data.name.indexOf(params.name) > 0);
+  }
+
+  if (params.labels) {
+    const labels = params.labels.split(',');
+    dataSource = dataSource.filter((data) => {
+      let result = true;
+      for (let i = 0; i < labels.length; i++) {
+        const label = labels[i];
+        if (!data.labels.includes(label)) {
+          result = false;
+        }
+      }
+      return result;
+    });
+  }
+
+  if (params.updatedAt) {
+    const updatedAt = params.updatedAt.split(',').map(t => moment(t, 'YYYYMMDD'));
+    dataSource = dataSource.filter((data) => {
+      if (data.updatedAt >= updatedAt[0] && data.updatedAt <= updatedAt[0]) {
+        return true;
+      }
+      return false;
+    });
+  }
+
+  if (params.createdAt) {
+    const createdAt = params.createdAt.split(',').map(t => moment(t, 'YYYYMMDD'));
+    dataSource = dataSource.filter((data) => {
+      if (data.createdAt >= createdAt[0] && data.createdAt <= createdAt[0]) {
+        return true;
+      }
+      return false;
+    });
   }
 
   let pageSize = 10;
@@ -69,8 +126,17 @@ export function getProject(req, res, u) {
 
   const startNum = (currentPage - 1) * pageSize;
   const returnDataSource = dataSource.slice(startNum, startNum + pageSize);
+
+  const formatedDataSource = returnDataSource.map((item) => {
+    return {
+      ...item,
+      createdAt: item.createdAt.format('YYYY-MM-DD HH:mm'),
+      updatedAt: item.updatedAt.format('YYYY-MM-DD HH:mm'),
+    };
+  });
+
   const result = {
-    list: returnDataSource,
+    list: formatedDataSource,
     pagination: {
       total: dataSource.length,
       pageSize,
@@ -106,8 +172,8 @@ export function postProject(req, res, u, b) {
         id: i,
         key: i,
         description,
-        createdAt: new Date(`2018-01-${Math.floor(i / 2) + 1}`),
-        updatedAt: new Date(`2018-02-${Math.floor(i / 2) + 1}`),
+        createdAt: moment(`2018-01-0${Math.floor(i / 2) + 1}`, 'YYYY-MM-DD'),
+        updatedAt: moment(`2018-02-0${Math.floor(i / 2) + 1}`, 'YYYY-MM-DD'),
         labels: allLabels,
       });
       break;
