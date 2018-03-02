@@ -3,6 +3,7 @@ import { connect } from 'dva';
 import { Layout, Collapse, Input } from 'antd';
 import { Scrollbars } from 'react-custom-scrollbars';
 import SiderSingleComponent from './SiderSingleComponent';
+import FilterCardList from '../../List/Applications';
 
 const { Sider } = Layout;
 const { Panel } = Collapse;
@@ -21,7 +22,7 @@ class SiderComponentList extends React.PureComponent {
     // fetch data.
     const { dispatch } = this.props;
     dispatch({
-      type: 'work_component_list/featchComponentList',
+      type: 'work_component_list/fetchComponentList',
     });
   }
 
@@ -31,21 +32,33 @@ class SiderComponentList extends React.PureComponent {
     });
   }
 
+  handleSearch = (filter) => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'work_component_list/filterComponent',
+      payload: {
+        filter,
+      },
+    });
+  }
+
   render() {
+    const { activekeys, groups } = this.props.work_component_list;
     return (
-      <Sider style={{ background: 'transparent', height: '100%', float: 'left' }}>
+      <Sider style={{ background: 'transparent' }}>
         <Search
           placeholder="Filter"
-          onSearch={value => console.log(value)}
+          onSearch={value => this.handleSearch(value)}
           style={{ width: 200, padding: '5px' }}
         />
-        <Scrollbars>
+        {/* the hight of scrollbars should be 100%-hight of search input */}
+        <Scrollbars style={{ height: 'calc( 100% - 42px)' }}>
           <Collapse
-            defaultActiveKey={this.props.work_component_list.activekeys}
+            defaultActiveKey={activekeys}
             onChange={this.onChange}
           >
             {
-              this.props.work_component_list.groups.map(
+              groups.map(
                 (group) => {
                   return (
                     <Panel header={group.name} key={group.key}>
@@ -79,5 +92,5 @@ class SiderComponentList extends React.PureComponent {
 }
 
 export default connect(
-  (work_component_list) => { return work_component_list; }
+  work_component_list => work_component_list
 )(SiderComponentList);

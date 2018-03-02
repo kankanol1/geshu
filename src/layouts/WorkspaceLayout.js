@@ -34,7 +34,7 @@ class WorkspaceLayout extends AbstractBasicLayout {
   getContent() {
     const { routerData, match } = this.props;
     return (
-      <Content style={{ height: '100%' }}>
+      <Content style={{ height: '100%', overflowX: 'initial' }}>
         <div style={{ height: 'calc(100vh - 64px)' }}>
           <Switch>
             {

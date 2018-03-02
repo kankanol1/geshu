@@ -62,6 +62,8 @@ export default {
         ],
       },
     ],
+    // store all the data fetched from server.
+    allGroups: [],
     activekeys: ['input-group', 'transform-group'],
   },
 
@@ -70,13 +72,32 @@ export default {
       const activekeys = data.groups.map(
         (group) => { return group.key; }
       );
-      return Object.assign({}, { ...state, ...{ groups: data.groups, activekeys } });
+      return Object.assign({}, { ...state,
+        ...{ groups: data.groups, allGroups: data.groups, activekeys } });
     },
 
+    filterComponent(state, { payload }) {
+      const { allGroups } = state;
+      const { filter } = payload;
+      if (filter && filter !== '') {
+        const filteredGroup = allGroups.map(
+          (group) => {
+            return {
+              ...group,
+              components: group.components.filter(c => c.name.indexOf(filter) > 0),
+            };
+          }
+        );
+        return Object.assign({}, { ...state,
+          groups: filteredGroup.filter(g => g.components.length > 0) });
+      } else {
+        return Object.assign({}, { ...state, groups: allGroups });
+      }
+    },
   },
 
   effects: {
-    *featchComponentList({ payload }, { call, put }) {
+    *fetchComponentList({ payload }, { call, put }) {
       const data = yield call(componentAPI.fetchComponentList);
       yield put({ type: 'replaceComponentList', data: data.data });
     },
