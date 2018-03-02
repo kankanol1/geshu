@@ -10,7 +10,7 @@ import { format, delay } from 'roadhog-api-doc';
 import componentList from './mock/workspace/componentList'
 import { wrapResponse } from './mock/response_wrapper'
 import componentParams from './mock/workspace/componentParams'
-import { getProject, postProject, getProjectLabels } from './mock/project';
+import { getProject, createProject, updateProject, deleteProject, getProjectLabels } from './mock/project';
 
 // 是否禁用代理
 const noProxy = process.env.NO_PROXY === 'true';
@@ -22,16 +22,10 @@ const proxy = {
   'GET /api/workspace/component_param/:id':  (req, res) => {
       res.send(wrapResponse(componentParams(req.params.id)))
   },
-  'GET /api/project/query': getProject,
-  'POST /api/project/command': {
-    $params: {
-      pageSize: {
-        desc: '分页',
-        exp: 2,
-      },
-    },
-    $body: postProject,
-  },
+  'GET /api/project/list': getProject,
+  'POST /api/project/create': createProject,
+  'POST /api/project/update': updateProject,
+  'POST /api/project/delete': deleteProject,
   'GET /api/project/labels':  getProjectLabels,
 
   // 支持值为 Object 和 Array

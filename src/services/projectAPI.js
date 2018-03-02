@@ -5,11 +5,11 @@ import { stringify } from 'qs';
 import request from '../utils/request';
 
 export async function queryProjects(params) {
-  return request(`/api/project/query?${stringify(params)}`);
+  return request(`/api/project/list?${stringify(params)}`);
 }
 
 export async function removeProject(params) {
-  return request('/api/project/command', {
+  return request('/api/project/delete', {
     method: 'POST',
     body: {
       ...params,
@@ -18,11 +18,20 @@ export async function removeProject(params) {
   });
 }
 
-export async function addProject(params) {
-  return request('/api/project/command', {
+export async function updateProject(params) {
+  return request('/api/project/update', {
+    method: 'POST',
     body: {
       ...params,
-      method: 'post',
+    },
+  });
+}
+
+export async function createProject(params) {
+  return request('/api/project/create', {
+    method: 'POST',
+    body: {
+      ...params,
     },
   });
 }

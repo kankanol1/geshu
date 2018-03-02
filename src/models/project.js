@@ -1,4 +1,6 @@
-import { queryProjects, queryProjectLabels, removeProject } from '../services/projectAPI';
+import { message } from 'antd';
+import { queryProjects, queryProjectLabels, removeProject, createProject, updateProject } from '../services/projectAPI';
+
 
 export default {
   namespace: 'project',
@@ -31,6 +33,7 @@ export default {
         },
       };
     },
+
   },
 
   effects: {
@@ -52,10 +55,44 @@ export default {
 
     *removeProject({ payload }, { call, put }) {
       const response = yield call(removeProject, { ids: payload.ids });
-      yield put({
-        type: 'fetchProjectList',
-        payload: payload.refreshParams,
-      });
+      if (response.success) {
+        message.success(response.message);
+        yield put({
+          type: 'fetchProjectList',
+          payload: payload.refreshParams,
+        });
+      } else {
+        // show message.
+        message.error(response.message);
+      }
+    },
+
+    *updateProject({ payload }, { call, put }) {
+      const response = yield call(updateProject, { ...payload });
+      if (response.success) {
+        message.success(response.message);
+        yield put({
+          type: 'fetchProjectList',
+          payload: payload.refreshParams,
+        });
+      } else {
+        // show message.
+        message.error(response.message);
+      }
+    },
+
+    *createProject({ payload }, { call, put }) {
+      const response = yield call(createProject, { ...payload });
+      if (response.success) {
+        message.success(response.message);
+        yield put({
+          type: 'fetchProjectList',
+          payload: payload.refreshParams,
+        });
+      } else {
+        // show message.
+        message.error(response.message);
+      }
     },
 
     *init({ payload }, { put }) {

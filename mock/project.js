@@ -151,41 +151,80 @@ export function getProject(req, res, u) {
   }
 }
 
-export function postProject(req, res, u, b) {
+export function createProject(req, res, u, b) {
   let url = u;
   if (!url || Object.prototype.toString.call(url) !== '[object String]') {
     url = req.url; // eslint-disable-line
   }
 
   const body = (b && b.body) || req.body;
-  const { method, ids, description } = body;
+  const { name, description, labels } = body;
 
-  switch (method) {
-    /* eslint no-case-declarations:0 */
-    case 'delete':
-      projectListDataSource = projectListDataSource.filter(item => !ids.includes(item.id));
-      break;
-    case 'post':
-      const i = gen();
-      projectListDataSource.unshift({
-        name: `项目名称 ${i}`,
-        id: i,
-        key: i,
-        description,
-        createdAt: moment(`2018-01-0${Math.floor(i / 2) + 1}`, 'YYYY-MM-DD'),
-        updatedAt: moment(`2018-02-0${Math.floor(i / 2) + 1}`, 'YYYY-MM-DD'),
-        labels: allLabels,
-      });
-      break;
-    default:
-      break;
-  }
+  const i = gen();
+  projectListDataSource.unshift({
+    name,
+    id: i,
+    key: i,
+    description,
+    createdAt: moment(`2018-01-0${Math.floor(i / 2) + 1}`, 'YYYY-MM-DD'),
+    updatedAt: moment(`2018-02-0${Math.floor(i / 2) + 1}`, 'YYYY-MM-DD'),
+    labels: labels.split(','),
+  });
 
   const result = {
-    list: projectListDataSource,
-    pagination: {
-      total: projectListDataSource.length,
-    },
+    success: true,
+    message: '添加成功',
+  };
+
+  if (res && res.json) {
+    res.json(result);
+  } else {
+    return result;
+  }
+}
+
+export function deleteProject(req, res, u, b) {
+  let url = u;
+  if (!url || Object.prototype.toString.call(url) !== '[object String]') {
+    url = req.url; // eslint-disable-line
+  }
+
+  const body = (b && b.body) || req.body;
+  const { ids } = body;
+
+  projectListDataSource = projectListDataSource.filter(item => !ids.includes(item.id));
+
+  const result = {
+    success: true,
+    message: '删除成功',
+  };
+
+  if (res && res.json) {
+    res.json(result);
+  } else {
+    return result;
+  }
+}
+
+export function updateProject(req, res, u, b) {
+  let url = u;
+  if (!url || Object.prototype.toString.call(url) !== '[object String]') {
+    url = req.url; // eslint-disable-line
+  }
+
+  const body = (b && b.body) || req.body;
+  const { id, name, description, labels } = body;
+
+  projectListDataSource = projectListDataSource.map((item) => {
+    if (item.id === id) {
+      return { ...item, name, description, labels: labels.split(',') };
+    }
+    return item;
+  });
+
+  const result = {
+    success: true,
+    message: '修改成功',
   };
 
   if (res && res.json) {
@@ -207,8 +246,10 @@ export function getProjectLabels(req, res) {
   }
 }
 
-export default{
+export default {
   getProject,
-  postProject,
+  updateProject,
+  createProject,
+  deleteProject,
   getProjectLabels,
 };

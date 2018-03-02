@@ -20,7 +20,6 @@ const buildTagSelect = (options, tagMode = false) => {
     <Select
       mode={tagMode ? 'tags' : 'multiple'}
       style={{ width: '100%' }}
-      labelInValue={true}
       placeholder="选择标签"
       tokenSeparators={[',']}
     >
@@ -32,22 +31,27 @@ const buildTagSelect = (options, tagMode = false) => {
 /** the creation form. */
 
 const CreateForm = Form.create()((props) => {
-  const { modalVisible, form, handleAdd, handleModalVisible } = props;
+  const { modalVisible, form, handleAdd, handleUpdate, handleModalVisible } = props;
+  const { data, currentRecord } = props;
+
   const okHandle = () => {
     form.validateFields((err, fieldsValue) => {
       if (err) return;
-      console.log(fieldsValue);
-      // handleAdd(fieldsValue);
+      if (currentRecord) {
+        handleUpdate(fieldsValue, currentRecord);
+        form.resetFields();
+      } else {
+        handleAdd(fieldsValue);
+        form.resetFields();
+      }
     });
   };
-
-  const { data, currentRecord } = props;
   return (
     <Modal
       title={currentRecord === undefined ? '新建项目' : '编辑项目'}
       visible={modalVisible}
       onOk={okHandle}
-      onCancel={() => { form.resetFields(); handleModalVisible(); }}
+      onCancel={() => { handleModalVisible(); }}
     >
       <FormItem
         labelCol={{ span: 5 }}
@@ -66,7 +70,7 @@ const CreateForm = Form.create()((props) => {
         wrapperCol={{ span: 15 }}
         label="描述"
       >
-        {form.getFieldDecorator('desc', {
+        {form.getFieldDecorator('description', {
           rules: [{ required: true, message: '项目描述' }],
           initialValue: currentRecord === undefined ? '' : currentRecord.description,
         })(
@@ -168,6 +172,19 @@ export default class ProjectList extends PureComponent {
 
   refreshParams = {}
 
+  /**
+   * perform query and store query params locally.
+   */
+  performQuery = (params) => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'project/fetchProjectList',
+      payload: params,
+    });
+
+    this.refreshParams = params;
+  }
+
   handleEdit = (record) => {
     // handle record edit.
     this.setState({
@@ -195,16 +212,64 @@ export default class ProjectList extends PureComponent {
     });
   }
 
+  handleAdd = (fieldsValue) => {
+    const { project: { data }, dispatch } = this.props;
+    const labels = fieldsValue.labels
+      && fieldsValue.labels.map((l) => {
+        const intL = parseInt(l, 10);
+        if (!isNaN(intL)) {
+          return data.labels[intL];
+        }
+        return l;
+      });
+
+    dispatch({
+      type: 'project/createProject',
+      payload: {
+        ...fieldsValue,
+        labels: labels && labels.join(),
+        refreshParams: this.refreshParams,
+      },
+    });
+
+    this.handleModalVisible(false);
+  }
+
+  handleUpdate = (fieldsValue, currentRecord) => {
+    const { project: { data }, dispatch } = this.props;
+    console.log(fieldsValue.labels);
+    const labels = fieldsValue.labels
+      && fieldsValue.labels.map((l) => {
+        const intL = parseInt(l, 10);
+        if (!isNaN(intL)) {
+          return data.labels[intL];
+        }
+        return l;
+      });
+
+    dispatch({
+      type: 'project/updateProject',
+      payload: {
+        ...fieldsValue,
+        labels: labels && labels.join(),
+        id: currentRecord.id,
+      },
+    });
+    this.handleModalVisible(false);
+  }
+
   handleSearch = (e) => {
     e.preventDefault();
 
-    const { dispatch, form } = this.props;
+    const { form } = this.props;
+    const { project: { data } } = this.props;
 
     form.validateFields((err, fieldsValue) => {
       if (err) return;
 
-      const labels = fieldsValue.labels && fieldsValue.labels.map(l => l.label);
-      console.log(fieldsValue.updatedAt);
+      const labels = fieldsValue.labels
+        && fieldsValue.labels.map(l => data.labels[parseInt(l, 10)]);
+
       const updatedAt = fieldsValue.updatedAt
         && fieldsValue.updatedAt.map(m => m.format('YYYYMMDD')).join();
 
@@ -218,22 +283,15 @@ export default class ProjectList extends PureComponent {
         createdAt,
       };
 
-      console.log(values);
-
-
       this.setState({
         formValues: values,
       });
 
-      dispatch({
-        type: 'project/fetchProjectList',
-        payload: values,
-      });
+      this.performQuery(values);
     });
   }
 
   handleStandardTableChange = (pagination, filtersArg, sorter) => {
-    const { dispatch } = this.props;
     const { formValues } = this.state;
 
     const filters = Object.keys(filtersArg).reduce((obj, key) => {
@@ -251,13 +309,7 @@ export default class ProjectList extends PureComponent {
     if (sorter.field) {
       params.sorter = `${sorter.field}_${sorter.order}`;
     }
-
-    dispatch({
-      type: 'project/fetchProjectList',
-      payload: params,
-    });
-
-    this.refreshParams = params;
+    this.performQuery(params);
   }
 
   handleModalVisible = (visible) => {
@@ -285,15 +337,12 @@ export default class ProjectList extends PureComponent {
   }
 
   handleFormReset = () => {
-    const { form, dispatch } = this.props;
+    const { form } = this.props;
     form.resetFields();
     this.setState({
       formValues: {},
     });
-    dispatch({
-      type: 'project/fetchProjectList',
-      payload: {},
-    });
+    this.performQuery({});
   }
 
   toggleForm = () => {
@@ -399,6 +448,7 @@ export default class ProjectList extends PureComponent {
       handleAdd: this.handleAdd,
       handleModalVisible: this.handleModalVisible,
       currentRecord,
+      handleUpdate: this.handleUpdate,
     };
 
     return (
