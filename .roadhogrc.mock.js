@@ -11,6 +11,7 @@ import componentList from './mock/workspace/componentList'
 import { wrapResponse } from './mock/response_wrapper'
 import componentParams from './mock/workspace/componentParams'
 import { getProject, createProject, updateProject, deleteProject, getProjectLabels } from './mock/project';
+import { login, userList, createUser, deleteUser } from './mock/user';
 
 // 是否禁用代理
 const noProxy = process.env.NO_PROXY === 'true';
@@ -27,6 +28,14 @@ const proxy = {
   'POST /api/project/update': updateProject,
   'POST /api/project/delete': deleteProject,
   'GET /api/project/labels':  getProjectLabels,
+
+  // login
+  'POST /api/login/account': login,
+  
+  // users manage.
+  'GET /api/users/list': userList,
+  'POST /api/users/create': createUser,
+  'POST /api/users/delete': deleteUser,
 
   // 支持值为 Object 和 Array
   'GET /api/currentUser': {
@@ -83,30 +92,30 @@ const proxy = {
   'GET /api/fake_chart_data': getFakeChartData,
   'GET /api/profile/basic': getProfileBasicData,
   'GET /api/profile/advanced': getProfileAdvancedData,
-  'POST /api/login/account': (req, res) => {
-    const { password, userName, type } = req.body;
-    if(password === '888888' && userName === 'admin'){
-      res.send({
-        status: 'ok',
-        type,
-        currentAuthority: 'admin'
-      });
-      return ;
-    }
-    if(password === '123456' && userName === 'user'){
-      res.send({
-        status: 'ok',
-        type,
-        currentAuthority: 'user'
-      });
-      return ;
-    }
-    res.send({
-      status: 'error',
-      type,
-      currentAuthority: 'guest'
-    });
-  },
+  // 'POST /api/login/account': (req, res) => {
+  //   const { password, userName, type } = req.body;
+  //   if(password === '888888' && userName === 'admin'){
+  //     res.send({
+  //       status: 'ok',
+  //       type,
+  //       currentAuthority: 'admin'
+  //     });
+  //     return ;
+  //   }
+  //   if(password === '123456' && userName === 'user'){
+  //     res.send({
+  //       status: 'ok',
+  //       type,
+  //       currentAuthority: 'user'
+  //     });
+  //     return ;
+  //   }
+  //   res.send({
+  //     status: 'error',
+  //     type,
+  //     currentAuthority: 'guest'
+  //   });
+  // },
   'POST /api/register': (req, res) => {
     res.send({ status: 'ok', currentAuthority: 'user' });
   },

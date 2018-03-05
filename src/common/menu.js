@@ -46,12 +46,13 @@ const menuData = [{
   name: '用户管理',
   icon: 'contacts',
   path: 'users',
+  authority: 'admin',
   children: [{
     name: '用户列表',
     path: 'list',
   }, {
     name: '添加用户',
-    path: 'new',
+    path: 'create',
   }],
 }, {
   name: '系统管理',

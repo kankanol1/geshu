@@ -91,6 +91,12 @@ export const getRouterData = (app) => {
     '/project/workspace/logview': {
       component: dynamicWrapper(app, [], () => import('../routes/Project/WorkspaceLogView')),
     },
+    '/users/list': {
+      component: dynamicWrapper(app, ['users'], () => import('../routes/Users/UserList')),
+    },
+    '/users/create': {
+      component: dynamicWrapper(app, ['users'], () => import('../routes/Users/UserEdit')),
+    },
 
     /**
      * The followings are used by our project. Adapted from ant-design-pro.
