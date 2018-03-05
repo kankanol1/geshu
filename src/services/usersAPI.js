@@ -34,3 +34,10 @@ export async function createUser(params) {
     },
   });
 }
+
+export async function queryUserName(params) {
+  console.log('dim', params);
+  return request(`/api/users/username?${stringify(params)}`, {
+    method: 'GET',
+  });
+}

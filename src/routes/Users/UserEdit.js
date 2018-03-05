@@ -24,10 +24,15 @@ export default class UserList extends PureComponent {
   handleAdd = (e) => {
     e.preventDefault();
 
-    const { form } = this.props;
+    const { form, dispatch } = this.props;
     form.validateFields((err, fieldsValue) => {
       if (!err) {
-        console.log('Received values of form: ', fieldsValue);
+        dispatch({
+          type: 'users/createUser',
+          payload: {
+            ...fieldsValue,
+          },
+        });
       }
     });
   }
@@ -45,9 +50,20 @@ export default class UserList extends PureComponent {
     callback();
   }
 
+  validateUserName = (rule, value, callback) => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'users/queryUserName',
+      payload: {
+        userName: value,
+      },
+    });
+    callback();
+  }
+
   render() {
     const currentRecord = undefined;
-    const { form, match } = this.props;
+    const { form, match, users } = this.props;
     return (
       <PageHeaderLayout>
         <Form onSubmit={this.handleAdd}>
@@ -57,9 +73,15 @@ export default class UserList extends PureComponent {
               wrapperCol={{ span: 15 }}
               label="用户名"
               hasFeedback
+              validateStatus={users.validate.userName.validating ? 'validating' :
+                (users.validate.userName.success ? 'success' : 'error')}
+              help={users.validate.userName.validating ? '检查中...' : users.validate.userName.message}
             >
               {form.getFieldDecorator('userName', {
-                rules: [{ required: true, message: '用户名称' }],
+                rules: [{ required: true,
+                  message: '用户名称',
+                  validator: this.validateUserName,
+              }],
                 initialValue: currentRecord === undefined ? '' : currentRecord.name,
               })(
                 <Input placeholder="请输入" />
@@ -113,7 +135,7 @@ export default class UserList extends PureComponent {
             >
               {form.getFieldDecorator('password1', {
                 rules: [{ required: true,
-                  message: '重复密码',
+                  message: '再重复一次密码',
                   validator: this.handlePasswordValidation,
                 }],
                 initialValue: currentRecord === undefined ? [] : currentRecord.labels,

@@ -180,6 +180,43 @@ export function deleteUser(req, res, u, b) {
   }
 }
 
+export function queryUserName(req, res, u, b) {
+  let url = u;
+  if (!url || Object.prototype.toString.call(url) !== '[object String]') {
+    url = req.url; // eslint-disable-line
+  }
+
+  const params = getUrlParams(url);
+
+  const successError = {
+    success: true,
+    message: '',
+  };
+
+  const failedError = {
+    success: false,
+    message: '已有相同用户名',
+  };
+
+  let returnJson = successError;
+  if (params.userName) {
+    const filteredUser = userListDataSource.filter(item => item.userName === params.userName);
+    if (filteredUser.length !== 0) {
+      returnJson = failedError;
+    } else {
+      returnJson = successError;
+    }
+  } else {
+    returnJson = failedError;
+  }
+
+  if (res && res.json) {
+    res.json(returnJson);
+  } else {
+    return returnJson;
+  }
+}
+
 // export function modifyPassword(req, res, u) {
 //   /** default modify admin's password. */
 

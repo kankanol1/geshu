@@ -1,5 +1,5 @@
 import { message } from 'antd';
-import { queryUsers, removeUsers, updateUser, createUser } from '../services/usersAPI';
+import { queryUsers, removeUsers, updateUser, createUser, queryUserName } from '../services/usersAPI';
 
 
 export default {
@@ -9,6 +9,13 @@ export default {
     data: {
       list: [],
       pagination: {},
+    },
+    validate: {
+      userName: {
+        validating: false,
+        success: true,
+        message: '',
+      },
     },
   },
 
@@ -22,6 +29,34 @@ export default {
         },
       };
     },
+
+    beginValidationUserName(state) {
+      return {
+        ...state,
+        validate: {
+          ...state.validate,
+          userName: {
+            ...state.validate.userName,
+            validating: true,
+          },
+        },
+      };
+    },
+
+    endValidationUserName(state, { payload }) {
+      return {
+        ...state,
+        validate: {
+          ...state.validate,
+          userName: {
+            ...state.validate.userName,
+            validating: false,
+            ...payload,
+          },
+        },
+      };
+    },
+
   },
 
   effects: {
@@ -65,14 +100,21 @@ export default {
       const response = yield call(createUser, { ...payload });
       if (response.success) {
         message.success(response.message);
-        yield put({
-          type: 'fetchUserList',
-          payload: payload.refreshParams,
-        });
       } else {
         // show message.
         message.error(response.message);
       }
+    },
+
+    *queryUserName({ payload }, { call, put }) {
+      yield put({
+        type: 'beginValidationUserName',
+      });
+      const response = yield call(queryUserName, { ...payload });
+      yield put({
+        type: 'endValidationUserName',
+        payload: response,
+      });
     },
   },
 
