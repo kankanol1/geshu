@@ -97,6 +97,9 @@ export const getRouterData = (app) => {
     '/users/create': {
       component: dynamicWrapper(app, ['users'], () => import('../routes/Users/UserEdit')),
     },
+    '/users/edit/:userName': {
+      component: dynamicWrapper(app, ['users'], () => import('../routes/Users/UserEdit')),
+    },
 
     /**
      * The followings are used by our project. Adapted from ant-design-pro.

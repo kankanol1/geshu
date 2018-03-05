@@ -94,11 +94,15 @@ export function userList(req, res, u, b) {
   }
 
   if (params.userName) {
-    dataSource = dataSource.filter(data => data.userName.indexOf(params.userName) > 0);
+    dataSource = dataSource.filter(data => data.userName.indexOf(params.userName) >= 0);
+  }
+
+  if (params.email) {
+    dataSource = dataSource.filter(data => data.email.indexOf(params.email) >= 0);
   }
 
   if (params.role) {
-    dataSource = dataSource.filter(data => data.role === params.name);
+    dataSource = dataSource.filter(data => data.role === params.role);
   }
 
   if (params.updatedAt) {

@@ -119,6 +119,7 @@ class AbstractBasicLayout extends React.PureComponent {
                     exact={item.exact}
                     authority={item.authority}
                     redirectPath="/exception/403"
+                    match={match}
                   />
                 )
               )

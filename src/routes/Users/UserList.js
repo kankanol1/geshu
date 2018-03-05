@@ -1,7 +1,9 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
 import moment from 'moment';
-import { Popconfirm, Tag, Row, Col, Card, Form, Input, Select, Icon, Button, Dropdown, Menu, InputNumber, DatePicker, Modal, message, Badge, Divider } from 'antd';
+import Identicon from 'identicon.js';
+import hash from 'object-hash';
+import { Avatar, Popconfirm, Tag, Row, Col, Card, Form, Input, Select, Icon, Button, Dropdown, Menu, InputNumber, DatePicker, Modal, message, Badge, Divider } from 'antd';
 import StandardTable from '../../components/StandardTable';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './UserList.less';
@@ -12,9 +14,10 @@ const { RangePicker } = DatePicker;
 
 const getValue = obj => Object.keys(obj).map(key => obj[key]).join(',');
 
-@connect(({ users, loading }) => ({
+@connect(({ users, loading }, { history }) => ({
   users,
   loading: loading.models.users,
+  history,
 }))
 @Form.create()
 export default class UserList extends PureComponent {
@@ -36,6 +39,15 @@ export default class UserList extends PureComponent {
     {
       title: '用户名',
       dataIndex: 'userName',
+      render: (val) => {
+        const imgData = new Identicon(hash(val), 32).toString();
+        return (
+          <Fragment>
+            <Avatar src={`data:image/png;base64,${imgData}`} />
+            <span style={{ display: 'inline-block', lineHeight: '32px', textAlign: 'center', margin: '5px' }}> {val} </span>
+          </Fragment>
+        );
+      },
     },
     {
       title: '邮箱',
@@ -64,9 +76,7 @@ export default class UserList extends PureComponent {
       title: '操作',
       render: (text, record) => (
         <Fragment>
-          <a onClick={() => this.handleEdit(record)} >编辑</a>
-          <Divider type="vertical" />
-          <a onClick={() => this.handleOpen(record)}>打开</a>
+          <a onClick={() => this.handleUpdate(record)}> 编辑</a>
           <Divider type="vertical" />
           <span>
             <Popconfirm title="确认删除吗?" onConfirm={() => this.handleRecordDelete(record)}>
@@ -93,14 +103,6 @@ export default class UserList extends PureComponent {
     this.refreshParams = params;
   }
 
-  handleEdit = (record) => {
-    // handle record edit.
-    this.setState({
-      ...this.state,
-      currentRecord: record,
-    });
-  }
-
   handleRecordDelete = (record) => {
     const { dispatch } = this.props;
     dispatch({
@@ -119,17 +121,24 @@ export default class UserList extends PureComponent {
     });
   }
 
+  handleAdd = () => {
+    const { history } = this.props;
+    history.push('/users/create');
+  }
+
+  handleUpdate = (user) => {
+    const { history } = this.props;
+    history.push(`/users/edit/${user.userName}`);
+  }
+
   handleSearch = (e) => {
     e.preventDefault();
 
     const { form } = this.props;
-    const { project: { data } } = this.props;
+    const { users: { data } } = this.props;
 
     form.validateFields((err, fieldsValue) => {
       if (err) return;
-
-      const labels = fieldsValue.labels
-        && fieldsValue.labels.map(l => data.labels[parseInt(l, 10)]);
 
       const updatedAt = fieldsValue.updatedAt
         && fieldsValue.updatedAt.map(m => m.format('YYYYMMDD')).join();
@@ -139,7 +148,6 @@ export default class UserList extends PureComponent {
 
       const values = {
         ...fieldsValue,
-        labels: labels && labels.join(),
         updatedAt,
         createdAt,
       };
@@ -318,7 +326,7 @@ export default class UserList extends PureComponent {
               {this.renderForm()}
             </div>
             <div className={styles.tableListOperator}>
-              <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>
+              <Button icon="plus" type="primary" onClick={() => this.handleAdd()}>
                 新建
               </Button>
               <Popconfirm title="确认删除吗?" onConfirm={() => this.handleMultiDelete()}>
@@ -339,10 +347,6 @@ export default class UserList extends PureComponent {
             onChange={this.handleStandardTableChange}
           />
         </Card>
-        {/* <CreateForm
-          {...parentMethods}
-          modalVisible={modalVisible}
-        /> */}
       </PageHeaderLayout>
     );
   }

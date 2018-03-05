@@ -14,8 +14,9 @@ const RadioGroup = Radio.Group;
 
 const getValue = obj => Object.keys(obj).map(key => obj[key]).join(',');
 
-@connect(({ users, loading }) => ({
+@connect(({ users, loading }, { match }) => ({
   users,
+  match,
   loading: loading.models.users,
 }))
 @Form.create()
@@ -36,9 +37,17 @@ export default class UserList extends PureComponent {
     form.resetFields();
   }
 
+  handlePasswordValidation = (rule, value, callback) => {
+    const { getFieldValue } = this.props.form;
+    if (value && value !== getFieldValue('password')) {
+      callback('两次密码输入不一致');
+    }
+    callback();
+  }
+
   render() {
     const currentRecord = undefined;
-    const { form } = this.props;
+    const { form, match } = this.props;
     return (
       <PageHeaderLayout>
         <Form onSubmit={this.handleAdd}>
@@ -47,6 +56,7 @@ export default class UserList extends PureComponent {
               labelCol={{ span: 5 }}
               wrapperCol={{ span: 15 }}
               label="用户名"
+              hasFeedback
             >
               {form.getFieldDecorator('userName', {
                 rules: [{ required: true, message: '用户名称' }],
@@ -59,9 +69,10 @@ export default class UserList extends PureComponent {
               labelCol={{ span: 5 }}
               wrapperCol={{ span: 15 }}
               label="邮箱"
+              hasFeedback
             >
               {form.getFieldDecorator('email', {
-                rules: [{ required: true, message: '邮箱' }],
+                rules: [{ required: true, message: '邮箱格式: xxx@xxx.xx', type: 'email' }],
                 initialValue: currentRecord === undefined ? '' : currentRecord.description,
               })(
                 <Input placeholder="请输入" />
@@ -85,6 +96,7 @@ export default class UserList extends PureComponent {
               labelCol={{ span: 5 }}
               wrapperCol={{ span: 15 }}
               label="密码"
+              hasFeedback
             >
               {form.getFieldDecorator('password', {
                 rules: [{ required: true, message: '密码' }],
@@ -96,10 +108,14 @@ export default class UserList extends PureComponent {
             <FormItem
               labelCol={{ span: 5 }}
               wrapperCol={{ span: 15 }}
+              hasFeedback
               label="重复密码"
             >
               {form.getFieldDecorator('password1', {
-                rules: [{ required: true, message: '重复密码' }],
+                rules: [{ required: true,
+                  message: '重复密码',
+                  validator: this.handlePasswordValidation,
+                }],
                 initialValue: currentRecord === undefined ? [] : currentRecord.labels,
               })(
                 <Input placeholder="请输入" type="password" />
