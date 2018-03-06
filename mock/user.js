@@ -63,7 +63,7 @@ export function createUser(req, res, u, b) {
 
   const result = {
     success: true,
-    message: '删除成功',
+    message: '添加成功',
   };
 
   if (res && res.json) {

@@ -12,7 +12,7 @@ export default {
     },
     validate: {
       userName: {
-        validating: false,
+        validating: undefined,
         success: true,
         message: '',
       },
@@ -52,6 +52,21 @@ export default {
             ...state.validate.userName,
             validating: false,
             ...payload,
+          },
+        },
+      };
+    },
+
+    resetValidation(state) {
+      return {
+        ...state,
+        validate: {
+          ...state.validate,
+          userName: {
+            ...state.validate.userName,
+            validating: undefined,
+            success: true,
+            message: '',
           },
         },
       };
@@ -110,11 +125,23 @@ export default {
       yield put({
         type: 'beginValidationUserName',
       });
-      const response = yield call(queryUserName, { ...payload });
-      yield put({
-        type: 'endValidationUserName',
-        payload: response,
-      });
+      const { userName } = payload;
+
+      if (userName.length < 2) {
+        yield put({
+          type: 'endValidationUserName',
+          payload: {
+            success: false,
+            message: '至少3个字符',
+          },
+        });
+      } else {
+        const response = yield call(queryUserName, { ...payload });
+        yield put({
+          type: 'endValidationUserName',
+          payload: response,
+        });
+      }
     },
   },
 

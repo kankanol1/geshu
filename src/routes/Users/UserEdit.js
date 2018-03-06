@@ -38,8 +38,11 @@ export default class UserList extends PureComponent {
   }
 
   handleFormReset = () => {
-    const { form } = this.props;
+    const { form, dispatch } = this.props;
     form.resetFields();
+    dispatch({
+      type: 'users/resetValidation',
+    });
   }
 
   handlePasswordValidation = (rule, value, callback) => {
