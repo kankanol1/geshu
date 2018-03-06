@@ -246,6 +246,38 @@ export function getProjectLabels(req, res) {
   }
 }
 
+export function getRecentProjects(req, res) {
+  const result = [
+  ];
+
+  for (let i = 0; i < 10; i++) {
+    result.push({
+      name: `项目名称 ${i}`,
+      key: i,
+      id: i,
+      description: '项目描述',
+      createdAt: moment(`2018-01-0${Math.floor(i / 3) + 1}`, 'YYYY-MM-DD'),
+      updatedAt: moment(`2018-02-0${Math.floor(i / 3) + 1}`, 'YYYY-MM-DD'),
+      labels: generatedLabels[i % 5],
+    });
+  }
+  result.push({
+    name: '测试一个很长的项目名称在前端显示时可能一行会放不开看一下最终效果是否可以接受',
+    key: 100,
+    id: 100,
+    description: '项目描述',
+    createdAt: moment('2018-03-01', 'YYYY-MM-DD'),
+    updatedAt: moment('2018-03-02', 'YYYY-MM-DD'),
+    labels: generatedLabels[100 % 5],
+  });
+
+  if (res && res.json) {
+    res.json(result);
+  } else {
+    return result;
+  }
+}
+
 export default {
   getProject,
   updateProject,

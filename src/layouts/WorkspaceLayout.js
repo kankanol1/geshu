@@ -59,7 +59,7 @@ class WorkspaceLayout extends AbstractBasicLayout {
             {
               // default redirect to editor.
             }
-            <Redirect exact from="/project/workspace" to="/project/workspace/editor" />
+            <Redirect exact from="/project/workspace" to="/project/workspace/index" />
             <Route render={NotFound} />
           </Switch>
         </div>

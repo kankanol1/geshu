@@ -1,5 +1,5 @@
 import { message } from 'antd';
-import { queryProjects, queryProjectLabels, removeProject, createProject, updateProject } from '../services/projectAPI';
+import { queryProjects, queryProjectLabels, removeProject, createProject, updateProject, queryRecentProjects } from '../services/projectAPI';
 
 
 export default {
@@ -10,6 +10,10 @@ export default {
       list: [],
       pagination: {},
       labels: [],
+    },
+    recentProjects: {
+      loading: false,
+      data: [],
     },
   },
 
@@ -34,6 +38,26 @@ export default {
       };
     },
 
+    saveRecentProjects(state, { payload }) {
+      return {
+        ...state,
+        recentProjects: {
+          data: payload,
+          loading: false,
+        },
+      };
+    },
+
+    unloadRecentProjects(state, { payload }) {
+      return {
+        ...state,
+        recentProjects: {
+          data: [],
+          loading: true,
+        },
+      };
+    },
+
   },
 
   effects: {
@@ -41,6 +65,14 @@ export default {
       const response = yield call(queryProjects, payload);
       yield put({
         type: 'saveProjectList',
+        payload: response,
+      });
+    },
+
+    *fetchRecentProjects({ payload }, { call, put }) {
+      const response = yield call(queryRecentProjects);
+      yield put({
+        type: 'saveRecentProjects',
         payload: response,
       });
     },

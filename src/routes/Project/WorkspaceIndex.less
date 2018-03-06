@@ -1,0 +1,27 @@
+@card-width: 600px;
+
+.contentLayout {
+  padding: 0;
+  height: 100%;
+  text-align: center;
+
+  .firstCard {
+    width: @card-width;
+    margin: 100px auto 0px auto;
+    .button{
+      margin: 5px;
+    }
+  }
+  .restCard {
+    width: @card-width;
+    margin: 50px auto 0px auto;
+  }
+}
+
+.clickableItem {
+  color: #262626;
+  &:hover{
+    color: #1890ff;
+    text-decoration: underline;
+  }
+}

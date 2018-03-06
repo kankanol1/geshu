@@ -10,7 +10,7 @@ import { format, delay } from 'roadhog-api-doc';
 import componentList from './mock/workspace/componentList'
 import { wrapResponse } from './mock/response_wrapper'
 import componentParams from './mock/workspace/componentParams'
-import { getProject, createProject, updateProject, deleteProject, getProjectLabels } from './mock/project';
+import { getProject, createProject, updateProject, deleteProject, getProjectLabels, getRecentProjects } from './mock/project';
 import { login, userList, createUser, deleteUser, queryUserName } from './mock/user';
 
 // 是否禁用代理
@@ -28,6 +28,7 @@ const proxy = {
   'POST /api/project/update': updateProject,
   'POST /api/project/delete': deleteProject,
   'GET /api/project/labels':  getProjectLabels,
+  'GET /api/project/recent': getRecentProjects,
 
   // login
   'POST /api/login/account': login,

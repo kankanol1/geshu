@@ -84,7 +84,7 @@ export default {
           (group) => {
             return {
               ...group,
-              components: group.components.filter(c => c.name.indexOf(filter) > 0),
+              components: group.components.filter(c => c.name.indexOf(filter) >= 0),
             };
           }
         );

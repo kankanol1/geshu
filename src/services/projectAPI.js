@@ -39,3 +39,16 @@ export async function createProject(params) {
 export async function queryProjectLabels() {
   return request('/api/project/labels');
 }
+
+export async function queryRecentProjects() {
+  return request('/api/project/recent');
+}
+
+export default {
+  queryProjectLabels,
+  queryProjects,
+  queryRecentProjects,
+  createProject,
+  removeProject,
+  updateProject,
+};

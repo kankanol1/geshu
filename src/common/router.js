@@ -82,7 +82,10 @@ export const getRouterData = (app) => {
     '/project/workspace': {
       component: dynamicWrapper(app, ['workspace/work_canvas', 'workspace/work_component_list', 'workspace/work_component_settings'], () => import('../layouts/WorkspaceLayout')),
     },
-    '/project/workspace/editor': {
+    '/project/workspace/index': {
+      component: dynamicWrapper(app, [], () => import('../routes/Project/WorkspaceIndex')),
+    },
+    '/project/workspace/editor/:id': {
       component: dynamicWrapper(app, [], () => import('../routes/Project/WorkspaceEditor')),
     },
     '/project/workspace/dataview': {
