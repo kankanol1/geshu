@@ -1,4 +1,3 @@
-/* eslint-disable*/
 import go from './go';
 
 const $ = go.GraphObject.make;
@@ -109,6 +108,7 @@ util.toJson = function (diagram) {
   return diagram.model.toJson();
 };
 util.fromJson = function (diagram, json) {
+  // eslint-disable-next-line
   diagram.model = go.Model.fromJson(json);
 };
 util.isNode = function (graphObject) {

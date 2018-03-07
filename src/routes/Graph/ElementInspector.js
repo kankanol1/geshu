@@ -1,4 +1,3 @@
-/* eslint-disable */
 import React, { Component } from 'react';
 import { Input, Icon, Button, Row, Col, InputNumber } from 'antd';
 import styles from './ElementInspector.less';
@@ -128,7 +127,7 @@ export default class ElementInspector extends Component {
       return (<p style={{ textAlign: 'center', fontSize: '16px' }}>暂无选中元素</p>);
     }
 
-    let nodeAttr = (<div/>);
+    let nodeAttr = (<div />);
     if (this.state.isNode) {
       nodeAttr = (
         <div className={styles.attrItem} style={{ width: '95%', marginTop: '10px' }}>

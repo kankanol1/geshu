@@ -1,4 +1,3 @@
-/* eslint-disable */
 import React, { Component } from 'react';
 import { Input, Icon, Button, Select, Row, Col } from 'antd';
 import styles from './ElementInspector.less';
@@ -45,7 +44,7 @@ export default class DynamicAttributeEditor extends Component {
                     </Select>
                   </Col>
                   <Col span={2}>
-                    <Button shape="circle" icon="minus" onClick={this.props.onRemoveAttr.bind({}, index)}/>
+                    <Button shape="circle" icon="minus" onClick={this.props.onRemoveAttr.bind({}, index)} />
                   </Col>
                 </Row>
               </div>

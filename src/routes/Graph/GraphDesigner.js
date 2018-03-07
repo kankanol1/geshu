@@ -1,4 +1,3 @@
-/* eslint-disable */
 import React, { Component } from 'react';
 import { Layout, Collapse, Row, Col, Tabs, Modal, Input, Button } from 'antd';
 import graphUtil from './GraphUtils';
