@@ -58,7 +58,7 @@ class ComponentSettings extends React.PureComponent {
     return (
       <div style={{ background: 'transparent', float: 'right', minWidth: '400px' }}>
         <div style={{ padding: '5px', background: '#fafafa', borderLeft: '1px solid #e8e8e8' }}>
-          <Button type="danger" size="small" onClick={this.onCloseClicked}><Icon type="close" />关闭</Button>
+          <Button type="danger" size="default" onClick={this.onCloseClicked}><Icon type="close" /></Button>
           <div style={{ display: 'inline-block', textAlign: 'center', width: '80%' }}>{displaySettings.title}</div>
         </div>
         {

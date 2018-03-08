@@ -78,13 +78,13 @@ export default {
 
     filterComponent(state, { payload }) {
       const { allGroups } = state;
-      const { filter } = payload;
+      const filter = payload.filter.toLowerCase();
       if (filter && filter !== '') {
         const filteredGroup = allGroups.map(
           (group) => {
             return {
               ...group,
-              components: group.components.filter(c => c.name.indexOf(filter) >= 0),
+              components: group.components.filter(c => c.name.toLowerCase().indexOf(filter) >= 0),
             };
           }
         );
