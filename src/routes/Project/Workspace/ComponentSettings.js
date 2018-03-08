@@ -1,12 +1,11 @@
 import React from 'react';
 import { connect } from 'dva';
-import { Layout, Collapse, Button } from 'antd';
+import { Layout, Collapse, Button, Icon } from 'antd';
 import BasicParamInput from '../../../components/Inputs/BasicParamInput';
+import ComponentSettingsForm from './ComponentSettingsForm';
 
 const { Sider } = Layout;
 const { Panel } = Collapse;
-
-const size = 'default';
 
 class ComponentSettings extends React.PureComponent {
   constructor(props) {
@@ -18,6 +17,27 @@ class ComponentSettings extends React.PureComponent {
     this.props.dispatch({
       type: 'work_component_settings/resetCurrentComponent',
     });
+  }
+
+  renderSettings = (displaySettings) => {
+    return (
+      <div>
+        {
+          Object.entries(displaySettings.properties).map(
+            ([k, item]) => {
+              return (
+                <BasicParamInput
+                  key={k}
+                  title={item.description}
+                  name={k}
+                  type={item.title}
+                />
+              );
+            }
+          )
+        }
+      </div>
+    );
   }
 
   render() {
@@ -33,52 +53,29 @@ class ComponentSettings extends React.PureComponent {
     if (currentComponent === undefined) {
       return null;
     }
+
+    // build required.
     return (
       <div style={{ background: 'transparent', float: 'right', minWidth: '400px' }}>
-        <div style={{ padding: '8px', background: '#fafafa', borderLeft: '1px solid #e8e8e8' }}>
-          <Button type="danger" size={size} onClick={this.onCloseClicked}>关闭</Button>
+        <div style={{ padding: '5px', background: '#fafafa', borderLeft: '1px solid #e8e8e8' }}>
+          <Button type="danger" size="small" onClick={this.onCloseClicked}><Icon type="close" />关闭</Button>
+          <div style={{ display: 'inline-block', textAlign: 'center', width: '80%' }}>{displaySettings.title}</div>
         </div>
-        <Collapse defaultActiveKey={['required', 'optional']} onChange={this.onChange}>
-          <Panel header="必填项" key="required">
-            {
-              displaySettings.required === undefined ||
-                displaySettings.required.length === 0 ? <div>无必填项</div> :
-                displaySettings.required.map(
-                  (item, i) => {
-                    return (
-                      <BasicParamInput
-                        key={i}
-                        title={item.description}
-                        name={item.name}
-                        type={item.type}
-                        tip={item.tip}
-                        validator={item.validator}
-                      />
-                    );
-                  }
-                )
-            }
-          </Panel>
-          <Panel header="可选项" key="optional">
-            {
-              displaySettings.optional === undefined ||
-                displaySettings.optional.length === 0 ? <div>无可选项</div> :
-                displaySettings.optional.map(
-                  (item, i) => {
-                    return (
-                      <BasicParamInput
-                        key={i}
-                        title={item.description}
-                        name={item.name}
-                        type={item.type}
-                        tip={item.tip}
-                        validator={item.validator}
-                      />);
-                  }
-                )
-            }
-          </Panel>
-        </Collapse>
+        {
+          Object.entries(displaySettings.properties).length === 0 ?
+          (
+            <div style={{ paddingTop: '20%', textAlign: 'center' }}>
+              无可配置项
+            </div>
+          )
+          :
+            (
+              <ComponentSettingsForm
+                properties={displaySettings.properties}
+                style={{ paddingTop: '20px', background: '#f5f5f5', height: '100%' }}
+              />
+            )
+        }
       </div>
     );
   }

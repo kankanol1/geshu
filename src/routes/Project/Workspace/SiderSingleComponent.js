@@ -23,10 +23,10 @@ class SiderSingleComponent extends React.PureComponent {
         <div
           key={`${kei}-display`}
           style={{
+            wordBreak: 'break-all',
             cursor: 'default',
             textAlign: 'center',
-            paddingTop: '2px',
-            paddingBottom: '2px',
+            padding: '2px 5px',
             marginTop: '5px',
             marginBottom: '5px',
             border: '1px solid #bfbfbf',

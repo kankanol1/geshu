@@ -19,9 +19,9 @@ const noProxy = process.env.NO_PROXY === 'true';
 // 代码中会兼容本地 service mock 以及部署站点的静态数据
 const proxy = {
 
-  'GET /api/workspace/component_list': wrapResponse(componentList),
+  'GET /api/workspace/component_list': componentList,
   'GET /api/workspace/component_param/:id':  (req, res) => {
-      res.send(wrapResponse(componentParams(req.params.id)))
+      res.send(componentParams(req.params.id))
   },
   'GET /api/project/list': getProject,
   'POST /api/project/create': createProject,

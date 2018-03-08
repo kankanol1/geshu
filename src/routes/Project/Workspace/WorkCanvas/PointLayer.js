@@ -48,7 +48,7 @@ class PointLayer extends React.PureComponent {
       varObj = { draggingType: null, draggingConnects: point.connects };
     } else if (point.metatype === 'output') {
       varObj = { draggingType: point.type, draggingConnects: [] };
-    } 
+    }
     this.props.dispatch({
       type: 'work_canvas/draggingLine',
       componentId: this.props.model.id,
@@ -64,7 +64,7 @@ class PointLayer extends React.PureComponent {
           this.props.draggingTarget.y) + draggableData.deltaY,
       },
       draggingMetaType: point.metatype,
-      ...varObj
+      ...varObj,
     });
   }
 
@@ -75,7 +75,7 @@ class PointLayer extends React.PureComponent {
       : this.props.positionDict[this.props.model.id];
 
     const renderPoint = (p, i, type) => {
-      const point = {...p, metatype: type}
+      const point = { ...p, metatype: type };
       const { x, y } = pointDict[point.id];
       const r = this.state.hovering.includes(point.id) ? R.large : R.normal;
       return (
@@ -103,8 +103,7 @@ class PointLayer extends React.PureComponent {
             textAnchor="middle"
             fill="white"
           >
-
-            {point.label}
+            {point.label && (point.label.length > 0) ? point.label.charAt(1) : ''}
           </text>
           {
             // 3. opeartion circle.
@@ -132,18 +131,18 @@ class PointLayer extends React.PureComponent {
           </DraggableCore>
         </React.Fragment>
       );
-    }
+    };
 
     return (
       <React.Fragment>
         {
           inputs.map(
-            (point, i) => {return renderPoint(point, i, 'input')}
+            (point, i) => { return renderPoint(point, i, 'input'); }
           )
         }
         {
           outputs.map(
-            (point, i) => {return renderPoint(point, i, 'output')}
+            (point, i) => { return renderPoint(point, i, 'output'); }
           )
         }
       </React.Fragment>

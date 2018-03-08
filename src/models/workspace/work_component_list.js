@@ -69,11 +69,11 @@ export default {
 
   reducers: {
     replaceComponentList(state, { data }) {
-      const activekeys = data.groups.map(
+      const activekeys = data.map(
         (group) => { return group.key; }
       );
       return Object.assign({}, { ...state,
-        ...{ groups: data.groups, allGroups: data.groups, activekeys } });
+        ...{ groups: data, allGroups: data, activekeys } });
     },
 
     filterComponent(state, { payload }) {
@@ -99,7 +99,7 @@ export default {
   effects: {
     *fetchComponentList({ payload }, { call, put }) {
       const data = yield call(componentAPI.fetchComponentList);
-      yield put({ type: 'replaceComponentList', data: data.data });
+      yield put({ type: 'replaceComponentList', data });
     },
   },
 

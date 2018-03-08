@@ -49,7 +49,7 @@ export default {
 
   effects: {
     *fetchComponentSettings({ code, id, name }, { call, put }) {
-      const { data } = yield call(componentAPI.fetchComponentSetting, code);
+      const data = yield call(componentAPI.fetchComponentSetting, code);
       yield put({ type: 'initComponentSettingsWithMeta', component: data, code, id, name });
     },
 
