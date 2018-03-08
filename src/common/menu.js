@@ -43,6 +43,23 @@ const menuData = [{
     path: 'new',
   }],
 }, {
+  name: '图数据管理',
+  icon: 'share-alt',
+  path: 'graph',
+  children: [{
+    name: '设计器',
+    path: 'editor',
+  }, {
+    name: '数据导入',
+    path: 'mapper',
+  }, {
+    name: '数据查询',
+    path: 'query',
+  }, {
+    name: '数据探索',
+    path: 'explore',
+  }],
+}, {
   name: '用户管理',
   icon: 'contacts',
   path: 'users',
