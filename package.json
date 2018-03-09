@@ -54,6 +54,7 @@
     "react-dom": "^16.2.0",
     "react-draggable": "^3.0.4",
     "react-fittext": "^1.0.0",
+    "react-jsonschema-form": "^1.0.1",
     "react-table": "^6.7.6",
     "url-polyfill": "^1.0.10"
   },

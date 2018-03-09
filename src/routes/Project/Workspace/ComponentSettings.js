@@ -71,7 +71,7 @@ class ComponentSettings extends React.PureComponent {
           :
             (
               <ComponentSettingsForm
-                properties={displaySettings.properties}
+                jsonschema={displaySettings}
                 style={{ paddingTop: '20px', background: '#f5f5f5', height: '100%' }}
               />
             )

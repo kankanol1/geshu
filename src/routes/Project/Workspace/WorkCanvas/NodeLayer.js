@@ -47,7 +47,9 @@ class NodeLayer extends React.PureComponent {
 
   handleDrag(e, draggableData) {
     e.preventDefault();
-    this.hasDrag = true;
+    if (draggableData.deltaX !== 0 || draggableData.deltaY !== 0) {
+      this.hasDrag = true;
+    }
     this.props.dispatch({
       type: 'work_canvas/moveComponentAndDisplaySettingsIfNeeded',
       component: this.props.model,

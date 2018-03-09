@@ -3,88 +3,41 @@
  */
 
 import React, { Fragment } from 'react';
-import { Form, Row, Col, Input, Button, Affix, Icon, Switch } from 'antd';
+import { Row, Col, Input, Button, Affix, Icon, Switch } from 'antd';
 import { Scrollbars } from 'react-custom-scrollbars';
 
-import NumericInput from '../../../components/Inputs/NumericInput';
+import JsonSchemaForm from '../../../components/JsonSchemaForm';
+import styles from './ComponentSettingsForm.less';
 
-const FormItem = Form.Item;
 
-const formItemLayout = {
-  labelCol: {
-    xs: { span: 24 },
-    sm: { span: 6 },
-  },
-  wrapperCol: {
-    xs: { span: 24 },
-    sm: { span: 18 },
-  },
-};
-
-@Form.create()
 export default class ComponentSettingsForm extends React.PureComponent {
-  handleSubmit = (e) => {
-    e.preventDefault();
-    const { form, onSubmit } = this.props;
-    form.validateFields((err, fieldsValue) => {
-      if (err) return;
-      if (onSubmit !== undefined) {
-        onSubmit(fieldsValue);
-      }
-    });
+  constructor(props) {
+    super(props);
+    this.submitForm = this.submitForm.bind(this);
   }
 
-  renderFormItem = (key, value) => {
-    const { getFieldDecorator } = this.props.form;
-    return (
-      <FormItem
-        {...formItemLayout}
-        label={key}
-        key={key}
-      >
-        {
-          getFieldDecorator(key, {
-            rules: [{
-              required: value.required,
-              message: `${key}不能为空`,
-            }],
-          })(
-            this.renderInputItem(key, value)
-          )
-        }
-      </FormItem>
-    );
-  }
-
-  /** render input item only */
-  renderInputItem = (key, value) => {
-    switch (value.title) {
-      case 'Fixed_Int':
-        return <NumericInput />;
-      case 'Fixed_Boolean':
-        return <Switch defaultChecked />;
-      /** the rest are return as default input */
-      case 'Fixed_String':
-      default:
-        return (<Input placeholder={key} />);
-    }
+  submitForm() {
+    this.submitButton.click();
   }
 
   render() {
-    const { properties } = this.props;
-    const propertiesElements = [];
-    for (const [key, value] of Object.entries(properties)) {
-      propertiesElements.push(this.renderFormItem(key, value));
-    }
+    const { jsonschema } = this.props;
     return (
       <Fragment>
         <Scrollbars style={{ height: 'calc( 100% - 88px)' }}>
-          <Form onSubmit={this.handleSubmit} {...this.props}>
-            { propertiesElements }
-          </Form>
+          <JsonSchemaForm
+            className={styles.settingForm}
+            ref={(form) => { this.form = form; }}
+            jsonschema={jsonschema}
+            onChange={() => console.log('changed')}
+            onSubmit={() => console.log('submitted')}
+            onError={() => console.log('errors')}
+          >
+            <button ref={(btn) => { this.submitButton = btn; }} className={styles.hidden} />
+          </JsonSchemaForm>
         </Scrollbars>
         <Affix offsetBottom={10} style={{ height: '46px', textAlign: 'center', background: '#fafafa' }}>
-          <Button style={{ margin: '5px 10px' }} type="primary" htmlType="submit"> <Icon type="save" />保存 </Button>
+          <Button style={{ margin: '5px 10px' }} type="primary" onClick={this.submitForm}> <Icon type="save" />保存 </Button>
           <Button style={{ margin: '5px 10px' }} type="danger"> <Icon type="sync" />重置 </Button>
         </Affix >
       </Fragment>
