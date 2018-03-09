@@ -3,8 +3,10 @@
  */
 
 import React, { Fragment } from 'react';
-import { Form, Row, Col, Input, Button, Affix, Icon } from 'antd';
+import { Form, Row, Col, Input, Button, Affix, Icon, Switch } from 'antd';
 import { Scrollbars } from 'react-custom-scrollbars';
+
+import NumericInput from '../../../components/Inputs/NumericInput';
 
 const FormItem = Form.Item;
 
@@ -47,11 +49,25 @@ export default class ComponentSettingsForm extends React.PureComponent {
               message: `${key}不能为空`,
             }],
           })(
-            <Input placeholder={key} />
+            this.renderInputItem(key, value)
           )
         }
       </FormItem>
     );
+  }
+
+  /** render input item only */
+  renderInputItem = (key, value) => {
+    switch (value.title) {
+      case 'Fixed_Int':
+        return <NumericInput />;
+      case 'Fixed_Boolean':
+        return <Switch defaultChecked />;
+      /** the rest are return as default input */
+      case 'Fixed_String':
+      default:
+        return (<Input placeholder={key} />);
+    }
   }
 
   render() {
