@@ -53,7 +53,7 @@ class ComponentSettings extends React.PureComponent {
     if (currentComponent === undefined) {
       return null;
     }
-
+    console.log('ds,', displaySettings);
     // build required.
     return (
       <div style={{ background: 'transparent', float: 'right', minWidth: '400px' }}>
@@ -62,7 +62,7 @@ class ComponentSettings extends React.PureComponent {
           <div style={{ display: 'inline-block', textAlign: 'center', width: '80%' }}>{displaySettings.title}</div>
         </div>
         {
-          Object.entries(displaySettings.properties).length === 0 ?
+          displaySettings.properties === undefined || Object.entries(displaySettings.properties).length === 0 ?
           (
             <div style={{ paddingTop: '20%', textAlign: 'center' }}>
               无可配置项

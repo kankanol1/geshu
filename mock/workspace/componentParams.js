@@ -49,7 +49,7 @@ const allComponents = {
             type: 'array',
             items: {
               type: 'number',
-              format: 'number',
+              // format: 'number',
             },
           },
         },
@@ -139,7 +139,7 @@ const allComponents = {
     type: 'object',
     properties: {},
   },
-  LogisticRegressionState: {
+  LogisticRegressionStage: {
     title: 'LogisticRegressionStageConf',
     type: 'object',
     properties: {
@@ -160,13 +160,13 @@ const allComponents = {
             type: 'array',
             items: {
               type: 'number',
-              format: 'number',
+              // format: 'number',
             },
           },
           value: {
             required: false,
             type: 'number',
-            format: 'number',
+            // format: 'number',
           },
         },
       },
@@ -187,13 +187,13 @@ const allComponents = {
             type: 'array',
             items: {
               type: 'number',
-              format: 'number',
+              // format: 'number',
             },
           },
           value: {
             required: false,
             type: 'number',
-            format: 'number',
+            // format: 'number',
           },
         },
       },
@@ -253,13 +253,13 @@ const allComponents = {
             type: 'array',
             items: {
               type: 'number',
-              format: 'number',
+              // format: 'number',
             },
           },
           value: {
             required: false,
             type: 'number',
-            format: 'number',
+            // format: 'number',
           },
         },
       },
@@ -292,7 +292,7 @@ const allComponents = {
         properties: {
           value: {
             type: 'number',
-            format: 'number',
+            // format: 'number',
           },
         },
       },

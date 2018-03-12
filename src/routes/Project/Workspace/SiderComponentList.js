@@ -14,6 +14,8 @@ class SiderComponentList extends React.PureComponent {
     super(props);
     this.state = {
       preview: null,
+      // store offset of the scrollbar.
+      offsetY: 0,
     };
     this.handlePreviewChange = this.handlePreviewChange.bind(this);
   }
@@ -27,9 +29,22 @@ class SiderComponentList extends React.PureComponent {
   }
 
   handlePreviewChange(preview) {
-    this.setState({
-      preview,
-    });
+    if (preview === null) {
+      this.setState({
+        ...this.state,
+        preview: null,
+      });
+    } else {
+      const displayPreview = React.cloneElement(preview, { style: {
+        ...preview.props.style,
+        ...{
+          top: `${parseInt(preview.props.style.top, 0) - this.state.offsetY}px`,
+        },
+      } });
+      this.setState({
+        preview: displayPreview,
+      });
+    }
   }
 
   handleSearch = (filter) => {
@@ -39,6 +54,13 @@ class SiderComponentList extends React.PureComponent {
       payload: {
         filter,
       },
+    });
+  }
+
+  handleScroll = (event) => {
+    this.setState({
+      ...this.state,
+      offsetY: event.target.scrollTop,
     });
   }
 
@@ -52,7 +74,7 @@ class SiderComponentList extends React.PureComponent {
           style={{ width: 200, padding: '5px' }}
         />
         {/* the hight of scrollbars should be 100%-hight of search input */}
-        <Scrollbars style={{ height: 'calc( 100% - 42px)' }}>
+        <Scrollbars style={{ height: 'calc( 100% - 42px)' }} onScroll={this.handleScroll}>
           <Collapse
             defaultActiveKey={activekeys}
             onChange={this.onChange}

@@ -5,7 +5,9 @@ import { Menu, Icon } from 'antd';
 export default class WorkspaceMenu extends Component {
   render() {
     const path = this.props.currentPath.pathname;
-    const selectedKey = path.substr(path.lastIndexOf('/') + 1, path.length);
+    const pathArr = path.split('/');
+    const selectedKey = pathArr[pathArr.length - 2];
+    const projectId = pathArr[pathArr.length - 1];
     return (
       <Menu
         style={{ padding: '0px', background: 'transparent', float: 'right' }}
@@ -14,13 +16,13 @@ export default class WorkspaceMenu extends Component {
         defaultSelectedKeys={[selectedKey]}
       >
         <Menu.Item key="editor">
-          <Link to="editor"><Icon type="codepen" />设计器</Link>
+          <Link to={`../editor/${projectId}`}><Icon type="codepen" />设计器</Link>
         </Menu.Item>
         <Menu.Item key="dataview">
-          <Link to="dataview"><Icon type="table" />数据视图</Link>
+          <Link to={`../dataview/${projectId}`}><Icon type="table" />数据视图</Link>
         </Menu.Item>
         <Menu.Item key="logview">
-          <Link to="logview"><Icon type="profile" />日志查看</Link>
+          <Link to={`../logview/${projectId}`}><Icon type="profile" />日志查看</Link>
         </Menu.Item>
       </Menu>
     );
