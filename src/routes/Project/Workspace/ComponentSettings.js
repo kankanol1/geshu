@@ -62,7 +62,8 @@ class ComponentSettings extends React.PureComponent {
           <div style={{ display: 'inline-block', textAlign: 'center', width: '80%' }}>{displaySettings.title}</div>
         </div>
         {
-          displaySettings.properties === undefined || Object.entries(displaySettings.properties).length === 0 ?
+          displaySettings.properties === undefined ||
+            Object.entries(displaySettings.properties).length === 0 ?
           (
             <div style={{ paddingTop: '20%', textAlign: 'center' }}>
               无可配置项

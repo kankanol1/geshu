@@ -17,6 +17,18 @@ export function extractJsonSchema(originJsonSchema) {
       delete value.required;
     }
 
+    if (value.format !== undefined) {
+      // not the same format.
+      delete value.format;
+    }
+
+    if (value.type === 'array') {
+      // delete format as well.
+      if (value.items.format !== undefined) {
+        delete value.items.format;
+      }
+    }
+
     if (value.type === 'object') {
       schemaClone.properties[key] = extractJsonSchema(value);
     }

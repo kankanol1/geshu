@@ -23,7 +23,8 @@ const ObjectFieldTemplate = (props) => {
   console.log('id schema', schema);
   // if only one child, use inline.
 
-  if (Object.keys(schema.properties).length === 1 && schema.properties[Object.keys(schema.properties)[0]].properties === undefined) {
+  if (Object.keys(schema.properties).length === 1 &&
+    schema.properties[Object.keys(schema.properties)[0]].properties === undefined) {
     let displayTitle = description === undefined ? title : description;
     if (schema.required && schema.required.length !== 0) {
       displayTitle += ' *';

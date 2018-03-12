@@ -1,4 +1,5 @@
 import componentAPI from '../../services/componentAPI';
+import nameMapping from '../../config/ComponentNameMapping';
 
 export default {
   namespace: 'work_component_list',
@@ -99,7 +100,25 @@ export default {
   effects: {
     *fetchComponentList({ payload }, { call, put }) {
       const data = yield call(componentAPI.fetchComponentList);
-      yield put({ type: 'replaceComponentList', data });
+      const translatedData = data.map(
+        (group) => {
+          const newComponents = group.components.map(
+            (component) => {
+              const translated = nameMapping[component.name];
+              if (translated === undefined) {
+                return component;
+              }
+              return { ...component, name: translated };
+            }
+          );
+          const translated = nameMapping[group.name];
+          if (translated === undefined) {
+            return { ...group, components: newComponents };
+          }
+          return { ...group, components: newComponents, name: translated };
+        }
+      );
+      yield put({ type: 'replaceComponentList', data: translatedData });
     },
   },
 

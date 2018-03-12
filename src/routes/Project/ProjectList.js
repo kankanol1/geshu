@@ -1,7 +1,8 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
+import { Link } from 'dva/router';
 import moment from 'moment';
-import { Popconfirm, Tag, Row, Col, Card, Form, Input, Select, Icon, Button, Dropdown, Menu, InputNumber, DatePicker, Modal, message, Badge, Divider } from 'antd';
+import { Popconfirm, Tag, Row, Col, Card, Form, Input, Select, Icon, Button, Menu, InputNumber, DatePicker, Modal, message, Badge, Divider } from 'antd';
 import StandardTable from '../../components/StandardTable';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './ProjectList.less';
@@ -158,7 +159,7 @@ export default class ProjectList extends PureComponent {
         <Fragment>
           <a onClick={() => this.handleEdit(record)} >编辑</a>
           <Divider type="vertical" />
-          <a onClick={() => this.handleOpen(record)}>打开</a>
+          <Link to={`workspace/editor/${record.id}`}><a>打开</a></Link>
           <Divider type="vertical" />
           <span>
             <Popconfirm title="确认删除吗?" onConfirm={() => this.handleRecordDelete(record)}>
