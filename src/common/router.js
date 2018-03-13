@@ -103,6 +103,11 @@ export const getRouterData = (app) => {
       component: dynamicWrapper(app, ['candidatemodels'], () => import('../routes/Model/CandidateModelList')),
     },
 
+    /* job manage */
+    '/jobs/list': {
+      component: dynamicWrapper(app, ['jobs'], () => import('../routes/Job/JobList')),
+    },
+
     /* user manage. */
     '/users/list': {
       component: dynamicWrapper(app, ['users'], () => import('../layouts/UsersListLayout')),

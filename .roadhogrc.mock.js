@@ -14,6 +14,7 @@ import { getProject, createProject, updateProject, deleteProject, getProjectLabe
 import { login, userList, createUser, deleteUser, queryUserName, updateUser } from './mock/user';
 import { getModels, addModel, updateModel, deleteModels } from './mock/model';
 import { getCandidateModels, updateCandidateModel, deleteCandidateModels, publishCandidateModels } from './mock/candidatemodel';
+import { getJobs, stopJobs, resumeJobs, pauseJobs, deleteJobs, restartJobs } from './mock/job';
 
 // 是否禁用代理
 const noProxy = process.env.NO_PROXY === 'true';
@@ -52,6 +53,14 @@ const proxy = {
   'POST /api/models/candidate/update': updateCandidateModel,
   'POST /api/models/candidate/delete': deleteCandidateModels,
   'POST /api/models/candidate/publish': publishCandidateModels,
+
+  // job manage.
+  'GET /api/jobs/list': getJobs,
+  'POST /api/jobs/stop': stopJobs,
+  'POST /api/jobs/resume': resumeJobs,
+  'POST /api/jobs/pause': pauseJobs,
+  'POST /api/jobs/remove': deleteJobs,
+  'POST /api/jobs/restart': restartJobs,
 
   // 支持值为 Object 和 Array
   'GET /api/currentUser': {
