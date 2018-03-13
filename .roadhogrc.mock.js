@@ -11,7 +11,7 @@ import componentList from './mock/workspace/componentList'
 import { wrapResponse } from './mock/response_wrapper'
 import componentParams from './mock/workspace/componentParams'
 import { getProject, createProject, updateProject, deleteProject, getProjectLabels, getRecentProjects } from './mock/project';
-import { login, userList, createUser, deleteUser, queryUserName } from './mock/user';
+import { login, userList, createUser, deleteUser, queryUserName, updateUser } from './mock/user';
 
 // 是否禁用代理
 const noProxy = process.env.NO_PROXY === 'true';
@@ -38,6 +38,7 @@ const proxy = {
   'POST /api/users/create': createUser,
   'POST /api/users/delete': deleteUser,
   'GET /api/users/username': queryUserName,
+  'POST /api/users/update': updateUser,
 
   // 支持值为 Object 和 Array
   'GET /api/currentUser': {

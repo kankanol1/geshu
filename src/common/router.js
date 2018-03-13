@@ -95,12 +95,15 @@ export const getRouterData = (app) => {
       component: dynamicWrapper(app, [], () => import('../routes/Project/WorkspaceLogView')),
     },
     '/users/list': {
-      component: dynamicWrapper(app, ['users'], () => import('../routes/Users/UserList')),
+      component: dynamicWrapper(app, ['users'], () => import('../layouts/UsersListLayout')),
+    },
+    '/users/list/index': {
+      component: dynamicWrapper(app, [], () => import('../routes/Users/UserList')),
     },
     '/users/create': {
-      component: dynamicWrapper(app, ['users'], () => import('../routes/Users/UserEdit')),
+      component: dynamicWrapper(app, ['users'], () => import('../routes/Users/UserCreate')),
     },
-    '/users/edit/:userName': {
+    '/users/list/edit/:userName': {
       component: dynamicWrapper(app, ['users'], () => import('../routes/Users/UserEdit')),
     },
 

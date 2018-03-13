@@ -217,6 +217,31 @@ export function queryUserName(req, res, u, b) {
   }
 }
 
+export function updateUser(req, res, u, b) {
+  const body = (b && b.body) || req.body;
+  const { userName, role, email, password, avatar } = body;
+
+  userListDataSource = userListDataSource.map(
+    (item) => {
+      if (item.userName === userName) {
+        return { ...item, role, email, password, avatar };
+      } else {
+        return item;
+      }
+    }
+  );
+  const result = {
+    success: true,
+    message: '修改成功',
+  };
+
+  if (res && res.json) {
+    res.json(result);
+  } else {
+    return result;
+  }
+}
+
 // export function modifyPassword(req, res, u) {
 //   /** default modify admin's password. */
 
@@ -227,4 +252,5 @@ export default {
   userList,
   createUser,
   deleteUser,
+  updateUser,
 };

@@ -37,22 +37,6 @@ export default class UserList extends PureComponent {
     });
   }
 
-  handleUpdate = (e) => {
-    e.preventDefault();
-
-    const { form, dispatch } = this.props;
-    form.validateFields((err, fieldsValue) => {
-      if (!err) {
-        dispatch({
-          type: 'users/updateUser',
-          payload: {
-            ...fieldsValue,
-          },
-        });
-      }
-    });
-  }
-
   handleFormReset = () => {
     const { form, dispatch } = this.props;
     form.resetFields();
@@ -82,11 +66,9 @@ export default class UserList extends PureComponent {
 
   render() {
     const { form, match, users } = this.props;
-    const currentRecord = users.selectedUser;
-    const updateMode = (currentRecord && currentRecord.userName === match.params.userName);
     return (
       <PageHeaderLayout>
-        <Form onSubmit={updateMode ? this.handleUpdate : this.handleAdd}>
+        <Form onSubmit={this.handleAdd}>
           <Card>
             <FormItem
               labelCol={{ span: 5 }}
@@ -97,22 +79,13 @@ export default class UserList extends PureComponent {
                 (users.validate.userName.success ? 'success' : 'error')}
               help={users.validate.userName.validating ? '检查中...' : users.validate.userName.message}
             >
-              { updateMode ?
-              form.getFieldDecorator('userName', {
-                initialValue: currentRecord.userName,
-              })(
-                <Input placeholder="请输入" disabled={updateMode} />
-              )
-              : form.getFieldDecorator('userName', {
+              {form.getFieldDecorator('userName', {
                 rules: [{ required: true,
-                  message: '用户名称不能为空',
-              }, {
-                validator: this.validateUserName,
-                message: '用户名已存在',
+                  message: '用户名称',
+                  validator: this.validateUserName,
               }],
-                initialValue: !updateMode ? '' : currentRecord.userName,
               })(
-                <Input placeholder="请输入" disabled={updateMode} />
+                <Input placeholder="请输入" />
               )}
             </FormItem>
             <FormItem
@@ -122,9 +95,7 @@ export default class UserList extends PureComponent {
               hasFeedback
             >
               {form.getFieldDecorator('email', {
-                rules: [{ required: true, message: '邮箱不能为空' },
-                { message: '邮箱格式错误', type: 'email' }],
-                initialValue: !updateMode ? '' : currentRecord.email,
+                rules: [{ required: true, message: '邮箱格式: xxx@xxx.xx', type: 'email' }],
               })(
                 <Input placeholder="请输入" />
               )}
@@ -135,7 +106,6 @@ export default class UserList extends PureComponent {
               label="角色"
             >
               {form.getFieldDecorator('role', {
-                initialValue: !updateMode ? 'user' : currentRecord.role,
               })(
                 <RadioGroup>
                   <Radio value="user">普通用户</Radio>
@@ -150,7 +120,7 @@ export default class UserList extends PureComponent {
               hasFeedback
             >
               {form.getFieldDecorator('password', {
-                rules: updateMode ? [] : [{ required: true, message: '密码不能为空' }],
+                rules: [{ required: true, message: '密码' }],
               })(
                 <Input placeholder="请输入" type="password" />
               )}
@@ -162,15 +132,8 @@ export default class UserList extends PureComponent {
               label="重复密码"
             >
               {form.getFieldDecorator('password1', {
-                rules: updateMode ?
-                [{
-                  message: '两次密码不一致',
-                  validator: this.handlePasswordValidation,
-                }]
-                : [{ required: true,
-                  message: '重复密码不能为空',
-                }, {
-                  message: '两次密码不一致',
+                rules: [{ required: true,
+                  message: '再重复一次密码',
                   validator: this.handlePasswordValidation,
                 }],
               })(

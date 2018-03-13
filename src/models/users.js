@@ -17,6 +17,7 @@ export default {
         message: '',
       },
     },
+    selectedUser: undefined,
   },
 
   reducers: {
@@ -72,6 +73,12 @@ export default {
       };
     },
 
+    setSelectedUser(state, { payload }) {
+      return {
+        ...state,
+        ...payload,
+      };
+    },
   },
 
   effects: {

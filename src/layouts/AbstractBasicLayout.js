@@ -97,6 +97,11 @@ class AbstractBasicLayout extends React.PureComponent {
     }
     return title;
   }
+
+  getCustomRedirect = () => {
+    return null;
+  }
+
   getContent() {
     const { routerData, match } = this.props;
     const bashRedirect = this.getBashRedirect();
@@ -125,6 +130,7 @@ class AbstractBasicLayout extends React.PureComponent {
               )
             }
             <Redirect exact from="/" to={bashRedirect} />
+            {this.getCustomRedirect()}
             <Route render={NotFound} />
           </Switch>
         </div>

@@ -127,8 +127,14 @@ export default class UserList extends PureComponent {
   }
 
   handleUpdate = (user) => {
-    const { history } = this.props;
-    history.push(`/users/edit/${user.userName}`);
+    const { history, dispatch } = this.props;
+    dispatch({
+      type: 'users/setSelectedUser',
+      payload: {
+        selectedUser: user,
+      },
+    });
+    history.push(`/users/list/edit/${user.userName}`);
   }
 
   handleSearch = (e) => {

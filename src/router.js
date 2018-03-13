@@ -18,6 +18,7 @@ function RouterConfig({ history, app }) {
   const UserLayout = routerData['/user'].component;
   const BasicLayout = routerData['/'].component;
   const WorkspaceLayout = routerData['/project/workspace'].component;
+  const UsersListLayout = routerData['/users/list'].component;
   return (
     <LocaleProvider locale={zhCN}>
       <ConnectedRouter history={history}>
@@ -30,6 +31,12 @@ function RouterConfig({ history, app }) {
             path="/project/workspace"
             render={props => <WorkspaceLayout {...props} />}
             authority={['admin', 'user']}
+            redirectPath="/user/login"
+          />
+          <AuthorizedRoute
+            path="/users/list"
+            render={props => <UsersListLayout {...props} />}
+            authority={['admin']}
             redirectPath="/user/login"
           />
           <AuthorizedRoute
