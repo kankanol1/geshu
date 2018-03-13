@@ -38,9 +38,6 @@ const menuData = [{
   children: [{
     name: '作业列表',
     path: 'list',
-  }, {
-    name: '添加作业',
-    path: 'new',
   }],
 }, {
   name: '图数据管理',
