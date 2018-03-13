@@ -78,9 +78,9 @@ const ModifyForm = Form.create()((props) => {
 
 const getValue = obj => Object.keys(obj).map(key => obj[key]).join(',');
 
-@connect(({ models, loading }) => ({
-  models,
-  loading: loading.models.models,
+@connect(({ candidatemodels, loading }) => ({
+  candidatemodels,
+  loading: loading.models.candidatemodels,
 }))
 @Form.create()
 export default class ModelList extends PureComponent {
@@ -95,7 +95,7 @@ export default class ModelList extends PureComponent {
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
-      type: 'models/fetchModelList',
+      type: 'candidatemodels/fetchCandidateModelList',
     });
   }
 
@@ -113,8 +113,8 @@ export default class ModelList extends PureComponent {
       dataIndex: 'description',
     },
     {
-      title: '添加人',
-      dataIndex: 'addedBy',
+      title: '所属项目',
+      dataIndex: 'projectName',
     },
     {
       title: '创建时间',
@@ -123,15 +123,13 @@ export default class ModelList extends PureComponent {
       render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
     },
     {
-      title: '添加时间',
-      dataIndex: 'addedAt',
-      sorter: true,
-      render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
-    },
-    {
       title: '操作',
       render: (text, record) => (
         <Fragment>
+          <Popconfirm title="确认发布吗?" onConfirm={() => this.handlePublish(record)}>
+            <a>发布</a>
+          </Popconfirm>
+          <Divider type="vertical" />
           <a onClick={() => this.handleEdit(record)} >编辑</a>
           <Divider type="vertical" />
           <span>
@@ -152,7 +150,7 @@ export default class ModelList extends PureComponent {
   performQuery = (params) => {
     const { dispatch } = this.props;
     dispatch({
-      type: 'models/fetchModelList',
+      type: 'candidatemodels/fetchCandidateModelList',
       payload: params,
     });
 
@@ -171,7 +169,7 @@ export default class ModelList extends PureComponent {
   handleRecordDelete = (record) => {
     const { dispatch } = this.props;
     dispatch({
-      type: 'models/removeModel',
+      type: 'candidatemodels/removeCandidateModel',
       payload: {
         ids: [record.id],
         refreshParams: this.refreshParams,
@@ -190,7 +188,7 @@ export default class ModelList extends PureComponent {
     const { dispatch } = this.props;
 
     dispatch({
-      type: 'models/updateModel',
+      type: 'candidatemodels/updateCandidateModel',
       payload: {
         ...fieldsValue,
         id: currentRecord.id,
@@ -199,11 +197,22 @@ export default class ModelList extends PureComponent {
     this.handleModalVisible(false);
   }
 
+  handlePublish = (record) => {
+    const { dispatch } = this.props;
+
+    dispatch({
+      type: 'candidatemodels/publishCandidateModels',
+      payload: {
+        ids: [record.id],
+      },
+    });
+  }
+
   handleSearch = (e) => {
     e.preventDefault();
 
     const { form } = this.props;
-    const { models: { data } } = this.props;
+    const { candidatemodels: { data } } = this.props;
 
     form.validateFields((err, fieldsValue) => {
       if (err) return;
@@ -211,13 +220,9 @@ export default class ModelList extends PureComponent {
       const createdAt = fieldsValue.createdAt
         && fieldsValue.createdAt.map(m => m.format('YYYYMMDD')).join();
 
-      const addedAt = fieldsValue.addedAt
-        && fieldsValue.addedAt.map(m => m.format('YYYYMMDD')).join();
-
       const values = {
         ...fieldsValue,
         createdAt,
-        addedAt,
       };
 
       this.setState({
@@ -260,7 +265,24 @@ export default class ModelList extends PureComponent {
     const { dispatch } = this.props;
     const ids = this.state.selectedRows.map(record => record.id);
     dispatch({
-      type: 'models/removeModel',
+      type: 'candidatemodels/removeCandidateModel',
+      payload: {
+        ids,
+        refreshParams: this.refreshParams,
+      },
+    });
+    // update selection.
+    this.setState({
+      ...this.state,
+      selectedRows: [],
+    });
+  }
+
+  handleMultiPublish = () => {
+    const { dispatch } = this.props;
+    const ids = this.state.selectedRows.map(record => record.id);
+    dispatch({
+      type: 'candidatemodels/publishCandidateModels',
       payload: {
         ids,
         refreshParams: this.refreshParams,
@@ -285,7 +307,7 @@ export default class ModelList extends PureComponent {
 
   renderAdvancedForm() {
     const { getFieldDecorator } = this.props.form;
-    const { models: { data } } = this.props;
+    const { candidatemodels: { data } } = this.props;
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
@@ -297,8 +319,8 @@ export default class ModelList extends PureComponent {
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
-            <FormItem label="添加人">
-              {getFieldDecorator('addedBy')(
+            <FormItem label="所属项目">
+              {getFieldDecorator('projectName')(
                 <Input placeholder="请输入" />
               )}
             </FormItem>
@@ -308,13 +330,6 @@ export default class ModelList extends PureComponent {
           <Col md={8} sm={24}>
             <FormItem label="创建时间">
               {getFieldDecorator('createdAt')(
-                <RangePicker style={{ width: '100%' }} placeholder={['开始日期', '结束日期']} />
-              )}
-            </FormItem>
-          </Col>
-          <Col md={8} sm={24}>
-            <FormItem label="更新时间">
-              {getFieldDecorator('addedAt')(
                 <RangePicker style={{ width: '100%' }} placeholder={['开始日期', '结束日期']} />
               )}
             </FormItem>
@@ -331,7 +346,7 @@ export default class ModelList extends PureComponent {
   }
 
   render() {
-    const { models: { data }, loading } = this.props;
+    const { candidatemodels: { data }, loading } = this.props;
     const { selectedRows, modalVisible, currentRecord } = this.state;
 
     const parentMethods = {
@@ -350,6 +365,13 @@ export default class ModelList extends PureComponent {
               {this.renderAdvancedForm()}
             </div>
             <div className={styles.tableListOperator}>
+              <Popconfirm title="确认发布吗?" onConfirm={() => this.handleMultiPublish()}>
+                {
+                  selectedRows.length > 0 && (
+                    <Button type="primary">批量发布</Button>
+                  )
+                }
+              </Popconfirm>
               <Popconfirm title="确认删除吗?" onConfirm={() => this.handleMultiDelete()}>
                 {
                   selectedRows.length > 0 && (

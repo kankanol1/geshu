@@ -94,6 +94,16 @@ export const getRouterData = (app) => {
     '/project/workspace/logview/:id': {
       component: dynamicWrapper(app, [], () => import('../routes/Project/WorkspaceLogView')),
     },
+
+    /* model manage */
+    '/models/list': {
+      component: dynamicWrapper(app, ['models'], () => import('../routes/Model/ModelList')),
+    },
+    '/models/candidates': {
+      component: dynamicWrapper(app, ['candidatemodels'], () => import('../routes/Model/CandidateModelList')),
+    },
+
+    /* user manage. */
     '/users/list': {
       component: dynamicWrapper(app, ['users'], () => import('../layouts/UsersListLayout')),
     },

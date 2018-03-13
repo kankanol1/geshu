@@ -1,35 +1,29 @@
 import moment from 'moment';
 import { getUrlParams } from './utils';
-
-let num = 1000;
-const gen = () => {
-  return num++;
-};
+import { addModel } from './model';
 
 let models = [
   { id: 'gen-1',
-    name: '模型1',
+    name: 'c模型1',
     description: '模型描述',
-    addedBy: 'user1',
+    projectName: 'project1',
+    projectId: '0',
     createdAt: moment('2018-03-02', 'YYYY-MM-DD'),
-    addedAt: moment('2018-03-03', 'YYYY-MM-DD'),
-    updatedAt: moment('2018-02-0', 'YYYY-MM-DD'),
   },
 ];
 
 for (let i = 0; i < 66; i += 1) {
   models.push({
     id: `gen${i}`,
-    name: `模型${i}`,
-    addedBy: `user${i}`,
+    name: `c模型${i}`,
     description: `模型描述${i}`,
+    projectName: 'project1',
+    projectId: '0',
     createdAt: moment('2018-03-02', 'YYYY-MM-DD'),
-    addedAt: moment('2018-03-03', 'YYYY-MM-DD'),
-    updatedAt: moment(`2018-02-0${Math.floor(i / 20) + 1}`, 'YYYY-MM-DD'),
   });
 }
 
-export function getModels(req, res, u) {
+export function getCandidateModels(req, res, u) {
   let url = u;
   if (!url || Object.prototype.toString.call(url) !== '[object String]') {
     url = req.url; // eslint-disable-line
@@ -53,23 +47,18 @@ export function getModels(req, res, u) {
     dataSource = dataSource.filter(data => data.name.indexOf(params.name) >= 0);
   }
 
-  if (params.addedBy) {
-    dataSource = dataSource.filter(data => data.addedBy.indexOf(params.addedBy) >= 0);
+  if (params.projectId) {
+    dataSource = dataSource.filter(data => data.projectId === params.projectId);
+  }
+
+  if (params.projectName) {
+    dataSource = dataSource.filter(data => data.projectName.indexOf(params.projectName) >= 0);
   }
 
   if (params.createdAt) {
     const createdAt = params.createdAt.split(',').map(t => moment(t, 'YYYYMMDD'));
     dataSource = dataSource.filter((data) => {
       if (data.createdAt >= createdAt[0] && data.createdAt <= createdAt[1]) {
-        return true;
-      }
-      return false;
-    });
-  }
-  if (params.addedAt) {
-    const addedAt = params.addedAt.split(',').map(t => moment(t, 'YYYYMMDD'));
-    dataSource = dataSource.filter((data) => {
-      if (data.addedAt >= addedAt[0] && data.addedAt <= addedAt[1]) {
         return true;
       }
       return false;
@@ -93,7 +82,6 @@ export function getModels(req, res, u) {
     return {
       ...item,
       createdAt: item.createdAt.format('YYYY-MM-DD HH:mm'),
-      addedAt: item.addedAt.format('YYYY-MM-DD HH:mm'),
     };
   });
 
@@ -113,7 +101,7 @@ export function getModels(req, res, u) {
   }
 }
 
-export function deleteModels(req, res, u, b) {
+export function deleteCandidateModels(req, res, u, b) {
   let url = u;
   if (!url || Object.prototype.toString.call(url) !== '[object String]') {
     url = req.url; // eslint-disable-line
@@ -136,7 +124,7 @@ export function deleteModels(req, res, u, b) {
   }
 }
 
-export function updateModel(req, res, u, b) {
+export function updateCandidateModel(req, res, u, b) {
   let url = u;
   if (!url || Object.prototype.toString.call(url) !== '[object String]') {
     url = req.url; // eslint-disable-line
@@ -164,23 +152,41 @@ export function updateModel(req, res, u, b) {
   }
 }
 
-export function addModel({ id, name, description }) {
-  const i = gen();
-  models.unshift({
-    name,
-    id: i,
-    description,
-    addedBy: `user${i}`,
-    createdAt: moment(`2018-01-0${Math.floor(i / 20) + 1}`, 'YYYY-MM-DD'),
-    addedAt: moment(`2018-02-0${Math.floor(i / 20) + 1}`, 'YYYY-MM-DD'),
-    updatedAt: moment(`2018-02-0${Math.floor(i / 20) + 1}`, 'YYYY-MM-DD'),
-  });
+export function publishCandidateModels(req, res, u, b) {
+  let url = u;
+  if (!url || Object.prototype.toString.call(url) !== '[object String]') {
+    url = req.url; // eslint-disable-line
+  }
+
+  const body = (b && b.body) || req.body;
+  const { ids } = body;
+
+  models.forEach(
+    (model) => {
+      if (ids.includes(model.id)) {
+        addModel({ name: model.name, description: model.description });
+      }
+    }
+  );
+
+  models = models.filter(item => !ids.includes(item.id));
+
+  const result = {
+    success: true,
+    message: '发布成功',
+  };
+
+  if (res && res.json) {
+    res.json(result);
+  } else {
+    return result;
+  }
 }
 
 export default {
-  getModels,
-  deleteModels,
-  updateModel,
-  addModel,
+  getCandidateModels,
+  deleteCandidateModels,
+  updateCandidateModel,
+  publishCandidateModels,
 };
 

@@ -39,6 +39,7 @@
     "lodash-decorators": "^4.4.1",
     "moment": "^2.19.1",
     "namor": "^1.0.1",
+    "npm": "^5.7.1",
     "numeral": "^2.0.6",
     "object-hash": "^1.2.0",
     "omit.js": "^1.0.0",

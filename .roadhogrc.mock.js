@@ -12,6 +12,8 @@ import { wrapResponse } from './mock/response_wrapper'
 import componentParams from './mock/workspace/componentParams'
 import { getProject, createProject, updateProject, deleteProject, getProjectLabels, getRecentProjects } from './mock/project';
 import { login, userList, createUser, deleteUser, queryUserName, updateUser } from './mock/user';
+import { getModels, addModel, updateModel, deleteModels } from './mock/model';
+import { getCandidateModels, updateCandidateModel, deleteCandidateModels, publishCandidateModels } from './mock/candidatemodel';
 
 // 是否禁用代理
 const noProxy = process.env.NO_PROXY === 'true';
@@ -39,6 +41,17 @@ const proxy = {
   'POST /api/users/delete': deleteUser,
   'GET /api/users/username': queryUserName,
   'POST /api/users/update': updateUser,
+
+  // model manage.
+  'GET /api/models/production/list': getModels,
+  'POST /api/models/production/update': updateModel,
+  'POST /api/models/production/delete': deleteModels,
+  
+  // candidate model manage.
+  'GET /api/models/candidate/list': getCandidateModels,
+  'POST /api/models/candidate/update': updateCandidateModel,
+  'POST /api/models/candidate/delete': deleteCandidateModels,
+  'POST /api/models/candidate/publish': publishCandidateModels,
 
   // 支持值为 Object 和 Array
   'GET /api/currentUser': {

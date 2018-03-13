@@ -77,7 +77,7 @@ export function getProject(req, res, u) {
   }
 
   if (params.name) {
-    dataSource = dataSource.filter(data => data.name.indexOf(params.name) > 0);
+    dataSource = dataSource.filter(data => data.name.indexOf(params.name) >= 0);
   }
 
   if (params.labels) {
@@ -97,7 +97,7 @@ export function getProject(req, res, u) {
   if (params.updatedAt) {
     const updatedAt = params.updatedAt.split(',').map(t => moment(t, 'YYYYMMDD'));
     dataSource = dataSource.filter((data) => {
-      if (data.updatedAt >= updatedAt[0] && data.updatedAt <= updatedAt[0]) {
+      if (data.updatedAt >= updatedAt[0] && data.updatedAt <= updatedAt[1]) {
         return true;
       }
       return false;
@@ -107,7 +107,7 @@ export function getProject(req, res, u) {
   if (params.createdAt) {
     const createdAt = params.createdAt.split(',').map(t => moment(t, 'YYYYMMDD'));
     dataSource = dataSource.filter((data) => {
-      if (data.createdAt >= createdAt[0] && data.createdAt <= createdAt[0]) {
+      if (data.createdAt >= createdAt[0] && data.createdAt <= createdAt[1]) {
         return true;
       }
       return false;
