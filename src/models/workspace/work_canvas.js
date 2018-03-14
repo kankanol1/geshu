@@ -34,8 +34,8 @@ export default {
           {
             /* connects to */
             component: 'preprocess-1',
-            input: 'i-1',
-            output: 'o-1',
+            from: 'i-1',
+            to: 'o-1',
           },
         ],
       },
@@ -257,7 +257,7 @@ export default {
             (line) => {
               if (containedComponents.includes(line.component)) {
                 // add this line.
-                newSelection.push({ type: 'line', from: line.output, to: line.input, source: component.id, target: line.component });
+                newSelection.push({ type: 'line', from: line.from, to: line.to, source: component.id, target: line.component });
               }
             }
           );
@@ -294,7 +294,6 @@ export default {
         }
       );
 
-
       const originComponent = Object.assign([], state.components);
       const newComponents = originComponent.map(
         (component) => {
@@ -304,7 +303,7 @@ export default {
             // not included, needs to check the lines.
             const newConnectFrom = component.connectFrom.map(
               (item) => {
-                if (lineSelectionSet.includes(`${component.id}-${item.output}-${item.component}-${item.input}`)) {
+                if (lineSelectionSet.includes(`${item.component}-${item.from}-${component.id}-${item.to}`)) {
                   return null;
                 } else if (componentSelectionSet.includes(item.component)) {
                   return null;
@@ -494,44 +493,21 @@ export default {
       });
 
       let newComponents = null;
-      if (overlappedInputs.length !== 0) {
-        if (draggingMetaType === 'output') {
-          const candidate = overlappedInputs[0];
-          // candidate is input, meaning dragging source should be an output.
-          // add connectFrom to the candidate point.
-          newComponents = state.components.map(
-            (component) => {
-              if (component.id === candidate.componentId) {
-                const connectFrom = Object.assign([], component.connectFrom);
-                connectFrom.push({ component: draggingComponent,
-                  input: draggingPoint,
-                  output: candidate.pointId,
-                });
-                return Object.assign({}, { ...component, ...{ connectFrom } });
-              } else {
-                return component;
-              }
-            }
-          );
-        } else {
-          message.info('needs to be connected with an input point');
-        }
-      }
       if (overlappedOutputs.length !== 0) {
         if (draggingMetaType === 'input') {
           const candidate = overlappedOutputs[0];
-          // candidate is output, meansing dragging source should be an input.
-          // the other way round.
           if (candidate.componentId === draggingComponent) {
             message.info('暂不能将同一组件首位相连');
           } else if (draggingConnects.includes(candidate.type)) {
+            // candidate is output, meaning dragging source should be an output.
+            // add connectFrom to the candidate point.
             newComponents = state.components.map(
               (component) => {
                 if (component.id === draggingComponent) {
                   const connectFrom = Object.assign([], component.connectFrom);
                   connectFrom.push({ component: candidate.componentId,
-                    input: candidate.pointId,
-                    output: draggingPoint,
+                    to: draggingPoint,
+                    from: candidate.pointId,
                   });
                   return Object.assign({}, { ...component, ...{ connectFrom } });
                 } else {
@@ -544,6 +520,35 @@ export default {
           }
         } else {
           message.info('needs to be connected with an output point');
+        }
+      }
+      if (overlappedInputs.length !== 0) {
+        if (draggingMetaType === 'output') {
+          const candidate = overlappedInputs[0];
+          // candidate is output, meansing dragging source should be an input.
+          // the other way round.
+          if (candidate.componentId === draggingComponent) {
+            message.info('暂不能将同一组件首位相连');
+          } else if (candidate.connects.includes(draggingType)) {
+            newComponents = state.components.map(
+              (component) => {
+                if (component.id === candidate.componentId) {
+                  const connectFrom = Object.assign([], component.connectFrom);
+                  connectFrom.push({ component: draggingComponent,
+                    to: candidate.pointId,
+                    from: draggingPoint,
+                  });
+                  return Object.assign({}, { ...component, ...{ connectFrom } });
+                } else {
+                  return component;
+                }
+              }
+            );
+          } else {
+            message.info('not compatiable');
+          }
+        } else {
+          message.info('needs to be connected with an input point');
         }
       }
 
@@ -572,6 +577,31 @@ export default {
           draggingSource: { x: null, y: null },
         },
       });
+    },
+
+    selectAll(state) {
+      const newSelection = [];
+      state.components.forEach(
+      //   { type: 'line', from: 'o-1', to: 'i-1', source: 'input', target: 'preprocess-1' },
+      // { type: 'component', id: 'input' },
+        (c) => {
+          newSelection.push({
+            type: 'component', id: c.id,
+          });
+          // get line.
+          c.connectFrom.forEach(
+            to => newSelection.push({
+              type: 'line',
+              source: to.component,
+              from: to.from,
+              target: c.id,
+              to: to.to,
+            })
+          );
+        }
+      );
+      // apply.
+      return Object.assign({}, { ...state, selection: newSelection });
     },
   },
 
@@ -614,6 +644,12 @@ export default {
       key('del, delete', () => {
         return dispatch({
           type: 'deleteCurrentSelection',
+        });
+      });
+      key('⌘+a, ctrl+a', (e) => {
+        e.preventDefault();
+        return dispatch({
+          type: 'selectAll',
         });
       });
     },

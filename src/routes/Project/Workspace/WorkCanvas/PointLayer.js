@@ -15,13 +15,15 @@ class PointLayer extends React.PureComponent {
     this.state = { hovering: [] };
   }
 
-  handleDragStop() {
+  handleDragStop(e) {
+    e.preventDefault();
     this.props.dispatch({
       type: 'work_canvas/endDrag',
     });
   }
 
   handleDragStart = (e) => {
+    e.preventDefault();
     // stop propagation to parent.
     e.stopPropagation();
   }
@@ -34,6 +36,7 @@ class PointLayer extends React.PureComponent {
   }
 
   handleDrag(e, draggableData, point) {
+    e.preventDefault();
     let originx = null;
     let originy = null;
     if (draggableData.node.x === undefined) {

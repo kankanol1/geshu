@@ -4,6 +4,7 @@ import { calculateLineStr } from '../../../../utils/PositionCalculation';
 
 class LineLayer extends React.PureComponent {
   handleLineClick(e, params) {
+    e.preventDefault();
     this.props.dispatch({
       type: 'work_canvas/updateLineSelection',
       ...params,
@@ -16,8 +17,8 @@ class LineLayer extends React.PureComponent {
         {
           this.props.model.connectFrom.map(
             (line, i) => {
-              const from = this.props.positionDict[this.props.model.id][line.output];
-              const to = this.props.positionDict[line.component][line.input];
+              const from = this.props.positionDict[line.component][line.from];
+              const to = this.props.positionDict[this.props.model.id][line.to];
               const lineStr = calculateLineStr(from.x, from.y, to.x, to.y);
               return (
                 <React.Fragment key={i}>
@@ -31,10 +32,10 @@ class LineLayer extends React.PureComponent {
                       style={{ fill: 'none', stroke: '#fff', strokeWidth: 20, opacity: 0 }}
                       onClick={(e) => {
                         this.handleLineClick(e, {
-                          source: this.props.model.id,
-                          target: line.component,
-                          from: line.output,
-                          to: line.input,
+                          source: line.component,
+                          target: this.props.model.id,
+                          from: line.from,
+                          to: line.to,
                         });
                       }
                       }
