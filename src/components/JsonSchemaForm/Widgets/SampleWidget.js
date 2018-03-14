@@ -45,7 +45,7 @@ export default class SampleWidget extends React.PureComponent {
           onCancel={() => { this.setState({ modal: false }); }}
         >
         All available options:
-          {this.state.listData.map(d => <p>{d}</p>)}
+          {this.state.listData.map(d => <p key={d}>{d}</p>)}
         </Modal>
       </div>
     );

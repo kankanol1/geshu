@@ -73,7 +73,9 @@ class NodeLayer extends React.PureComponent {
 
   render() {
     const { name, id } = this.props.model;
-    const { x, y, height, width } = this.props.componentDict[id];
+    const { x, y, height, width } =
+      this.props.componentDict === undefined ?
+        this.props.model : this.props.componentDict[id];
     return (
       <React.Fragment>
         <rect

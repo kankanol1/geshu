@@ -100,8 +100,8 @@ export default {
       { type: 'component', id: 'input' },
     ],
     offset: {
-      x: 400,
-      y: 400,
+      x: 0,
+      y: 0,
     },
     scale: 1.0,
     scaleCenter: {
