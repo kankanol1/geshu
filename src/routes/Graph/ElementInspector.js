@@ -1,24 +1,30 @@
 import React, { Component } from 'react';
-import { Input, Icon, Button, Row, Col, InputNumber } from 'antd';
+import { connect } from 'dva';
+import { Input, Row, Col, Checkbox, Tooltip, Icon, Select, Switch } from 'antd';
 import styles from './ElementInspector.less';
 import DynamicAttributeEditor from './DynamicAttributeEditor';
-import graphUtils from './GraphUtils';
+import graphUtils from '../../utils/graph_utils';
 
 
 let myDiagram;
 let currentInspectedObject;
-let self;
+const defaultData = {
+  text: '',
+  partition: false,
+  useStatic: false,
+  unidirected: true,
+  multiplicity: 'MULTI',
+};
 
 function getInspectedObjectData() {
   let data;
   if (currentInspectedObject && currentInspectedObject.data) {
     data = { ...currentInspectedObject.data };
   }
-  data.text = data.text ? data.text : '';
-  data.attrList = data.attrList ? data.attrList : [];
-  data.color = data.color ? data.color : '#ffffff';
-  data.stroke = data.stroke ? data.stroke : '#000000';
-  data.loc = data.loc ? data.loc : { x: 0, y: 0 };
+  for (const key in defaultData) {
+    if (!data[key]) data[key] = defaultData[key];
+  }
+  if (!data.attrList) data.attrList = [];
   return data;
 }
 
@@ -26,69 +32,48 @@ function setInspectedObjectData(name, value) {
   myDiagram.model.setDataProperty(currentInspectedObject.data, name, value);
 }
 
-function selectionChangedListener(diagramEvent) {
-  if (myDiagram.selection.count !== 1) {
-    self.setState({
-      show: false,
-    });
-    currentInspectedObject = undefined;
-    return;
-  }
-  currentInspectedObject = myDiagram.selection.first();
-  if (!currentInspectedObject) return;
-  const data = getInspectedObjectData();
-  data.show = true;
-  data.isNode = graphUtils.isNode(currentInspectedObject);
-  self.setState(data);
-}
-
-function textEditedListener(diagramEvent) {
-  if (currentInspectedObject) {
-    self.setState({
-      show: true,
-      text: getInspectedObjectData().text,
-    });
-  }
-}
-
-function selectionMovedListener(diagramEvent) {
-  if (currentInspectedObject) {
-    self.setState({
-      show: true,
-      loc: getInspectedObjectData().loc,
-    });
-  }
-}
-
-export default class ElementInspector extends Component {
+const multiplicityTypes = ['MULTI', 'SIMPLE', 'MANY2ONE', 'ONE2MANY', 'ONE2ONE'];
+class ElementInspector extends Component {
   constructor(props) {
     super(props);
+
     this.state = {
       isNode: false,
       show: false,
-      text: '',
-      attrList: [],
-      color: '',
-      stroke: '',
-      loc: { x: 0, y: 0 },
     };
   }
+  componentWillReceiveProps(newProp) {
+    if (newProp.diagram) {
+      myDiagram = newProp.diagram;
+      myDiagram.addDiagramListener('ChangedSelection', () => {
+        if (myDiagram.selection.count !== 1) {
+          this.setState({
+            show: false,
+          });
+          currentInspectedObject = undefined;
+          return;
+        }
+        currentInspectedObject = myDiagram.selection.first();
+        if (!currentInspectedObject) return;
+        const data = getInspectedObjectData();
+        data.show = true;
+        data.isNode = graphUtils.isNode(currentInspectedObject);
+        this.setState(data);
+      });
 
-  componentWillReceiveProps(nextProps) {
-    if (!nextProps.diagram) return;
-
-    self = this;
-    myDiagram = nextProps.diagram;
-
-    myDiagram.removeDiagramListener('ChangedSelection', selectionChangedListener);
-    myDiagram.removeDiagramListener('TextEdited', textEditedListener);
-    myDiagram.removeDiagramListener('SelectionMoved', selectionMovedListener);
-
-    myDiagram.addDiagramListener('ChangedSelection', selectionChangedListener);
-    myDiagram.addDiagramListener('TextEdited', textEditedListener);
-    myDiagram.addDiagramListener('SelectionMoved', selectionMovedListener);
+      myDiagram.addDiagramListener('TextEdited', () => {
+        if (currentInspectedObject) {
+          this.setState({
+            show: true,
+            text: getInspectedObjectData().text,
+          });
+        }
+      });
+    }
   }
-
+  shouldComponentUpdate(newProp, newState) {
+    return true;
+  }
   removeAttr(index) {
     this.state.attrList.splice(index, 1);
     setInspectedObjectData('attrList', this.state.attrList);
@@ -96,7 +81,7 @@ export default class ElementInspector extends Component {
   }
 
   addAttr() {
-    this.state.attrList.push({ name: '', type: 'string' });
+    this.state.attrList.push({ name: '', type: 'String', cardinality: 'SINGLE' });
     setInspectedObjectData('attrList', this.state.attrList);
     this.setState({});
   }
@@ -113,76 +98,108 @@ export default class ElementInspector extends Component {
     setInspectedObjectData(stateKey, event.target.value);
   }
 
-  locationInputChanged = (stateKey, event) => {
-    const location = this.state.loc;
-    location[stateKey] = event;
-    this.setState({ location });
-    myDiagram.model.setDataProperty(currentInspectedObject.data, 'loc', location);
-    currentInspectedObject.position = location;
-  }
-
-
   render() {
     if (!this.state.show) {
       return (<p style={{ textAlign: 'center', fontSize: '16px' }}>暂无选中元素</p>);
     }
 
-    let nodeAttr = (<div />);
+    let attrConfig = (<div />);
     if (this.state.isNode) {
-      nodeAttr = (
-        <div className={styles.attrItem} style={{ width: '95%', marginTop: '10px' }}>
-          <div className={`${styles.attrBox} ${styles.markdown}`}>
-            <div className={styles.boxTitle}>
-              <span>元素配置</span>
-            </div>
-            <Row className={styles.attrItem}>
-              <Col span={5}><p style={{ textAlign: 'right' }}>背景：</p></Col>
-              <Col span={6}><Input
-                type="color"
-                value={this.state.color}
-                onChange={this.inputChanged.bind({}, 'color')}
-              />
-              </Col>
-              <Col span={5}><p style={{ textAlign: 'right' }}>边框：</p></Col>
-              <Col span={6}>
-                <Input
-                  type="color"
-                  onChange={this.inputChanged.bind({}, 'stroke')}
-                />
-              </Col>
-            </Row>
-            <Row className={styles.attrItem}>
-              <Col span={5}><p style={{ textAlign: 'right' }}>X：</p></Col>
-              <Col span={6}><InputNumber
-                value={this.state.loc.x}
-                onChange={this.locationInputChanged.bind({}, 'x')}
+      attrConfig = (
+        <div>
+          <Row className={styles.attrItem}>
+            <Col span={9} offset={4}>
+              <Checkbox
+                checked={this.state.partition}
+                onChange={(e) => {
+                    this.state.partition = e.target.checked;
+                    this.setState({});
+                    setInspectedObjectData('partition', e.target.checked);
+                  }}
+              >
+                <strong>Partition</strong>
+                <Tooltip title="Allowed cardinality of the values associated with the key on any given vertex">
+                  <Icon type="question-circle" />
+                </Tooltip>
+              </Checkbox>
+            </Col>
+            <Col span={9}>
+              <Checkbox
+                checked={this.state.useStatic}
+                onChange={(e) => {
+                    this.state.useStatic = e.target.checked;
+                    this.setState({});
+                    setInspectedObjectData('useStatic', e.target.checked);
+                  }}
+              >
+                <strong>Static</strong>
+                <Tooltip title="Allowed cardinality of the values associated with the key on any given vertex">
+                  <Icon type="question-circle" />
+                </Tooltip>
+              </Checkbox>
+            </Col>
+          </Row>
+        </div>
+      );
+    } else {
+      attrConfig = (
+        <div>
+          <Row className={styles.attrItem}>
+            <Col span={7} style={{ textAlign: 'right' }}>
+              <strong >Unidirected&nbsp;</strong>
+              <Tooltip title="Allowed cardinality of the values associated with the key on any given vertex">
+                <Icon type="question-circle" />
+              </Tooltip>
+              &nbsp;&nbsp;
+            </Col>
+            <Col span={9}>
+              <Switch
+                checked={this.state.unidirected}
+                onChange={(checked) => {
+                    this.state.unidirected = checked;
+                    this.setState({});
+                    setInspectedObjectData('unidirected', checked);
+                  }}
+              />,
+            </Col>
+          </Row>
+          <Row className={styles.attrItem}>
+            <Col span={7} style={{ textAlign: 'right' }}>
+              <strong >Multiplicity&nbsp;</strong>
+              <Tooltip title="Allowed cardinality of the values associated with the key on any given vertex">
+                <Icon type="question-circle" />
+              </Tooltip>
+              &nbsp;&nbsp;
+            </Col>
+            <Col span={9}>
+              <Select
+                showSearch
                 style={{ width: '100%' }}
-                formatter={(value) => {
-                  if (value) {
-                    return parseFloat(value).toFixed(2);
-                  }
-                  return value;
-                }}
-              />
-              </Col>
-              <Col span={5}><p style={{ textAlign: 'right' }}>Y：</p></Col>
-              <Col span={6}><InputNumber
-                value={this.state.loc.y}
-                style={{ width: '100%' }}
-                onChange={this.locationInputChanged.bind({}, 'y')}
-                formatter={(value) => {
-                  if (value) {
-                    return parseFloat(value).toFixed(2);
-                  }
-                  return value;
-                }}
-              />
-              </Col>
-            </Row>
-          </div>
+                optionFilterProp="children"
+                filterOption={
+                        (input, option) => {
+                          return option.props.children
+                            .toLowerCase()
+                            .indexOf(input.toLowerCase()) >= 0;
+                        }
+                      }
+                value={this.state.multiplicity}
+                onChange={(event) => {
+                        this.state.multiplicity = event;
+                        this.setState({});
+                        setInspectedObjectData('multiplicity', event);
+                      }}
+              >
+                {multiplicityTypes.map((value, index) => {
+                  return (<Select.Option value={value} key={index}>{value}</Select.Option>);
+                })}
+              </Select>
+            </Col>
+          </Row>
         </div>
       );
     }
+
 
     return (
       <div>
@@ -194,7 +211,15 @@ export default class ElementInspector extends Component {
             value={this.state.text}
           />
         </div>
-        {nodeAttr}
+        <div className={styles.attrItem} style={{ width: '95%', marginTop: '10px' }}>
+          <div className={`${styles.attrBox} ${styles.markdown}`}>
+            <div className={styles.boxTitle}>
+              <span>元素配置</span>
+            </div>
+            {attrConfig}
+          </div>
+        </div>
+
         <div className={styles.attrItem} style={{ width: '95%', marginTop: '10px' }}>
           <div className={`${styles.attrBox} ${styles.markdown}`}>
             <div className={styles.boxTitle}>
@@ -214,3 +239,4 @@ export default class ElementInspector extends Component {
     );
   }
 }
+export default connect((state) => { return { diagram: state.graph_schema_editor.diagram }; })(ElementInspector);
