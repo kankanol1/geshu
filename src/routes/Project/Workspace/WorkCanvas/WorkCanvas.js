@@ -18,9 +18,28 @@ class WorkCanvas extends React.PureComponent {
   }
 
   componentWillMount() {
-    this.props.dispatch({
+    const { dispatch } = this.props;
+    dispatch({
       type: 'work_canvas/init',
     });
+    // add key listener.
+
+    key('del, delete', () => {
+      return dispatch({
+        type: 'work_canvas/deleteCurrentSelection',
+      });
+    });
+    key('⌘+a, ctrl+a', (e) => {
+      e.preventDefault();
+      return dispatch({
+        type: 'work_canvas/selectAll',
+      });
+    });
+  }
+
+  componentWillUnmount() {
+    key.unbind('del, delete');
+    key.unbind('⌘+a, ctrl+a');
   }
 
   handleDrag(e, draggableData) {
@@ -73,12 +92,25 @@ class WorkCanvas extends React.PureComponent {
           onStop={this.handleDragStop}
           onStart={this.handleDragStart}
         >
-          <svg style={{ width: '100%', height: '100%' }} className="work-canvas">
+          <svg
+            style={{ width: '100%',
+            height: '100%',
+            cursor: this.props.mode === 'move' ? 'move' : 'default' }}
+            className="work-canvas"
+          >
             {
               /* 1. node layer */
               this.props.components.map(
                 (component, i) => {
-                  return (<NodeLayer key={i} model={component} dispatch={this.props.dispatch} />);
+                  return (
+                    <NodeLayer
+                      key={i}
+                      model={component}
+                      dispatch={this.props.dispatch}
+                      positionDict={componentPointPosition}
+                      componentDict={componentDict}
+                    />
+                  );
                 }
               )
             }
@@ -92,6 +124,7 @@ class WorkCanvas extends React.PureComponent {
                       model={component}
                       dispatch={this.props.dispatch}
                       positionDict={componentPointPosition}
+                      componentDict={componentDict}
                     />);
                 }
               )
@@ -107,6 +140,7 @@ class WorkCanvas extends React.PureComponent {
                       dispatch={this.props.dispatch}
                       draggingTarget={this.props.lineDraggingState.draggingTarget}
                       positionDict={componentPointPosition}
+                      componentDict={componentDict}
                     />
                   );
                 }

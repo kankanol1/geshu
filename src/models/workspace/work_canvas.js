@@ -100,8 +100,8 @@ export default {
       { type: 'component', id: 'input' },
     ],
     offset: {
-      x: 0,
-      y: 0,
+      x: 400,
+      y: 400,
     },
     scale: 1.0,
     scaleCenter: {
@@ -168,7 +168,7 @@ export default {
       switch (state.mode) {
         case 'move':
           if (!state.runtime.dragging) {
-            return Object.assign({}, {
+            return updateCache(Object.assign({}, {
               ...state,
               ...{
                 runtime: {
@@ -183,9 +183,9 @@ export default {
                   y: state.offset.y + currentY,
                 },
               },
-            });
+            }));
           } else {
-            return Object.assign({}, {
+            return updateCache(Object.assign({}, {
               ...state,
               ...{
                 runtime: {
@@ -198,7 +198,7 @@ export default {
                   y: state.offset.y + currentY,
                 },
               },
-            });
+            }));
           }
         case 'select':
         default:
@@ -276,6 +276,7 @@ export default {
             stopY: 0,
           },
           selection: newSelection,
+          mode: 'select',
         },
       });
     },
@@ -640,18 +641,6 @@ export default {
   },
 
   subscriptions: {
-    keyboardWatcher({ dispatch }) {
-      key('del, delete', () => {
-        return dispatch({
-          type: 'deleteCurrentSelection',
-        });
-      });
-      key('⌘+a, ctrl+a', (e) => {
-        e.preventDefault();
-        return dispatch({
-          type: 'selectAll',
-        });
-      });
-    },
+
   },
 };

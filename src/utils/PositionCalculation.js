@@ -90,15 +90,18 @@ const calculatePointPositionDict = (component) => {
 const updateCache = (state) => {
   const componentDict = {}; // store: componentid: {x, y}
   const componentPointPosition = {}; // store: componentid: {pointid: {x, y}}
+  const { offset } = state;
   state.components.forEach(
     (component) => {
-      componentDict[component.id] = {
-        x: component.x,
-        y: component.y,
+      const calculatedPosition = {
+        x: component.x + offset.x,
+        y: component.y + offset.y,
         height: component.height,
         width: component.width,
       };
-      componentPointPosition[component.id] = calculatePointPositionDict(component);
+      componentDict[component.id] = calculatedPosition;
+      componentPointPosition[component.id] =
+        calculatePointPositionDict({ ...component, ...calculatedPosition });
     }
   );
   return Object.assign({}, { ...state,

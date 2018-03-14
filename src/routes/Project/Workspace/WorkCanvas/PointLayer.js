@@ -73,7 +73,7 @@ class PointLayer extends React.PureComponent {
 
   render() {
     const { inputs, outputs } = this.props.model;
-    const pointDict = this.props.pointDict === undefined ?
+    const pointDict = this.props.positionDict === undefined ?
       calculatePointPositionDict(this.props.model)
       : this.props.positionDict[this.props.model.id];
 
