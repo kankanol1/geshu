@@ -1,12 +1,13 @@
-import React, { Component } from 'react';
-import { Layout, Collapse, Row, Col, Tabs, Modal, Input, Button } from 'antd';
-import graphUtil from './GraphUtils';
+import React from 'react';
+import { connect } from 'dva';
+import { Layout, Row, Col, Tabs, Modal, Input, Menu, Icon, Card } from 'antd';
 import ElementInspector from './ElementInspector';
+import IndexInspector from './IndexInspector';
+
+import graphUtils from '../../utils/graph_utils';
 
 const { TextArea } = Input;
-let myDiagram;
-
-export default class GraphDesigner extends Component {
+class GraphDesigner extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -17,7 +18,11 @@ export default class GraphDesigner extends Component {
   }
 
   componentDidMount() {
-    myDiagram = graphUtil.init('myPaletteDiv', 'myDiagramDiv');
+    this.props.dispatch({
+      type: 'graph_schema_editor/create',
+      palletContainer: 'myPalletteDiv',
+      graphContainer: 'myDiagramDiv',
+    });
   }
 
   load() {
@@ -31,22 +36,21 @@ export default class GraphDesigner extends Component {
   save() {
     this.setState({
       showModal: true,
-      json: graphUtil.toJson(myDiagram),
+      json: graphUtils.toJson(this.props.diagram),
       modalType: 'export',
     });
   }
 
-
-  handleOk = (e) => {
+  handleOk = () => {
     this.setState({
       showModal: false,
     });
     if (this.state.modalType === 'import') {
-      graphUtil.fromJson(myDiagram, this.state.json);
+      graphUtils.fromJson(this.props.diagram, this.state.json);
     }
   }
 
-  handleCancel = (e) => {
+  handleCancel = () => {
     this.setState({
       showModal: false,
     });
@@ -55,49 +59,48 @@ export default class GraphDesigner extends Component {
   render() {
     return (
       <Layout style={{ padding: '0', height: '100%' }} theme="light">
+        <Menu mode="horizontal">
+          <Menu.Item >
+            <a onClick={this.load.bind(this)}><Icon type="folder-open" />导入JSON</a>
+          </Menu.Item>
+          <Menu.Item >
+            <a onClick={this.save.bind(this)}><Icon type="download" /> 导出JSON</a>
+          </Menu.Item>
+          <Menu.Item >
+            <a onClick={this.save.bind(this)} ><Icon type="save" />保存当前图</a>
+          </Menu.Item>
+          <Menu.Item >
+            <a onClick={this.save.bind(this)}><Icon type="delete" />清空当前图</a>
+          </Menu.Item>
+        </Menu>
         <Modal
-          title="导入/导出"
-          visible={this.state.showModal}
+          title={this.state.type === 'import' ? '导入JSON' : '导出JSON'}
           onOk={this.handleOk}
           onCancel={this.handleCancel}
+          visible={this.state.showModal}
         >
           <TextArea
-            value={this.state.json}
             autosize={{ minRows: 2 }}
-            onChange={(e) => {
-              this.setState({
-                json: e.target.value,
-              });
-            }}
+            value={this.state.json}
+            onChange={(e) => { this.setState({ json: e.target.value }); }}
           />
         </Modal>
         <Row>
-          <Col span={4}>
-            <Collapse defaultActiveKey={['1']}>
-              <Collapse.Panel header="元素" key="1">
-                <div id="myPaletteDiv" style={{ height: '200px' }} />
-              </Collapse.Panel>
-              <Collapse.Panel header="导入/导出" key="2">
-                <Button
-                  type="primary"
-                  icon="folder-open"
-                  style={{ margin: '5px' }}
-                  onClick={this.load.bind(this)}
-                >
-                  导入JSON
-                </Button>
-                <Button
-                  type="primary"
-                  icon="download"
-                  style={{ margin: '5px' }}
-                  onClick={this.save.bind(this)}
-                >
-                  导出JSON
-                </Button>
-              </Collapse.Panel>
-            </Collapse>
+          <Col span={6}>
+            <Card title="元素" type="inner">
+              <div id="myPalletteDiv" style={{ height: '60px' }} />
+            </Card>
+            <Card
+              title="索引"
+              type="inner"
+              extra={<a onClick={() => { this.indexInspector.add(); }}><Icon type="plus-circle" /> 添加</a>}
+            >
+              <div style={{ margin: '-8px -10px', height: `${window.screen.availHeight - 455}px`, overflow: 'auto' }} >
+                <IndexInspector ref={(e) => { this.indexInspector = e; }} />
+              </div>
+            </Card>
           </Col>
-          <Col span={14} style={{ padding: '0', height: '100%' }}>
+          <Col span={10} style={{ padding: '0', height: '100%' }}>
             <div
               style={{
                 background: '#fff',
@@ -109,19 +112,19 @@ export default class GraphDesigner extends Component {
               id="myDiagramDiv"
             />
           </Col>
-          <Col span={6}>
-            <div style={{
-              background: '#fff',
-              padding: '3px',
-              margin: '0px 10px',
-              height: `${window.screen.availHeight - 250}px`,
-              width: '100%',
-            }}
+          <Col span={8}>
+            <div style={
+              {
+                background: '#fff',
+                padding: '3px',
+                margin: '0px 10px',
+                height: `${window.screen.availHeight - 250}px`,
+                width: '100%',
+              }
+            }
             >
               <Tabs defaultActiveKey="1">
-                <Tabs.TabPane tab="元素配置" key="1">
-                  <ElementInspector diagram={myDiagram} />
-                </Tabs.TabPane>
+                <Tabs.TabPane tab="元素配置" key="1"><ElementInspector /></Tabs.TabPane>
               </Tabs>
             </div>
           </Col>
@@ -130,3 +133,5 @@ export default class GraphDesigner extends Component {
     );
   }
 }
+export default connect((state) => { return { diagram: state.graph_schema_editor.diagram }; })(GraphDesigner);
+

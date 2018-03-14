@@ -5,8 +5,8 @@ const util = {
   shapes: [
     { text: '', figure: 'Ellipse', color: '#ffffff', stroke: '#000000' },
     { text: '', figure: 'Rectangle', color: '#ffffff', stroke: '#000000' },
-    { text: '', figure: 'Diamond', color: '#ffffff', stroke: '#000000' },
-    { text: '', figure: 'Triangle', color: '#ffffff', stroke: '#000000' },
+    // { text: '', figure: 'Diamond', color: '#ffffff', stroke: '#000000' },
+    // { text: '', figure: 'Triangle', color: '#ffffff', stroke: '#000000' },
   ],
 };
 /**
@@ -14,7 +14,7 @@ const util = {
  * @param palletContainer
  * @param graphContainer
  */
-util.init = function (palletContainer, graphContainer) {
+util.init = (palletContainer, graphContainer) => {
   const myDiagram =
     $(go.Diagram, graphContainer,
       {
@@ -95,23 +95,53 @@ util.init = function (palletContainer, graphContainer) {
       )
     );
 
-  const myPalette =
-    $(go.Palette, palletContainer,
-      {
-        scrollsPageOnFocus: false,
-        nodeTemplateMap: myDiagram.nodeTemplateMap,
-        model: new go.GraphLinksModel(util.shapes),
-      });
+  $(go.Palette, palletContainer,
+    {
+      scrollsPageOnFocus: false,
+      nodeTemplateMap: myDiagram.nodeTemplateMap,
+      model: new go.GraphLinksModel(util.shapes),
+    });
   return myDiagram;
 };
-util.toJson = function (diagram) {
+util.toJson = (diagram) => {
   return diagram.model.toJson();
 };
-util.fromJson = function (diagram, json) {
+util.fromJson = (diagram, json) => {
   // eslint-disable-next-line
   diagram.model = go.Model.fromJson(json);
 };
-util.isNode = function (graphObject) {
+util.isNode = (graphObject) => {
   return graphObject instanceof go.Node;
+};
+util.isLink = (graphObject) => {
+  return graphObject instanceof go.Link;
+};
+util.getNodeProps = (diagram) => {
+  const propsArr = [];
+  for (const i in diagram.model.nodeDataArray) {
+    if (diagram.model.nodeDataArray[i].attrList) {
+      for (const j in diagram.model.nodeDataArray[i].attrList) {
+        if (diagram.model.nodeDataArray[i].attrList[j].name
+          && propsArr.indexOf(diagram.model.nodeDataArray[i].attrList[j].name) < 0) {
+          propsArr.push(diagram.model.nodeDataArray[i].attrList[j].name);
+        }
+      }
+    }
+  }
+  return propsArr;
+};
+util.getLinkProps = (diagram) => {
+  const propsArr = [];
+  for (const i in diagram.model.linkDataArray) {
+    if (diagram.model.linkDataArray[i].attrList) {
+      for (const j in diagram.model.linkDataArray[i].attrList) {
+        if (diagram.model.linkDataArray[i].attrList[j].name
+          && propsArr.indexOf(diagram.model.linkDataArray[i].attrList[j].name) < 0) {
+          propsArr.push(diagram.model.linkDataArray[i].attrList[j].name);
+        }
+      }
+    }
+  }
+  return propsArr;
 };
 export default util;

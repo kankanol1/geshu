@@ -218,7 +218,7 @@ export const getRouterData = (app) => {
       component: dynamicWrapper(app, [], () => import('../routes/User/RegisterResult')),
     },
     '/graph/editor': {
-      component: dynamicWrapper(app, [], () => import('../routes/Graph/GraphDesigner')),
+      component: dynamicWrapper(app, ['graph/graph_schema_editor'], () => import('../routes/Graph/GraphDesigner')),
     },
     // '/user/:id': {
     //   component: dynamicWrapper(app, [], () => import('../routes/User/SomeComponent')),
