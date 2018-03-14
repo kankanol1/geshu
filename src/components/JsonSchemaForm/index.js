@@ -1,10 +1,11 @@
 /** generate form using json schema */
 
-import React, { Fragment } from 'react';
-import { Row, Col, Input, Button, Affix, Icon, Switch } from 'antd';
-import { Scrollbars } from 'react-custom-scrollbars';
+import React from 'react';
+import { Row, Col, Input, Button, Icon } from 'antd';
 import Form from 'react-jsonschema-form';
 import styles from './index.less';
+
+const ButtonGroup = Button.Group;
 
 const CustomFieldTemplate = (props) => {
   const { id, classNames, label, help, required, description, errors, children, schema } = props;
@@ -24,7 +25,8 @@ const ObjectFieldTemplate = (props) => {
   // if only one child, use inline.
 
   if (Object.keys(schema.properties).length === 1 &&
-    schema.properties[Object.keys(schema.properties)[0]].properties === undefined) {
+    schema.properties[Object.keys(schema.properties)[0]].properties === undefined &&
+    schema.properties[Object.keys(schema.properties)[0]].type !== 'array') {
     let displayTitle = description === undefined ? title : description;
     if (schema.required && schema.required.length !== 0) {
       displayTitle += ' *';
@@ -73,48 +75,55 @@ const ObjectFieldTemplate = (props) => {
 
 
 const ArrayFieldTemplate = (props) => {
+  console.log('arr', props);
   return (
     <div className={props.className}>
+      <hr />
+      <Row style={{ height: '36px' }}>
+        <Col span={20}><span style={{ lineHeight: '36px' }}>{props.title}</span></Col>
+        {props.canAdd && (
+          <Col span={4}>
+            <Button onClick={props.onAddClick} type="primary">
+              <Icon type="plus" />
+            </Button>
+          </Col>
+      )}
+      </Row>
       {props.items &&
         props.items.map(element => (
-          <div key={element.index}>
-            <div>{element.children}</div>
-            {element.hasMoveDown && (
-              <button
-                onClick={element.onReorderClick(
-                  element.index,
-                  element.index + 1
-                )}
-              >
-                Down
-              </button>
-            )}
-            {element.hasMoveUp && (
-              <button
-                onClick={element.onReorderClick(
-                  element.index,
-                  element.index - 1
-                )}
-              >
-                Up
-              </button>
-            )}
-            <button onClick={element.onDropIndexClick(element.index)}>
-              Delete
-            </button>
-            <hr />
-          </div>
+          <Row key={element.index} className="arr-row">
+            <Col span={18}>{element.children}</Col>
+            <Col span={6}>
+              <ButtonGroup>
+                <Button
+                  onClick={element.onReorderClick(
+                    element.index,
+                    element.index - 1
+                  )}
+                  disabled={!element.hasMoveUp}
+                  className="slim-btn"
+                >
+                  <Icon type="up" />
+                </Button>
+                <Button
+                  onClick={element.onReorderClick(
+                    element.index,
+                    element.index + 1
+                  )}
+                  className="slim-btn"
+                  disabled={!element.hasMoveDown}
+                >
+                  <Icon type="down" />
+                </Button>
+                <Button onClick={element.onDropIndexClick(element.index)} className="slim-btn" type="danger">
+                  <Icon type="close" />
+                </Button>
+              </ButtonGroup>
+            </Col>
+          </Row>
         ))}
+      <hr />
 
-      {props.canAdd && (
-        <div className="row">
-          <p className="col-xs-3 col-xs-offset-9 array-item-add text-right">
-            <button onClick={props.onAddClick} type="button">
-              Custom +
-            </button>
-          </p>
-        </div>
-      )}
     </div>
   );
 };
