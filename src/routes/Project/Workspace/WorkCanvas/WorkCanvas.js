@@ -7,6 +7,7 @@ import PointLayer from './PointLayer';
 import LineLayer from './LineLayer';
 import SelectionLayer from './SelectionLayer';
 import ContextMenu from './ContextMenu';
+import './WorkCanvas.less';
 
 class WorkCanvas extends React.PureComponent {
   constructor(props) {

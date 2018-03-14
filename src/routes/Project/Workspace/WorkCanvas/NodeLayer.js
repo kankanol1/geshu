@@ -2,7 +2,7 @@ import React from 'react';
 import { DraggableCore } from 'react-draggable';
 
 const styles = {
-  fill: '#722ed1', stroke: '#22075e', strokeWidth: 1, opacity: 1, cursor: 'move',
+  fill: '#722ed1', stroke: '#22075e', strokeWidth: 1, opacity: 1,
 };
 
 
@@ -75,6 +75,25 @@ class NodeLayer extends React.PureComponent {
     const { x, y, width, height, name } = this.props.model;
     return (
       <React.Fragment>
+        <rect
+          x={x}
+          y={y}
+          rx="10"
+          ry="10"
+          width={width}
+          height={height}
+          style={{ ...styles }}
+        />
+        <text
+          x={x + (width / 2)}
+          y={y + (height / 2)}
+          alignmentBaseline="middle"
+          textAnchor="middle"
+          fill="white"
+        >
+          &#xE64E;   {name}
+        </text>
+
         <DraggableCore
           onStop={this.handleDragStop}
           onDrag={this.handleDrag}
@@ -88,25 +107,8 @@ class NodeLayer extends React.PureComponent {
             width={width}
             height={height}
             onContextMenu={this.handleContextMenu}
-            style={{ ...styles }}
+            style={{ fill: '#722ed1', stroke: '#22075e', strokeWidth: 1, opacity: 0, cursor: 'move' }}
           />
-        </DraggableCore>
-        <DraggableCore
-          onStop={this.handleDragStop}
-          onDrag={this.handleDrag}
-          onStart={this.handleDragStart}
-        >
-          <text
-            x={x + (width / 2)}
-            y={y + (height / 2)}
-            alignmentBaseline="middle"
-            onContextMenu={this.handleContextMenu}
-            textAnchor="middle"
-            fill="white"
-            style={{ cursor: 'move' }}
-          >
-            {name}
-          </text>
         </DraggableCore>
       </React.Fragment>
     );
