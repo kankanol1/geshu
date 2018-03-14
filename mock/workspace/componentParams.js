@@ -349,6 +349,16 @@ const allComponents = {
         },
         description: '这是路径',
       },
+      diy: {
+        title: 'DIY',
+        type: 'object',
+        description: '自定義組件',
+        properties: {
+          value: {
+            type: 'string',
+          },
+        },
+      },
     },
   },
 };

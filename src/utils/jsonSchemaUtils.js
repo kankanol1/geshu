@@ -41,7 +41,7 @@ export function extractJsonSchema(originJsonSchema) {
 }
 
 export function extractUISchema(originJsonSchema) {
-  return '{}';
+  return { diy: { 'ui:field': 'sample', 'ui:options': { url: '/api/component/sample' } } };
 }
 
 export default {

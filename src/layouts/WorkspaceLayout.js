@@ -69,6 +69,7 @@ class WorkspaceLayout extends AbstractBasicLayout {
 
 export default connect(({ user, global, loading }) => ({
   currentUser: user.currentUser,
+  loading,
   collapsed: global.collapsed,
   fetchingNotices: loading.effects['global/fetchNotices'],
   notices: global.notices,

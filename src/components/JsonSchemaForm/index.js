@@ -4,8 +4,14 @@ import React from 'react';
 import { Row, Col, Input, Button, Icon } from 'antd';
 import Form from 'react-jsonschema-form';
 import styles from './index.less';
+import SampleWidget from './Widgets/SampleWidget';
 
 const ButtonGroup = Button.Group;
+
+
+const registeredFields = {
+  sample: SampleWidget,
+};
 
 const CustomFieldTemplate = (props) => {
   const { id, classNames, label, help, required, description, errors, children, schema } = props;
@@ -140,6 +146,7 @@ export default class JsonSchemaForm extends React.PureComponent {
         ObjectFieldTemplate={ObjectFieldTemplate}
         ArrayFieldTemplate={ArrayFieldTemplate}
         className={styles.settingsForm}
+        fields={{ ...registeredFields, ...this.props.fields }}
       >
         {this.props.children}
       </Form>

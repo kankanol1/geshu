@@ -1,11 +1,15 @@
 import React, { Component } from 'react';
 import { Layout } from 'antd';
+import { connect } from 'dva';
 import WorkArea from './Workspace/WorkArea';
 import WorkSpaceMenu from './WorkspaceMenu';
 import WorkAreaMenu from './Workspace/WorkAreaMenu';
 
 const { Header } = Layout;
-
+@connect(({ loading }, { history }) => ({
+  loading: loading.models.users,
+  history,
+}))
 export default class WorkspaceEditor extends Component {
   render() {
     return (

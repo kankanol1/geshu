@@ -62,6 +62,9 @@ const proxy = {
   'POST /api/jobs/remove': deleteJobs,
   'POST /api/jobs/restart': restartJobs,
 
+  // a sample test for component settings.
+  'GET /api/component/sample': ["op1", "op2", "op3"],
+
   // 支持值为 Object 和 Array
   'GET /api/currentUser': {
     $desc: "获取当前用户接口",
