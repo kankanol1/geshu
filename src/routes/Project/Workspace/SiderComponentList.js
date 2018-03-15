@@ -25,9 +25,12 @@ export default class SiderComponentList extends React.PureComponent {
   componentDidMount() {
     // fetch data.
     const { dispatch } = this.props;
-    dispatch({
-      type: 'work_component_list/fetchComponentList',
-    });
+    const { state } = this.props.work_component_list;
+    if (state.lastSync <= 0) {
+      dispatch({
+        type: 'work_component_list/fetchComponentList',
+      });
+    }
   }
 
   handlePreviewChange(preview) {

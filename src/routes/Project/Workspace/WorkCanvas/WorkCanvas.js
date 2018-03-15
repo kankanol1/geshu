@@ -24,12 +24,19 @@ export default class WorkCanvas extends React.PureComponent {
 
   componentWillMount() {
     const { dispatch, match } = this.props;
-    dispatch({
-      type: 'work_canvas/init',
-      payload: {
-        id: match.params.id,
-      },
-    });
+    const { state } = this.props.work_canvas;
+    const maxRefreshTime = 1000 * 60 * 60;
+    if (state.projectId === undefined
+        || state.projectId !== match.params.id
+        || Date.now() - state.lastSync > maxRefreshTime) {
+      // only call init if project id not match or last sync is too long.
+      dispatch({
+        type: 'work_canvas/init',
+        payload: {
+          id: match.params.id,
+        },
+      });
+    }
     // add key listener.
 
     key('del, delete', () => {

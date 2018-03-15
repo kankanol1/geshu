@@ -7,6 +7,10 @@ export default {
   namespace: 'work_canvas',
 
   state: {
+    state: {
+      projectId: undefined,
+      lastSync: -1,
+    },
     name: 'pn',
     components: [
       {
@@ -135,7 +139,10 @@ export default {
 
   reducers: {
     saveProjectInfo(state, { payload }) {
-      return updateCache({ ...state, ...payload });
+      return updateCache({ ...state,
+        ...payload.response,
+        ...{ state: { projectId: payload.id, lastSync: Date.now() } },
+      });
     },
 
     openContextMenu(state, { component, x, y }) {
@@ -613,8 +620,7 @@ export default {
 
     *init({ payload }, { put, call }) {
       const response = yield call(openProject, payload.id);
-      console.log('response', response);
-      yield put({ type: 'saveProjectInfo', payload: response });
+      yield put({ type: 'saveProjectInfo', payload: { response, id: payload.id } });
     },
 
     *updateComponentSelectionAndDisplaySettings({ component }, { put }) {

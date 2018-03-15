@@ -1,10 +1,14 @@
-import componentAPI from '../../services/componentAPI';
+import { fetchComponentList } from '../../services/componentAPI';
 import nameMapping from '../../config/ComponentNameMapping';
 
 export default {
   namespace: 'work_component_list',
 
   state: {
+    // this state record current state of this data
+    state: {
+      lastSync: -1,
+    },
     groups: [
       // component group.
       {
@@ -74,7 +78,7 @@ export default {
         (group) => { return group.key; }
       );
       return Object.assign({}, { ...state,
-        ...{ groups: data, allGroups: data, activekeys } });
+        ...{ state: { lastSync: Date.now() }, groups: data, allGroups: data, activekeys } });
     },
 
     filterComponent(state, { payload }) {
@@ -99,7 +103,7 @@ export default {
 
   effects: {
     *fetchComponentList({ payload }, { call, put }) {
-      const data = yield call(componentAPI.fetchComponentList);
+      const data = yield call(fetchComponentList);
       const translatedData = data.map(
         (group) => {
           const newComponents = group.components.map(
