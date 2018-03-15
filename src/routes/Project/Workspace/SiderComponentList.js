@@ -1,15 +1,17 @@
 import React from 'react';
 import { connect } from 'dva';
-import { Layout, Collapse, Input } from 'antd';
+import { Layout, Collapse, Input, Spin } from 'antd';
 import { Scrollbars } from 'react-custom-scrollbars';
 import SiderSingleComponent from './SiderSingleComponent';
-import FilterCardList from '../../List/Applications';
 
 const { Sider } = Layout;
 const { Panel } = Collapse;
 const { Search } = Input;
 
-class SiderComponentList extends React.PureComponent {
+@connect(({ work_component_list, loading }) => ({
+  work_component_list, loading: loading.models.work_component_list,
+}))
+export default class SiderComponentList extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -66,53 +68,69 @@ class SiderComponentList extends React.PureComponent {
 
   render() {
     const { activekeys, groups } = this.props.work_component_list;
+    const { loading } = this.props;
+    if (loading) {
+      return (
+        <Sider style={{ background: 'transparent', paddingTop: '200px', textAlign: 'center' }}>
+          <Spin />
+        </Sider>
+      );
+    }
     return (
       <Sider style={{ background: 'transparent' }}>
         <Search
-          placeholder="Filter"
+          placeholder="搜索组件"
           onSearch={value => this.handleSearch(value)}
           style={{ width: 200, padding: '5px' }}
         />
         {/* the hight of scrollbars should be 100%-hight of search input */}
-        <Scrollbars style={{ height: 'calc( 100% - 42px)' }} onScroll={this.handleScroll}>
-          <Collapse
-            defaultActiveKey={activekeys}
-            onChange={this.onChange}
-          >
-            {
-              groups.map(
-                (group) => {
-                  return (
-                    <Panel header={group.name} key={group.key}>
-                      {
-                        group.components.map(
-                          (component, i) => {
-                            return (
-                              <SiderSingleComponent
-                                key={`${group.key}-${i}`}
-                                kei={`${group.key}-${i}`}
-                                name={component.name}
-                                component={component}
-                                onItemDragged={this.props.onItemDragged}
-                                handlePreviewChange={this.handlePreviewChange}
-                              />
-                            );
+
+        {
+
+          groups.length === 0 ?
+          (
+            <div style={{ paddingTop: '200px', textAlign: 'center' }}>无相应组件</div>
+          )
+          :
+          (
+            <Scrollbars style={{ height: 'calc( 100% - 42px)' }} onScroll={this.handleScroll}>
+              <Collapse
+                defaultActiveKey={activekeys}
+              >
+                {
+                  groups.map(
+                    (group) => {
+                      return (
+                        <Panel header={group.name} key={group.key}>
+                          {
+                            group.components.map(
+                              (component, i) => {
+                                return (
+                                  <SiderSingleComponent
+                                    key={`${group.key}-${i}`}
+                                    kei={`${group.key}-${i}`}
+                                    name={component.name}
+                                    component={component}
+                                    onItemDragged={this.props.onItemDragged}
+                                    handlePreviewChange={this.handlePreviewChange}
+                                  />
+                                );
+                              }
+                            )
                           }
-                        )
-                      }
-                    </Panel>
-                  );
+                        </Panel>
+                      );
+                    }
+                  )
                 }
-              )
-            }
-          </Collapse>
-        </Scrollbars>
+              </Collapse>
+            </Scrollbars>
+          )
+        }
+
         {this.state.preview}
       </Sider>
     );
   }
 }
 
-export default connect(
-  work_component_list => work_component_list
-)(SiderComponentList);

@@ -89,7 +89,11 @@ class WorkCanvas extends React.PureComponent {
     if (this.props.contextmenu.show) {
       const { x, y, component } = this.props.contextmenu;
       contextMenuView = (
-        <ContextMenu top={y} left={x} onSettingsClicked={() => this.handleSettingsClicked(component)} />
+        <ContextMenu
+          top={y}
+          left={x}
+          onSettingsClicked={() => this.handleSettingsClicked(component)}
+        />
       );
     }
 
