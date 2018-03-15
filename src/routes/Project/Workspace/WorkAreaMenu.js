@@ -15,6 +15,7 @@ class WorkAreaMenu extends React.PureComponent {
         <SubMenu title={<span>项目</span>}>
           <Menu.Item key="open">打开</Menu.Item>
           <Menu.Item key="close">关闭</Menu.Item>
+          <Menu.Item key="close">export</Menu.Item>
           <SubMenu title={<span>最近打开的项目</span>}>
             <Menu.Item key="recent-1">项目1</Menu.Item>
             <Menu.Item key="recent-2">项目2</Menu.Item>

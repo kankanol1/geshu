@@ -1,11 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { connect } from 'dva';
-import { Layout } from 'antd';
+import { Layout, Button } from 'antd';
+import { saveSvgAsPng } from 'save-svg-as-png';
 import SiderComponentList from './SiderComponentList';
 import WorkCanvas from './WorkCanvas/WorkCanvas';
 import ComponentSettings from './ComponentSettings';
-import WorkAreaMenu from './WorkAreaMenu';
 
 const { Content } = Layout;
 
@@ -20,6 +20,7 @@ class WorkArea extends React.PureComponent {
   constructor(props) {
     super(props);
     this.handleItemDragged = this.handleItemDragged.bind(this);
+    // this.exportSvg = this.exportSvg.bind(this);
   }
 
 
@@ -41,9 +42,16 @@ class WorkArea extends React.PureComponent {
     }
   }
 
+  // exportSvg() {
+  //   saveSvgAsPng(
+  //     ReactDOM.findDOMNode(this.canvasRef).getElementsByClassName('work-canvas')[0],
+  //     'diagram.png');
+  // }
+
   render() {
     return (
       <React.Fragment>
+        {/* <Button onClick={this.exportSvg}> export </Button> */}
         <SiderComponentList onItemDragged={this.handleItemDragged} />
         <Content style={{ background: '#fff', padding: 0, margin: 0, height: '100%', width: '100%' }}>
           <WorkCanvas ref={(e) => { this.canvasRef = e; }} style={{ height: '100%' }} />
