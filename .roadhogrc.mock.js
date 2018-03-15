@@ -15,6 +15,7 @@ import { login, userList, createUser, deleteUser, queryUserName, updateUser } fr
 import { getModels, addModel, updateModel, deleteModels } from './mock/model';
 import { getCandidateModels, updateCandidateModel, deleteCandidateModels, publishCandidateModels } from './mock/candidatemodel';
 import { getJobs, stopJobs, resumeJobs, pauseJobs, deleteJobs, restartJobs } from './mock/job';
+import { open } from './mock/workspace/workspace';
 
 // 是否禁用代理
 const noProxy = process.env.NO_PROXY === 'true';
@@ -63,7 +64,7 @@ const proxy = {
   'POST /api/jobs/restart': restartJobs,
 
   // workspace related.
-  // 'GET /api/workspace/open/:projectId':
+  'GET /api/workspace/open/:projectId': open,
   // 'POST /api/workspace/save/:projectId':
   // 'POST /api/workspace/saveconf/:projectId/:componentId/'
   // 'POST /api/workspace/run/:projectId':

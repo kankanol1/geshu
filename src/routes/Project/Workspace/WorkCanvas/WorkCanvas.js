@@ -1,4 +1,5 @@
 import React from 'react';
+import { Spin } from 'antd';
 import { connect } from 'dva';
 import { DraggableCore } from 'react-draggable';
 import key from 'keymaster';
@@ -9,7 +10,11 @@ import SelectionLayer from './SelectionLayer';
 import ContextMenu from './ContextMenu';
 import './WorkCanvas.less';
 
-class WorkCanvas extends React.PureComponent {
+@connect(({ work_canvas, loading }) => ({
+  work_canvas,
+  loading: loading.models.work_canvas,
+}))
+export default class WorkCanvas extends React.PureComponent {
   constructor(props) {
     super(props);
     this.handleDrag = this.handleDrag.bind(this);
@@ -18,9 +23,12 @@ class WorkCanvas extends React.PureComponent {
   }
 
   componentWillMount() {
-    const { dispatch } = this.props;
+    const { dispatch, match } = this.props;
     dispatch({
       type: 'work_canvas/init',
+      payload: {
+        id: match.params.id,
+      },
     });
     // add key listener.
 
@@ -79,21 +87,32 @@ class WorkCanvas extends React.PureComponent {
   render() {
     // 1. generate position reference table for the rest calculation.
     // store: componentid: {x, y}
-    const { componentDict } = this.props.cache;
+    const { componentDict } = this.props.work_canvas.cache;
     // store: componentid: {pointid: {x, y}}
-    const componentPointPosition = this.props.cache.pointDict;
+    const componentPointPosition = this.props.work_canvas.cache.pointDict;
     // avoid first render. we need to wait for the cache ready.
     if (Object.keys(componentDict).length === 0) return null;
 
+    const { contextmenu } = this.props.work_canvas;
     let contextMenuView = null;
-    if (this.props.contextmenu.show) {
-      const { x, y, component } = this.props.contextmenu;
+    if (contextmenu.show) {
+      const { x, y, component } = contextmenu;
       contextMenuView = (
         <ContextMenu
           top={y}
           left={x}
           onSettingsClicked={() => this.handleSettingsClicked(component)}
         />
+      );
+    }
+
+    const { components, mode } = this.props.work_canvas;
+    const { loading } = this.props;
+    if (loading) {
+      return (
+        <div style={{ width: '100%', height: '99%', textAlign: 'center', paddingTop: '200px' }}>
+          <Spin size="large" />
+        </div>
       );
     }
 
@@ -107,12 +126,12 @@ class WorkCanvas extends React.PureComponent {
           <svg
             style={{ width: '100%',
             height: '100%',
-            cursor: this.props.mode === 'move' ? 'move' : 'default' }}
+            cursor: mode === 'move' ? 'move' : 'default' }}
             className="work-canvas"
           >
             {
               /* 1. node layer */
-              this.props.components.map(
+              components.map(
                 (component, i) => {
                   return (
                     <NodeLayer
@@ -128,7 +147,7 @@ class WorkCanvas extends React.PureComponent {
             }
             {
               /* 2. line layer */
-              this.props.components.map(
+              components.map(
                 (component, i) => {
                   return (
                     <LineLayer
@@ -143,14 +162,14 @@ class WorkCanvas extends React.PureComponent {
             }
             {
               /* 3. point layer */
-              this.props.components.map(
+              components.map(
                 (component, i) => {
                   return (
                     <PointLayer
                       key={i}
                       model={component}
                       dispatch={this.props.dispatch}
-                      draggingTarget={this.props.lineDraggingState.draggingTarget}
+                      draggingTarget={this.props.work_canvas.lineDraggingState.draggingTarget}
                       positionDict={componentPointPosition}
                       componentDict={componentDict}
                     />
@@ -161,7 +180,7 @@ class WorkCanvas extends React.PureComponent {
             {
               /* 4. selection layer */
               <SelectionLayer
-                {...this.props}
+                {...this.props.work_canvas}
                 positionDict={componentPointPosition}
                 componentDict={componentDict}
               />
@@ -175,6 +194,3 @@ class WorkCanvas extends React.PureComponent {
     );
   }
 }
-
-
-export default connect(({ work_canvas }) => work_canvas)(WorkCanvas);

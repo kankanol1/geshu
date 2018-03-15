@@ -1,11 +1,13 @@
 import key from 'keymaster';
 import { message } from 'antd';
 import { calculatePointCenter, updateCache } from '../../utils/PositionCalculation';
+import { openProject } from '../../services/componentAPI';
 
 export default {
   namespace: 'work_canvas',
 
   state: {
+    name: 'pn',
     components: [
       {
         id: 'input',
@@ -132,8 +134,8 @@ export default {
   },
 
   reducers: {
-    init(state) {
-      return updateCache(state);
+    saveProjectInfo(state, { payload }) {
+      return updateCache({ ...state, ...payload });
     },
 
     openContextMenu(state, { component, x, y }) {
@@ -608,6 +610,12 @@ export default {
   },
 
   effects: {
+
+    *init({ payload }, { put, call }) {
+      const response = yield call(openProject, payload.id);
+      console.log('response', response);
+      yield put({ type: 'saveProjectInfo', payload: response });
+    },
 
     *updateComponentSelectionAndDisplaySettings({ component }, { put }) {
       yield put({ type: 'updateComponentSelection', id: component.id });

@@ -1,11 +1,15 @@
 import request from '../utils/request';
 
-const fetchComponentSetting = (code) => {
+export async function fetchComponentSetting(code) {
   return request(`/api/workspace/component_param/${code}`);
-};
+}
 
-const fetchComponentList = () => {
+export async function fetchComponentList() {
   return request('/api/workspace/component_list');
-};
+}
 
-export default { fetchComponentSetting, fetchComponentList };
+export async function openProject(id) {
+  return request(`/api/workspace/open/${id}`);
+}
+
+export default { fetchComponentSetting, fetchComponentList, openProject };

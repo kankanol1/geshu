@@ -32,7 +32,7 @@ class WorkArea extends React.PureComponent {
       this.props.dispatch({
         type: 'work_canvas/newComponent',
         component: {
-          id: `generated-${component.name}${gen()}`,
+          id: `${component.name}${gen()}`,
           ...component,
           x: dragClientTarget.x - x,
           y: dragClientTarget.y - y,
@@ -54,7 +54,7 @@ class WorkArea extends React.PureComponent {
         {/* <Button onClick={this.exportSvg}> export </Button> */}
         <SiderComponentList onItemDragged={this.handleItemDragged} />
         <Content style={{ background: '#fff', padding: 0, margin: 0, height: '100%', width: '100%' }}>
-          <WorkCanvas ref={(e) => { this.canvasRef = e; }} style={{ height: '100%' }} />
+          <WorkCanvas ref={(e) => { this.canvasRef = e; }} style={{ height: '100%' }} match={this.props.match} />
         </Content>
         <ComponentSettings />
       </React.Fragment>
