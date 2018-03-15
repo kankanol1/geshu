@@ -12,8 +12,6 @@ export default {
 
     ],
     currentComponent: undefined,
-
-    loading: false,
   },
 
   reducers: {
@@ -36,7 +34,7 @@ export default {
       return Object.assign({}, { ...state, componentSettings, currentComponent: id });
     },
 
-    displayComponentSettingForId(state, { id }) {
+    setCurrentComponent(state, { id }) {
       // we assume that we have all the data already. just change current component.
       return Object.assign({}, { ...state, currentComponent: id });
     },
@@ -73,11 +71,11 @@ export default {
           if (cs.id === component.id) alreadyHaveTheSettings = true;
         }
       );
-      if (alreadyHaveTheSettings) {
-        yield put({ type: 'displayComponentSettingForId', id: component.id });
-      } else if (componentMetaDict[component.type] === undefined) {
+      // set the id first.
+      yield put({ type: 'setCurrentComponent', id: component.id });
+      if (componentMetaDict[component.type] === undefined) {
         yield put({ type: 'fetchComponentSettings', code: component.code, id: component.id, name: component.name });
-      } else {
+      } else if (!alreadyHaveTheSettings) {
         yield put({
           type: 'initComponentSettingsForId',
           id: component.id,

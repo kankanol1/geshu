@@ -69,6 +69,12 @@ class WorkCanvas extends React.PureComponent {
     });
   }
 
+  handleSettingsClicked(component) {
+    this.props.dispatch({
+      type: 'work_canvas/updateComponentSelectionAndDisplaySettings',
+      component,
+    });
+  }
 
   render() {
     // 1. generate position reference table for the rest calculation.
@@ -81,8 +87,10 @@ class WorkCanvas extends React.PureComponent {
 
     let contextMenuView = null;
     if (this.props.contextmenu.show) {
-      const { x, y } = this.props.contextmenu;
-      contextMenuView = (<ContextMenu top={y} left={x} />);
+      const { x, y, component } = this.props.contextmenu;
+      contextMenuView = (
+        <ContextMenu top={y} left={x} onSettingsClicked={() => this.handleSettingsClicked(component)} />
+      );
     }
 
     return (

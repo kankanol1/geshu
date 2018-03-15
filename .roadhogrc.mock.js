@@ -62,6 +62,13 @@ const proxy = {
   'POST /api/jobs/remove': deleteJobs,
   'POST /api/jobs/restart': restartJobs,
 
+  // workspace related.
+  // 'GET /api/workspace/open/:projectId':
+  // 'POST /api/workspace/save/:projectId':
+  // 'POST /api/workspace/saveconf/:projectId/:componentId/'
+  // 'POST /api/workspace/run/:projectId':
+  // 'POST /api/workspace/sample/:projectId':
+
   // a sample test for component settings.
   'GET /api/component/sample': ["op1", "op2", "op3"],
 
