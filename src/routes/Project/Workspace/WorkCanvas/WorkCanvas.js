@@ -108,13 +108,13 @@ export default class WorkCanvas extends React.PureComponent {
 
     const { components, mode } = this.props.work_canvas;
     const { loading } = this.props;
-    if (loading) {
-      return (
-        <div style={{ width: '100%', height: '99%', textAlign: 'center', paddingTop: '200px' }}>
-          <Spin size="large" />
-        </div>
-      );
-    }
+    // if (loading) {
+    //   return (
+    //     <div style={{ width: '100%', height: '99%', textAlign: 'center', paddingTop: '200px' }}>
+    //       <Spin size="large" />
+    //     </div>
+    //   );
+    // }
 
     return (
       <div style={{ width: '100%', height: '99%' }}>
@@ -185,6 +185,23 @@ export default class WorkCanvas extends React.PureComponent {
                 componentDict={componentDict}
               />
             }
+
+
+            {loading ?
+                // add a rect to cover background.
+              (
+                <rect x={0} y={0} height="100%" width="100%" style={{ fill: 'white' }} />
+              )
+             : null}
+            {loading ?
+              (
+                // loading spin
+                <foreignObject x="0" y="0" width="100%" height="100%">
+                  <Spin xmlns="http://www.w3.org/1999/xhtml" size="large" style={{ width: '100%', margin: 'auto', paddingTop: '200px' }} />
+                </foreignObject>
+
+              )
+             : null}
           </svg>
         </DraggableCore>
         {
