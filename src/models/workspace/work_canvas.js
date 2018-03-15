@@ -31,12 +31,6 @@ export default {
           },
         ],
         connectFrom: [
-          {
-            /* connects to */
-            component: 'preprocess-1',
-            from: 'i-1',
-            to: 'o-1',
-          },
         ],
       },
       {
@@ -68,7 +62,14 @@ export default {
             type: 'datasource-output',
           },
         ],
-        connectFrom: [],
+        connectFrom: [
+          {
+            /* connects to */
+            component: 'input',
+            to: 'i-1',
+            from: 'o-1',
+          },
+        ],
       },
     ],
     // this state is used for detect line connection dragging event.
@@ -257,7 +258,7 @@ export default {
             (line) => {
               if (containedComponents.includes(line.component)) {
                 // add this line.
-                newSelection.push({ type: 'line', from: line.from, to: line.to, source: component.id, target: line.component });
+                newSelection.push({ type: 'line', from: line.from, to: line.to, target: component.id, source: line.component });
               }
             }
           );

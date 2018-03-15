@@ -3,7 +3,7 @@ import { Layout, Card, Input, Button, Select } from 'antd';
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
 import WorkSpaceMenu from './WorkspaceMenu';
-import WorkAreaMenu from './Workspace/WorkAreaMenu';
+import DataViewMenu from './Workspace/Menu/DataViewMenu';
 import { makeData } from '../../utils/Fake';
 
 import styles from './WorkspaceDataView.less';
@@ -24,7 +24,7 @@ export default class WorkspaceDataView extends Component {
     return (
       <Layout style={{ padding: '0', height: '100%' }} theme="light" >
         <Header style={{ padding: '0px', height: '48px', lineHeight: '46px', background: '#eee' }}>
-          <WorkAreaMenu />
+          <DataViewMenu />
           <WorkSpaceMenu currentPath={this.props.location} />
         </Header>
         <Layout style={{ padding: '0', height: '100%' }} theme="light">
