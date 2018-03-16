@@ -86,8 +86,8 @@ export function save(req, res, u, b) {
 
   const body = (b && b.body) || req.body;
 
-  console.log('req', req);
-  console.log('saved', body);
+  console.log('save: project id', req.params.projectId);
+  // console.log('saved', body);
 
 
   const result = {

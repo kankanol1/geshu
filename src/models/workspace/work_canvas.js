@@ -20,6 +20,7 @@ export default {
       projectId: undefined,
       lastSync: -1,
       dirty: false,
+      loading: true,
     },
     tips: {
       show: true,
@@ -162,15 +163,21 @@ export default {
         } });
     },
 
+    saveState(state, { payload }) {
+      return Object.assign({}, { ...state, state: { ...state.state, ...payload } });
+    },
+
     startLoading(state) {
-      return Object.assign({}, { ...state, tips: { ...state.tips, messages: initMessage() } });
+      return Object.assign({}, { ...state,
+        state: { ...state.state, loading: true },
+        tips: { ...state.tips, messages: initMessage() } });
     },
 
     saveProjectInfo(state, { payload }) {
       return updateCache({ ...state,
         ...payload.response,
         ...{
-          state: { projectId: payload.id, lastSync: Date.now(), dirty: false },
+          state: { projectId: payload.id, lastSync: Date.now(), dirty: false, loading: false },
           tips: { ...state.tips, messages: appendMessage(state.tips.messages, '加载完毕') },
         },
       });
@@ -722,10 +729,30 @@ export default {
 
     *saveComponents({ payload }, { put, call, select }) {
       const currentState = yield select((state) => { return state.work_canvas; });
+      if (!currentState.state.dirty) {
+        message.info('保存成功');
+        return;
+      }
       const response = yield call(saveProject,
         { id: payload.id, payload: { components: currentState.components } }
       );
-      console.log('保存成功', response);
+      if (response.success) {
+        message.info('保存成功');
+      } else {
+        message.error('保存出错！请检查重试');
+      }
+      yield put({
+        type: 'addMessage',
+        payload: {
+          message: `项目保存${response.success ? '成功' : '失败'}`,
+        },
+      });
+      yield put({
+        type: 'saveState',
+        payload: {
+          dirty: false,
+        },
+      });
     },
   },
 

@@ -17,9 +17,9 @@ function gen() {
 }
 
 
-@connect(({ loading }) => (
+@connect(({ work_canvas }) => (
   {
-    loading,
+    work_canvas,
   }))
 export default class WorkArea extends React.PureComponent {
   constructor(props) {
@@ -56,7 +56,7 @@ export default class WorkArea extends React.PureComponent {
   // }
 
   render() {
-    let workCanvasLoading = this.props.loading.models.work_canvas;
+    let workCanvasLoading = this.props.work_canvas.state.loading;
     if (workCanvasLoading === undefined) {
       workCanvasLoading = true;
     }
