@@ -3,6 +3,7 @@ import { connect } from 'dva';
 import { Layout, Collapse, Button, Icon, Spin } from 'antd';
 import BasicParamInput from '../../../components/Inputs/BasicParamInput';
 import ComponentSettingsForm from './ComponentSettingsForm';
+import translateName from '../../../config/ComponentNameMapping';
 
 const { Sider } = Layout;
 const { Panel } = Collapse;
@@ -66,7 +67,9 @@ class ComponentSettings extends React.PureComponent {
           <Button type="danger" size="default" onClick={this.onCloseClicked} disabled={loading} >
             <Icon type={loading ? 'loading' : 'close'} />
           </Button>
-          <div style={{ display: 'inline-block', textAlign: 'center', width: '80%' }}>{ loading ? '加载中...' : displaySettings.title}</div>
+          <div style={{ display: 'inline-block', textAlign: 'center', width: '80%' }}>
+            { loading ? '加载中...' : translateName(displaySettings.title)}
+          </div>
         </div>
         { loading ? (
           <div style={{ paddingTop: '20%', textAlign: 'center' }}>

@@ -1,4 +1,6 @@
 const nameMapping = {
+
+  /** component groups and components */
   DataSink: '数据存储',
   ConsoleDataSink: '控制台数据存储',
   ConsoleModelSink: '控制台模型存储',
@@ -20,6 +22,24 @@ const nameMapping = {
   ModelSource: '模型读取',
   DataSource: '数据读取',
   FileDataSource: '文件读取',
+
+  /* config name mapping */
+  ConsoleDataSinkConf: '控制台数据存储配置项',
+  AllLiteralColumnTransformerConf: '增加列配置项',
+  RandomSplitTransformerConf: 'RandomSplit配置项',
+  ColumnFilterTransformerConf: '列过滤配置项',
+  ColumnRenameTransformerConf: '列重命名配置项',
+  SelectTransformerConf: '选择配置项',
+  CommonPredictorConf: '通用预测配置项',
+  ConsoleModelSinkConf: '控制台模型存储配置项',
+  LogisticRegressionStageConf: '逻辑回归配置项',
+  TokenizerStageConf: '分词配置项',
+  HashingTFStageConf: 'HashingTF配置项',
+  CrossValidationTunerConf: '交叉验证配置项',
+  FileDataSourceConf: '文件读取配置项',
+
 };
 
-export default nameMapping;
+export default function translateName(name) {
+  return nameMapping[name] === undefined ? name : nameMapping[name];
+}

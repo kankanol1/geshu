@@ -1,5 +1,5 @@
 import { fetchComponentList } from '../../services/componentAPI';
-import nameMapping from '../../config/ComponentNameMapping';
+import translateName from '../../config/ComponentNameMapping';
 
 export default {
   namespace: 'work_component_list',
@@ -108,18 +108,10 @@ export default {
         (group) => {
           const newComponents = group.components.map(
             (component) => {
-              const translated = nameMapping[component.name];
-              if (translated === undefined) {
-                return component;
-              }
-              return { ...component, name: translated };
+              return { ...component, name: translateName(component.name) };
             }
           );
-          const translated = nameMapping[group.name];
-          if (translated === undefined) {
-            return { ...group, components: newComponents };
-          }
-          return { ...group, components: newComponents, name: translated };
+          return { ...group, components: newComponents, name: translateName(group.name) };
         }
       );
       yield put({ type: 'replaceComponentList', data: translatedData });

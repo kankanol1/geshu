@@ -349,6 +349,12 @@ const allComponents = {
         },
         description: '这是路径',
       },
+    },
+  },
+  'csv-source': {
+    title: 'CSVSource',
+    type: 'object',
+    properties: {
       diy: {
         title: 'DIY',
         type: 'object',
