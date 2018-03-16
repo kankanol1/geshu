@@ -8,7 +8,7 @@ import { Scrollbars } from 'react-custom-scrollbars';
 
 import JsonSchemaForm from '../../../components/JsonSchemaForm';
 import styles from './ComponentSettingsForm.less';
-import { extractJsonSchema, extractUISchema } from '../../../utils/jsonSchemaUtils.js';
+import jsonSchemaUtils, { extractJsonSchema, extractUISchema } from '../../../utils/jsonSchemaUtils.js';
 
 export default class ComponentSettingsForm extends React.PureComponent {
   constructor(props) {
@@ -21,20 +21,18 @@ export default class ComponentSettingsForm extends React.PureComponent {
   }
 
   render() {
-    const { jsonschema } = this.props;
-    const extractedJsonSchema = extractJsonSchema(jsonschema);
-    const uiSchema = extractUISchema(jsonschema);
+    const { jsonSchema, uiSchema } = this.props;
     return (
       <Fragment>
         <Scrollbars style={{ height: 'calc( 100% - 88px)' }}>
           <JsonSchemaForm
             className={styles.settingForm}
             ref={(form) => { this.form = form; }}
-            jsonschema={extractedJsonSchema}
+            jsonSchema={jsonSchema}
             uiSchema={uiSchema}
-            onChange={() => console.log('changed')}
+            onChange={v => console.log('changed', v)}
             onSubmit={v => console.log('submitted', v)}
-            onError={() => console.log('errors')}
+            onError={v => console.log('errors', v)}
           >
             <button ref={(btn) => { this.submitButton = btn; }} className={styles.hidden} />
           </JsonSchemaForm>

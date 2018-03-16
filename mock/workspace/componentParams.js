@@ -303,6 +303,7 @@ const allComponents = {
     type: 'object',
     properties: {
       definedSchema: {
+        required: false,
         title: 'Switch_Schema',
         type: 'object',
         properties: {

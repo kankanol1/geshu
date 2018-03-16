@@ -1,4 +1,5 @@
 import { fetchComponentSetting } from '../../services/componentAPI';
+import { extractJsonSchema, extractUISchema } from '../../utils/jsonSchemaUtils';
 
 export default {
   namespace: 'work_component_settings',
@@ -8,30 +9,50 @@ export default {
     componentMetaDict: {
 
     },
-    componentSettings: [
+    componentSettings: {
 
-    ],
+    },
+
+    /** stores translated uiSchema */
+    uiSchemaDict: {
+
+    },
+    /** stores translated jsonSchema */
+    jsonSchemaDict: {
+
+    },
+
+    /** stores form data */
+    formDataDict: {
+
+    },
     currentComponent: undefined,
   },
 
   reducers: {
-    initComponentSettingsWithMeta(state, { component, code, id, name }) {
-      const { componentMetaDict, componentSettings } = state;
+    registerComponentMetaDict(state, { component, code, id, name }) {
+      const { componentMetaDict } = state;
       componentMetaDict[code] = component;
-      componentSettings.push({ ...component, id, name });
       // 3. don't forget to change the selection.
       return Object.assign({},
-        { ...state, componentMetaDict, componentSettings, currentComponent: id });
+        { ...state, componentMetaDict });
     },
 
     initComponentSettingsForId(state, { id, code, name }) {
       // 1. copy meta settings from MetaDict.
       const componentMetaSettings = state.componentMetaDict[code];
       // 2. set this to the component settings.
-      const { componentSettings } = state;
-      componentSettings.push({ ...componentMetaSettings, id, name });
+      const { componentSettings, jsonSchemaDict, uiSchemaDict } = state;
+      componentSettings[id] = { ...componentMetaSettings, id, name };
+      const translatedJsonSchema = extractJsonSchema(componentMetaSettings);
+      const translatedUISchema = extractUISchema(componentMetaSettings);
+
+      jsonSchemaDict[id] = { ...translatedJsonSchema, id, name };
+      uiSchemaDict[id] = { ...translatedUISchema, id, name };
       // 3. don't forget to change the selection.
-      return Object.assign({}, { ...state, componentSettings, currentComponent: id });
+      return Object.assign({},
+        { ...state, jsonSchemaDict, uiSchemaDict, componentSettings }
+      );
     },
 
     setCurrentComponent(state, { id }) {
@@ -49,7 +70,13 @@ export default {
     *fetchComponentSettings({ code, id, name }, { call, put }) {
       yield put({ type: 'work_canvas/addMessage', payload: { message: `加载配置[${code}](${name})...` } });
       const data = yield call(fetchComponentSetting, code);
-      yield put({ type: 'initComponentSettingsWithMeta', component: data, code, id, name });
+      yield put({ type: 'registerComponentMetaDict', component: data, code, id, name });
+      yield put({
+        type: 'initComponentSettingsForId',
+        id,
+        code,
+        name,
+      });
       yield put({ type: 'work_canvas/addMessage', payload: { message: `配置[${code}](${name})加载完毕` } });
     },
 
@@ -67,12 +94,7 @@ export default {
     *displayComponentSetting({ component }, { put, select }) {
       const { componentMetaDict, componentSettings } =
         yield select(state => state.work_component_settings);
-      let alreadyHaveTheSettings = false;
-      componentSettings.forEach(
-        (cs) => {
-          if (cs.id === component.id) alreadyHaveTheSettings = true;
-        }
-      );
+      const alreadyHaveTheSettings = componentSettings[component.id] !== undefined;
       // set the id first.
       yield put({ type: 'setCurrentComponent', id: component.id });
       if (componentMetaDict[component.code] === undefined) {

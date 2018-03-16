@@ -15,7 +15,6 @@ const registeredFields = {
 
 const CustomFieldTemplate = (props) => {
   const { id, classNames, label, help, required, description, errors, children, schema } = props;
-  console.log('schema', schema);
   return (
     <div className={classNames}>
       {children}
@@ -27,7 +26,6 @@ const CustomFieldTemplate = (props) => {
 
 const ObjectFieldTemplate = (props) => {
   const { required, TitleField, properties, title, description, schema, idSchema } = props;
-  console.log('id schema', schema);
   // if only one child, use inline.
 
   if (Object.keys(schema.properties).length === 1 &&
@@ -81,7 +79,6 @@ const ObjectFieldTemplate = (props) => {
 
 
 const ArrayFieldTemplate = (props) => {
-  console.log('arr', props);
   return (
     <div className={props.className}>
       <hr />
@@ -136,17 +133,18 @@ const ArrayFieldTemplate = (props) => {
 
 export default class JsonSchemaForm extends React.PureComponent {
   render() {
-    console.log('json schema', this.props.jsonschema);
     return (
       <Form
         {...this.props}
         ref={(form) => { this.form = form; }}
-        schema={this.props.jsonschema}
+        schema={this.props.jsonSchema}
         FieldTemplate={CustomFieldTemplate}
         ObjectFieldTemplate={ObjectFieldTemplate}
         ArrayFieldTemplate={ArrayFieldTemplate}
         className={styles.settingsForm}
         fields={{ ...registeredFields, ...this.props.fields }}
+        // html5 validation will prevent from submitting when there are required checkboxes.
+        noHtml5Validate
       >
         {this.props.children}
       </Form>
