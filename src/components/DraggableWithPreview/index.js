@@ -32,6 +32,7 @@ class DraggableWithPreview extends React.Component {
           position: 'absolute',
           left: `${this.state.dragging.x}px`,
           top: `${this.state.dragging.y}px`,
+          zIndex: 100,
         },
       } });
     }

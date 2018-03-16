@@ -39,8 +39,10 @@ export default class WorkArea extends React.PureComponent {
         component: {
           id: `${component.name}${gen()}`,
           ...component,
-          x: dragClientTarget.x - x,
-          y: dragClientTarget.y - y,
+          x: (dragClientTarget.x - x) + 10,
+          // plus margin in the preview.
+          y: (dragClientTarget.y - y - component.height) + 10,
+          // minus the height of the preview & plus margin in the preview.
           connectFrom: [],
         },
       });

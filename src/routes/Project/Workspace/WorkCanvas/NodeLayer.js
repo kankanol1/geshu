@@ -29,7 +29,7 @@ class NodeLayer extends React.PureComponent {
 
   handleDragStop(e) {
     e.preventDefault();
-    if (!this.hasDrag) {
+    if (!this.hasDrag && this.props.dispatch) {
       this.props.dispatch({
         type: 'work_canvas/updateComponentSelectionAndDisplaySettings',
         component: this.props.model,
@@ -50,25 +50,29 @@ class NodeLayer extends React.PureComponent {
     if (draggableData.deltaX !== 0 || draggableData.deltaY !== 0) {
       this.hasDrag = true;
     }
-    this.props.dispatch({
-      type: 'work_canvas/moveComponentAndDisplaySettingsIfNeeded',
-      component: this.props.model,
-      deltaX: draggableData.deltaX,
-      deltaY: draggableData.deltaY,
-      originX: this.props.model.x,
-      originY: this.props.model.y,
+    if (this.props.dispatch) {
+      this.props.dispatch({
+        type: 'work_canvas/moveComponentAndDisplaySettingsIfNeeded',
+        component: this.props.model,
+        deltaX: draggableData.deltaX,
+        deltaY: draggableData.deltaY,
+        originX: this.props.model.x,
+        originY: this.props.model.y,
 
-    });
+      });
+    }
   }
 
   handleContextMenu(e) {
     e.preventDefault();
-    this.props.dispatch({
-      type: 'work_canvas/openContextMenu',
-      component: this.props.model,
-      x: e.clientX,
-      y: e.clientY,
-    });
+    if (this.props.dispatch) {
+      this.props.dispatch({
+        type: 'work_canvas/openContextMenu',
+        component: this.props.model,
+        x: e.clientX,
+        y: e.clientY,
+      });
+    }
   }
 
   render() {
