@@ -48,6 +48,16 @@ export default class WorkCanvas extends React.PureComponent {
         type: 'work_canvas/selectAll',
       });
     });
+    key('⌘+s, ctrl+s', (e) => {
+      e.preventDefault();
+      console.log('save');
+      return dispatch({
+        type: 'work_canvas/saveComponents',
+        payload: {
+          id: match.params.id,
+        },
+      });
+    });
   }
 
   componentWillUnmount() {

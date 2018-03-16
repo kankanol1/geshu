@@ -12,4 +12,18 @@ export async function openProject(id) {
   return request(`/api/workspace/open/${id}`);
 }
 
-export default { fetchComponentSetting, fetchComponentList, openProject };
+export async function saveProject({ id, payload }) {
+  return request(`/api/workspace/save/${id}`, {
+    method: 'POST',
+    body: {
+      ...payload,
+    },
+  });
+}
+
+export default {
+  fetchComponentSetting,
+  fetchComponentList,
+  openProject,
+  saveProject,
+};

@@ -6,6 +6,7 @@ import { saveSvgAsPng } from 'save-svg-as-png';
 import SiderComponentList from './SiderComponentList';
 import WorkCanvas from './WorkCanvas/WorkCanvas';
 import ComponentSettings from './ComponentSettings';
+import WorkAreaBottomBar from './WorkAreaBottomBar';
 
 const { Content } = Layout;
 
@@ -61,13 +62,14 @@ export default class WorkArea extends React.PureComponent {
       <React.Fragment>
         {/* <Button onClick={this.exportSvg}> export </Button> */}
         <SiderComponentList onItemDragged={this.handleItemDragged} />
-        <Content style={{ background: '#fff', padding: 0, margin: 0, height: '100%', width: '100%' }}>
+        <Content style={{ background: '#fff', padding: 0, margin: 0, height: '100%', width: '100%', position: 'relative' }}>
           <WorkCanvas ref={(e) => { this.canvasRef = e; }} style={{ height: '100%' }} match={this.props.match} />
           {
             workCanvasLoading ?
               <Spin size="large" style={{ zIndex: '200', width: '100%', margin: 'auto', paddingTop: '200px', position: 'absolute', left: '0' }} />
             : null
           }
+          <WorkAreaBottomBar />
         </Content>
         <ComponentSettings />
       </React.Fragment>

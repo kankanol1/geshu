@@ -1,7 +1,16 @@
 import key from 'keymaster';
 import { message } from 'antd';
 import { calculatePointCenter, updateCache } from '../../utils/PositionCalculation';
-import { openProject } from '../../services/componentAPI';
+import { openProject, saveProject } from '../../services/componentAPI';
+
+function appendMessage(messages, m) {
+  messages.unshift({ message: m, time: Date.now() });
+  return messages;
+}
+
+function initMessage() {
+  return [{ message: '加载中...', time: Date.now() }];
+}
 
 export default {
   namespace: 'work_canvas',
@@ -11,6 +20,12 @@ export default {
       projectId: undefined,
       lastSync: -1,
       dirty: false,
+    },
+    tips: {
+      show: true,
+      maxMessage: 10,
+      messages: [
+      ],
     },
     name: 'pn',
     components: [
@@ -139,10 +154,18 @@ export default {
   },
 
   reducers: {
+
+    startLoading(state) {
+      return Object.assign({}, { ...state, tips: { ...state.tips, messages: initMessage() } });
+    },
+
     saveProjectInfo(state, { payload }) {
       return updateCache({ ...state,
         ...payload.response,
-        ...{ state: { projectId: payload.id, lastSync: Date.now(), dirty: false } },
+        ...{
+          state: { projectId: payload.id, lastSync: Date.now(), dirty: false },
+          tips: { ...state.tips, messages: appendMessage(initMessage(), '加载完毕') },
+        },
       });
     },
 
@@ -654,6 +677,7 @@ export default {
   effects: {
 
     *init({ payload }, { put, call }) {
+      yield put({ type: 'startLoading' });
       const response = yield call(openProject, payload.id);
       yield put({ type: 'saveProjectInfo', payload: { response, id: payload.id } });
     },
@@ -687,6 +711,14 @@ export default {
       //     component,
       //   });
       // }
+    },
+
+    *saveComponents({ payload }, { put, call, select }) {
+      const currentState = yield select((state) => { return state.work_canvas; });
+      const response = yield call(saveProject,
+        { id: payload.id, payload: { components: currentState.components } }
+      );
+      console.log('保存成功', response);
     },
   },
 
