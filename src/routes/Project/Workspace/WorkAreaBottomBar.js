@@ -28,7 +28,14 @@ export default class WorkAreaBottomBar extends React.PureComponent {
     if (!show) return null;
     return (
       <div
-        style={{ position: 'absolute', bottom: '0', width: '100%', cursor: 'pointer', paddingLeft: '20px' }}
+        style={{
+          position: 'absolute',
+          bottom: '0',
+          width: '100%',
+          cursor: 'pointer',
+          paddingLeft: '20px',
+          color: '#bfbfbf',
+        }}
         onClick={e => this.toggleState()}
       >
         {this.state.fullView ?

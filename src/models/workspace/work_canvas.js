@@ -171,7 +171,7 @@ export default {
         ...payload.response,
         ...{
           state: { projectId: payload.id, lastSync: Date.now(), dirty: false },
-          tips: { ...state.tips, messages: appendMessage(initMessage(), '加载完毕') },
+          tips: { ...state.tips, messages: appendMessage(state.tips.messages, '加载完毕') },
         },
       });
     },
