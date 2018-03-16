@@ -38,7 +38,6 @@ export default class WorkCanvas extends React.PureComponent {
       });
     }
     // add key listener.
-
     key('del, delete', () => {
       return dispatch({
         type: 'work_canvas/deleteCurrentSelection',
@@ -97,8 +96,6 @@ export default class WorkCanvas extends React.PureComponent {
     const { componentDict } = this.props.work_canvas.cache;
     // store: componentid: {pointid: {x, y}}
     const componentPointPosition = this.props.work_canvas.cache.pointDict;
-    // avoid first render. we need to wait for the cache ready.
-    if (Object.keys(componentDict).length === 0) return null;
 
     const { contextmenu } = this.props.work_canvas;
     let contextMenuView = null;
@@ -114,14 +111,11 @@ export default class WorkCanvas extends React.PureComponent {
     }
 
     const { components, mode } = this.props.work_canvas;
-    const { loading } = this.props;
-    // if (loading) {
-    //   return (
-    //     <div style={{ width: '100%', height: '99%', textAlign: 'center', paddingTop: '200px' }}>
-    //       <Spin size="large" />
-    //     </div>
-    //   );
-    // }
+    let { loading } = this.props;
+    // important! the loading value here will starts from undefined.
+    if (loading === undefined) {
+      loading = true;
+    }
 
     return (
       <div style={{ width: '100%', height: '99%' }}>
@@ -133,12 +127,13 @@ export default class WorkCanvas extends React.PureComponent {
           <svg
             style={{ width: '100%',
             height: '100%',
+            display: loading ? 'none' : 'inline-block',
             cursor: mode === 'move' ? 'move' : 'default' }}
             className="work-canvas"
           >
             {
               /* 1. node layer */
-              components.map(
+              loading ? null : components.map(
                 (component, i) => {
                   return (
                     <NodeLayer
@@ -154,7 +149,7 @@ export default class WorkCanvas extends React.PureComponent {
             }
             {
               /* 2. line layer */
-              components.map(
+              loading ? null : components.map(
                 (component, i) => {
                   return (
                     <LineLayer
@@ -169,7 +164,7 @@ export default class WorkCanvas extends React.PureComponent {
             }
             {
               /* 3. point layer */
-              components.map(
+              loading ? null : components.map(
                 (component, i) => {
                   return (
                     <PointLayer
@@ -186,31 +181,20 @@ export default class WorkCanvas extends React.PureComponent {
             }
             {
               /* 4. selection layer */
-              <SelectionLayer
-                {...this.props.work_canvas}
-                positionDict={componentPointPosition}
-                componentDict={componentDict}
-              />
+              loading ? null : (
+                <SelectionLayer
+                  {...this.props.work_canvas}
+                  positionDict={componentPointPosition}
+                  componentDict={componentDict}
+                />
+              )
             }
-
-
-            {loading ?
-                // add a rect to cover background.
-              (
-                <rect x={0} y={0} height="100%" width="100%" style={{ fill: 'white' }} />
-              )
-             : null}
-            {loading ?
-              (
-                // loading spin
-                <foreignObject x="0" y="0" width="100%" height="100%">
-                  <Spin xmlns="http://www.w3.org/1999/xhtml" size="large" style={{ width: '100%', margin: 'auto', paddingTop: '200px' }} />
-                </foreignObject>
-
-              )
-             : null}
           </svg>
         </DraggableCore>
+        {
+          loading ?
+            <Spin size="large" style={{ zIndex: '200', width: '100%', margin: 'auto', paddingTop: '200px', position: 'absolute', left: '0' }} /> : null
+        }
         {
           contextMenuView
         }
