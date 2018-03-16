@@ -11,7 +11,7 @@ export default class WorkAreaBottomBar extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      fullView: true,
+      fullView: false,
     };
   }
 

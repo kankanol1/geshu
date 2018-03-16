@@ -1,4 +1,4 @@
-import componentAPI from '../../services/componentAPI';
+import { fetchComponentSetting } from '../../services/componentAPI';
 
 export default {
   namespace: 'work_component_settings',
@@ -47,8 +47,10 @@ export default {
 
   effects: {
     *fetchComponentSettings({ code, id, name }, { call, put }) {
-      const data = yield call(componentAPI.fetchComponentSetting, code);
+      yield put({ type: 'work_canvas/addMessage', payload: { message: `加载配置[${code}](${name})...` } });
+      const data = yield call(fetchComponentSetting, code);
       yield put({ type: 'initComponentSettingsWithMeta', component: data, code, id, name });
+      yield put({ type: 'work_canvas/addMessage', payload: { message: `配置[${code}](${name})加载完毕` } });
     },
 
     /**
@@ -73,7 +75,7 @@ export default {
       );
       // set the id first.
       yield put({ type: 'setCurrentComponent', id: component.id });
-      if (componentMetaDict[component.type] === undefined) {
+      if (componentMetaDict[component.code] === undefined) {
         yield put({ type: 'fetchComponentSettings', code: component.code, id: component.id, name: component.name });
       } else if (!alreadyHaveTheSettings) {
         yield put({

@@ -20,7 +20,8 @@ export default class WorkspaceEditor extends Component {
         <Header style={{ padding: '0px', height: '48px', lineHeight: '46px', background: '#eee' }}>
           <EditorMenu />
           <div style={{ float: 'left', marginLeft: '15%', fontWeight: '900' }}>
-            {loading ? <Icon type="loading" /> : `项目[${name}]`}
+            {loading ? <Icon type="loading" /> : null}
+            {name === undefined ? null : `项目[${name}]`}
             {dirty ? '  *' : null}
           </div>
           <WorkSpaceMenu currentPath={this.props.location} />

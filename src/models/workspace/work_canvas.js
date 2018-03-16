@@ -27,7 +27,7 @@ export default {
       messages: [
       ],
     },
-    name: 'pn',
+    name: undefined,
     components: [
       {
         id: 'input',
@@ -154,6 +154,13 @@ export default {
   },
 
   reducers: {
+
+    addMessage(state, { payload }) {
+      return Object.assign({}, { ...state,
+        tips: {
+          ...state.tips, messages: appendMessage(state.tips.messages, payload.message),
+        } });
+    },
 
     startLoading(state) {
       return Object.assign({}, { ...state, tips: { ...state.tips, messages: initMessage() } });
