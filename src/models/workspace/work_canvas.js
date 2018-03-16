@@ -10,6 +10,7 @@ export default {
     state: {
       projectId: undefined,
       lastSync: -1,
+      dirty: false,
     },
     name: 'pn',
     components: [
@@ -141,7 +142,7 @@ export default {
     saveProjectInfo(state, { payload }) {
       return updateCache({ ...state,
         ...payload.response,
-        ...{ state: { projectId: payload.id, lastSync: Date.now() } },
+        ...{ state: { projectId: payload.id, lastSync: Date.now(), dirty: false } },
       });
     },
 
@@ -181,6 +182,10 @@ export default {
             return updateCache(Object.assign({}, {
               ...state,
               ...{
+                state: {
+                  ...state.state,
+                  dirty: true,
+                },
                 runtime: {
                   dragging: false,
                   startX,
@@ -198,6 +203,10 @@ export default {
             return updateCache(Object.assign({}, {
               ...state,
               ...{
+                state: {
+                  ...state.state,
+                  dirty: true,
+                },
                 runtime: {
                   ...state.runtime,
                   stopX: currentX + state.runtime.stopX,
@@ -327,7 +336,13 @@ export default {
         }
       );
       const newState = Object.assign({}, { ...state,
-        ...{ components: newComponents.filter(a => a != null), selection: [] } });
+        ...{
+          state: {
+            ...state.state,
+            dirty: true,
+          },
+          components: newComponents.filter(a => a != null),
+          selection: [] } });
       return newState;
     },
 
@@ -370,7 +385,15 @@ export default {
           y: component.y - offset.y,
         },
       });
-      return updateCache(Object.assign({}, { ...state, ...{ components } }));
+      return updateCache(Object.assign({}, { ...state,
+        ...{
+          state: {
+            ...state.state,
+            dirty: true,
+          },
+          components,
+        },
+      }));
     },
 
     moveComponent(state, { id, deltaX, deltaY, originX, originY }) {
@@ -417,6 +440,10 @@ export default {
         return updateCache(Object.assign({}, {
           ...state,
           ...{
+            state: {
+              ...state.state,
+              dirty: true,
+            },
             components: nr,
             contextmenu: {
               show: false,
@@ -430,6 +457,10 @@ export default {
         return updateCache(Object.assign({}, {
           ...state,
           ...{
+            state: {
+              ...state.state,
+              dirty: true,
+            },
             components: nr,
             contextmenu: {
               show: false,
@@ -581,6 +612,10 @@ export default {
       // return.
       return Object.assign({}, {
         ...state,
+        state: {
+          ...state.state,
+          dirty: true,
+        },
         lineDraggingState: {
           ...state.lineDraggingState,
           dragging: false,

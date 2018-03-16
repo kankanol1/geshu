@@ -1,3 +1,6 @@
+
+import { getUrlParams } from '../utils';
+
 const projectInfo = {
   name: 'Project-name',
   components: [{
@@ -71,5 +74,30 @@ export function open(req, res, u, q) {
     res.json(projectInfo);
   } else {
     return projectInfo;
+  }
+}
+
+export function save(req, res, u, b) {
+  let url = u;
+  if (!url || Object.prototype.toString.call(url) !== '[object String]') {
+    url = req.url; // eslint-disable-line
+  }
+
+
+  const body = (b && b.body) || req.body;
+
+  console.log('req', req);
+  console.log('saved', body);
+
+
+  const result = {
+    success: true,
+    message: '保存成功',
+  };
+
+  if (res && res.json) {
+    res.json(result);
+  } else {
+    return result;
   }
 }

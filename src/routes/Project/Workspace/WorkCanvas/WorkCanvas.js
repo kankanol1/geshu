@@ -10,9 +10,8 @@ import SelectionLayer from './SelectionLayer';
 import ContextMenu from './ContextMenu';
 import './WorkCanvas.less';
 
-@connect(({ work_canvas, loading }) => ({
+@connect(({ work_canvas }) => ({
   work_canvas,
-  loading: loading.models.work_canvas,
 }))
 export default class WorkCanvas extends React.PureComponent {
   constructor(props) {
@@ -111,11 +110,8 @@ export default class WorkCanvas extends React.PureComponent {
     }
 
     const { components, mode } = this.props.work_canvas;
-    let { loading } = this.props;
-    // important! the loading value here will starts from undefined.
-    if (loading === undefined) {
-      loading = true;
-    }
+
+    if (Object.keys(componentDict).length === 0) return null;
 
     return (
       <div style={{ width: '100%', height: '99%' }}>
@@ -127,13 +123,12 @@ export default class WorkCanvas extends React.PureComponent {
           <svg
             style={{ width: '100%',
             height: '100%',
-            display: loading ? 'none' : 'inline-block',
             cursor: mode === 'move' ? 'move' : 'default' }}
             className="work-canvas"
           >
             {
               /* 1. node layer */
-              loading ? null : components.map(
+              components.map(
                 (component, i) => {
                   return (
                     <NodeLayer
@@ -149,7 +144,7 @@ export default class WorkCanvas extends React.PureComponent {
             }
             {
               /* 2. line layer */
-              loading ? null : components.map(
+              components.map(
                 (component, i) => {
                   return (
                     <LineLayer
@@ -164,7 +159,7 @@ export default class WorkCanvas extends React.PureComponent {
             }
             {
               /* 3. point layer */
-              loading ? null : components.map(
+              components.map(
                 (component, i) => {
                   return (
                     <PointLayer
@@ -181,20 +176,14 @@ export default class WorkCanvas extends React.PureComponent {
             }
             {
               /* 4. selection layer */
-              loading ? null : (
-                <SelectionLayer
-                  {...this.props.work_canvas}
-                  positionDict={componentPointPosition}
-                  componentDict={componentDict}
-                />
-              )
+              <SelectionLayer
+                {...this.props.work_canvas}
+                positionDict={componentPointPosition}
+                componentDict={componentDict}
+              />
             }
           </svg>
         </DraggableCore>
-        {
-          loading ?
-            <Spin size="large" style={{ zIndex: '200', width: '100%', margin: 'auto', paddingTop: '200px', position: 'absolute', left: '0' }} /> : null
-        }
         {
           contextMenuView
         }

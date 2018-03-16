@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { connect } from 'dva';
-import { Layout, Button } from 'antd';
+import { Layout, Button, Spin } from 'antd';
 import { saveSvgAsPng } from 'save-svg-as-png';
 import SiderComponentList from './SiderComponentList';
 import WorkCanvas from './WorkCanvas/WorkCanvas';
@@ -16,7 +16,11 @@ function gen() {
 }
 
 
-class WorkArea extends React.PureComponent {
+@connect(({ loading }) => (
+  {
+    loading,
+  }))
+export default class WorkArea extends React.PureComponent {
   constructor(props) {
     super(props);
     this.handleItemDragged = this.handleItemDragged.bind(this);
@@ -49,17 +53,24 @@ class WorkArea extends React.PureComponent {
   // }
 
   render() {
+    let workCanvasLoading = this.props.loading.models.work_canvas;
+    if (workCanvasLoading === undefined) {
+      workCanvasLoading = true;
+    }
     return (
       <React.Fragment>
         {/* <Button onClick={this.exportSvg}> export </Button> */}
         <SiderComponentList onItemDragged={this.handleItemDragged} />
         <Content style={{ background: '#fff', padding: 0, margin: 0, height: '100%', width: '100%' }}>
           <WorkCanvas ref={(e) => { this.canvasRef = e; }} style={{ height: '100%' }} match={this.props.match} />
+          {
+            workCanvasLoading ?
+              <Spin size="large" style={{ zIndex: '200', width: '100%', margin: 'auto', paddingTop: '200px', position: 'absolute', left: '0' }} />
+            : null
+          }
         </Content>
         <ComponentSettings />
       </React.Fragment>
     );
   }
 }
-
-export default connect()(WorkArea);
