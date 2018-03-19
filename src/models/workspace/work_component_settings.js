@@ -44,8 +44,8 @@ export default {
       // 2. set this to the component settings.
       const { componentSettings, jsonSchemaDict, uiSchemaDict } = state;
       componentSettings[id] = { ...componentMetaSettings, id, name };
-      const translatedJsonSchema = extractJsonSchema(componentMetaSettings);
-      const translatedUISchema = extractUISchema(componentMetaSettings);
+      const translatedJsonSchema = extractJsonSchema(componentMetaSettings, id, code, name);
+      const translatedUISchema = extractUISchema(componentMetaSettings, id, code, name);
 
       jsonSchemaDict[id] = { ...translatedJsonSchema, id, name };
       uiSchemaDict[id] = { ...translatedUISchema, id, name };

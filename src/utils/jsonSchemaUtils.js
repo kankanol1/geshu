@@ -1,11 +1,17 @@
 /** utils to translate json schema. */
 
 // stores schema titls => translate function.
-const registeredSpecialSchemas = {
-  Switch_Schema: translateSwitchSchema,
+const registeredSpecialJsonSchemas = {
+  // Switch_Schema: translateSwitchSchema,
 };
 
-function translateSwitchSchema(originJsonSchema) {
+const registeredSpecialUISchemas = {
+  Switch_Schema: translateSwitchUISchema,
+};
+
+
+/** ======== translate switch schema ========== */
+function translateSwitchJsonSchema(originJsonSchema, id, code, name) {
   const newProps = {};
   const dependencies = {};
   for (const [key, value] of Object.entries(originJsonSchema.properties)) {
@@ -25,7 +31,14 @@ function translateSwitchSchema(originJsonSchema) {
   return translated;
 }
 
-export function extractJsonSchema(originJsonSchema) {
+function translateSwitchUISchema(originJsonSchema, id, code, name) {
+  return { 'ui:field': 'switch_schema' };
+}
+
+/** ======== end translate switch schema ========== */
+
+/** general translation */
+export function extractJsonSchema(originJsonSchema, id, code, name) {
   // extract required fields.
   const schemaClone = Object.assign({}, originJsonSchema);
   const required = [];
@@ -56,14 +69,14 @@ export function extractJsonSchema(originJsonSchema) {
       // default all booleans to false,
       value.default = false;
     } else if (value.type === 'object') {
-      schemaClone.properties[key] = extractJsonSchema(value);
+      schemaClone.properties[key] = extractJsonSchema(value, id, code, name);
     }
 
-    const translateFunc = registeredSpecialSchemas[value.title];
+    const translateFunc = registeredSpecialJsonSchemas[value.title];
 
     if (translateFunc !== undefined) {
       // translate.
-      schemaClone.properties[key] = translateFunc(value);
+      schemaClone.properties[key] = translateFunc(value, id, code, name);
     }
   }
   if (required.length > 0) {
@@ -73,11 +86,7 @@ export function extractJsonSchema(originJsonSchema) {
   }
 }
 
-export function extractUISchemaForSample(originJsonSchema) {
-  return { diy: { 'ui:field': 'sample', 'ui:options': { url: '/api/component/sample' } } };
-}
-
-export function extractUISchema(originJsonSchema) {
+export function extractUISchema(originJsonSchema, id, code, name) {
   const uiSchema = {};
   for (const [key, value] of Object.entries(originJsonSchema.properties)) {
     // set all boolean default to false.
@@ -86,11 +95,24 @@ export function extractUISchema(originJsonSchema) {
     }
 
     if (value.type === 'object') {
-      uiSchema[key] = extractUISchema(value);
+      uiSchema[key] = extractUISchema(value, id, code, name);
+    }
+
+    const translateFunc = registeredSpecialUISchemas[value.title];
+    if (translateFunc !== undefined) {
+      // translate.
+      uiSchema[key] = translateFunc(value, id, code, name);
     }
   }
-  return {};
+  return uiSchema;
 }
+
+
+/** just for example */
+export function extractUISchemaForSample(originJsonSchema) {
+  return { diy: { 'ui:field': 'sample', 'ui:options': { url: '/api/component/sample' } } };
+}
+/** example end */
 
 export default {
   extractJsonSchema,

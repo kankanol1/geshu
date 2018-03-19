@@ -5,12 +5,14 @@ import { Row, Col, Input, Button, Icon } from 'antd';
 import Form from 'react-jsonschema-form';
 import styles from './index.less';
 import SampleWidget from './Widgets/SampleWidget';
+import SwitchSchemaWidget from './Widgets/SwitchSchemaWidget';
 
 const ButtonGroup = Button.Group;
 
 
 const registeredFields = {
   sample: SampleWidget,
+  switch_schema: SwitchSchemaWidget,
 };
 
 const CustomFieldTemplate = (props) => {
