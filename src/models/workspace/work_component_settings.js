@@ -1,5 +1,7 @@
-import { fetchComponentSetting } from '../../services/componentAPI';
+import { message } from 'antd';
+import { fetchComponentSetting, saveComponentSettings } from '../../services/componentAPI';
 import { extractJsonSchema, extractUISchema } from '../../utils/jsonSchemaUtils';
+
 
 export default {
   namespace: 'work_component_settings',
@@ -64,6 +66,13 @@ export default {
       return Object.assign({}, { ...state, currentComponent: undefined });
     },
 
+    saveComponentSettingsInMemory(state, { payload }) {
+      const { componentId, formData } = payload;
+      const { formDataDict } = state;
+      formDataDict[componentId] = formData;
+      return Object.assign({}, { ...state, formDataDict });
+    },
+
   },
 
   effects: {
@@ -109,5 +118,20 @@ export default {
       }
     },
 
+    *saveComponentSettings({ payload }, { put, call }) {
+      const { projectId, componentId, formData } = payload;
+      // save it locally first.
+      yield put({
+        type: 'saveComponentSettingsInMemory',
+        payload,
+      });
+      const response = yield call(saveComponentSettings,
+        { id: projectId, component: componentId, payload: formData });
+      if (response.success) {
+        message.info(response.message);
+      } else {
+        message.error(response.message);
+      }
+    },
   },
 };

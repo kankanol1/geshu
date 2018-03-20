@@ -46,15 +46,12 @@ class ComponentSettings extends React.PureComponent {
   }
 
   render() {
-    const { currentComponent, componentSettings,
-      jsonSchemaDict, uiSchemaDict } = this.props.work_component_settings;
+    const { currentComponent, componentSettings } = this.props.work_component_settings;
     if (currentComponent === undefined) {
       return null;
     }
     const { loading } = this.props;
     const displaySettings = componentSettings[currentComponent];
-    const jsonSchema = jsonSchemaDict[currentComponent];
-    const uiSchema = uiSchemaDict[currentComponent];
     // build required.
     return (
       <div style={{ background: 'transparent', float: 'right', minWidth: '400px' }}>
@@ -81,8 +78,7 @@ class ComponentSettings extends React.PureComponent {
           :
             (
               <ComponentSettingsForm
-                jsonSchema={jsonSchema}
-                uiSchema={uiSchema}
+                match={this.props.match}
                 style={{ paddingTop: '20px', background: '#f5f5f5', height: '100%' }}
               />
             )

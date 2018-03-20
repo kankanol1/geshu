@@ -21,9 +21,19 @@ export async function saveProject({ id, payload }) {
   });
 }
 
+export async function saveComponentSettings({ id, component, payload }) {
+  return request(`/api/workspace/saveconf/${id}/${component}`, {
+    method: 'POST',
+    body: {
+      ...payload,
+    },
+  });
+}
+
 export default {
   fetchComponentSetting,
   fetchComponentList,
   openProject,
   saveProject,
+  saveComponentSettings,
 };

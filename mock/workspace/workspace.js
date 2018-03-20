@@ -101,3 +101,28 @@ export function save(req, res, u, b) {
     return result;
   }
 }
+
+export function saveSettings(req, res, u, b) {
+  let url = u;
+  if (!url || Object.prototype.toString.call(url) !== '[object String]') {
+    url = req.url; // eslint-disable-line
+  }
+
+
+  const body = (b && b.body) || req.body;
+
+  console.log('save: project id, component id', req.params.projectId, req.params.componentId);
+  // console.log('saved', body);
+
+
+  const result = {
+    success: true,
+    message: '保存成功',
+  };
+
+  if (res && res.json) {
+    res.json(result);
+  } else {
+    return result;
+  }
+}

@@ -10,7 +10,7 @@ import WorkAreaBottomBar from './WorkAreaBottomBar';
 
 const { Content } = Layout;
 
-let i = 0;
+let i = Date.now();
 
 function gen() {
   return i++;
@@ -73,7 +73,7 @@ export default class WorkArea extends React.PureComponent {
           }
           <WorkAreaBottomBar />
         </Content>
-        <ComponentSettings />
+        <ComponentSettings match={this.props.match} />
       </React.Fragment>
     );
   }
