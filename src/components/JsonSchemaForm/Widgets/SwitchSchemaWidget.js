@@ -21,7 +21,6 @@ export default class SwitchSchemaWidget extends React.PureComponent {
       formData: dataCopy,
       on: name === 'on' ? value : this.state.on,
     }, () => this.props.onChange(this.state.formData));
-    console.log('properties changed', name, value);
   }
 
   isRequired(name) {

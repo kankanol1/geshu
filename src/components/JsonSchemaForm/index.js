@@ -3,9 +3,11 @@
 import React from 'react';
 import { Row, Col, Input, Button, Icon } from 'antd';
 import Form from 'react-jsonschema-form';
+import JsonPath from 'jsonpath';
 import styles from './index.less';
 import SampleWidget from './Widgets/SampleWidget';
 import SwitchSchemaWidget from './Widgets/SwitchSchemaWidget';
+import TableWidget from './Widgets/TableWidget';
 
 const ButtonGroup = Button.Group;
 
@@ -13,6 +15,7 @@ const ButtonGroup = Button.Group;
 const registeredFields = {
   sample: SampleWidget,
   switch_schema: SwitchSchemaWidget,
+  table: TableWidget,
 };
 
 const CustomFieldTemplate = (props) => {
@@ -20,7 +23,8 @@ const CustomFieldTemplate = (props) => {
   return (
     <div className={classNames}>
       {children}
-      {errors}
+      {/* uncomment the following line will display errors for each item */}
+      {/* {errors} */}
       {help}
     </div>
   );
@@ -133,7 +137,30 @@ const ArrayFieldTemplate = (props) => {
   );
 };
 
+const replaceLastPathTo = (pathSelector, lastPath) => {
+  const pathArr = pathSelector.split('.');
+  pathArr[pathArr.length - 1] = lastPath;
+  return pathArr.join('.');
+};
+
 export default class JsonSchemaForm extends React.PureComponent {
+  constructor(props) {
+    super(props);
+    this.transformErrors = this.transformErrors.bind(this);
+  }
+
+  transformErrors(errors) {
+    const schema = this.props.jsonSchema;
+    const transformedErrors = errors.map((e) => {
+      if (e.name === 'required') {
+        const title = JsonPath.query(schema, `$.${replaceLastPathTo(e.property, 'title')}`);
+        const description = JsonPath.query(schema, `$.${replaceLastPathTo(e.property, 'description')}`);
+        return { ...e, stack: `"${description.length === 0 ? title[0] : description[0]}" 为必填项`, message: '必填' };
+      } else return e;
+    });
+    return transformedErrors;
+  }
+
   render() {
     return (
       <Form
@@ -145,8 +172,11 @@ export default class JsonSchemaForm extends React.PureComponent {
         ArrayFieldTemplate={ArrayFieldTemplate}
         className={styles.settingsForm}
         fields={{ ...registeredFields, ...this.props.fields }}
+        transformErrors={this.transformErrors}
         // html5 validation will prevent from submitting when there are required checkboxes.
         noHtml5Validate
+        // disable error list display.
+        showErrorList
       >
         {this.props.children}
       </Form>

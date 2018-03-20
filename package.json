@@ -34,6 +34,7 @@
     "fastclick": "^1.0.6",
     "identicon.js": "^2.3.1",
     "jshint": "^2.9.5",
+    "jsonpath": "^1.0.0",
     "keymaster": "^1.6.2",
     "lodash": "^4.17.4",
     "lodash-decorators": "^4.4.1",
