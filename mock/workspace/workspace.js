@@ -67,6 +67,14 @@ const projectInfo = {
       },
     ],
   }],
+  // settings info.
+  settings: {
+    input: {
+      diy: {
+        value: '预设值',
+      },
+    },
+  },
 };
 
 export function open(req, res, u, q) {

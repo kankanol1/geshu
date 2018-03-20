@@ -73,6 +73,11 @@ export default {
       return Object.assign({}, { ...state, formDataDict });
     },
 
+    initSettings(state, { payload }) {
+      const { settings } = payload;
+      // add to formData.
+      return Object.assign({}, { ...state, formDataDict: settings });
+    },
   },
 
   effects: {

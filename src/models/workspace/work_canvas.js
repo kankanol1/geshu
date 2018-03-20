@@ -693,7 +693,12 @@ export default {
     *init({ payload }, { put, call }) {
       yield put({ type: 'startLoading' });
       const response = yield call(openProject, payload.id);
-      yield put({ type: 'saveProjectInfo', payload: { response, id: payload.id } });
+      yield put({ type: 'saveProjectInfo',
+        payload: {
+          response: { name: response.name, components: response.components },
+          id: payload.id },
+      });
+      yield put({ type: 'work_component_settings/initSettings', payload: { settings: response.settings } });
     },
 
     *updateComponentSelectionAndDisplaySettings({ component }, { put }) {
