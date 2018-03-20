@@ -31,7 +31,7 @@ export default class WorkAreaBottomBar extends React.PureComponent {
         style={{
           position: 'absolute',
           bottom: '0',
-          width: '100%',
+          width: '60%',
           cursor: 'pointer',
           paddingLeft: '20px',
           color: '#bfbfbf',

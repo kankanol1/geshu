@@ -54,7 +54,7 @@ class ComponentSettings extends React.PureComponent {
     const displaySettings = componentSettings[currentComponent];
     // build required.
     return (
-      <div style={{ background: 'transparent', float: 'right', minWidth: '400px' }}>
+      <div style={{ background: 'transparent', float: 'right', minWidth: '400px', zIndex: 200 }}>
         <div style={{ padding: '5px', background: '#fafafa', borderLeft: '1px solid #e8e8e8' }}>
           <Button type="danger" size="default" onClick={this.onCloseClicked} disabled={loading} >
             <Icon type={loading ? 'loading' : 'close'} />
@@ -79,7 +79,7 @@ class ComponentSettings extends React.PureComponent {
             (
               <ComponentSettingsForm
                 match={this.props.match}
-                style={{ paddingTop: '20px', background: '#f5f5f5', height: '100%' }}
+                style={{ paddingTop: '20px', background: '#f5f5f5', height: '100%', zIndex: 200 }}
               />
             )
           )

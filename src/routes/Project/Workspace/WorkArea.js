@@ -64,7 +64,7 @@ export default class WorkArea extends React.PureComponent {
       <React.Fragment>
         {/* <Button onClick={this.exportSvg}> export </Button> */}
         <SiderComponentList onItemDragged={this.handleItemDragged} />
-        <Content style={{ background: '#fff', padding: 0, margin: 0, height: '100%', width: '100%', position: 'relative' }}>
+        <Content style={{ background: '#fff', padding: 0, margin: 0, height: '100%', width: '100%' }}>
           <WorkCanvas ref={(e) => { this.canvasRef = e; }} style={{ height: '100%' }} match={this.props.match} />
           {
             workCanvasLoading ?
