@@ -32,7 +32,7 @@ function translateSwitchJsonSchema(originJsonSchema, id, code, name) {
 }
 
 function translateSwitchUISchema(originJsonSchema, id, code, name) {
-  return { 'ui:field': 'switch_schema' };
+  return { 'ui:field': 'switch_schema', schema: { 'ui:field': 'define_schema' } };
 }
 
 /** ======== end translate switch schema ========== */
@@ -89,11 +89,6 @@ export function extractJsonSchema(originJsonSchema, id, code, name) {
 export function extractUISchema(originJsonSchema, id, code, name) {
   const uiSchema = {};
   for (const [key, value] of Object.entries(originJsonSchema.properties)) {
-    // set all boolean default to false.
-    if (value.type === 'boolean') {
-      uiSchema[key] = { 'ui:emptyValue': false };
-    }
-
     if (value.type === 'object') {
       uiSchema[key] = extractUISchema(value, id, code, name);
     }

@@ -7,7 +7,7 @@ import JsonPath from 'jsonpath';
 import styles from './index.less';
 import SampleWidget from './Widgets/SampleWidget';
 import SwitchSchemaWidget from './Widgets/SwitchSchemaWidget';
-import TableWidget from './Widgets/TableWidget';
+import DefineSchemaWidget from './Widgets/DefineSchemaWidget';
 
 const ButtonGroup = Button.Group;
 
@@ -15,7 +15,7 @@ const ButtonGroup = Button.Group;
 const registeredFields = {
   sample: SampleWidget,
   switch_schema: SwitchSchemaWidget,
-  table: TableWidget,
+  define_schema: DefineSchemaWidget,
 };
 
 const CustomFieldTemplate = (props) => {
@@ -177,6 +177,7 @@ export default class JsonSchemaForm extends React.PureComponent {
         noHtml5Validate
         // disable error list display.
         showErrorList
+        safeRenderCompletion
       >
         {this.props.children}
       </Form>

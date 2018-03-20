@@ -1,5 +1,3 @@
-
-
 import React from 'react';
 
 export default class SwitchSchemaWidget extends React.PureComponent {
@@ -7,20 +5,20 @@ export default class SwitchSchemaWidget extends React.PureComponent {
     super(props);
     this.state = {
       formData: { ...props.formData },
-      on: false,
     };
   }
-  componentWillMount() {
 
+  componentWillReceiveProps(props) {
+    this.setState({
+      formData: { ...props.formData },
+    });
   }
 
   onPropertyChange(name, value) {
-    const dataCopy = Object.assign({}, this.state.formData);
-    dataCopy[name] = value;
+    const dataCopy = Object.assign({}, { ...this.state.formData, [name]: value });
     this.setState({
       formData: dataCopy,
-      on: name === 'on' ? value : this.state.on,
-    }, () => this.props.onChange(this.state.formData));
+    }, () => this.props.onChange(dataCopy));
   }
 
   isRequired(name) {
@@ -56,7 +54,7 @@ export default class SwitchSchemaWidget extends React.PureComponent {
   }
 
   render() {
-    const { on } = this.state;
+    const { on } = this.state.formData;
     return (
       <div>
         {this.renderSchema('on')}

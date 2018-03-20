@@ -50,7 +50,7 @@ export default class ComponentSettingsForm extends React.PureComponent {
   }
 
   handleFormChange(value) {
-    this.setState({ dirty: true });
+    this.setState({ dirty: true, displayFormData: value.formData });
   }
 
   resetForm() {
@@ -88,6 +88,7 @@ export default class ComponentSettingsForm extends React.PureComponent {
             onChange={v => this.handleFormChange(v)}
             onSubmit={v => this.handleFormSubmit(v)}
             onError={v => console.log('errors', v)}
+            noValidate
           >
             <button ref={(btn) => { this.submitButton = btn; }} className={styles.hidden} />
           </JsonSchemaForm>
