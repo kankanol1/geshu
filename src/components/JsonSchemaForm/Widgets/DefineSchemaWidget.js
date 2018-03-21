@@ -83,8 +83,6 @@ export default class DefineSchemaWidget extends React.PureComponent {
 
   render() {
     const maxHeight = this.props.height || 200;
-    const { schema, name } = this.props;
-    const { title, description } = schema;
     return (
       <div className={styles.tableWidget}>
         <span >

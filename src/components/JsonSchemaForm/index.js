@@ -8,9 +8,13 @@ import styles from './index.less';
 import SampleWidget from './Widgets/SampleWidget';
 import SwitchSchemaWidget from './Widgets/SwitchSchemaWidget';
 import DefineSchemaWidget from './Widgets/DefineSchemaWidget';
+import SelectWidget from './Widgets/SelectWidget';
 
 const ButtonGroup = Button.Group;
 
+const registeredWidgets = {
+  SelectWidget,
+};
 
 const registeredFields = {
   sample: SampleWidget,
@@ -19,9 +23,11 @@ const registeredFields = {
 };
 
 const CustomFieldTemplate = (props) => {
-  const { id, classNames, label, help, required, description, errors, children, schema } = props;
+  const { id, classNames, label, help, required, title, errors, children, schema } = props;
+  const { description } = props;
   return (
     <div className={classNames}>
+      {/* <legend> {description === undefined ? title : description} </legend> */}
       {children}
       {/* uncomment the following line will display errors for each item */}
       {/* {errors} */}
@@ -41,12 +47,13 @@ const ObjectFieldTemplate = (props) => {
     if (schema.required && schema.required.length !== 0) {
       displayTitle += ' *';
     }
+    const isCheckbox = schema.properties[Object.keys(schema.properties)[0]].type === 'boolean';
     return (
       <Row>
-        <Col span={8}>
+        <Col span={isCheckbox ? 16 : 8}>
           <TitleField title={displayTitle} />
         </Col>
-        <Col span={16}>
+        <Col span={isCheckbox ? 8 : 16} className={styles.hideInnerSpan} >
           {properties.map(prop => (
             <div
               key={prop.content.key}
@@ -59,7 +66,7 @@ const ObjectFieldTemplate = (props) => {
     );
   }
 
-  let displayTitle = title;
+  let displayTitle = description === undefined ? title : description;
   if (required) {
     displayTitle += ' *';
   }
@@ -78,18 +85,19 @@ const ObjectFieldTemplate = (props) => {
           </div>
         ))}
       </div>
-      {description}
     </div>
   );
 };
 
 
 const ArrayFieldTemplate = (props) => {
+  const { schema, title } = props;
+  const { description } = schema;
   return (
     <div className={props.className}>
       <hr />
       <Row style={{ height: '36px' }}>
-        <Col span={20}><span style={{ lineHeight: '36px' }}>{props.title}</span></Col>
+        <Col span={20}><span style={{ lineHeight: '36px' }}>{description === undefined ? title : description}</span></Col>
         {props.canAdd && (
           <Col span={4}>
             <Button onClick={props.onAddClick} type="primary">
@@ -172,6 +180,7 @@ export default class JsonSchemaForm extends React.PureComponent {
         ArrayFieldTemplate={ArrayFieldTemplate}
         className={styles.settingsForm}
         fields={{ ...registeredFields, ...this.props.fields }}
+        widgets={{ ...registeredWidgets, ...this.props.widgets }}
         transformErrors={this.transformErrors}
         // html5 validation will prevent from submitting when there are required checkboxes.
         noHtml5Validate

@@ -1,4 +1,6 @@
 import React from 'react';
+import { Col, Row } from 'antd';
+import styles from './SwitchSchemaWidget.less';
 
 export default class SwitchSchemaWidget extends React.PureComponent {
   constructor(props) {
@@ -55,9 +57,18 @@ export default class SwitchSchemaWidget extends React.PureComponent {
 
   render() {
     const { on } = this.state.formData;
+    const { schema, name } = this.props;
+    const { title, description } = schema;
     return (
-      <div>
-        {this.renderSchema('on')}
+      <div style={{ paddingBottom: '4px' }}>
+        <Row>
+          <Col span={16}>
+            <span >
+              {description === undefined ? (title === undefined ? name : title) : description}
+            </span>
+          </Col>
+          <Col span={8} className={styles.hideInnerSpan}>{this.renderSchema('on')}</Col>
+        </Row>
         {on ? this.renderSchema('schema') : null}
       </div>
     );
