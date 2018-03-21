@@ -303,7 +303,6 @@ const allComponents = {
     type: 'object',
     properties: {
       definedSchema: {
-        required: false,
         title: 'Switch_Schema',
         type: 'object',
         properties: {
@@ -314,10 +313,23 @@ const allComponents = {
             required: false,
             type: 'array',
             items: {
-              type: 'string',
+              title: 'StructFieldMapping',
+              type: 'object',
+              properties: {
+                name: {
+                  type: 'string',
+                },
+                nullable: {
+                  type: 'boolean',
+                },
+                type: {
+                  type: 'string',
+                },
+              },
             },
           },
         },
+        description: '是否指定表格Schema',
       },
       format: {
         title: 'Fixed_String',
@@ -327,7 +339,7 @@ const allComponents = {
             type: 'string',
           },
         },
-        description: '这是格式',
+        description: '文件格式',
       },
       header: {
         required: false,
@@ -338,17 +350,17 @@ const allComponents = {
             type: 'boolean',
           },
         },
+        description: '文件是否包含Header',
       },
       path: {
         title: 'Fixed_String',
         type: 'object',
-        required: 'true',
         properties: {
           value: {
             type: 'string',
           },
         },
-        description: '这是路径',
+        description: '文件路径',
       },
     },
   },
