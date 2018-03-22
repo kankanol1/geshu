@@ -91,6 +91,19 @@ export function extractUISchema(originJsonSchema, id, code, name) {
   for (const [key, value] of Object.entries(originJsonSchema.properties)) {
     if (value.type === 'object') {
       uiSchema[key] = extractUISchema(value, id, code, name);
+      if (Object.keys(value.properties).length === 1) {
+        // hide labels.
+        uiSchema[key][Object.keys(value.properties)[0]] = { 'ui:options': { label: false } };
+      }
+    } else if (value.type === 'integer') {
+      // use up-down for integer.
+      uiSchema[key] = { 'ui:widget': 'updown' };
+    }
+
+    if ((value.type === 'string' && value.enum !== undefined)
+      || (value.type === 'array')) {
+      // hide labels.
+      uiSchema[key] = { 'ui:options': { label: false } };
     }
 
     const translateFunc = registeredSpecialUISchemas[value.title];

@@ -9,6 +9,7 @@ import SampleWidget from './Widgets/SampleWidget';
 import SwitchSchemaWidget from './Widgets/SwitchSchemaWidget';
 import DefineSchemaWidget from './Widgets/DefineSchemaWidget';
 import SelectWidget from './Widgets/SelectWidget';
+import ObjectFieldTemplate from './Templates/ObjectFieldTemplate';
 
 const ButtonGroup = Button.Group;
 
@@ -23,68 +24,26 @@ const registeredFields = {
 };
 
 const CustomFieldTemplate = (props) => {
-  const { id, classNames, label, help, required, title, errors, children, schema } = props;
+  const { id, classNames, label, displayLabel, help,
+    required, title, errors, children, schema } = props;
   const { description } = props;
+  if (displayLabel) {
+    return (
+      <Row className={classNames}>
+        <Col span={8}><legend> {description} </legend></Col>
+        <Col span={16}>{children}</Col>
+        {/* uncomment the following line will display errors for each item */}
+        {/* {errors} */}
+        {help}
+      </Row>
+    );
+  }
   return (
     <div className={classNames}>
-      {/* <legend> {description === undefined ? title : description} </legend> */}
       {children}
       {/* uncomment the following line will display errors for each item */}
       {/* {errors} */}
       {help}
-    </div>
-  );
-};
-
-const ObjectFieldTemplate = (props) => {
-  const { required, TitleField, properties, title, description, schema, idSchema } = props;
-  // if only one child, use inline.
-
-  if (Object.keys(schema.properties).length === 1 &&
-    schema.properties[Object.keys(schema.properties)[0]].properties === undefined &&
-    schema.properties[Object.keys(schema.properties)[0]].type !== 'array') {
-    let displayTitle = description === undefined ? title : description;
-    if (schema.required && schema.required.length !== 0) {
-      displayTitle += ' *';
-    }
-    const isCheckbox = schema.properties[Object.keys(schema.properties)[0]].type === 'boolean';
-    return (
-      <Row>
-        <Col span={isCheckbox ? 16 : 8}>
-          <TitleField title={displayTitle} />
-        </Col>
-        <Col span={isCheckbox ? 8 : 16} className={styles.hideInnerSpan} >
-          {properties.map(prop => (
-            <div
-              key={prop.content.key}
-            >
-              {prop.content}
-            </div>
-          ))}
-        </Col>
-      </Row>
-    );
-  }
-
-  let displayTitle = description === undefined ? title : description;
-  if (required) {
-    displayTitle += ' *';
-  }
-  return (
-    <div>
-      {
-        // do not display root title.
-        idSchema.$id === 'root' ? null : <TitleField title={displayTitle} />
-      }
-      <div className="row">
-        {properties.map(prop => (
-          <div
-            key={prop.content.key}
-          >
-            {prop.content}
-          </div>
-        ))}
-      </div>
     </div>
   );
 };

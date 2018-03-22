@@ -1,5 +1,41 @@
+@form-item-padding-lr: 10px;
+@form-item-padding-tb: 4px;
+
 .settingsForm {
-  padding: 10px;
+
+  .groupDiv {
+    >div {
+      background: #fafafa;
+      margin-left: -@form-item-padding-lr;
+      margin-right: -@form-item-padding-lr;
+      padding-left: @form-item-padding-lr;
+      padding-right: @form-item-padding-lr;
+      border: 1px solid #e8e8e8;
+    }
+    .groupIcon {
+      line-height: 38px;
+    }
+    .groupHeader {
+      cursor: pointer;
+      legend {
+        line-height: 38px;
+        font-weight: 800;
+      }
+    }
+    .groupContent {
+      background: #fafafa;
+      padding-left: @form-item-padding-lr;
+      padding-right: @form-item-padding-lr;
+      padding-bottom: @form-item-padding-tb;
+      padding-top: @form-item-padding-tb;
+    }
+  }
+
+  .rootContent {
+    margin-left: @form-item-padding-lr;
+    margin-right: @form-item-padding-lr;
+    margin-top: @form-item-padding-tb;
+  }
 
   :global(.slim-btn) {
     padding: 0 8px;
@@ -13,7 +49,7 @@
   .hideInnerSpan {
     :global {
       span {
-        display: none
+        display: none;
       }
     }
   }

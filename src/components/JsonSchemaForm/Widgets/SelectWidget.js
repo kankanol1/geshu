@@ -105,7 +105,7 @@ class SelectWidget extends React.PureComponent {
             value={selected}
             required={required}
             disabled={disabled || readonly}
-            placeholder={placeholder === undefined ? '请选择' : placeholder}
+            placeholder={placeholder === undefined || '' || ' ' ? '请选择' : placeholder}
             onBlur={
               onBlur &&
               ((newValue) => {

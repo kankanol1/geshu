@@ -277,7 +277,7 @@ const allComponents = {
             description: '默认值',
           },
         },
-        description: '特征数目',
+        description: '特征数目调节',
       },
       outputCol: {
         title: 'Fixed_String',
