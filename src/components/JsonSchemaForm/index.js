@@ -10,6 +10,7 @@ import SwitchSchemaWidget from './Widgets/SwitchSchemaWidget';
 import DefineSchemaWidget from './Widgets/DefineSchemaWidget';
 import SelectWidget from './Widgets/SelectWidget';
 import ObjectFieldTemplate from './Templates/ObjectFieldTemplate';
+import AnyValueWidget from './Widgets/AnyValueWidget';
 
 const ButtonGroup = Button.Group;
 
@@ -21,6 +22,7 @@ const registeredFields = {
   sample: SampleWidget,
   switch_schema: SwitchSchemaWidget,
   define_schema: DefineSchemaWidget,
+  any_value: AnyValueWidget,
 };
 
 const CustomFieldTemplate = (props) => {

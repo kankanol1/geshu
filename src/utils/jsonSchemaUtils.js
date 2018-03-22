@@ -7,7 +7,14 @@ const registeredSpecialJsonSchemas = {
 
 const registeredSpecialUISchemas = {
   Switch_Schema: translateSwitchUISchema,
+  Fixed_Any: translateFixedAnyUISchema,
 };
+
+/* fixed any */
+
+function translateFixedAnyUISchema(originJsonSchema, id, code, name) {
+  return { 'ui:field': 'any_value' };
+}
 
 
 /** ======== translate switch schema ========== */
