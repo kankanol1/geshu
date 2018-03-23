@@ -80,10 +80,9 @@ const menuData = [{
     path: 'params',
   }],
 }, {
-  name: '使用文档',
-  icon: 'book',
-  path: 'http://pro.ant.design/docs/getting-started',
-  target: '_blank',
+  name: '个人中心',
+  icon: 'user',
+  path: 'self',
 }];
 
 function formatter(data, parentPath = '', parentAuthority) {

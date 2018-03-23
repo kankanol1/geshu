@@ -16,6 +16,7 @@ import { getModels, addModel, updateModel, deleteModels } from './mock/model';
 import { getCandidateModels, updateCandidateModel, deleteCandidateModels, publishCandidateModels } from './mock/candidatemodel';
 import { getJobs, stopJobs, resumeJobs, pauseJobs, deleteJobs, restartJobs } from './mock/job';
 import { open, save, saveSettings } from './mock/workspace/workspace';
+import { getUserInfo, updatePassword } from './mock/selfmanage';
 
 // 是否禁用代理
 const noProxy = process.env.NO_PROXY === 'true';
@@ -69,6 +70,10 @@ const proxy = {
   'POST /api/workspace/saveconf/:projectId/:componentId/': saveSettings,
   // 'POST /api/workspace/run/:projectId':
   // 'POST /api/workspace/sample/:projectId':
+
+  // self manage.
+  'GET /api/self/info': getUserInfo,
+  'POST /api/self/password': updatePassword,
 
   // a sample test for component settings.
   'GET /api/component/sample': ["op1", "op2", "op3"],
@@ -124,10 +129,10 @@ const proxy = {
   'GET /api/tags': mockjs.mock({
     'list|100': [{ name: '@city', 'value|1-100': 150, 'type|0-2': 1 }]
   }),
-  'GET /api/fake_list': getFakeList,
-  'GET /api/fake_chart_data': getFakeChartData,
-  'GET /api/profile/basic': getProfileBasicData,
-  'GET /api/profile/advanced': getProfileAdvancedData,
+  // 'GET /api/fake_list': getFakeList,
+  // 'GET /api/fake_chart_data': getFakeChartData,
+  // 'GET /api/profile/basic': getProfileBasicData,
+  // 'GET /api/profile/advanced': getProfileAdvancedData,
   // 'POST /api/login/account': (req, res) => {
   //   const { password, userName, type } = req.body;
   //   if(password === '888888' && userName === 'admin'){
@@ -152,9 +157,9 @@ const proxy = {
   //     currentAuthority: 'guest'
   //   });
   // },
-  'POST /api/register': (req, res) => {
-    res.send({ status: 'ok', currentAuthority: 'user' });
-  },
+  // 'POST /api/register': (req, res) => {
+  //   res.send({ status: 'ok', currentAuthority: 'user' });
+  // },
   'GET /api/notices': getNotices,
   'GET /api/500': (req, res) => {
     res.status(500).send({

@@ -36,8 +36,20 @@ export async function createUser(params) {
 }
 
 export async function queryUserName(params) {
-  console.log('dim', params);
   return request(`/api/users/username?${stringify(params)}`, {
     method: 'GET',
+  });
+}
+
+export async function queryCurrentUser() {
+  return request('/api/self/info');
+}
+
+export async function updatePassword(params) {
+  return request('/api/self/password', {
+    method: 'POST',
+    body: {
+      ...params,
+    },
   });
 }

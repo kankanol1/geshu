@@ -1,5 +1,5 @@
 import { message } from 'antd';
-import { queryUsers, removeUsers, updateUser, createUser, queryUserName } from '../services/usersAPI';
+import { queryUsers, removeUsers, updateUser, createUser, queryUserName, queryCurrentUser, updatePassword } from '../services/usersAPI';
 
 
 export default {
@@ -18,6 +18,7 @@ export default {
       },
     },
     selectedUser: undefined,
+    currentUser: undefined,
   },
 
   reducers: {
@@ -73,7 +74,7 @@ export default {
       };
     },
 
-    setSelectedUser(state, { payload }) {
+    updateState(state, { payload }) {
       return {
         ...state,
         ...payload,
@@ -148,6 +149,23 @@ export default {
           type: 'endValidationUserName',
           payload: response,
         });
+      }
+    },
+
+    *queryCurrentUser(_, { call, put }) {
+      const response = yield call(queryCurrentUser);
+      yield put({ type: 'updateState', payload: { currentUser: response } });
+    },
+
+    *updatePassword({ payload, succeed, failed }, { call }) {
+      const response = yield call(updatePassword, ...payload);
+      if (response.success) {
+        message.success(response.message);
+        succeed();
+      } else {
+      // show message.
+        message.error(response.message);
+        failed();
       }
     },
   },
