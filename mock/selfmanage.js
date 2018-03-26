@@ -21,7 +21,7 @@ export function getUserInfo(req, res, u, b) {
 
 export function updatePassword(req, res, u, b) {
   const body = (b && b.body) || req.body;
-  const { userName, role, email, password, avatar } = body;
+  const { oldPassword, password } = body;
 
   const result = {
     success: true,

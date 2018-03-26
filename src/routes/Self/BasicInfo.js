@@ -37,7 +37,7 @@ export default class BasicInfo extends React.PureComponent {
   render() {
     const { form, users, loading } = this.props;
     const currentRecord = users.currentUser;
-    if (loading) {
+    if (currentRecord === undefined || loading) {
       return <Spin />;
     }
     return (

@@ -1,5 +1,6 @@
-import go from './go';
+import './go';
 
+const { go } = window;
 const $ = go.GraphObject.make;
 const util = {
   shapes: [
