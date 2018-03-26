@@ -7,7 +7,7 @@ import ScopeMenuItem from './ScopeMenuItem';
 const { SubMenu } = Menu;
 
 @connect(
-  ({ project, loading }) => ({ project, loading })
+  ({ project, loading, global }) => ({ project, loading, global })
 )
 export default class WorkspaceMenu extends React.PureComponent {
   componentDidMount() {
@@ -31,13 +31,25 @@ export default class WorkspaceMenu extends React.PureComponent {
       case 'redirect':
         dispatch(routerRedux.push(item.props.address));
         break;
+      case 'command':
+        item.props.op();
+        break;
       default:
         break;
     }
   }
 
+
+  toggleFullScreen() {
+    const { dispatch, global } = this.props;
+    dispatch({
+      type: 'global/changeFullScreen',
+      payload: !global.fullScreen,
+    });
+  }
+
   renderRecentProjects() {
-    const { loading, project } = this.props;
+    const { loading, project, global } = this.props;
     const { recentProjects } = project;
     if (loading.models.project) {
       return <Menu.Item key="loading"><Spin /></Menu.Item>;
@@ -52,11 +64,12 @@ export default class WorkspaceMenu extends React.PureComponent {
   }
 
   render() {
-    const { env } = this.props;
+    const { env, global } = this.props;
+    const { fullScreen } = global;
     return (
       <Menu
         onClick={({ item, key, keypath }) => this.handleClick(item, key, keypath)}
-        selectedKeys={[]}
+        selectedKeys={fullScreen ? ['fullScreen'] : []}
         mode="horizontal"
         style={{ background: 'transparent', float: 'left' }}
       >
@@ -66,6 +79,9 @@ export default class WorkspaceMenu extends React.PureComponent {
           <SubMenu title={<span>最近打开的项目</span>}>
             {this.renderRecentProjects()}
           </SubMenu>
+        </SubMenu>
+        <SubMenu title={<span>窗口</span>}>
+          <Menu.Item key="fullScreen" type="command" op={() => this.toggleFullScreen()} >{fullScreen ? '√ ' : null}全屏</Menu.Item>
         </SubMenu>
         <SubMenu title={<span>调试</span>}>
           <ScopeMenuItem scope="editor" env={env} key="hi">测试仅在editor可见</ScopeMenuItem>

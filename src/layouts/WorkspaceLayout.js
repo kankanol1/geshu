@@ -73,4 +73,5 @@ export default connect(({ user, global, loading }) => ({
   collapsed: global.collapsed,
   fetchingNotices: loading.effects['global/fetchNotices'],
   notices: global.notices,
+  fullScreen: global.fullScreen,
 }))(WorkspaceLayout);
