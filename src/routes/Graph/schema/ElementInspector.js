@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
 import { Input, Row, Col, Checkbox, Tooltip, Icon, Select, Switch } from 'antd';
-import styles from './ElementInspector.less';
+import styles from '../Inspectors.less';
 import DynamicAttributeEditor from './DynamicAttributeEditor';
-import graphUtils from '../../utils/graph_utils';
+import graphUtils from '../../../utils/graph_utils';
 
 
 let myDiagram;
@@ -239,4 +239,6 @@ class ElementInspector extends Component {
     );
   }
 }
-export default connect((state) => { return { diagram: state.graph_schema_editor.diagram }; })(ElementInspector);
+export default connect((state) => {
+  return { diagram: state.graph_schema_editor.diagram };
+})(ElementInspector);

@@ -17,6 +17,7 @@ import { getCandidateModels, updateCandidateModel, deleteCandidateModels, publis
 import { getJobs, stopJobs, resumeJobs, pauseJobs, deleteJobs, restartJobs } from './mock/job';
 import { open, save, saveSettings } from './mock/workspace/workspace';
 import { getUserInfo, updatePassword } from './mock/selfmanage';
+import {recentGraph,saveGraph,getGraph,getDataSources,getDataSourceColumns} from './mock/graph';
 
 // 是否禁用代理
 const noProxy = process.env.NO_PROXY === 'true';
@@ -71,6 +72,13 @@ const proxy = {
   // 'POST /api/workspace/run/:projectId':
   // 'POST /api/workspace/sample/:projectId':
 
+  // graph
+  'GET /api/graph/recent': recentGraph,
+  'GET /api/graph/detail': getGraph,
+  'POST /api/graph/save': saveGraph,  
+  'GET /api/graph/datasource/list': getDataSources,  
+  'GET /api/graph/datasource/columns': getDataSourceColumns,  
+  
   // self manage.
   'GET /api/self/info': getUserInfo,
   'POST /api/self/password': updatePassword,
