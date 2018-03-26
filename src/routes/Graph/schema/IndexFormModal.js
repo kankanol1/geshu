@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
 import { Modal, Form, Input, Radio, Select } from 'antd';
-import graphUtils from '../../utils/graph_utils';
+import graphUtils from '../../../utils/graph_utils';
 
 let nodeProps = [];
 let linkProps = [];

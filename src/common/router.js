@@ -222,8 +222,26 @@ export const getRouterData = (app) => {
     '/user/register-result': {
       component: dynamicWrapper(app, [], () => import('../routes/User/RegisterResult')),
     },
-    '/graph/editor': {
-      component: dynamicWrapper(app, ['graph/graph_schema_editor'], () => import('../routes/Graph/GraphDesigner')),
+    '/graph/schema': {
+      component: dynamicWrapper(app, [], () => import('../layouts/GraphLayout')),
+    },
+    '/graph/explore': {
+      component: dynamicWrapper(app, [], () => import('../layouts/GraphLayout')),
+    },
+    '/graph/query': {
+      component: dynamicWrapper(app, [], () => import('../layouts/GraphLayout')),
+    },
+    '/graph/mapper': {
+      component: dynamicWrapper(app, [], () => import('../layouts/GraphLayout')),
+    },
+    '/graph/index/:type': {
+      component: dynamicWrapper(app, ['graph/graph'], () => import('../routes/Graph/GraphIndex')),
+    },
+    '/graph/detail/schema/:id': {
+      component: dynamicWrapper(app, ['graph/graph_schema_editor'], () => import('../routes/Graph/schema/SchemaDesigner')),
+    },
+    '/graph/detail/mapper/:id': {
+      component: dynamicWrapper(app, ['graph/graph_mapping_editor'], () => import('../routes/Graph/mapping/MappingDesigner')),
     },
     // '/user/:id': {
     //   component: dynamicWrapper(app, [], () => import('../routes/User/SomeComponent')),

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Input, Button, Select, Row, Col, Tooltip, Icon } from 'antd';
-import styles from './ElementInspector.less';
+import styles from '../Inspectors.less';
 
 const dataTypes = ['String', 'Character', 'Boolean', 'Byte', 'Short', 'Integer', 'Long', 'Float', 'Double', 'Date', 'Geoshape', 'UUID'];
 const cardinalityTypes = ['SINGLE', 'LIST', 'SET'];

@@ -45,7 +45,7 @@ const menuData = [{
   path: 'graph',
   children: [{
     name: '设计器',
-    path: 'editor',
+    path: 'schema',
   }, {
     name: '数据导入',
     path: 'mapper',
