@@ -113,7 +113,7 @@ export default {
       }
     },
 
-    *createProject({ payload }, { call, put }) {
+    *createProject({ payload, resolve, reject }, { call, put }) {
       const response = yield call(createProject, { ...payload });
       if (response.success) {
         message.success(response.message);
@@ -121,9 +121,15 @@ export default {
           type: 'fetchProjectList',
           payload: payload.refreshParams,
         });
+        if (resolve !== undefined) {
+          resolve(response);
+        }
       } else {
         // show message.
         message.error(response.message);
+        if (reject !== undefined) {
+          reject(response);
+        }
       }
     },
 

@@ -6,92 +6,12 @@ import { Popconfirm, Tag, Row, Col, Card, Form, Input, Select, Icon, Button, Men
 import StandardTable from '../../components/StandardTable';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './ProjectList.less';
+import { buildTagSelect } from '../../utils/uiUtils';
+import CreateProjectForm from './CreateProjectForm';
 
 const FormItem = Form.Item;
-const { Option } = Select;
 const { RangePicker } = DatePicker;
-const { TextArea } = Input;
 
-const buildTagSelect = (options, tagMode = false) => {
-  const children = [];
-  for (let i = 0; i < options.length; i++) {
-    children.push(<Option key={i.toString(options.length)}>{options[i]}</Option>);
-  }
-  return (
-    <Select
-      mode={tagMode ? 'tags' : 'multiple'}
-      style={{ width: '100%' }}
-      placeholder="选择标签"
-      tokenSeparators={[',']}
-    >
-      {children}
-    </Select>
-  );
-};
-
-/** the creation form. */
-
-const CreateForm = Form.create()((props) => {
-  const { modalVisible, form, handleAdd, handleUpdate, handleModalVisible } = props;
-  const { data, currentRecord } = props;
-
-  const okHandle = () => {
-    form.validateFields((err, fieldsValue) => {
-      if (err) return;
-      if (currentRecord) {
-        handleUpdate(fieldsValue, currentRecord);
-        form.resetFields();
-      } else {
-        handleAdd(fieldsValue);
-        form.resetFields();
-      }
-    });
-  };
-  return (
-    <Modal
-      title={currentRecord === undefined ? '新建项目' : '编辑项目'}
-      visible={modalVisible}
-      onOk={okHandle}
-      onCancel={() => { handleModalVisible(); }}
-    >
-      <FormItem
-        labelCol={{ span: 5 }}
-        wrapperCol={{ span: 15 }}
-        label="名称"
-      >
-        {form.getFieldDecorator('name', {
-          rules: [{ required: true, message: '项目名称' }],
-          initialValue: currentRecord === undefined ? '' : currentRecord.name,
-        })(
-          <Input placeholder="请输入" />
-        )}
-      </FormItem>
-      <FormItem
-        labelCol={{ span: 5 }}
-        wrapperCol={{ span: 15 }}
-        label="描述"
-      >
-        {form.getFieldDecorator('description', {
-          rules: [{ required: true, message: '项目描述' }],
-          initialValue: currentRecord === undefined ? '' : currentRecord.description,
-        })(
-          <TextArea placeholder="请输入" rows={2} />
-        )}
-      </FormItem>
-      <FormItem
-        labelCol={{ span: 5 }}
-        wrapperCol={{ span: 15 }}
-        label="标签"
-      >
-        {form.getFieldDecorator('labels', {
-          initialValue: currentRecord === undefined ? [] : currentRecord.labels,
-        })(
-          buildTagSelect(data.labels, true)
-        )}
-      </FormItem>
-    </Modal>
-  );
-});
 
 const getValue = obj => Object.keys(obj).map(key => obj[key]).join(',');
 
@@ -444,7 +364,7 @@ export default class ProjectList extends PureComponent {
     const { selectedRows, modalVisible, currentRecord } = this.state;
 
     const parentMethods = {
-      data,
+      labels: data.labels,
       handleAdd: this.handleAdd,
       handleModalVisible: this.handleModalVisible,
       currentRecord,
@@ -480,7 +400,7 @@ export default class ProjectList extends PureComponent {
             onChange={this.handleStandardTableChange}
           />
         </Card>
-        <CreateForm
+        <CreateProjectForm
           {...parentMethods}
           modalVisible={modalVisible}
         />
