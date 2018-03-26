@@ -32,10 +32,10 @@ getMenuData().forEach(getRedirect);
 
 class WorkspaceLayout extends AbstractBasicLayout {
   getContent() {
-    const { routerData, match } = this.props;
+    const { routerData, match, fullScreen } = this.props;
     return (
       <Content style={{ height: '100%', overflowX: 'initial' }}>
-        <div style={{ height: 'calc(100vh - 64px)' }}>
+        <div style={{ height: fullScreen ? '100vh' : 'calc(100vh - 64px)' }}>
           <Switch>
             {
               redirectData.map(item =>
