@@ -17,9 +17,10 @@ function gen() {
 }
 
 
-@connect(({ work_canvas }) => (
+@connect(({ work_canvas, loading }) => (
   {
     work_canvas,
+    loading,
   }))
 export default class WorkArea extends React.PureComponent {
   constructor(props) {
@@ -56,18 +57,15 @@ export default class WorkArea extends React.PureComponent {
   // }
 
   render() {
-    let workCanvasLoading = this.props.work_canvas.state.loading;
-    if (workCanvasLoading === undefined) {
-      workCanvasLoading = true;
-    }
+    const isLoading = this.props.loading.effects['work_canvas/init'];
     return (
       <React.Fragment>
         {/* <Button onClick={this.exportSvg}> export </Button> */}
         <SiderComponentList onItemDragged={this.handleItemDragged} />
         <Content style={{ background: '#fff', padding: 0, margin: 0, height: '100%', width: '100%' }}>
-          <WorkCanvas ref={(e) => { this.canvasRef = e; }} style={{ height: '100%' }} match={this.props.match} />
+          <WorkCanvas ref={(e) => { this.canvasRef = e; }} style={{ height: isLoading ? '0' : '100%' }} match={this.props.match} />
           {
-            workCanvasLoading ?
+            isLoading ?
               <Spin size="large" style={{ zIndex: '200', width: '100%', margin: 'auto', paddingTop: '200px', position: 'absolute', left: '0' }} />
             : null
           }

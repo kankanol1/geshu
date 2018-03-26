@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { Icon, Layout } from 'antd';
 import { connect } from 'dva';
 import WorkArea from './Workspace/WorkArea';
-import WorkSpaceMenu from './WorkspaceMenu';
-import EditorMenu from './Workspace/Menu/EditorMenu';
+import WorkspaceViewMenu from './WorkspaceViewMenu';
+import WorkspaceMenu from './Workspace/Menu/WorkspaceMenu';
 
 const { Header } = Layout;
 @connect(({ work_canvas, loading }, { history }) => ({
@@ -18,13 +18,13 @@ export default class WorkspaceEditor extends Component {
     return (
       <Layout style={{ padding: '0', height: '100%' }} theme="light" >
         <Header style={{ padding: '0px', height: '48px', lineHeight: '46px', background: '#eee' }}>
-          <EditorMenu />
+          <WorkspaceMenu env={['editor']} />
           <div style={{ float: 'left', marginLeft: '15%', fontWeight: '900' }}>
             {loading ? <Icon type="loading" /> : null}
             {name === undefined ? null : `项目[${name}]`}
             {dirty ? '  *' : null}
           </div>
-          <WorkSpaceMenu currentPath={this.props.location} />
+          <WorkspaceViewMenu currentPath={this.props.location} />
         </Header>
         <Layout style={{ padding: '0', height: '100%' }} theme="light">
           <WorkArea match={this.props.match} />

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'dva/router';
 import { Menu, Icon } from 'antd';
 
-export default class WorkspaceMenu extends Component {
+export default class WorkspaceViewMenu extends Component {
   render() {
     const path = this.props.currentPath.pathname;
     const pathArr = path.split('/');

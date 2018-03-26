@@ -10,8 +10,9 @@ import SelectionLayer from './SelectionLayer';
 import ContextMenu from './ContextMenu';
 import './WorkCanvas.less';
 
-@connect(({ work_canvas }) => ({
+@connect(({ work_canvas, loading }) => ({
   work_canvas,
+  loading,
 }))
 export default class WorkCanvas extends React.PureComponent {
   constructor(props) {
@@ -59,6 +60,21 @@ export default class WorkCanvas extends React.PureComponent {
       });
     });
   }
+
+  componentWillReceiveProps(nextProps) {
+    const newMatch = nextProps.match;
+    const { match } = this.props;
+    if (match.params.id !== newMatch.params.id) {
+      // load new canvas.
+      this.props.dispatch({
+        type: 'work_canvas/init',
+        payload: {
+          id: newMatch.params.id,
+        },
+      });
+    }
+  }
+
 
   componentWillUnmount() {
     key.unbind('del, delete');
@@ -123,8 +139,10 @@ export default class WorkCanvas extends React.PureComponent {
 
     if (Object.keys(componentDict).length === 0) return null;
 
+    const isLoading = this.props.loading.effects['work_canvas/init'];
+
     return (
-      <div style={{ width: '100%', height: '99%' }}>
+      <div style={{ width: '100%', height: isLoading ? '0' : '99%' }}>
         <DraggableCore
           onDrag={this.handleDrag}
           onStop={this.handleDragStop}
@@ -132,7 +150,7 @@ export default class WorkCanvas extends React.PureComponent {
         >
           <svg
             style={{ width: '100%',
-            height: '100%',
+            height: isLoading ? '0' : '100%',
             cursor: mode === 'move' ? 'move' : 'default' }}
             className="work-canvas"
           >
