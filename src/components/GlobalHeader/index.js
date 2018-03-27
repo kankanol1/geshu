@@ -64,10 +64,10 @@ export default class GlobalHeader extends PureComponent {
       </Menu>
     );
     const { avatar, userName } = currentUser;
-    let displayAvatar;
+    let displayAvatar = null;
     if (avatar !== undefined) {
       displayAvatar = avatar;
-    } else {
+    } else if (userName !== undefined) {
       const imgData = new Identicon(hash(userName), 32).toString();
       displayAvatar = `data:image/png;base64,${imgData}`;
     }

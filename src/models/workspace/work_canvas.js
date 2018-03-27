@@ -179,6 +179,7 @@ export default {
         ...{
           state: { projectId: payload.id, lastSync: Date.now(), dirty: false, loading: false },
           tips: { ...state.tips, messages: appendMessage(state.tips.messages, '加载完毕') },
+          selection: [],
         },
       });
     },
