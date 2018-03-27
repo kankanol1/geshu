@@ -26,7 +26,7 @@ export default class SelfManage extends React.PureComponent {
     const selected = (tab === 'basic' || tab === 'password') ? tab : 'basic';
     return (
       <Card>
-        <Tabs defaultActiveKey={selected} onChange={k => this.handleChange(k)}>
+        <Tabs defaultActiveKey={selected} activeKey={selected} onChange={k => this.handleChange(k)}>
           <TabPane tab="基本信息" key="basic">
             <BasicInfo />
           </TabPane>

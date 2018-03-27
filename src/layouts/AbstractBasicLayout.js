@@ -85,7 +85,7 @@ class AbstractBasicLayout extends React.PureComponent {
       });
     });
     this.props.dispatch({
-      type: 'user/fetchCurrent',
+      type: 'users/queryCurrentUser',
     });
   }
   getPageTitle() {
@@ -166,13 +166,13 @@ class AbstractBasicLayout extends React.PureComponent {
       payload: collapsed,
     });
   }
-  handleNoticeClear = (type) => {
-    message.success(`清空了${type}`);
-    this.props.dispatch({
-      type: 'global/clearNotices',
-      payload: type,
-    });
-  }
+  // handleNoticeClear = (type) => {
+  //   message.success(`清空了${type}`);
+  //   this.props.dispatch({
+  //     type: 'global/clearNotices',
+  //     payload: type,
+  //   });
+  // }
   handleMenuClick = ({ key }) => {
     if (key === 'triggerError') {
       this.props.dispatch(routerRedux.push('/exception/trigger'));
@@ -183,14 +183,17 @@ class AbstractBasicLayout extends React.PureComponent {
         type: 'login/logout',
       });
     }
-  }
-  handleNoticeVisibleChange = (visible) => {
-    if (visible) {
-      this.props.dispatch({
-        type: 'global/fetchNotices',
-      });
+    if (key === 'self') {
+      this.props.dispatch(routerRedux.push('/self'));
     }
   }
+  // handleNoticeVisibleChange = (visible) => {
+  //   if (visible) {
+  //     this.props.dispatch({
+  //       type: 'global/fetchNotices',
+  //     });
+  //   }
+  // }
   render() {
     const {
       currentUser, collapsed, fetchingNotices, notices, location, fullScreen,
