@@ -154,7 +154,7 @@ export default {
 
     *queryCurrentUser(_, { call, put }) {
       const response = yield call(queryCurrentUser);
-      yield put({ type: 'updateState', payload: { currentUser: response } });
+      yield put({ type: 'updateState', payload: { currentUser: response === undefined ? {} : response } });
     },
 
     *updatePassword({ payload, succeed, failed }, { call }) {
