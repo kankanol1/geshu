@@ -1,5 +1,5 @@
 import mockjs from 'mockjs';
-import httpProxy from 'express-http-proxy';
+import request from 'request';
 import { getRule, postRule } from './mock/rule';
 import { getActivities, getNotice, getFakeList } from './mock/api';
 import { getFakeChartData } from './mock/chart';
@@ -32,13 +32,19 @@ if (serverEnabled) {
   console.log(`using ${server} as backend`)
 }
 
-
-const proxyServer = {
-  "/api/**": serverEnabled ? httpProxy(server) : null,
-}
-
 // 代码中会兼容本地 service mock 以及部署站点的静态数据
-const proxy = {
+const proxy = serverEnabled ? 
+  {
+    "GET /api**": (req, res) => {
+      req.pipe(request(server+req.url)).pipe(res);
+    },
+    "POST /api**": (req, res) => {
+      request.post({
+       url: server+req.url, json: req.body}).pipe(res);
+    },
+  }
+  : 
+  {
 
   'GET /api/project/list': getProject,
   'POST /api/project/create': createProject,
@@ -222,4 +228,4 @@ const proxy = {
   },
 };
 
-export default noProxy ? {} : delay(serverEnabled ? proxyServer : proxy, 1000);
+export default noProxy ? {} : delay(proxy, 1000);
