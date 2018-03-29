@@ -38,77 +38,14 @@ function graphson3to1(data) {
   }
   return data;
 }
-function formatJson(json, options) {
-  let reg = null;
-  let formatted = '';
-  let pad = 0;
-  const PADDING = '    ';
-  options = options || {};
-  options.newlineAfterColonIfBeforeBraceOrBracket =
-    (options.newlineAfterColonIfBeforeBraceOrBracket === true);
-  options.spaceAfterColon = options.spaceAfterColon !== false;
-  if (typeof json !== 'string') {
-    json = JSON.stringify(json);
-  } else {
-    json = JSON.parse(json);
-    json = JSON.stringify(json);
-  }
-  reg = /([\{\}])/g;
-  json = json.replace(reg, '\r\n$1\r\n');
-  reg = /([\[\]])/g;
-  json = json.replace(reg, '\r\n$1\r\n');
-  reg = /(\,)/g;
-  json = json.replace(reg, '$1\r\n');
-  reg = /(\r\n\r\n)/g;
-  json = json.replace(reg, '\r\n');
-  reg = /\r\n\,/g;
-  json = json.replace(reg, ',');
-  if (!options.newlineAfterColonIfBeforeBraceOrBracket) {
-    reg = /\:\r\n\{/g;
-    json = json.replace(reg, ':{');
-    reg = /\:\r\n\[/g;
-    json = json.replace(reg, ':[');
-  }
-  if (options.spaceAfterColon) {
-    reg = /\:/g;
-    json = json.replace(reg, ':');
-  }
-  (json.split('\r\n')).forEach((node, index) => {
-    let i = 0;
-    let indent = 0;
-    let padding = '';
-
-    if (node.match(/\{$/) || node.match(/\[$/)) {
-      indent = 1;
-    } else if (node.match(/\}/) || node.match(/\]/)) {
-      if (pad !== 0) {
-        pad -= 1;
-      }
-    } else {
-      indent = 0;
-    }
-
-    for (i = 0; i < pad; i++) {
-      padding += PADDING;
-    }
-
-    formatted += `${padding + node}\r\n`;
-    pad += indent;
-  }
-  );
-  return formatted;
-}
 
 export default {
-  namespace: 'graph_query',
+  namespace: 'graph_explore',
   state: {
     goJsGraph: {},
-    code: '',
     host: '',
     port: '',
-    showGraph: true,
     id: '',
-    responseJson: '',
   },
   reducers: {
     init(state, { payload }) {
@@ -125,10 +62,7 @@ export default {
     setGraph(state, { payload }) {
       state.goJsGraph.clear();
       const data = graphson3to1(payload.result.data);
-      if (data[0] && Array.isArray(data[0]) && data[0].length > 0 && data[0][0] instanceof Object) {
-        state.showGraph = true;
-        state.goJsGraph.mergeData(data);
-      } else state.showGraph = false;
+      state.goJsGraph.mergeData(data);
       return state;
     },
     mergeGraph(state, { payload }) {
@@ -136,19 +70,6 @@ export default {
       state.goJsGraph.mergeData(data);
       return state;
     },
-    saveCode(state, { payload }) {
-      return Object.assign({}, {
-        ...state,
-        code: payload,
-      });
-    },
-    saveResponse(state, { payload }) {
-      return Object.assign({}, {
-        ...state,
-        responseJson: formatJson(JSON.stringify(payload)),
-      });
-    },
-
   },
   effects: {
     *initialize({ payload }, { call, put }) {
@@ -161,21 +82,31 @@ export default {
         },
       });
     },
-    *queryGraph({ payload }, { call, put, select }) {
-      const { host, port, id, code } = yield select(state => state.graph_query);
-      const response = yield call(queryGremlinServer, { code, id, host, port });
-      if (response.status.code > 200) { message.error(`错误：${response.status.message}`); }
-      yield put({
-        type: 'saveResponse',
-        payload: response,
+    *searchGraph({ payload }, { call, put, select }) {
+      const { host, port, id } = yield select(state => state.graph_explore);
+      const { name, value } = payload;
+      const response = yield call(queryGremlinServer, {
+        code: `nodes=g.V().has('${name}','${value}')
+        edges = g.V().
+          has('${name}','${value}').
+          aggregate('node')
+          .outE().as('edge')
+          .inV()
+          .where(within('node'))
+          .select('edge')
+        [nodes.toList(),edges.toList()]`,
+        id,
+        host,
+        port,
       });
+      if (response.status.code > 200) { message.error(`错误：${response.status.message}`); }
       yield put({
         type: 'setGraph',
         payload: response,
       });
     },
     *exploreGraph({ payload }, { call, put, select }) {
-      const { host, port, id } = yield select(state => state.graph_query);
+      const { host, port, id } = yield select(state => state.graph_explore);
       const { key } = payload.data;
       const code = `nodes =g.V(${key}).as("node").both().as("node")
         .select(all,"node").inject(g.V(${key})).unfold()
@@ -187,8 +118,5 @@ export default {
         payload: response,
       });
     },
-    // *saveQuery({ payload }, { call, put, select }) {
-    //   const { id } = yield select(state => state.graph_query);
-    // },
   },
 };

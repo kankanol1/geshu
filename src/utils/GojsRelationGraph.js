@@ -2,6 +2,7 @@ import './gojs/go';
 
 const { go } = window;
 const $ = go.GraphObject.make;
+
 export default class GojsRelationGraph {
   constructor() {
     this.options = {};
@@ -9,20 +10,49 @@ export default class GojsRelationGraph {
     this.label2Color = {};
     this.labelCount = 0;
   }
-    create=({ container }) => {
+    create=(options) => {
+      this.options = { ...options };
       const layout = $(go.ForceDirectedLayout, { randomNumberGenerator: null });
       const toolTipTemplate =
       $(go.Adornment, 'Auto',
-        $(go.Shape, { fill: '#F2F2F2' }),
-        $(go.TextBlock, { margin: 4 },
-          new go.Binding('text', '', ((d) => {
-            return `id: ${d.key}
-                    label: ${d.label}
-                    `;
-          })))
+        $(go.Shape, 'RoundedRectangle',
+          {
+            name: 'SHAPE',
+            fill: $(go.Brush, 'Linear', { 0: 'rgb(125, 125, 125)', 0.5: 'rgb(86, 86, 86)', 1: 'rgb(86, 86, 86)' }),
+            stroke: 'black',
+            portId: '',
+            fromLinkable: true,
+            toLinkable: true,
+            cursor: 'pointer',
+          }),
+        $(go.TextBlock,
+          {
+            font: '9pt sans-serif',
+            stroke: 'white',
+          },
+          new go.Binding('text', '', (d) => {
+            const text = [
+              `ID: ${d.id}`,
+              `Label: ${d.label}`,
+            ];
+
+            for (const name in d.properties) {
+              if (Array.isArray(d.properties[name])) {
+                const propStr = [];
+                d.properties[name].forEach((value) => {
+                  propStr.push(value.value);
+                });
+                text.push(`${name}: ${propStr.join(',')}`);
+              } else {
+                text.push(`${name}: ${d.properties[name].value}`);
+              }
+            }
+            return text.join('\n');
+          })),
+
       );
       const myDiagram =
-        $(go.Diagram, container,
+        $(go.Diagram, options.container,
           {
             initialContentAlignment: go.Spot.Center,
             layout,
@@ -91,38 +121,49 @@ export default class GojsRelationGraph {
               new go.Binding('text', 'text').makeTwoWay())
           )
         );
+      myDiagram.addDiagramListener('ObjectDoubleClicked', () => {
+        if (myDiagram.selection.count === 1) {
+          const currentObject = myDiagram.selection.first();
+          if (currentObject instanceof go.Node) {
+            if (this.options.dblClick) { this.options.dblClick(currentObject); }
+          }
+        }
+      });
+      myDiagram.model.linkKeyProperty = 'key';
       this.diagram = myDiagram;
     };
     mergeData= (data) => {
       const { diagram, label2Color, pallet } = this;
-      const data2Add = [[], []];
+      diagram.startTransaction('mergeData');
       data[0].forEach((node) => {
         if (!label2Color[node.label]) {
           label2Color[node.label] = pallet[this.labelCount];
           this.labelCount++;
         }
         if (!diagram.model.findNodeDataForKey(node.id)) {
-          data2Add[0].push({
-            ...node,
-            text: node.properties.name ? node.properties.name[0].value : '',
-            key: node.id,
-            fill: label2Color[node.label],
-          });
+          diagram.model.addNodeData(
+            {
+              ...node,
+              text: node.properties.name ? node.properties.name[0].value : '',
+              key: node.id,
+              fill: label2Color[node.label],
+            });
         }
       });
       data[1].forEach((link) => {
         if (!diagram.model.findLinkDataForKey(link.id)) {
-          data2Add[1].push({
-            ...link,
-            text: link.label,
-            key: link.id,
-            from: link.outV,
-            to: link.inV,
-          });
+          diagram.model.addLinkData(
+            {
+              ...link,
+              text: link.label,
+              key: link.id,
+              from: link.outV,
+              to: link.inV,
+            });
         }
       });
-      console.log(data2Add);
-      diagram.model = new go.GraphLinksModel(...data2Add);
+      diagram.commitTransaction('mergeData');
+      diagram.zoomToFit();
     };
     clear=() => {
       this.diagram.clear();

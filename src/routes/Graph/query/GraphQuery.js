@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'dva';
-import { Layout, Row, Col, Icon, Button, Tabs, Menu } from 'antd';
+import { Layout, Row, Col, Icon, Button, Tabs, Alert } from 'antd';
 import CodeMirror from 'react-codemirror';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/solarized.css';
@@ -21,6 +21,12 @@ class GraphQuery extends React.PureComponent {
       payload: {
         container: 'container',
         id: this.props.match.params.id,
+        dblClick: (currentObject) => {
+          this.props.dispatch({
+            type: 'graph_query/exploreGraph',
+            payload: currentObject,
+          });
+        },
       },
     });
   }
@@ -34,30 +40,39 @@ class GraphQuery extends React.PureComponent {
                 background: '#fff',
                 height: `${window.screen.availHeight - 250}px`,
                 width: '100%',
-                border: '1px solid #d9d9d9',
                 borderRadius: '3px',
-
+                border: '1px solid #e6e7ea',
               }}
             >
-              <div style={{ background: '#f9f8f8', width: '100%', height: '32px', borderBottom: '1px solid #d9d9d9' }}>
-                <div style={{ float: 'right' }}>
-                  <Button.Group>
-                    <Button >
-                      <Icon type="save" />
-                      保存
-                    </Button>
-                    <Button onClick={() => {
+              <div style={{
+                  width: '100%',
+                  padding: '7px',
+                  backgroundColor: '#f7f7f8',
+                  borderBottom: '1px solid #e6e7ea',
+                }}
+              >
+                <strong>&nbsp;&nbsp;Gremlin编辑器</strong>
+                <div style={{
+                    float: 'right',
+                    marginBottom: '-6px',
+                    marginRight: '-6px',
+
+                  }}
+                >
+                  <Button
+                    onClick={() => {
                        this.props.dispatch({
                         type: 'graph_query/queryGraph',
                       });
                     }}
-                    >
-                      <Icon type="caret-right" />
+                    type="primary"
+                  >
+                    <Icon type="caret-right" />
                       运行
-                    </Button>
-                  </Button.Group>
+                  </Button>
                 </div>
               </div>
+
               <div
                 style={{
                 height: `${window.screen.availHeight - 284}px`,
@@ -105,13 +120,16 @@ class GraphQuery extends React.PureComponent {
                   </div>
                 </Tabs.TabPane>
                 <Tabs.TabPane tab="关系图" disabled={!this.props.showGraph} key="2">
-                  <div
-                    id="container"
-                    style={{
-                      height: `${window.screen.availHeight - 324}px`,
+                  <div style={{ marginTop: '-13px' }}>
+                    <Alert message="关系图需要以[nodelist,edgelist]的格式返回" type="warning" />
+                    <div
+                      id="container"
+                      style={{
+                      height: `${window.screen.availHeight - 340}px`,
                       width: '100%',
                     }}
-                  />
+                    />
+                  </div>
                 </Tabs.TabPane>
               </Tabs>
             </div>

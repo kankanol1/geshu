@@ -246,6 +246,9 @@ export const getRouterData = (app) => {
     '/graph/detail/query/:id': {
       component: dynamicWrapper(app, ['graph/graph_query'], () => import('../routes/Graph/query/GraphQuery')),
     },
+    '/graph/detail/explore/:id': {
+      component: dynamicWrapper(app, ['graph/graph_explore'], () => import('../routes/Graph/explore/GraphExplore')),
+    },
     // '/user/:id': {
     //   component: dynamicWrapper(app, [], () => import('../routes/User/SomeComponent')),
     // },
