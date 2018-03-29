@@ -241,7 +241,6 @@ class MappingInspector extends Component {
                   setEdgeMappingConfig('end', 'column', value);
                   this.setState({ endColumn: value });
                 }}
-                
                 filterOption={(input, option) =>
                   option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
               >

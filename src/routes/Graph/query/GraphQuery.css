@@ -1,0 +1,6 @@
+:global( .CodeMirror ) {
+    height: 100%; 
+}
+.codeEditor{
+    height: 100%;
+}

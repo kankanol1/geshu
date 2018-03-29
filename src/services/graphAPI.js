@@ -32,9 +32,30 @@ export async function getDataSourceColumns(params) {
   });
 }
 
+export async function getGremlinServerAddress() {
+  return request('/api/graph/gremlinserver/address', {
+    method: 'GET',
+  });
+}
+
+export async function queryGremlinServer(params) {
+  return request(`http://${params.host}:${params.port}`, {
+    method: 'POST',
+    credentials: null,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+    },
+    body: {
+      gremlin: params.code,
+    },
+  });
+}
+
 export default {
   recentGraph,
   saveGraph,
   getGraph,
   getDataSources,
+  getGremlinServerAddress,
+  queryGremlinServer,
 };

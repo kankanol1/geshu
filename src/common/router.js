@@ -243,6 +243,9 @@ export const getRouterData = (app) => {
     '/graph/detail/mapper/:id': {
       component: dynamicWrapper(app, ['graph/graph_mapping_editor'], () => import('../routes/Graph/mapping/MappingDesigner')),
     },
+    '/graph/detail/query/:id': {
+      component: dynamicWrapper(app, ['graph/graph_query'], () => import('../routes/Graph/query/GraphQuery')),
+    },
     // '/user/:id': {
     //   component: dynamicWrapper(app, [], () => import('../routes/User/SomeComponent')),
     // },
