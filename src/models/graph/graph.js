@@ -1,7 +1,6 @@
 import { routerRedux } from 'dva/router';
 import { message } from 'antd';
-import { recentGraph, queryGraphList, removeProject, updateProject, createProject } from '../../services/graphAPI';
-
+import { recentGraph, queryGraphList, removeProject, updateProject, createProject, queryProjectLabels } from '../../services/graphAPI';
 
 export default {
   namespace: 'graph',
@@ -14,6 +13,7 @@ export default {
     data: {
       list: [],
       pagination: {},
+      labels: [],
     },
   },
 
@@ -45,9 +45,18 @@ export default {
         },
       };
     },
+    saveLabelsList(state, { payload }) {
+      return {
+        ...state,
+        data: {
+          ...state.data,
+          labels: payload.list,
+        },
+      };
+    },
   },
   effects: {
-    * fetchRecent({ payload }, { call, put }) {
+    *fetchRecent({ payload }, { call, put }) {
       const response = yield call(recentGraph);
       yield put({
         type: 'saveRecent',
@@ -119,6 +128,14 @@ export default {
       // show message.
         message.error(response.message);
       }
+    },
+
+    *fetchLabelsList({ payload }, { call, put }) {
+      const response = yield call(queryProjectLabels, payload);
+      yield put({
+        type: 'saveLabelsList',
+        payload: response,
+      });
     },
   },
   subscriptions: {},

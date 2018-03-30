@@ -98,8 +98,7 @@ export async function createProject(params) {
 }
 
 export async function updateQuery(params) {
-  return request('/api/graph/query/update', {
-    method: 'POST',
+  return request('/api/graph/query/update', { method: 'POST',
     body: {
       ...params,
     },
@@ -114,6 +113,10 @@ export async function removeQuery(params) {
       method: 'delete',
     },
   });
+}
+
+export async function queryProjectLabels() {
+  return request('/api/project/labels');
 }
 
 export default {
@@ -132,4 +135,5 @@ export default {
   updateQuery,
   removeQuery,
   execute,
+  queryProjectLabels,
 };

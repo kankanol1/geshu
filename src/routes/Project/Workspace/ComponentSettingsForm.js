@@ -48,6 +48,7 @@ export default class ComponentSettingsForm extends React.PureComponent {
       },
     });
   }
+
   handleFormChange(value) {
     this.setState({ dirty: true, displayFormData: value.formData });
   }
