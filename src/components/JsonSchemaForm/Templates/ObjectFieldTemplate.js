@@ -31,7 +31,7 @@ export default class ObjectFieldTemplate extends React.PureComponent {
           <Col span={isCheckbox ? 16 : 8} >
             <TitleField title={displayTitle} />
           </Col>
-          <Col span={isCheckbox ? 8 : 16} className={styles.hideInnerSpan} >
+          <Col span={isCheckbox ? 8 : 16} className={styles.hideInnerSpan}>
             {properties.map(prop => (
               <div
                 key={prop.content.key}
