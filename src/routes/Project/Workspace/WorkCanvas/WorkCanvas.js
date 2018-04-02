@@ -137,7 +137,7 @@ export default class WorkCanvas extends React.PureComponent {
 
     const { components, mode } = this.props.work_canvas;
 
-    if (Object.keys(componentDict).length === 0) return null;
+    console.log('components', components);
 
     const isLoading = this.props.loading.effects['work_canvas/init'];
 

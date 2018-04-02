@@ -31,6 +31,7 @@ export default class WorkArea extends React.PureComponent {
 
 
   handleItemDragged(dragTarget, dragClientTarget, component) {
+    console.log('current ref', ReactDOM.findDOMNode(this.canvasRef));
     const { x, y, width, height } = ReactDOM.findDOMNode(this.canvasRef).getBoundingClientRect();
     if (dragClientTarget.x > x && dragClientTarget.y > y &&
       dragClientTarget.x < width + x && dragClientTarget.y < height + y) {

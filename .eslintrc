@@ -11,6 +11,8 @@
     "jasmine": true
   },
   "rules": {
+    "import/no-named-as-default": [0],
+    "import/no-named-as-default-member": [0],
     "generator-star-spacing": [0],
     "consistent-return": [0],
     "react/forbid-prop-types": [0],

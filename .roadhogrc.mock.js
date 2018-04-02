@@ -36,11 +36,18 @@ if (serverEnabled) {
 const proxy = serverEnabled ? 
   {
     "GET /api**": (req, res) => {
-      req.pipe(request(server+req.url)).pipe(res);
+      req.pipe(request.get({
+        credentials: 'include',
+        url: server+req.url})).pipe(res);
     },
     "POST /api**": (req, res) => {
-      request.post({
-       url: server+req.url, json: req.body}).pipe(res);
+      try{
+        req.pipe(request.post(server+req.url, {
+          credentials: 'include',
+          json: req.body}), {end: false}).pipe(res);
+      } catch (e){
+        console.log(e);
+      }
     },
   }
   : 
