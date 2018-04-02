@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'dva';
-import { Layout, Row, Col, Tabs, Menu, Icon, Card } from 'antd';
+import { Layout, Row, Col, Menu, Icon, Card } from 'antd';
 import ElementInspector from './ElementInspector';
 import IndexInspector from './IndexInspector';
 
@@ -33,7 +33,6 @@ class GraphDesigner extends React.PureComponent {
           </Menu.Item>
           <Menu.Item>
             <a onClick={() => {
-              console.log(this);
               this.props.dispatch({
                 type: 'graph_schema_editor/clearSchema',
               });

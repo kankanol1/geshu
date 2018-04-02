@@ -64,6 +64,22 @@ export function getDataSources(req, res) {
     return result;
   }
 }
+export function getGremlinServerAddress(req, res) {
+  const result = {
+    success: true,
+    data: {
+      // host: '20.28.30.28',
+      host: 'localhost',
+      port: '8182',
+    },
+  };
+
+  if (res && res.json) {
+    res.json(result);
+  } else {
+    return result;
+  }
+}
 export function getDataSourceColumns(req, res, u) {
   let url = u;
   if (!url || Object.prototype.toString.call(url) !== '[object String]') {
