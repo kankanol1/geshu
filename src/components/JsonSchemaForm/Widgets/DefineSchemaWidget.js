@@ -66,9 +66,9 @@ export default class DefineSchemaWidget extends React.PureComponent {
         <Col span={8}>
           {/* <Input value={item.type} onChange={v => this.onChange(item, index, 'type', v)} />  */}
           <Select style={{ width: 120 }} onChange={v => this.onChange(item, index, 'type', v)} defaultValue={item.type} value={item.type} >
-            <Option value="String">String</Option>
-            <Option value="Int">Int</Option>
-            <Option value="Float">Float</Option>
+            <Option value={'"string"'}>String</Option>
+            <Option value={'"int"'}>Int</Option>
+            <Option value={'"double"'}>Double</Option>
           </Select>
         </Col>
         <Col span={2}>
