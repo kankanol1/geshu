@@ -25,17 +25,21 @@ export default class ChangePassword extends React.PureComponent {
 
     form.validateFields((err, fieldsValue) => {
       if (!err) {
-        return new Promise((succeed, failed) => {
+        return new Promise((resolve, reject) => {
           dispatch({
             type: 'users/updatePassword',
             payload: {
               ...fieldsValue,
             },
-            succeed,
-            failed,
-          }).then((s) => { console.log('yeap'); form.resetFields(); })
-            .catch((f) => { console.log('nope'); });
-        });
+            resolve,
+            reject,
+          });
+        })
+          .then(
+            () => { console.log('yeap'); form.resetFields(); }
+            ,
+            () => console.log('nope')
+          );
       }
     });
   }

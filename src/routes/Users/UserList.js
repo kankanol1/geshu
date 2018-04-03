@@ -129,7 +129,7 @@ export default class UserList extends PureComponent {
   handleUpdate = (user) => {
     const { history, dispatch } = this.props;
     dispatch({
-      type: 'users/setSelectedUser',
+      type: 'users/updateState',
       payload: {
         selectedUser: user,
       },

@@ -157,15 +157,15 @@ export default {
       yield put({ type: 'updateState', payload: { currentUser: response === undefined ? {} : response } });
     },
 
-    *updatePassword({ payload, succeed, failed }, { call }) {
-      const response = yield call(updatePassword, ...payload);
+    *updatePassword({ payload, resolve, reject }, { call }) {
+      const response = yield call(updatePassword, payload);
       if (response.success) {
         message.success(response.message);
-        succeed();
+        resolve();
       } else {
       // show message.
         message.error(response.message);
-        failed();
+        reject();
       }
     },
   },

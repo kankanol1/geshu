@@ -62,7 +62,9 @@ export default class WorkspaceMenu extends React.PureComponent {
     this.setState({ runPipelineModal: {
       ...this.state.runPipelineModal, visible: true, loading: true,
     } });
-    const result = runPipeline({ id: match.params.id });
+    const result = runPipeline({
+      id: match.params.id,
+    });
     result.then(a =>
       this.setState({ runPipelineModal: {
         ...this.state.runPipelineModal, loading: false, result: a,
