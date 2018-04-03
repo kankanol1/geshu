@@ -16,7 +16,7 @@ import { login, userList, createUser, deleteUser, queryUserName, updateUser } fr
 import { getModels, addModel, updateModel, deleteModels } from './mock/model';
 import { getCandidateModels, updateCandidateModel, deleteCandidateModels, publishCandidateModels } from './mock/candidatemodel';
 import { getJobs, stopJobs, resumeJobs, pauseJobs, deleteJobs, restartJobs } from './mock/job';
-import { open, save, saveSettings } from './mock/workspace/workspace';
+import { open, save, saveSettings, submit } from './mock/workspace/workspace';
 import { getUserInfo, updatePassword } from './mock/selfmanage';
 import {recentGraph,saveGraph,getGraph,getDataSources,getDataSourceColumns,getGremlinServerAddress} from './mock/graph';
 
@@ -97,7 +97,7 @@ const proxy = serverEnabled ?
   'GET /api/workspace/open/:projectId': open,
   'POST /api/workspace/save/:projectId': save,
   'POST /api/workspace/saveconf/:projectId/:componentId/': saveSettings,
-  // 'POST /api/workspace/run/:projectId':
+  'POST /api/workspace/run/': submit,
   // 'POST /api/workspace/sample/:projectId':
 
   // graph

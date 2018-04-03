@@ -18,7 +18,7 @@ export default class WorkspaceEditor extends Component {
     return (
       <Layout style={{ padding: '0', height: '100%' }} theme="light" >
         <Header style={{ padding: '0px', height: '48px', lineHeight: '46px', background: '#eee' }}>
-          <WorkspaceMenu env={['editor']} />
+          <WorkspaceMenu env={['editor']} match={this.props.match} />
           <div style={{ float: 'left', marginLeft: '15%', fontWeight: '900' }}>
             {loading ? <Icon type="loading" /> : null}
             {name === undefined ? null : `项目[${name}]`}

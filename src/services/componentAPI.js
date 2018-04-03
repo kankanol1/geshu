@@ -30,10 +30,20 @@ export async function saveComponentSettings({ id, component, payload }) {
   });
 }
 
+export async function runPipeline({ id }) {
+  return request('/api/workspace/run', {
+    method: 'POST',
+    body: {
+      id,
+    },
+  });
+}
+
 export default {
   fetchComponentSetting,
   fetchComponentList,
   openProject,
   saveProject,
   saveComponentSettings,
+  runPipeline,
 };

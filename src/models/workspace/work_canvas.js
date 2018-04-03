@@ -744,6 +744,12 @@ export default {
       );
       if (response.success) {
         message.info('保存成功');
+        yield put({
+          type: 'saveState',
+          payload: {
+            dirty: false,
+          },
+        });
       } else {
         message.error('保存出错！请检查重试');
       }
@@ -753,13 +759,8 @@ export default {
           message: `项目保存${response.success ? '成功' : '失败'}`,
         },
       });
-      yield put({
-        type: 'saveState',
-        payload: {
-          dirty: false,
-        },
-      });
     },
+
   },
 
   subscriptions: {

@@ -1,8 +1,9 @@
 import React from 'react';
 import { connect } from 'dva';
-import { Menu, Spin } from 'antd';
+import { Menu, Spin, Modal, Progress } from 'antd';
 import { routerRedux } from 'dva/router';
 import ScopeMenuItem from './ScopeMenuItem';
+import { runPipeline } from '../../../../services/componentAPI';
 
 const { SubMenu } = Menu;
 
@@ -10,6 +11,14 @@ const { SubMenu } = Menu;
   ({ project, loading, global }) => ({ project, loading, global })
 )
 export default class WorkspaceMenu extends React.PureComponent {
+  state = {
+    runPipelineModal: {
+      visible: false,
+      loading: true,
+      result: {},
+    },
+
+  }
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
@@ -39,13 +48,35 @@ export default class WorkspaceMenu extends React.PureComponent {
     }
   }
 
-
   toggleFullScreen() {
     const { dispatch, global } = this.props;
     dispatch({
       type: 'global/changeFullScreen',
       payload: !global.fullScreen,
     });
+  }
+
+
+  runPipeline() {
+    const { dispatch, match } = this.props;
+    this.setState({ runPipelineModal: {
+      ...this.state.runPipelineModal, visible: true, loading: true,
+    } });
+    const result = runPipeline({ id: match.params.id });
+    result.then(a =>
+      this.setState({ runPipelineModal: {
+        ...this.state.runPipelineModal, loading: false, result: a,
+      } }));
+  }
+
+  handleSubmitPipelineModalOk() {
+    this.setState({ runPipelineModal: { ...this.state.runPipelineModal, visible: false } });
+    const { dispatch } = this.props;
+    dispatch(routerRedux.push('/jobs/list'));
+  }
+
+  handleSubmitPipelineModalCancel() {
+    this.setState({ runPipelineModal: { ...this.state.runPipelineModal, visible: false } });
   }
 
   renderRecentProjects() {
@@ -63,38 +94,74 @@ export default class WorkspaceMenu extends React.PureComponent {
     );
   }
 
+  renderModals() {
+    const { loading, visible, result } = this.state.runPipelineModal;
+    return (
+      <Modal
+        title={loading ? '提交中' : '提交完毕'}
+        visible={visible}
+        okText="跳转至作业管理"
+        cancelText="知道了"
+        footer={loading ? null : undefined}
+        onOk={() => this.handleSubmitPipelineModalOk()}
+        onCancel={() => this.handleSubmitPipelineModalCancel()}
+        style={{ textAlign: 'center' }}
+      >
+        {
+          loading ?
+            <Spin size="large" />
+          :
+            (result.success ? (
+              <div>
+                <Progress type="circle" percent={100} width={40} style={{ marginRight: '20px' }} />
+                <span>作业ID: {result.jobId}</span>
+              </div>
+            ) : (
+              <div>
+                <Progress type="circle" percent={100} width={40} status="exception" style={{ marginRight: '20px' }} />
+                <span>错误信息: {result.message}</span>
+              </div>
+            ))
+        }
+      </Modal>
+    );
+  }
+
   render() {
     const { env, global } = this.props;
     const { fullScreen } = global;
     return (
-      <Menu
-        onClick={({ item, key, keypath }) => this.handleClick(item, key, keypath)}
-        selectedKeys={fullScreen ? ['fullScreen'] : []}
-        mode="horizontal"
-        style={{ background: 'transparent', float: 'left' }}
-      >
-        <SubMenu title={<span>项目</span>}>
-          <Menu.Item key="open">打开</Menu.Item>
-          <Menu.Item key="close" type="redirect" address="/project/workspace/index">关闭</Menu.Item>
-          <SubMenu title={<span>最近打开的项目</span>}>
-            {this.renderRecentProjects()}
+      <React.Fragment>
+        <Menu
+          onClick={({ item, key, keypath }) => this.handleClick(item, key, keypath)}
+          selectedKeys={fullScreen ? ['fullScreen'] : []}
+          mode="horizontal"
+          style={{ background: 'transparent', float: 'left' }}
+        >
+          <SubMenu title={<span>项目</span>}>
+            <Menu.Item key="open">打开</Menu.Item>
+            <Menu.Item key="close" type="redirect" address="/project/workspace/index">关闭</Menu.Item>
+            <SubMenu title={<span>最近打开的项目</span>}>
+              {this.renderRecentProjects()}
+            </SubMenu>
           </SubMenu>
-        </SubMenu>
-        <SubMenu title={<span>窗口</span>}>
-          <Menu.Item key="fullScreen" type="command" op={() => this.toggleFullScreen()} >{fullScreen ? '√ ' : null}全屏</Menu.Item>
-        </SubMenu>
-        <SubMenu title={<span>调试</span>}>
-          <ScopeMenuItem scope="editor" env={env} key="hi">测试仅在editor可见</ScopeMenuItem>
-          <Menu.Item key="sampledata" >取样执行</Menu.Item>
-          <Menu.Item key="samplepipeline">执行至指定组件</Menu.Item>
-        </SubMenu>
-        <SubMenu title={<span>部署</span>}>
-          <Menu.Item key="submit">提交运行</Menu.Item>
-        </SubMenu>
-        <Menu.Item key="help">
-          <a href="https://www.google.com" target="_blank" rel="noopener noreferrer">帮助</a>
-        </Menu.Item>
-      </Menu>
+          <SubMenu title={<span>窗口</span>}>
+            <Menu.Item key="fullScreen" type="command" op={() => this.toggleFullScreen()} >{fullScreen ? '√ ' : null}全屏</Menu.Item>
+          </SubMenu>
+          <SubMenu title={<span>调试</span>}>
+            <ScopeMenuItem scope="editor" env={env} key="hi">测试仅在editor可见</ScopeMenuItem>
+            <Menu.Item key="sampledata" >取样执行</Menu.Item>
+            <Menu.Item key="samplepipeline">执行至指定组件</Menu.Item>
+          </SubMenu>
+          <SubMenu title={<span>部署</span>}>
+            <Menu.Item key="submit" type="command" op={() => this.runPipeline()}>提交运行</Menu.Item>
+          </SubMenu>
+          <Menu.Item key="help">
+            <a href="https://www.google.com" target="_blank" rel="noopener noreferrer">帮助</a>
+          </Menu.Item>
+        </Menu>
+        { this.renderModals() }
+      </React.Fragment>
     );
   }
 }
