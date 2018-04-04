@@ -84,9 +84,9 @@ const proxy = serverEnabled ?
   // job manage.
   'GET /api/jobs/list': getJobs,
   'POST /api/jobs/cancel': cancelJobs,
+  'POST /api/jobs/delete': deleteJobs,
   // 'POST /api/jobs/resume': resumeJobs,
   // 'POST /api/jobs/pause': pauseJobs,
-  // 'POST /api/jobs/remove': deleteJobs,
   // 'POST /api/jobs/restart': restartJobs,
 
   // workspace related.

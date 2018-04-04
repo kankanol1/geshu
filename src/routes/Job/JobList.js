@@ -106,7 +106,7 @@ export default class JobList extends PureComponent {
       title: '作业完成时间',
       dataIndex: 'finishedAt',
       sorter: true,
-      render: (val, record) => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
+      render: (val, record) => <span>{val == null || undefined ? '-' : moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
     },
     {
       title: '操作',
@@ -116,14 +116,14 @@ export default class JobList extends PureComponent {
           case 'started':
             // cancelable.
             return (
-              <Popconfirm title="确认删除吗?" onConfirm={() => this.handleRecordCancel(record)}>
+              <Popconfirm title="确认终止吗?" onConfirm={() => this.handleRecordCancel(record)}>
                 <a>终止</a>
               </Popconfirm>
             );
 
           default:
             return (
-              <Popconfirm title="确认终止吗?" onConfirm={() => this.handleRecordDelete(record)}>
+              <Popconfirm title="确认删除吗?" onConfirm={() => this.handleRecordDelete(record)}>
                 <a>删除</a>
               </Popconfirm>
             );

@@ -9,7 +9,7 @@ export async function queryJobs(params) {
 }
 
 export async function removeJobs(params) {
-  return request('/api/jobs/remove', {
+  return request('/api/jobs/delete', {
     method: 'POST',
     body: {
       ...params,
