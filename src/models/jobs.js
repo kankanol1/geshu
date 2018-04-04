@@ -1,5 +1,5 @@
 import { message } from 'antd';
-import { queryJobs, removeJobs, stopJobs, pauseJobs, resumeJobs, restartJobs } from '../services/jobsAPI';
+import { queryJobs, removeJobs, cancelJobs } from '../services/jobsAPI';
 
 
 export default {
@@ -52,8 +52,8 @@ export default {
       }
     },
 
-    *stopJobs({ payload }, { call, put }) {
-      const response = yield call(stopJobs, { ids: payload.ids });
+    *cancelJobs({ payload }, { call, put }) {
+      const response = yield call(cancelJobs, { ids: payload.ids });
       if (response.success) {
         message.success(response.message);
         yield put({
@@ -66,47 +66,6 @@ export default {
       }
     },
 
-    *pauseJobs({ payload }, { call, put }) {
-      const response = yield call(pauseJobs, { ids: payload.ids });
-      if (response.success) {
-        message.success(response.message);
-        yield put({
-          type: 'fetchJobList',
-          payload: payload.refreshParams,
-        });
-      } else {
-        // show message.
-        message.error(response.message);
-      }
-    },
-
-    *resumeJobs({ payload }, { call, put }) {
-      const response = yield call(resumeJobs, { ids: payload.ids });
-      if (response.success) {
-        message.success(response.message);
-        yield put({
-          type: 'fetchJobList',
-          payload: payload.refreshParams,
-        });
-      } else {
-        // show message.
-        message.error(response.message);
-      }
-    },
-
-    *restartJobs({ payload }, { call, put }) {
-      const response = yield call(restartJobs, { ids: payload.ids });
-      if (response.success) {
-        message.success(response.message);
-        yield put({
-          type: 'fetchJobList',
-          payload: payload.refreshParams,
-        });
-      } else {
-        // show message.
-        message.error(response.message);
-      }
-    },
 
   },
 

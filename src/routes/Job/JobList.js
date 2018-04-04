@@ -2,7 +2,7 @@ import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
 import { Link } from 'dva/router';
 import moment from 'moment';
-import { Popconfirm, Progress, Row, Col, Card, Form, Input, Select, Icon, Button, Menu, InputNumber, DatePicker, Modal, message, Badge, Divider } from 'antd';
+import { Popconfirm, Progress, Row, Col, Card, Form, Input, Select, Icon, Button, Menu, InputNumber, DatePicker, Tag, message, Badge, Divider } from 'antd';
 import StandardTable from '../../components/StandardTable';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './JobList.less';
@@ -13,12 +13,27 @@ const { RangePicker } = DatePicker;
 const { TextArea } = Input;
 
 const statusMap = {
-  doing: '执行中',
-  paused: '已暂停',
-  done: '已完成',
-  waiting: '等待中',
+  queued: '等待中',
   canceled: '已取消',
+  started: '运行中',
+  finished: '已完成',
   failed: '已失败',
+};
+
+const statusColorMap = {
+  queued: 'blue',
+  canceled: '#8c8c8c',
+  started: '#2db7f5',
+  finished: '#87d068',
+  failed: '#f50',
+};
+
+const statusIconMap = {
+  queued: 'clock-circle-o',
+  canceled: 'close-circle-o',
+  started: 'right-circle-o',
+  finished: 'check-circle-o',
+  failed: 'exclamation-circle-o',
 };
 
 const getValue = obj => Object.keys(obj).map(key => obj[key]).join(',');
@@ -48,6 +63,7 @@ export default class JobList extends PureComponent {
     {
       title: '编号',
       dataIndex: 'id',
+      render: val => val.split('-')[0],
     },
     {
       title: '项目名称',
@@ -56,9 +72,9 @@ export default class JobList extends PureComponent {
     {
       title: '状态',
       dataIndex: 'status',
-      render: val => statusMap[val],
+      render: val => <Tag color={statusColorMap[val]}><Icon type={statusIconMap[val]} />{` ${statusMap[val]}`}</Tag>,
     },
-    {
+    /* {
       title: '作业进度',
       dataIndex: 'progress',
       render: (val, record) => (
@@ -74,7 +90,7 @@ export default class JobList extends PureComponent {
             />
           )
       ),
-    },
+    }, */
     {
       title: '总运行时长',
       dataIndex: 'runningTime',
@@ -95,34 +111,23 @@ export default class JobList extends PureComponent {
     {
       title: '操作',
       render: (text, record) => {
-        // switch (record.status) {
-        //   case 'doing':
-        //   // stop, pause.
-        //   case 'paused':
-        //   // resume, restart.
-        //   case 'done':
-        //   // delete, restart
-        //   case 'waiting':
-        //   // don'tknow
-        //   case 'canceled':
-        //   // restart.
-        //   // delete
-        //   case 'failed':
-        //   // restart, delete
-        // }
-        return (
-          <Fragment>
-            <a onClick={() => this.handleEdit(record)} >编辑</a>
-            <Divider type="vertical" />
-            <Link to={`workspace/editor/${record.id}`}><a>打开</a></Link>
-            <Divider type="vertical" />
-            <span>
-              <Popconfirm title="确认删除吗?" onConfirm={() => this.handleRecordDelete(record)}>
+        switch (record.status) {
+          case 'queued':
+          case 'started':
+            // cancelable.
+            return (
+              <Popconfirm title="确认删除吗?" onConfirm={() => this.handleRecordCancel(record)}>
+                <a>终止</a>
+              </Popconfirm>
+            );
+
+          default:
+            return (
+              <Popconfirm title="确认终止吗?" onConfirm={() => this.handleRecordDelete(record)}>
                 <a>删除</a>
               </Popconfirm>
-            </span>
-          </Fragment>
-        );
+            );
+        }
       },
     },
   ];
@@ -153,33 +158,22 @@ export default class JobList extends PureComponent {
     });
   }
 
+  handleRecordCancel = (record) => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'jobs/cancelJobs',
+      payload: {
+        ids: [record.id],
+        refreshParams: this.refreshParams,
+      },
+    });
+  }
+
   handleSelectRows = (rows) => {
     this.setState({
       ...this.state,
       selectedRows: rows,
     });
-  }
-
-  handleUpdate = (fieldsValue, currentRecord) => {
-    const { jobs: { data }, dispatch } = this.props;
-    const labels = fieldsValue.labels
-      && fieldsValue.labels.map((l) => {
-        const intL = parseInt(l, 10);
-        if (!isNaN(intL)) {
-          return data.labels[intL];
-        }
-        return l;
-      });
-
-    dispatch({
-      type: 'jobs/updateProject',
-      payload: {
-        ...fieldsValue,
-        labels: labels && labels.join(),
-        id: currentRecord.id,
-      },
-    });
-    this.handleModalVisible(false);
   }
 
   handleSearch = (e) => {

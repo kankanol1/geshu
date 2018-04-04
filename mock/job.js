@@ -6,19 +6,18 @@ import { getUrlParams } from './utils';
  */
 
 const allStatus = [
-  'done',
-  'paused',
-  'doing',
-  'waiting',
+  'queued',
+  'started',
   'canceled',
+  'finished',
   'failed',
 ];
 
 let jobDataSource = [{
-  id: '233',
+  id: '957c7239-8320-4868-976d-83a178050157',
   projectName: 'Project-1',
   projectId: '9',
-  status: 'done',
+  status: 'finished',
   progress: 0.8,
   createdAt: moment('2018-01-08', 'YYYY-MM-DD'),
   finishedAt: moment('2018-01-08', 'YYYY-MM-DD'),
@@ -37,7 +36,7 @@ for (let i = 0; i < 66; i += 1) {
     id: `${i}`,
     projectName: `Project-${i}`,
     projectId: Math.floor(i / 12),
-    status: allStatus[i % 6],
+    status: allStatus[i % allStatus.length],
     progress: 0.1 * (i % 10),
     createdAt: moment('2018-01-08', 'YYYY-MM-DD'),
     finishedAt: moment('2018-01-08', 'YYYY-MM-DD'),
@@ -215,34 +214,6 @@ export function resumeJobs(req, res, u, b) {
   }
 }
 
-export function stopJobs(req, res, u, b) {
-  let url = u;
-  if (!url || Object.prototype.toString.call(url) !== '[object String]') {
-    url = req.url; // eslint-disable-line
-  }
-
-  const body = (b && b.body) || req.body;
-  const { ids } = body;
-
-  jobDataSource.forEach(
-    (job) => {
-      if (ids.includes(job.id)) {
-        job.status = 'canceled'; //eslint-disable-line
-      }
-    }
-  );
-  const result = {
-    success: true,
-    message: '作业已终止',
-  };
-
-  if (res && res.json) {
-    res.json(result);
-  } else {
-    return result;
-  }
-}
-
 export function restartJobs(req, res, u, b) {
   let url = u;
   if (!url || Object.prototype.toString.call(url) !== '[object String]') {
@@ -271,11 +242,39 @@ export function restartJobs(req, res, u, b) {
   }
 }
 
+export function cancelJobs(req, res, u, b) {
+  let url = u;
+  if (!url || Object.prototype.toString.call(url) !== '[object String]') {
+    url = req.url; // eslint-disable-line
+  }
+
+  const body = (b && b.body) || req.body;
+  const { ids } = body;
+
+  jobDataSource.forEach(
+    (job) => {
+      if (ids.includes(job.id)) {
+        job.status = 'canceled'; //eslint-disable-line
+      }
+    }
+  );
+  const result = {
+    success: true,
+    message: '取消成功',
+  };
+
+  if (res && res.json) {
+    res.json(result);
+  } else {
+    return result;
+  }
+}
+
 export default {
   getJobs,
   deleteJobs,
-  stopJobs,
   resumeJobs,
   pauseJobs,
   restartJobs,
+  cancelJobs,
 };

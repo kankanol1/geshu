@@ -15,7 +15,7 @@ import { getProject, createProject, updateProject, deleteProject, getProjectLabe
 import { login, userList, createUser, deleteUser, queryUserName, updateUser } from './mock/user';
 import { getModels, addModel, updateModel, deleteModels } from './mock/model';
 import { getCandidateModels, updateCandidateModel, deleteCandidateModels, publishCandidateModels } from './mock/candidatemodel';
-import { getJobs, stopJobs, resumeJobs, pauseJobs, deleteJobs, restartJobs } from './mock/job';
+import { getJobs, cancelJobs, deleteJobs } from './mock/job';
 import { open, save, saveSettings, submit } from './mock/workspace/workspace';
 import { getUserInfo, updatePassword } from './mock/selfmanage';
 import {recentGraph,saveGraph,getGraph,getDataSources,getDataSourceColumns,getGremlinServerAddress} from './mock/graph';
@@ -83,11 +83,11 @@ const proxy = serverEnabled ?
 
   // job manage.
   'GET /api/jobs/list': getJobs,
-  'POST /api/jobs/stop': stopJobs,
-  'POST /api/jobs/resume': resumeJobs,
-  'POST /api/jobs/pause': pauseJobs,
-  'POST /api/jobs/remove': deleteJobs,
-  'POST /api/jobs/restart': restartJobs,
+  'POST /api/jobs/cancel': cancelJobs,
+  // 'POST /api/jobs/resume': resumeJobs,
+  // 'POST /api/jobs/pause': pauseJobs,
+  // 'POST /api/jobs/remove': deleteJobs,
+  // 'POST /api/jobs/restart': restartJobs,
 
   // workspace related.
   'GET /api/workspace/component_list': componentList,

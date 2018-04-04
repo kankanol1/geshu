@@ -17,35 +17,8 @@ export async function removeJobs(params) {
   });
 }
 
-export async function stopJobs(params) {
-  return request('/api/jobs/stop', {
-    method: 'POST',
-    body: {
-      ...params,
-    },
-  });
-}
-
-export async function pauseJobs(params) {
-  return request('/api/jobs/pause', {
-    method: 'POST',
-    body: {
-      ...params,
-    },
-  });
-}
-
-export async function resumeJobs(params) {
-  return request('/api/jobs/resume', {
-    method: 'POST',
-    body: {
-      ...params,
-    },
-  });
-}
-
-export async function restartJobs(params) {
-  return request('/api/jobs/restart', {
+export async function cancelJobs(params) {
+  return request('/api/jobs/cancel', {
     method: 'POST',
     body: {
       ...params,
@@ -55,9 +28,5 @@ export async function restartJobs(params) {
 
 export default {
   queryJobs,
-  resumeJobs,
-  pauseJobs,
-  stopJobs,
-  removeJobs,
-  restartJobs,
+  cancelJobs,
 };
