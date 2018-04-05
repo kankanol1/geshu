@@ -63,7 +63,7 @@ export default class JobList extends PureComponent {
     {
       title: '编号',
       dataIndex: 'id',
-      render: val => val.split('-')[0],
+      render: val => val.split('-')[val.split('-').length - 1],
     },
     {
       title: '项目名称',
