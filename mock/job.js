@@ -6,6 +6,7 @@ import { getUrlParams } from './utils';
  */
 
 const allStatus = [
+  'initialized',
   'queued',
   'started',
   'canceled',
