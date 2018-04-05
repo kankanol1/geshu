@@ -39,6 +39,15 @@ export async function runPipeline({ id }) {
   });
 }
 
+export async function validatePipeline({ id }) {
+  return request('/api/workspace/validate', {
+    method: 'POST',
+    body: {
+      id,
+    },
+  });
+}
+
 export default {
   fetchComponentSetting,
   fetchComponentList,

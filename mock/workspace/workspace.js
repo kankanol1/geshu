@@ -101,6 +101,21 @@ export function submit(req, res, u, q) {
   }, 2000);
 }
 
+export function validate(req, res, u, q) {
+  const result = {
+    success: true,
+    message: '验证通过',
+  };
+
+  setTimeout(() => {
+    if (res && res.json) {
+      res.json(result);
+    } else {
+      return result;
+    }
+  }, 2000);
+}
+
 export function save(req, res, u, b) {
   let url = u;
   if (!url || Object.prototype.toString.call(url) !== '[object String]') {

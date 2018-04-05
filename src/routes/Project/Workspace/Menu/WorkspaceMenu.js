@@ -1,9 +1,9 @@
 import React from 'react';
 import { connect } from 'dva';
-import { Menu, Spin, Modal, Progress } from 'antd';
+import { Menu, Spin, Modal, Progress, Button } from 'antd';
 import { routerRedux } from 'dva/router';
 import ScopeMenuItem from './ScopeMenuItem';
-import { runPipeline } from '../../../../services/componentAPI';
+import { runPipeline, validatePipeline } from '../../../../services/componentAPI';
 
 const { SubMenu } = Menu;
 
@@ -13,6 +13,11 @@ const { SubMenu } = Menu;
 export default class WorkspaceMenu extends React.PureComponent {
   state = {
     runPipelineModal: {
+      visible: false,
+      loading: true,
+      result: {},
+    },
+    validatePipelineModal: {
       visible: false,
       loading: true,
       result: {},
@@ -58,7 +63,7 @@ export default class WorkspaceMenu extends React.PureComponent {
 
 
   runPipeline() {
-    const { dispatch, match } = this.props;
+    const { match } = this.props;
     this.setState({ runPipelineModal: {
       ...this.state.runPipelineModal, visible: true, loading: true,
     } });
@@ -71,6 +76,20 @@ export default class WorkspaceMenu extends React.PureComponent {
       } }));
   }
 
+  validatePipeline() {
+    const { match } = this.props;
+    this.setState({ validatePipelineModal: {
+      ...this.state.validatePipelineModal, visible: true, loading: true,
+    } });
+    const result = validatePipeline({
+      id: match.params.id,
+    });
+    result.then(a =>
+      this.setState({ validatePipelineModal: {
+        ...this.state.validatePipelineModal, loading: false, result: a,
+      } }));
+  }
+
   handleSubmitPipelineModalOk() {
     this.setState({ runPipelineModal: { ...this.state.runPipelineModal, visible: false } });
     const { dispatch } = this.props;
@@ -79,6 +98,11 @@ export default class WorkspaceMenu extends React.PureComponent {
 
   handleSubmitPipelineModalCancel() {
     this.setState({ runPipelineModal: { ...this.state.runPipelineModal, visible: false } });
+  }
+
+  handleValidatePipelineModalClose() {
+    this.setState({ validatePipelineModal: {
+      ...this.state.validatePipelineModal, visible: false } });
   }
 
   renderRecentProjects() {
@@ -96,7 +120,7 @@ export default class WorkspaceMenu extends React.PureComponent {
     );
   }
 
-  renderModals() {
+  renderSubmitModal() {
     const { loading, visible, result } = this.state.runPipelineModal;
     return (
       <Modal
@@ -129,6 +153,46 @@ export default class WorkspaceMenu extends React.PureComponent {
     );
   }
 
+  renderValidateModal() {
+    const { loading, visible, result } = this.state.validatePipelineModal;
+    return (
+      <Modal
+        title={loading ? '验证中' : '验证完毕'}
+        visible={visible}
+        cancelText="关闭"
+        footer={loading ? null :
+        <Button type="primary" onClick={() => this.handleValidatePipelineModalClose()} >关闭</Button>}
+        style={{ textAlign: 'center' }}
+      >
+        {
+          loading ?
+            <Spin size="large" />
+          :
+            (result.success ? (
+              <div>
+                <Progress type="circle" percent={100} width={40} style={{ marginRight: '20px' }} />
+                <span>{result.message}</span>
+              </div>
+            ) : (
+              <div>
+                <Progress type="circle" percent={100} width={40} status="exception" style={{ marginRight: '20px' }} />
+                <span>验证失败: {result.message}</span>
+              </div>
+            ))
+        }
+      </Modal>
+    );
+  }
+
+  renderModals() {
+    return (
+      <React.Fragment>
+        {this.renderSubmitModal()}
+        {this.renderValidateModal()}
+      </React.Fragment>
+    );
+  }
+
   render() {
     const { env, global } = this.props;
     const { fullScreen } = global;
@@ -151,7 +215,7 @@ export default class WorkspaceMenu extends React.PureComponent {
             <Menu.Item key="fullScreen" type="command" op={() => this.toggleFullScreen()} >{fullScreen ? '√ ' : null}全屏</Menu.Item>
           </SubMenu>
           <SubMenu title={<span>调试</span>}>
-            <ScopeMenuItem scope="editor" env={env} key="hi">测试仅在editor可见</ScopeMenuItem>
+            <ScopeMenuItem scope="editor" env={env} key="validate" type="command" op={() => this.validatePipeline()} >Validate</ScopeMenuItem>
             <Menu.Item key="sampledata" >取样执行</Menu.Item>
             <Menu.Item key="samplepipeline">执行至指定组件</Menu.Item>
           </SubMenu>
