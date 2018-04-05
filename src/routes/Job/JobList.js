@@ -117,6 +117,7 @@ export default class JobList extends PureComponent {
         switch (record.status) {
           case 'queued':
           case 'started':
+          case 'initialized':
             // cancelable.
             return (
               <Popconfirm title="确认终止吗?" onConfirm={() => this.handleRecordCancel(record)}>
