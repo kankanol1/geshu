@@ -3,62 +3,32 @@
  * */
 
 const allComponents = {
-  /* ==================================== */
-  ConsoleDataSink: {
-    title: 'ConsoleDataSinkConf',
-    type: 'object',
-    properties: {},
-  },
-  /* ==================================== */
-  AddLiteralColumnTransformer: {
-    title: 'AllLiteralColumnTransformerConf',
+  TokenizerStage: {
+    title: 'TokenizerStageConf',
     type: 'object',
     properties: {
-      columnName: {
-        title: 'Fixed_Column',
+      inputCol: {
+        title: 'Fixed_String',
         type: 'object',
         properties: {
           value: {
             type: 'string',
           },
         },
-        description: '列名',
+        description: '输入列',
       },
-      literal: {
-        title: 'Fixed_Any',
+      outputCol: {
+        title: 'Fixed_String',
         type: 'object',
         properties: {
           value: {
-            title: 'Any',
-            type: 'object',
-            properties: {},
+            type: 'string',
           },
         },
-        description: '值',
+        description: '输出列',
       },
     },
   },
-  /* ==================================== */
-  RandomSplitTransformer: {
-    title: 'RandomSplitTransformerConf',
-    type: 'object',
-    properties: {
-      weights: {
-        title: 'Fixed_Double_Array',
-        type: 'object',
-        properties: {
-          value: {
-            type: 'array',
-            items: {
-              type: 'number',
-            },
-          },
-        },
-        description: '给个double的列表',
-      },
-    },
-  },
-  /* ==================================== */
   ColumnFilterTransformer: {
     title: 'ColumnFilterTransformerConf',
     type: 'object',
@@ -88,61 +58,8 @@ const allComponents = {
       },
     },
   },
-  /* ==================================== */
-  ColumnRenameTransformer: {
-    title: 'ColumnRenameTransformerConf',
-    type: 'object',
-    properties: {
-      existingName: {
-        title: 'Fixed_Column',
-        type: 'object',
-        properties: {
-          value: {
-            type: 'string',
-          },
-        },
-        description: '重命名列',
-      },
-      newName: {
-        title: 'Fixed_String',
-        type: 'object',
-        properties: {
-          value: {
-            type: 'string',
-          },
-        },
-        description: '新列名',
-      },
-    },
-  },
-  /* ==================================== */
-  SelectTransformer: {
-    title: 'SelectTransformerConf',
-    type: 'object',
-    properties: {
-      cols: {
-        title: 'Fixed_String_Array',
-        type: 'object',
-        properties: {
-          value: {
-            type: 'array',
-            items: {
-              type: 'string',
-            },
-          },
-        },
-        description: '选择列',
-      },
-    },
-  },
-  /* ==================================== */
   CommonPredictor: {
     title: 'CommonPredictorConf',
-    type: 'object',
-    properties: {},
-  },
-  ConsoleModelSink: {
-    title: 'ConsoleModelSinkConf',
     type: 'object',
     properties: {},
   },
@@ -210,76 +127,97 @@ const allComponents = {
       },
     },
   },
-  TokenizerStage: {
-    title: 'TokenizerStageConf',
+  ConsoleDataSink: {
+    title: 'ConsoleDataSinkConf',
+    type: 'object',
+    properties: {},
+  },
+  AddLiteralColumnTransformer: {
+    title: 'AllLiteralColumnTransformerConf',
     type: 'object',
     properties: {
-      inputCol: {
-        title: 'Fixed_String',
+      columnName: {
+        title: 'Fixed_Column',
         type: 'object',
         properties: {
           value: {
             type: 'string',
           },
         },
-        description: '输入列',
+        description: '列名',
       },
-      outputCol: {
-        title: 'Fixed_String',
+      literal: {
+        title: 'Fixed_Any',
         type: 'object',
         properties: {
           value: {
-            type: 'string',
+            title: 'Any',
+            type: 'object',
+            properties: {},
           },
         },
-        description: '输出列',
+        description: '值',
       },
     },
   },
-  HashingTFStage: {
-    title: 'HashingTFStageConf',
+  RandomSplitTransformer: {
+    title: 'RandomSplitTransformerConf',
     type: 'object',
     properties: {
-      inputCol: {
-        title: 'Fixed_String',
+      weights: {
+        title: 'Fixed_Double_Array',
         type: 'object',
         properties: {
           value: {
-            type: 'string',
-          },
-        },
-        description: '输入列',
-      },
-      numFeatures: {
-        title: 'Tunable_Int',
-        type: 'object',
-        properties: {
-          tunableType: {
-            type: 'string',
-            enum: [
-              'FIXED',
-              'GRID',
-              'RANGE',
-            ],
-            description: '调节类型',
-          },
-          tunableValue: {
-            required: false,
             type: 'array',
             items: {
-              type: 'integer',
+              type: 'number',
             },
-            description: '参数取值',
-          },
-          value: {
-            required: false,
-            type: 'integer',
-            description: '默认值',
           },
         },
-        description: '特征数目调节',
+        description: '给个double的列表',
       },
-      outputCol: {
+    },
+  },
+  SelectTransformer: {
+    title: 'SelectTransformerConf',
+    type: 'object',
+    properties: {
+      cols: {
+        title: 'Fixed_String_Array',
+        type: 'object',
+        properties: {
+          value: {
+            type: 'array',
+            items: {
+              type: 'string',
+            },
+          },
+        },
+        description: '选择列',
+      },
+    },
+  },
+  ConsoleModelSink: {
+    title: 'ConsoleModelSinkConf',
+    type: 'object',
+    properties: {},
+  },
+  ColumnRenameTransformer: {
+    title: 'ColumnRenameTransformerConf',
+    type: 'object',
+    properties: {
+      existingName: {
+        title: 'Fixed_Column',
+        type: 'object',
+        properties: {
+          value: {
+            type: 'string',
+          },
+        },
+        description: '重命名列',
+      },
+      newName: {
         title: 'Fixed_String',
         type: 'object',
         properties: {
@@ -287,32 +225,7 @@ const allComponents = {
             type: 'string',
           },
         },
-        description: '输出列',
-      },
-    },
-  },
-  CrossValidationTuner: {
-    title: 'CrossValidationTunerConf',
-    type: 'object',
-    properties: {
-      evaluator: {
-        type: 'string',
-        enum: [
-          'BinaryClassification',
-          'MulticlassClassification',
-          'Regression',
-        ],
-        description: '评价类型',
-      },
-      numFolds: {
-        title: 'Fixed_Int',
-        type: 'object',
-        properties: {
-          value: {
-            type: 'integer',
-          },
-        },
-        description: 'fold',
+        description: '新列名',
       },
     },
   },
@@ -382,19 +295,83 @@ const allComponents = {
       },
     },
   },
-  'csv-source': {
-    title: 'CSVSource',
+  HashingTFStage: {
+    title: 'HashingTFStageConf',
     type: 'object',
     properties: {
-      diy: {
-        title: 'DIY',
+      inputCol: {
+        title: 'Fixed_String',
         type: 'object',
-        description: '自定義組件',
         properties: {
           value: {
             type: 'string',
           },
         },
+        description: '输入列',
+      },
+      numFeatures: {
+        title: 'Tunable_Int',
+        type: 'object',
+        properties: {
+          tunableType: {
+            type: 'string',
+            enum: [
+              'FIXED',
+              'GRID',
+              'RANGE',
+            ],
+            description: '调节类型',
+          },
+          tunableValue: {
+            required: false,
+            type: 'array',
+            items: {
+              type: 'integer',
+            },
+            description: '参数取值',
+          },
+          value: {
+            required: false,
+            type: 'integer',
+            description: '默认值',
+          },
+        },
+        description: '特征数目',
+      },
+      outputCol: {
+        title: 'Fixed_String',
+        type: 'object',
+        properties: {
+          value: {
+            type: 'string',
+          },
+        },
+        description: '输出列',
+      },
+    },
+  },
+  CrossValidationTuner: {
+    title: 'CrossValidationTunerConf',
+    type: 'object',
+    properties: {
+      evaluator: {
+        type: 'string',
+        enum: [
+          'BinaryClassification',
+          'MulticlassClassification',
+          'Regression',
+        ],
+        description: '评价类型',
+      },
+      numFolds: {
+        title: 'Fixed_Int',
+        type: 'object',
+        properties: {
+          value: {
+            type: 'integer',
+          },
+        },
+        description: 'fold',
       },
     },
   },
