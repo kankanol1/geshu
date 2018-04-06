@@ -1,9 +1,10 @@
 import React from 'react';
 import { connect } from 'dva';
-import { Menu, Spin, Modal, Progress, Button } from 'antd';
+import { Menu, Spin, Modal, Progress, Button, Icon } from 'antd';
 import { routerRedux } from 'dva/router';
 import ScopeMenuItem from './ScopeMenuItem';
 import { runPipeline, validatePipeline } from '../../../../services/componentAPI';
+import styles from './WorkspaceMenu.less';
 
 const { SubMenu } = Menu;
 
@@ -202,28 +203,28 @@ export default class WorkspaceMenu extends React.PureComponent {
           onClick={({ item, key, keypath }) => this.handleClick(item, key, keypath)}
           selectedKeys={fullScreen ? ['fullScreen'] : []}
           mode="horizontal"
-          style={{ background: 'transparent', float: 'left' }}
+          className={styles.workspaceMenu}
         >
-          <SubMenu title={<span>项目</span>}>
+          <SubMenu title={<span><Icon type="folder" />项目</span>}>
             <Menu.Item key="open">打开</Menu.Item>
             <Menu.Item key="close" type="redirect" address="/project/workspace/index">关闭</Menu.Item>
             <SubMenu title={<span>最近打开的项目</span>}>
               {this.renderRecentProjects()}
             </SubMenu>
           </SubMenu>
-          <SubMenu title={<span>窗口</span>}>
+          <SubMenu title={<span><Icon type="eye-o" />显示</span>}>
             <Menu.Item key="fullScreen" type="command" op={() => this.toggleFullScreen()} >{fullScreen ? '√ ' : null}全屏</Menu.Item>
           </SubMenu>
-          <SubMenu title={<span>调试</span>}>
+          <SubMenu title={<span><Icon type="code-o" />调试</span>}>
             <ScopeMenuItem scope="editor" env={env} key="validate" type="command" op={() => this.validatePipeline()} >Validate</ScopeMenuItem>
             <Menu.Item key="sampledata" >取样执行</Menu.Item>
             <Menu.Item key="samplepipeline">执行至指定组件</Menu.Item>
           </SubMenu>
-          <SubMenu title={<span>部署</span>}>
+          <SubMenu title={<span><Icon type="cloud-upload-o" />部署</span>}>
             <Menu.Item key="submit" type="command" op={() => this.runPipeline()}>提交运行</Menu.Item>
           </SubMenu>
           <Menu.Item key="help">
-            <a href="https://www.google.com" target="_blank" rel="noopener noreferrer">帮助</a>
+            <a href="https://www.google.com" target="_blank" rel="noopener noreferrer"><Icon type="question-circle-o" />帮助</a>
           </Menu.Item>
         </Menu>
         { this.renderModals() }

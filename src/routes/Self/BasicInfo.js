@@ -37,8 +37,9 @@ export default class BasicInfo extends React.PureComponent {
   render() {
     const { form, users, loading } = this.props;
     const currentRecord = users.currentUser;
+
     if (currentRecord === undefined || loading) {
-      return <Spin />;
+      return <Spin style={{ width: '100%', padding: '100px' }} />;
     }
     return (
       <Form onSubmit={e => this.handleSubmit(e)}>
