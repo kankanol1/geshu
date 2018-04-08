@@ -44,6 +44,9 @@ const menuData = [{
   icon: 'share-alt',
   path: 'graph',
   children: [{
+    name: '项目列表',
+    path: 'list',
+  }, {
     name: '设计器',
     path: 'schema',
   }, {

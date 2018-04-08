@@ -16,6 +16,14 @@ export async function saveGraph(params) {
     },
   });
 }
+export async function saveQuery(params) {
+  return request('/api/graph/saveQuery', {
+    method: 'POST',
+    body: {
+      ...params,
+    },
+  });
+}
 
 export async function getGraph(params) {
   return request(`/api/graph/detail?${stringify(params)}`, {
@@ -38,6 +46,12 @@ export async function getGremlinServerAddress() {
   });
 }
 
+export async function getGremlinQueries() {
+  return request('/api/graph/queryList', {
+    method: 'GET',
+  });
+}
+
 export async function queryGremlinServer(params) {
   return request(`http://${params.host}:${params.port}`, {
     method: 'POST',
@@ -50,6 +64,35 @@ export async function queryGremlinServer(params) {
     },
   });
 }
+export async function queryGraphList(params) {
+  return request(`/api/graph/graphList?${stringify(params)}`);
+}
+export async function removeProject(params) {
+  return request('/api/graph/delete', {
+    method: 'POST',
+    body: {
+      ...params,
+      method: 'delete',
+    },
+  });
+}
+
+export async function updateProject(params) {
+  return request('/api/graph/update', {
+    method: 'POST',
+    body: {
+      ...params,
+    },
+  });
+}
+export async function createProject(params) {
+  return request('/api/graph/create', {
+    method: 'POST',
+    body: {
+      ...params,
+    },
+  });
+}
 
 export default {
   recentGraph,
@@ -58,4 +101,10 @@ export default {
   getDataSources,
   getGremlinServerAddress,
   queryGremlinServer,
+  getGremlinQueries,
+  saveQuery,
+  queryGraphList,
+  removeProject,
+  updateProject,
+  createProject,
 };

@@ -6,8 +6,7 @@ export function recentGraph(req, res) {
   const result = [];
   for (let i = 0; i < 10; i++) {
     result.push({
-      name: `图数据库 ${i}`,
-      key: i,
+      name: `项目 ${i}`,
       id: i,
       createdAt: moment(`2018-01-0${Math.floor(i / 3) + 1}`, 'YYYY-MM-DD'),
       updatedAt: moment(`2018-02-0${Math.floor(i / 3) + 1}`, 'YYYY-MM-DD'),
@@ -33,13 +32,56 @@ export function saveGraph(req, res) {
   }
 }
 
+export function saveQuery(req, res) {
+  const result = {
+    success: true,
+    message: '保存成功',
+  };
+
+  if (res && res.json) {
+    res.json(result);
+  } else {
+    return result;
+  }
+}
+
 export function getGraph(req, res) {
   const result = {
     success: true,
     data: {
-      frontendJson: '{ "class": "go.GraphLinksModel",  "nodeDataArray": [ {"text":"node1", "figure":"Ellipse", "color":"#ffffff", "stroke":"#000000", "key":-1, "loc":{"class":"go.Point", "x":-96.25, "y":-60}, "attrList":[ {"name":"attr1", "type":"String", "cardinality":"SINGLE"},{"name":"attr2", "type":"String", "cardinality":"SINGLE"} ]},{"text":"node2", "figure":"Rectangle", "color":"#ffffff", "stroke":"#000000", "key":-2, "loc":{"class":"go.Point", "x":109.75, "y":-8.999999999999993}, "attrList":[ {"name":"attr5", "type":"String", "cardinality":"SINGLE"} ]},{"text":"node3", "figure":"Rectangle", "color":"#ffffff", "stroke":"#000000", "key":-3, "loc":{"class":"go.Point", "x":-101.25, "y":88}, "attrList":[ {"name":"attr8", "type":"String", "cardinality":"SINGLE"} ]} ],  "linkDataArray": [ {"from":-1, "to":-2, "text":"testLink", "attrList":[ {"name":"attr3", "type":"String", "cardinality":"SINGLE"},{"name":"attr4", "type":"String", "cardinality":"SINGLE"} ]},{"from":-1, "to":-3, "text":"testLink2", "attrList":[ {"name":"attr6", "type":"String", "cardinality":"SINGLE"},{"name":"attr7", "type":"String", "cardinality":"SINGLE"} ]},{"from":-3, "to":-2, "text":"testLink3", "attrList":[ {"name":"attr9", "type":"String", "cardinality":"SINGLE"} ]} ]}',
-      indexJson: '[{"name":"attr1","type":"node","config":"unique","properties":["attr1"]},{"name":"attr4","type":"link","config":"mixed","properties":["attr4"]}]',
-      frontendMappingJson: '{"class":"go.GraphLinksModel",      "nodeDataArray":[      {"text":"node1","figure":"Ellipse","color":"#ffffff","stroke":"#000000","key":-1,"loc":{"class":"go.Point","x":-96.25,"y":-60},"attrList":[{"name":"attr1","type":"String","cardinality":"SINGLE"},{"name":"attr2","type":"String","cardinality":"SINGLE"}]},      {"text":"node2","figure":"Rectangle","color":"#ffffff","stroke":"#000000","key":-2,"loc":{"class":"go.Point","x":109.75,"y":-8.999999999999993},"attrList":[{"name":"attr5","type":"String","cardinality":"SINGLE"}]},      {"text":"node3","figure":"Rectangle","color":"#ffffff","stroke":"#000000","key":-3,"loc":{"class":"go.Point","x":-101.25,"y":88},"attrList":[{"name":"attr8","type":"String","cardinality":"SINGLE"}]},      {"from":-1,"to":-2,"text":"testLink","attrList":[{"name":"attr3","type":"String","cardinality":"SINGLE"},{"name":"attr4","type":"String","cardinality":"SINGLE"}],"key":"temp0","stroke":"#ffffff","margin":0,"originType":"link"},      {"from":-1,"to":-3,"text":"testLink2","attrList":[{"name":"attr6","type":"String","cardinality":"SINGLE"},{"name":"attr7","type":"String","cardinality":"SINGLE"}],"key":"temp1","stroke":"#ffffff","margin":0,"originType":"link"},      {"from":-3,"to":-2,"text":"testLink3","attrList":[{"name":"attr9","type":"String","cardinality":"SINGLE"}],"key":"temp2","stroke":"#ffffff","margin":0,"originType":"link"},      {"id":"file0","name":"file0.csv","key":"file0","category":"file","geo":"file","text":"file0.csv","loc":"23.01182501441015-44.34573232100241"}      ],      "linkDataArray":[      {"from":-1,"to":"temp0","category":"readOnly"},      {"from":"temp0","to":-2,"category":"readOnly"},      {"from":-1,"to":"temp1","category":"readOnly"},      {"from":"temp1","to":-3,"category":"readOnly"},      {"from":-3,"to":"temp2","category":"readOnly"},      {"from":"temp2","to":-2,"category":"readOnly"},      {"from":"file0","to":"temp1","start":{"nodeAttr":"attr1","column":"file0-column5"},"end":{"nodeAttr":"attr8","column":"file0-column3"},"mapping":{"file0-column2":"attr6","file0-column3":"attr7"}},      {"from":"file0","to":"temp2","start":{"nodeAttr":"attr8","column":"file0-column2"},"end":{"nodeAttr":"attr5","column":"file0-column2"},"mapping":{"file0-column0":"attr9","file0-column2":"attr9"}},      {"from":"file0","to":-3,"mapping":{"file0-column0":"attr8"}}      ]}',
+      name: 'test',
+      frontendJson: `{ "class": "go.GraphLinksModel",
+                      "nodeDataArray": [ 
+                    {"text":"person", "figure":"Ellipse", "color":"#ffffff", "stroke":"#000000", "key":-1, "loc":{"class":"go.Point", "x":-119.25, "y":-60}, "attrList":[ {"name":"name", "type":"String", "cardinality":"SINGLE"},{"name":"age", "type":"Integer", "cardinality":"SINGLE"} ]},
+                    {"text":"software", "figure":"Rectangle", "color":"#ffffff", "stroke":"#000000", "key":-2, "loc":{"class":"go.Point", "x":131.75, "y":-74}, "attrList":[ {"name":"name", "type":"String", "cardinality":"SINGLE"},{"name":"lang", "type":"String", "cardinality":"SINGLE"} ]}
+                    ],
+                      "linkDataArray": [ 
+                    {"from":-1, "to":-2, "text":"created", "attrList":[ {"name":"weight", "type":"Integer", "cardinality":"SINGLE"} ]},
+                    {"from":-1, "to":-1, "text":"knows", "attrList":[ {"name":"weight", "type":"Integer", "cardinality":"SINGLE"} ]}
+                    ]}`,
+      indexJson: '[{"name":"name","type":"node","config":"unique","properties":["name"]},{"name":"lang","type":"node","config":"composite","properties":["lang"]},{"name":"weight","type":"link","config":"composite","properties":["weight"]}]',
+      backendJson: '{"propertyKeys":[{"name":"name","dataType":"String","cardinality":"SINGLE"},{"name":"age","dataType":"Integer","cardinality":"SINGLE"},{"name":"lang","dataType":"String","cardinality":"SINGLE"},{"name":"weight","dataType":"Integer","cardinality":"SINGLE"}],"vertexLabels":[{"name":"person","partition":false,"useStatic":false},{"name":"software","partition":false,"useStatic":false}],"edgeLabels":[{"name":"created","multiplicity":"MULTI","unidirected":true,"signatures":[]},{"name":"knows","multiplicity":"MULTI","unidirected":true,"signatures":[]}],"vertexCentricIndexes":[],"vertexIndexes":[{"name":"name","propertyKeys":["name"],"composite":false,"unique":true,"mixedIndex":false,"indexOnly":""},{"name":"lang","propertyKeys":["lang"],"composite":true,"unique":false,"mixedIndex":false,"indexOnly":""}],"edgeIndexes":[{"name":"weight","propertyKeys":["weight"],"composite":true,"unique":false,"mixedIndex":false,"indexOnly":""}]}',
+      frontendMappingJson: `{ "class": "go.GraphLinksModel",
+                  "nodeDataArray": [ 
+                {"text":"person", "figure":"Ellipse", "color":"#ffffff", "stroke":"#000000", "key":-1, "loc":{"class":"go.Point", "x":-119.25, "y":-60}, "attrList":[ {"name":"name", "type":"String", "cardinality":"SINGLE"},{"name":"age", "type":"Integer", "cardinality":"SINGLE"} ]},
+                {"text":"software", "figure":"Rectangle", "color":"#ffffff", "stroke":"#000000", "key":-2, "loc":{"class":"go.Point", "x":131.75, "y":-74}, "attrList":[ {"name":"name", "type":"String", "cardinality":"SINGLE"},{"name":"lang", "type":"String", "cardinality":"SINGLE"} ]},
+                {"from":-1, "to":-2, "text":"created", "attrList":[ {"name":"weight", "type":"Integer", "cardinality":"SINGLE"} ], "key":"temp0", "stroke":"#ffffff", "margin":0, "originType":"link"},
+                {"from":-1, "to":-1, "text":"knows", "attrList":[ {"name":"weight", "type":"Integer", "cardinality":"SINGLE"} ], "key":"temp1", "stroke":"#ffffff", "margin":0, "originType":"link"},
+                {"id":"file0", "name":"file0.csv", "key":"file0", "category":"file", "geo":"file", "text":"file0.csv", "loc":"-121.07613908082482 -27.607494633355195"},
+                {"id":"file2", "name":"file2.csv", "key":"file2", "category":"file", "geo":"file", "text":"file2.csv", "loc":"96.84568373906346 -188.92675204681095"}
+                ],
+                  "linkDataArray": [ 
+                {"from":-1, "to":"temp0", "category":"readOnly"},
+                {"from":"temp0", "to":-2, "category":"readOnly"},
+                {"from":-1, "to":"temp1", "category":"readOnly"},
+                {"from":"temp1", "to":-1, "category":"readOnly"},
+                {"from":"file0", "to":-2, "mapping":{"file0-column0":"name", "file0-column1":"lang"}},
+                {"from":"file0", "to":"temp0", "start":{"nodeAttr":"name", "column":"file0-column2"}, "end":{"column":"file0-column3", "nodeAttr":"name"}, "mapping":{"file0-column4":"weight"}},
+                {"from":"file0", "to":-1},
+                {"from":"file2", "to":-1, "mapping":{"file2-column0":"name", "file2-column1":"age"}},
+                {"from":"file2", "to":"temp1", "start":{"nodeAttr":"name", "column":"file2-column2"}, "end":{"nodeAttr":"name", "column":"file2-column3"}, "mapping":{"file2-column4":"weight"}}
+                ]}`,
+      backendMappingJson: '{"vertexMaps":[{"edge":"software","source":{"path":"file0.csv","header":true,"inferSchema":true,"schema":"","type":"CsvSourceAttribute"},"propertyMapping":{"name":"file0-column0","lang":"file0-column1"}},{"edge":"person","source":{"path":"file0.csv","header":true,"inferSchema":true,"schema":"","type":"CsvSourceAttribute"},"propertyMapping":{}},{"edge":"person","source":{"path":"file2.csv","header":true,"inferSchema":true,"schema":"","type":"CsvSourceAttribute"},"propertyMapping":{"name":"file2-column0","age":"file2-column1"}}],"edgeMaps":[{"edge":"created","source":{"path":"file0.csv","header":true,"inferSchema":true,"schema":"","type":"CsvSourceAttribute"},"propertyMapping":{"weight":"file0-column4"},"edgeLeft":{"edgeField":"name","vertex":"person","vertexField":"file0-column2"},"edgeRight":{"edgeField":"name","vertex":"software","vertexField":"file0-column2"}},{"edge":"knows","source":{"path":"file2.csv","header":true,"inferSchema":true,"schema":"","type":"CsvSourceAttribute"},"propertyMapping":{"weight":"file2-column4"},"edgeLeft":{"edgeField":"name","vertex":"person","vertexField":"file2-column2"},"edgeRight":{"edgeField":"name","vertex":"person","vertexField":"file2-column2"}}]}',
     },
   };
 
@@ -68,8 +110,10 @@ export function getGremlinServerAddress(req, res) {
   const result = {
     success: true,
     data: {
+      name: 'test',
       // host: '20.28.30.28',
       host: 'localhost',
+      // host: '18.217.118.40',
       port: '8182',
     },
   };
@@ -80,6 +124,53 @@ export function getGremlinServerAddress(req, res) {
     return result;
   }
 }
+export function getQueryList(req, res, u) {
+  const result = {
+    success: true,
+    data: [
+      {
+        name: 'queryAll',
+        query: `nodes=g.V().limit(5)
+        edges = g.V()
+                .limit(5)
+                .aggregate('node')
+                .outE()
+                .as('edge')
+                .inV()
+                .where(within('node'))
+                .select('edge')
+        [nodes.toList(),edges.toList()]`,
+
+      },
+      {
+        name: 'exploreNode',
+        query: `nodes =g.V(1).as("node").both().as("node")
+        .select(all,"node").inject(g.V(1)).unfold()
+        edges = g.V(1).bothE()
+        [nodes.toList(),edges.toList()]`,
+      },
+      {
+        name: 'searchNodeBy',
+        query: `nodes=g.V().has('name','vadas')
+        edges = g.V().
+          has('name','vadas').
+          aggregate('node')
+          .outE().as('edge')
+          .inV()
+          .where(within('node'))
+          .select('edge')
+        [nodes.toList(),edges.toList()]`,
+      },
+    ],
+  };
+
+  if (res && res.json) {
+    res.json(result);
+  } else {
+    return result;
+  }
+}
+
 export function getDataSourceColumns(req, res, u) {
   let url = u;
   if (!url || Object.prototype.toString.call(url) !== '[object String]') {
@@ -105,4 +196,6 @@ export default {
   getGraph,
   getDataSources,
   getDataSourceColumns,
+  getQueryList,
+  saveQuery,
 };

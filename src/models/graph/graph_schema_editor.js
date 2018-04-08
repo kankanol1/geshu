@@ -95,6 +95,7 @@ export default {
   namespace: 'graph_schema_editor',
   state: {
     id: -1,
+    name: '',
     diagram: {},
     indexData: {
       indexes: [],
@@ -105,7 +106,7 @@ export default {
   },
   reducers: {
     init(state, { payload }) {
-      const { palletContainer, graphContainer, frontendJson, id, indexJson } = payload;
+      const { palletContainer, graphContainer, frontendJson, id, indexJson, name } = payload;
       const diagram = graphUtil.init(palletContainer, graphContainer);
       if (frontendJson) graphUtil.fromJson(diagram, frontendJson);
       let indexes = [];
@@ -113,6 +114,7 @@ export default {
       return Object.assign({}, { ...state,
         diagram,
         id,
+        name,
         indexData: {
           ...state.indexData,
           indexes,

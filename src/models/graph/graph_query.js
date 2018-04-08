@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign,guard-for-in,no-useless-escape */
 
 import { message } from 'antd';
-import { getGremlinServerAddress, queryGremlinServer } from '../../services/graphAPI';
+import { getGremlinServerAddress, queryGremlinServer, getGremlinQueries, saveQuery } from '../../services/graphAPI';
 import GojsRelationGraph from '../../utils/GojsRelationGraph';
 
 function graphson3to1(data) {
@@ -19,7 +19,6 @@ function graphson3to1(data) {
       for (let i = 0; i < data['@value'].length; i += 2) {
         let data_key = data['@value'][i];
         if ((typeof data_key === 'object') && (data_key !== null)) data_key = graphson3to1(data_key);
-        // console.log(data_key);
         if (Array.isArray(data_key)) data_key = JSON.stringify(data_key).replace(/\"/g, ' ');// .toString();
         data_tmp[data_key] = graphson3to1(data['@value'][i + 1]);
       }
@@ -106,9 +105,13 @@ export default {
     code: '',
     host: '',
     port: '',
+    loadedCode: false,
     showGraph: true,
     id: '',
+    name: '',
     responseJson: '',
+    queries: [],
+    queryLoading: false,
   },
   reducers: {
     init(state, { payload }) {
@@ -116,10 +119,12 @@ export default {
       goJsGraph.create(payload);
       return Object.assign({}, {
         ...state,
+        ...payload,
         goJsGraph,
-        id: payload.id,
-        host: payload.host,
-        port: payload.port,
+        // id: payload.id,
+        // host: payload.host,
+        // port: payload.port,
+        // name: payload.name,
       });
     },
     setGraph(state, { payload }) {
@@ -140,12 +145,36 @@ export default {
       return Object.assign({}, {
         ...state,
         code: payload,
+        loadedCode: false,
       });
     },
     saveResponse(state, { payload }) {
       return Object.assign({}, {
         ...state,
         responseJson: formatJson(JSON.stringify(payload)),
+      });
+    },
+    loadQuery(state, { payload }) {
+      return Object.assign({}, {
+        ...state,
+        code: state.queries[payload].query,
+        loadedCode: true,
+      });
+    },
+    startLoadQueries(state, { payload }) {
+      return Object.assign({}, {
+        ...state,
+        queryLoading: true,
+      });
+    },
+    saveQueries(state, { payload }) {
+      payload.forEach((value, index) => {
+        payload[index].index = index;
+      });
+      return Object.assign({}, {
+        ...state,
+        queries: payload,
+        queryLoading: false,
       });
     },
 
@@ -160,6 +189,15 @@ export default {
           ...payload,
         },
       });
+    },
+    *saveQuery({ payload }, { call, put, select }) {
+      const { id, code } = yield select(state => state.graph_query);
+      const response = yield call(saveQuery, {
+        id,
+        query: code,
+        name: payload,
+      });
+      message.info(response.message);
     },
     *queryGraph({ payload }, { call, put, select }) {
       const { host, port, id, code } = yield select(state => state.graph_query);
@@ -187,8 +225,13 @@ export default {
         payload: response,
       });
     },
-    // *saveQuery({ payload }, { call, put, select }) {
-    //   const { id } = yield select(state => state.graph_query);
-    // },
+    *queryList({ payload }, { call, put, select }) {
+      const { id } = yield select(state => state.graph_query);
+      const response = yield call(getGremlinQueries, { id });
+      yield put({
+        type: 'saveQueries',
+        payload: response.data,
+      });
+    },
   },
 };

@@ -1,7 +1,9 @@
 import React from 'react';
 import { connect } from 'dva';
-import { Layout, Row, Col, Menu, Icon, Modal, Transfer } from 'antd';
+import { Layout, Row, Col, Menu, Icon, Modal, Transfer, Button } from 'antd';
 import MappingInspector from './MappingInspector';
+
+const { confirm } = Modal;
 
 
 class MappingDesigner extends React.PureComponent {
@@ -53,16 +55,39 @@ class MappingDesigner extends React.PureComponent {
           />
         </Modal>
         <Menu mode="horizontal">
-          <Menu.Item>
-            <a onClick={() => {
-              this.props.dispatch({
-                type: 'graph_mapping_editor/saveMapping',
-              });
-            }}
-            >
-              <Icon type="save" />保存
-            </a>
-          </Menu.Item>
+          <Menu.SubMenu title={<span><Icon type="save" />保存</span>}>
+            <Menu.Item >
+              <a onClick={() => {
+                this.props.dispatch({
+                  type: 'graph_mapping_editor/saveMapping',
+                });
+              }}
+              >
+              保存
+              </a>
+            </Menu.Item>
+            <Menu.Item>
+              <a onClick={() => {
+                const self = this;
+                confirm({
+                  title: '确定开始导入数据？',
+                  content: '开始数据导入后对项目的修改不会立即生效',
+                  okText: '确定',
+                  cancelText: '取消',
+                  onOk() {
+                    self.props.dispatch({
+                      type: 'graph_mapping_editor/saveMapping',
+                      payload: 'excute',
+                    });
+                  },
+                  onCancel() { },
+                });
+              }}
+              >
+              保存并开始导入...
+              </a>
+            </Menu.Item>
+          </Menu.SubMenu>
           <Menu.Item>
             <a onClick={() => {
               this.props.dispatch({
@@ -82,19 +107,17 @@ class MappingDesigner extends React.PureComponent {
             </a>
           </Menu.Item>
           <Menu.Item>
-            <a><Icon type="question-circle-o" />帮助</a>
-          </Menu.Item>
-          <Menu.Item>
             <a><Icon type="info-circle-o" />关于</a>
           </Menu.Item>
+          <strong style={{ marginLeft: '15%', marginRight: '10px' }}>项目名称：{this.props.name}</strong>
         </Menu>
         <Row>
           <Col span={13} style={{ padding: '0', height: '100%' }}>
             <div
               style={{
-                background: '#fff',
-                height: `${window.screen.availHeight - 250}px`,
+                height: `${window.screen.availHeight - 205}px`,
                 width: '100%',
+                background: '#fff',
               }}
               id="myDiagramDiv"
             />
@@ -103,9 +126,9 @@ class MappingDesigner extends React.PureComponent {
             <div style={
               {
                 background: '#fff',
-                padding: '3px',
+                padding: '10px 3px',
                 margin: '0px 5px',
-                height: `${window.screen.availHeight - 250}px`,
+                height: `${window.screen.availHeight - 205}px`,
                 width: '100%',
               }
             }
@@ -120,6 +143,6 @@ class MappingDesigner extends React.PureComponent {
 }
 
 export default connect(({ graph_mapping_editor }) => {
-  return { dataSource: graph_mapping_editor.datasources };
+  return { dataSource: graph_mapping_editor.datasources, ...graph_mapping_editor };
 })(MappingDesigner);
 

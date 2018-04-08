@@ -19,7 +19,7 @@ class GraphDesigner extends React.PureComponent {
 
   render() {
     return (
-      <Layout style={{ padding: '0', height: '100%' }} theme="light">
+      <Layout theme="light">
         <Menu mode="horizontal">
           <Menu.Item>
             <a onClick={() => {
@@ -42,11 +42,9 @@ class GraphDesigner extends React.PureComponent {
             </a>
           </Menu.Item>
           <Menu.Item>
-            <a><Icon type="question-circle-o" />帮助</a>
-          </Menu.Item>
-          <Menu.Item>
             <a><Icon type="info-circle-o" />关于</a>
           </Menu.Item>
+          <strong style={{ marginLeft: '20%' }}>项目名称：{this.props.name}</strong>
         </Menu>
         <Row>
           <Col span={6}>
@@ -76,7 +74,7 @@ class GraphDesigner extends React.PureComponent {
                 </a>
               }
             >
-              <div style={{ margin: '-8px -10px', height: `${window.screen.availHeight - 455}px`, overflow: 'auto' }}>
+              <div style={{ margin: '-8px -10px', height: `${window.screen.availHeight - 410}px`, overflow: 'auto' }}>
                 <IndexInspector />
               </div>
             </Card>
@@ -87,7 +85,7 @@ class GraphDesigner extends React.PureComponent {
                 background: '#fff',
                 padding: 0,
                 margin: '0px 5px',
-                height: `${window.screen.availHeight - 250}px`,
+                height: `${window.screen.availHeight - 205}px`,
                 width: '100%',
               }}
               id="myDiagramDiv"
@@ -97,9 +95,9 @@ class GraphDesigner extends React.PureComponent {
             <div style={
               {
                 background: '#fff',
-                padding: '3px',
+                padding: '10px 3px',
                 margin: '0px 10px',
-                height: `${window.screen.availHeight - 250}px`,
+                height: `${window.screen.availHeight - 205}px`,
                 width: '100%',
                 overflowY: 'auto',
               }
@@ -114,5 +112,7 @@ class GraphDesigner extends React.PureComponent {
   }
 }
 
-export default connect()(GraphDesigner);
+export default connect(({ graph_schema_editor }) => {
+  return { ...graph_schema_editor };
+})(GraphDesigner);
 

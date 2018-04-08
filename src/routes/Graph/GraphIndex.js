@@ -29,9 +29,10 @@ export default class GraphIndex extends Component {
   render() {
     const { recentGraph } = this.props.graph;
     const loading = this.props.loading || recentGraph.loading;
+    console.log(this.props.graph);
     return (
       <Layout className={styles.contentLayout} theme="light">
-        <Card title="图数据库列表" className={styles.firstCard}>
+        <Card title="项目列表" className={styles.firstCard}>
           {
             loading ? <Spin /> :
               recentGraph.data.map(item =>
@@ -48,8 +49,13 @@ export default class GraphIndex extends Component {
               )
           }
           <Divider />
-          <Button type="primary" className={styles.button}> <Icon type="folder-add" />新建数据库</Button>
-          <Button className={styles.button}> <Icon type="folder-open" />打开数据库</Button>
+          {
+            this.props.match.params.type === 'schema' ?
+              <Button type="primary" className={styles.button}> <Icon type="folder-add" />新建项目</Button>
+            : null
+          }
+          <Button className={styles.button}> <Icon type="folder-open" />打开项目</Button>
+
         </Card>
       </Layout>
     );

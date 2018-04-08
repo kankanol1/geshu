@@ -222,6 +222,12 @@ export const getRouterData = (app) => {
     '/user/register-result': {
       component: dynamicWrapper(app, [], () => import('../routes/User/RegisterResult')),
     },
+    '/graph': {
+      component: dynamicWrapper(app, [], () => import('../layouts/GraphLayout')),
+    },
+    '/graph/list': {
+      component: dynamicWrapper(app, [], () => import('../routes/Graph/GraphList')),
+    },
     '/graph/schema': {
       component: dynamicWrapper(app, [], () => import('../layouts/GraphLayout')),
     },

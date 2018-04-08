@@ -168,7 +168,7 @@ export function createProject(req, res, u, b) {
     description,
     createdAt: moment(`2018-01-0${Math.floor(i / 2) + 1}`, 'YYYY-MM-DD'),
     updatedAt: moment(`2018-02-0${Math.floor(i / 2) + 1}`, 'YYYY-MM-DD'),
-    labels: labels.split(','),
+    labels: labels ? labels.split(',') : [],
   });
 
   const result = {
@@ -217,7 +217,7 @@ export function updateProject(req, res, u, b) {
 
   projectListDataSource = projectListDataSource.map((item) => {
     if (item.id === id) {
-      return { ...item, name, description, labels: labels.split(',') };
+      return { ...item, name, description, labels: labels ? labels.split(',') : [] };
     }
     return item;
   });

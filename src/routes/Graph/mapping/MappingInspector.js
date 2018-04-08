@@ -112,7 +112,7 @@ class MappingInspector extends Component {
     }
     const attrList = graphUtils.getNodeProps(myDiagram, currentInspectedObject.toNode.key);
     const columns = [{
-      title: '文件名',
+      title: '文件字段',
       dataIndex: 'name',
     },
     {
@@ -149,8 +149,6 @@ class MappingInspector extends Component {
       [] : graphUtils.getNodeProps(myDiagram, currentInspectedObject.toNode.data.from);
     const endNodeProps = this.state.mappingNode ?
       [] : graphUtils.getNodeProps(myDiagram, currentInspectedObject.toNode.data.to);
-    const startMappingConfig = getEdgeMappingConfig('start');
-    const endMappingConfig = getEdgeMappingConfig('end');
     const linkAttrConfig = (
       <div className={styles.attrItem} style={{ width: '95%', marginTop: '10px' }}>
         <div className={`${styles.attrBox} ${styles.markdown}`}>

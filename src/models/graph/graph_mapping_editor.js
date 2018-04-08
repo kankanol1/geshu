@@ -1,3 +1,4 @@
+import { routerRedux } from 'dva/router';
 import { message } from 'antd';
 import graphUtil from '../../utils/graph_utils';
 import { getGraph, saveGraph, getDataSources, getDataSourceColumns } from '../../services/graphAPI';
@@ -62,6 +63,7 @@ export default {
   namespace: 'graph_mapping_editor',
   state: {
     id: -1,
+    name: '',
     diagram: {},
     frontendJson: '',
     datasources: [],
@@ -71,7 +73,7 @@ export default {
   },
   reducers: {
     init(state, { payload }) {
-      const { graphContainer, frontendJson, id, frontendMappingJson } = payload;
+      const { graphContainer, frontendJson, id, frontendMappingJson, name } = payload;
       const diagram = graphUtil.initMappingDiagram(graphContainer,
         frontendMappingJson || frontendJson,
         !frontendMappingJson);
@@ -79,6 +81,7 @@ export default {
         ...state,
         diagram,
         id,
+        name,
       });
     },
     resetMapping(state) {
@@ -163,7 +166,7 @@ export default {
         payload,
       });
     },
-    *saveMapping({ payload }, { call, select }) {
+    *saveMapping({ payload }, { call, put, select }) {
       const { diagram, id } =
         yield select(state => state.graph_mapping_editor);
       const frontendMappingJson = graphUtil.toJson(diagram);
@@ -174,8 +177,11 @@ export default {
           frontendMappingJson,
           backendMappingJson,
           id,
+          excute: !!payload,
         });
-      message.info(response.message);
+      if (!payload) { message.info(response.message); } else {
+        yield put(routerRedux.push('/jobs/list'));
+      }
     },
   },
 

@@ -34,9 +34,10 @@ class GraphLayout extends AbstractBasicLayout {
   getContent() {
     const { routerData, match } = this.props;
     const type = this.props.location.pathname.split('/')[2];
+    if (type === 'list') { return super.getContent(); }
     return (
-      <Content style={{ height: '100%', overflowX: 'initial' }}>
-        <div style={{ height: 'calc(100vh - 64px)' }}>
+      <Content>
+        <div style={{ height: 'calc(100vh - 84px)', margin: '10px' }}>
           <Switch>
             {
               redirectData.map(item =>
@@ -69,9 +70,11 @@ class GraphLayout extends AbstractBasicLayout {
   }
 }
 
-export default connect(({ user, global, loading }) => ({
-  currentUser: user.currentUser,
+export default connect(({ users, global, loading }) => ({
+  currentUser: users.currentUser,
+  loading,
   collapsed: global.collapsed,
-  fetchingNotices: loading.effects['global/fetchNotices'],
-  notices: global.notices,
+  // fetchingNotices: loading.effects['global/fetchNotices'],
+  // notices: global.notices,
+  fullScreen: global.fullScreen,
 }))(GraphLayout);

@@ -1,31 +1,107 @@
 import React from 'react';
 import { connect } from 'dva';
-import { Layout, Form, Col, Icon, Button, Tabs, Alert, Input, Select } from 'antd';
+import { Layout, Form, Icon, Button, Input, Select, InputNumber, Divider } from 'antd';
 
 const FormItem = Form.Item;
 const SearchForm = Form.create()(
   (props) => {
-    const { getFieldDecorator, getFieldsError } = props.form;
-
-    // Only show error after a field is touched.
+    const { getFieldDecorator } = props.form;
+    let renderAttrs = {
+      node: [],
+      link: [],
+    };
+    const label = props.form.getFieldValue('label');
+    if (label) {
+      renderAttrs.node = props.type2Label2Attrs.node[label] || [];
+      renderAttrs.link = props.type2Label2Attrs.link[label] || [];
+    } else { renderAttrs = props.type2Attrs; }
     return (
-      <Form layout="inline" onSubmit={this.handleSubmit}>
+      <Form layout="inline">
+        <FormItem
+          label="元素类型"
+        >
+          {getFieldDecorator('label', {
+            rules: [{ message: '请输入元素类型!' }],
+          })(
+            <Select
+              allowClear
+              showSearch
+              placeholder="元素类型"
+              style={{ width: 120 }}
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+            >
+              <Select.OptGroup label="节点">
+                {
+
+                  props.type2Labels.node.map(value =>
+                    <Select.Option value={value} key={`label-${value}`}>{value}</Select.Option>
+                 )
+                 }
+              </Select.OptGroup>
+              <Select.OptGroup label="关系">
+                {
+                  props.type2Labels.link.map(value =>
+                    <Select.Option value={value} key={`label-${value}`}>{value}</Select.Option>
+                 )
+                 }
+              </Select.OptGroup>
+            </Select>)}
+        </FormItem>
         <FormItem
           label="属性名称"
         >
           {getFieldDecorator('name', {
-            rules: [{ required: true, message: '请输入属性名称!' }],
+            rules: [{
+              required: props.form.getFieldValue('value'),
+              message: '请输入属性名称!',
+            }],
           })(
-            <Input placeholder="属性名称" />
-          )}
+            <Select
+              allowClear
+              showSearch
+              placeholder="属性名称"
+              style={{ width: 120 }}
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+            >
+              <Select.OptGroup label="节点属性">
+                {
+                  renderAttrs.node.map(value =>
+                    <Select.Option value={value} key={`name-${value}`}>{value}</Select.Option>
+                 )
+                 }
+              </Select.OptGroup>
+              <Select.OptGroup label="关系属性">
+                {
+                  renderAttrs.link.map(value =>
+                    <Select.Option value={value} key={`name-${value}`}>{value}</Select.Option>
+                 )
+                 }
+              </Select.OptGroup>
+            </Select>)}
         </FormItem>
         <FormItem
           label="属性值"
         >
           {getFieldDecorator('value', {
-            rules: [{ required: true, message: '请输入属性值!' }],
+            rules: [{
+               required: props.form.getFieldValue('name'),
+               message: '请输入属性值!',
+              }],
           })(
             <Input placeholder="属性值" />
+          )}
+        </FormItem>
+        <FormItem
+          label="最大元素数量"
+        >
+          {getFieldDecorator('limit', {
+            initialValue: 5,
+          })(
+            <InputNumber min={1} max={20} />
           )}
         </FormItem>
         <FormItem>
@@ -75,18 +151,33 @@ class GraphExplore extends React.PureComponent {
             padding: '20px',
           }}
         >
-          <SearchForm onSave={(values) => {
+          <div
+            style={{
+              fontSize: '17px',
+              fontWeight: 'bold',
+              marginBottom: '-20px',
+              marginLeft: '10px',
+           }}
+          >
+            当前项目：{this.props.name}
+          </div>
+          <Divider />
+          <SearchForm
+            onSave={(values) => {
             this.props.dispatch({
                 type: 'graph_explore/searchGraph',
                 payload: { ...values },
             });
             }}
+            type2Labels={this.props.type2Labels}
+            type2Label2Attrs={this.props.type2Label2Attrs}
+            type2Attrs={this.props.type2Attrs}
           />
         </div>
         <div
           id="container"
           style={{
-            height: `${window.screen.availHeight - 340}px`,
+            height: `${window.screen.availHeight - 298}px`,
             width: '100%',
             background: 'white',
             marginTop: '10px',
