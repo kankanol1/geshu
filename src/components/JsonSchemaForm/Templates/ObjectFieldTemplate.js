@@ -28,7 +28,7 @@ export default class ObjectFieldTemplate extends React.PureComponent {
       const isCheckbox = schema.properties[Object.keys(schema.properties)[0]].type === 'boolean';
       return (
         <Row>
-          <Col span={isCheckbox ? 16 : 8}>
+          <Col span={isCheckbox ? 16 : 8} >
             <TitleField title={displayTitle} />
           </Col>
           <Col span={isCheckbox ? 8 : 16} className={styles.hideInnerSpan} >

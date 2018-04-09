@@ -3,6 +3,23 @@
  * */
 
 const allComponents = {
+  'csv-source': {
+    title: 'CSVSource',
+    type: 'object',
+    properties: {
+      diy: {
+        title: 'DIY',
+        type: 'object',
+        description: '自定義組件',
+        properties: {
+          value: {
+            type: 'string',
+          },
+        },
+      },
+    },
+  },
+
   TokenizerStage: {
     title: 'TokenizerStageConf',
     type: 'object',
@@ -284,7 +301,7 @@ const allComponents = {
         description: '文件是否包含Header',
       },
       path: {
-        title: 'Fixed_String',
+        title: 'Select_Schema',
         type: 'object',
         properties: {
           value: {
