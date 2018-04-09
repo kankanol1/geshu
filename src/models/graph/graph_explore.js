@@ -3,7 +3,6 @@
 import { message } from 'antd';
 import { getGremlinServerAddress, queryGremlinServer, getGraph } from '../../services/graphAPI';
 import GojsRelationGraph from '../../utils/GojsRelationGraph';
-import { isNumber } from 'util';
 
 function graphson3to1(data) {
   // Convert data from graphSON v2 format to graphSON v1

@@ -193,7 +193,7 @@ export default {
     *saveQuery({ payload }, { call, put, select }) {
       const { id, code } = yield select(state => state.graph_query);
       const response = yield call(saveQuery, {
-        id,
+        graphId: id,
         query: code,
         name: payload,
       });
@@ -227,7 +227,7 @@ export default {
     },
     *queryList({ payload }, { call, put, select }) {
       const { id } = yield select(state => state.graph_query);
-      const response = yield call(getGremlinQueries, { id });
+      const response = yield call(getGremlinQueries, { graphId: id });
       yield put({
         type: 'saveQueries',
         payload: response.data,

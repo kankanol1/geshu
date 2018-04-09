@@ -93,10 +93,11 @@ class GraphQuery extends React.PureComponent {
           </Row>
         </Modal>
         <Modal
-          title="打开查询..."
+          title="查询列表"
           visible={this.state.show}
           onOk={this.handleOk}
           onCancel={this.handleCancel}
+          style={{ minWidth: '1000px!important' }}
         >
           <Spin spinning={this.props.queryLoading}>
             <Select
@@ -149,7 +150,7 @@ class GraphQuery extends React.PureComponent {
                 >
                   <Button.Group>
                     <Button
-                      title="打开"
+                      title="查询管理"
                       onClick={() => {
                         this.setState({
                           show: true,
@@ -163,7 +164,7 @@ class GraphQuery extends React.PureComponent {
                     }}
                       size="small"
                     >
-                      <Icon type="folder-open" />
+                      <Icon type="profile" />
                     </Button>
                     <Button
                       title="保存"

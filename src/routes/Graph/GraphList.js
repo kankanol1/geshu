@@ -23,7 +23,6 @@ export default class ProjectList extends PureComponent {
   state = {
     modalVisible: false,
     selectedRows: [],
-    expendForm: false,
     currentRecord: undefined,
     formValues: [],
   }
