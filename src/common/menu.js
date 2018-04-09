@@ -25,11 +25,14 @@ const menuData = [{
   icon: 'api',
   path: 'models',
   children: [{
+    name: '待选模型库',
+    path: 'candidates',
+  }, {
     name: '模型库',
     path: 'list',
   }, {
-    name: '待选模型库',
-    path: 'candidates',
+    name: '模型服务',
+    path: 'serving',
   }],
 }, {
   name: '作业管理',

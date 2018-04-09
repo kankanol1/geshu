@@ -1,5 +1,5 @@
 import { message } from 'antd';
-import { publishCandidateModels, updateCandidateModel, removeCandidateModels, queryCandidateModels } from '../services/modelsAPI';
+import { publishCandidateModels, updateCandidateModel, removeCandidateModels, queryCandidateModels } from '../../services/modelsAPI';
 
 export default {
   namespace: 'candidatemodels',

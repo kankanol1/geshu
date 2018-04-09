@@ -1,14 +1,13 @@
 import { message } from 'antd';
-import { queryModels, removeModels, updateModel } from '../services/modelsAPI';
+import { queryServingModels, offlineServingModels } from '../../services/modelsAPI';
 
 export default {
-  namespace: 'models',
+  namespace: 'servingmodels',
 
   state: {
     data: {
       list: [],
       pagination: {},
-      labels: [],
     },
   },
 
@@ -26,29 +25,15 @@ export default {
 
   effects: {
     *fetchModelList({ payload }, { call, put }) {
-      const response = yield call(queryModels, payload);
+      const response = yield call(queryServingModels, payload);
       yield put({
         type: 'saveModelList',
         payload: response,
       });
     },
 
-    *removeModel({ payload }, { call, put }) {
-      const response = yield call(removeModels, { ids: payload.ids });
-      if (response.success) {
-        message.success(response.message);
-        yield put({
-          type: 'fetchModelList',
-          payload: payload.refreshParams,
-        });
-      } else {
-        // show message.
-        message.error(response.message);
-      }
-    },
-
-    *updateModel({ payload }, { call, put }) {
-      const response = yield call(updateModel, { ...payload });
+    *offlineModel({ payload }, { call, put }) {
+      const response = yield call(offlineServingModels, { ids: payload.ids });
       if (response.success) {
         message.success(response.message);
         yield put({

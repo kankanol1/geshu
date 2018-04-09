@@ -97,10 +97,13 @@ export const getRouterData = (app) => {
 
     /* model manage */
     '/models/list': {
-      component: dynamicWrapper(app, ['models'], () => import('../routes/Model/ModelList')),
+      component: dynamicWrapper(app, ['models/models'], () => import('../routes/Model/ModelList')),
     },
     '/models/candidates': {
-      component: dynamicWrapper(app, ['candidatemodels'], () => import('../routes/Model/CandidateModelList')),
+      component: dynamicWrapper(app, ['models/candidatemodels'], () => import('../routes/Model/CandidateModelList')),
+    },
+    '/models/serving': {
+      component: dynamicWrapper(app, ['models/servingmodels'], () => import('../routes/Model/ServingModelList')),
     },
 
     /* job manage */

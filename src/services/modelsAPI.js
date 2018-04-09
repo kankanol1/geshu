@@ -13,7 +13,6 @@ export async function removeModels(params) {
     method: 'POST',
     body: {
       ...params,
-      method: 'delete',
     },
   });
 }
@@ -36,7 +35,6 @@ export async function removeCandidateModels(params) {
     method: 'POST',
     body: {
       ...params,
-      method: 'delete',
     },
   });
 }
@@ -55,10 +53,23 @@ export async function publishCandidateModels(params) {
     method: 'POST',
     body: {
       ...params,
-      method: 'delete',
     },
   });
 }
+
+export async function queryServingModels(params) {
+  return request(`/api/models/serving/list?${stringify(params)}`);
+}
+
+export async function offlineServingModels(params) {
+  return request('/api/models/serving/offline', {
+    method: 'POST',
+    body: {
+      ...params,
+    },
+  });
+}
+
 export default {
   updateModel,
   removeModels,
@@ -67,4 +78,6 @@ export default {
   removeCandidateModels,
   queryCandidateModels,
   publishCandidateModels,
+  queryServingModels,
+  offlineServingModels,
 };
