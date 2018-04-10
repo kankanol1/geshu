@@ -44,7 +44,7 @@ function translateSwitchUISchema(originJsonSchema, id, code, name) {
 }
 
 function translateSelectUISchema(originJsonSchema, id, code, name) {
-  return { 'ui:field': 'select_schema', 'ui:options': '/api/file/getFileLists' };
+  return { 'ui:field': 'select_schema', 'ui:options': '/api/fs/ls' };
 }
 
 /** ======== end translate switch schema ========== */
