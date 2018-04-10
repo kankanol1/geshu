@@ -7,6 +7,7 @@ const registeredSpecialJsonSchemas = {
 
 const registeredSpecialUISchemas = {
   Switch_Schema: translateSwitchUISchema,
+  Select_Schema: translateSelectUISchema,
   Fixed_Any: translateFixedAnyUISchema,
 };
 
@@ -40,6 +41,10 @@ function translateSwitchJsonSchema(originJsonSchema, id, code, name) {
 
 function translateSwitchUISchema(originJsonSchema, id, code, name) {
   return { 'ui:field': 'switch_schema', schema: { 'ui:field': 'define_schema' } };
+}
+
+function translateSelectUISchema(originJsonSchema, id, code, name) {
+  return { 'ui:field': 'select_schema', 'ui:options': '/api/fs/ls' };
 }
 
 /** ======== end translate switch schema ========== */

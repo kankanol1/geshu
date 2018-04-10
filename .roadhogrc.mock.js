@@ -19,7 +19,7 @@ import { getJobs, cancelJobs, deleteJobs } from './mock/job';
 import { open, save, saveSettings, submit, validate } from './mock/workspace/workspace';
 import { getUserInfo, updatePassword } from './mock/selfmanage';
 import {recentGraph,saveGraph,getGraph,getDataSources,getDataSourceColumns,getGremlinServerAddress,getQueryList,saveQuery} from './mock/graph';
-import { getServingModels, offlineServingModels } from './mock/servingmodel';
+import {getFileList} from './mock/file';
 
 // 是否禁用代理
 const noProxy = process.env.NO_PROXY === 'true';
@@ -107,7 +107,7 @@ const proxy = serverEnabled ?
   // 'POST /api/workspace/sample/:projectId':
 
   // graph
-  'GET /api/graph/recent': recentGraph,
+  'GET /api/graph/recentGraph': recentGraph,
   'GET /api/graph/detail': getGraph,
   'POST /api/graph/save': saveGraph,  
   'GET /api/graph/datasource/list': getDataSources,  
@@ -120,11 +120,15 @@ const proxy = serverEnabled ?
   'POST /api/graph/update': updateProject,
   'POST /api/graph/create': createProject,
   
-
+  // file list
+  'GET /api/fs/ls': getFileList,
   
   // self manage.
   'GET /api/self/info': getUserInfo,
   'POST /api/self/password': updatePassword,
+
+
+
 
   // a sample test for component settings.
   'GET /api/component/sample': ["op1", "op2", "op3"],
