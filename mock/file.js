@@ -1,38 +1,27 @@
-const fileList = [
-  {
-    fileName: '文件夹1',
-    address: 'project/demo1',
-    addressId: '10001',
-    childFile: [
-      {
-        fileName: '子文件夹1',
-        address: 'project/demo1/file1',
-        addressId: '100010001',
-      },
-      {
-        fileName: '子文件夹2',
-        address: 'project/demo1/file2',
-        addressId: '100010001',
-      },
-      {
-        fileName: '子文件夹3',
-        address: 'project/demo1/file3',
-        addressId: '100010001',
-      },
-    ],
-  },
-  {
-    fileName: '文件夹1',
-    address: 'project/demo1',
-    addressId: '10001',
-  },
-];
+import { getUrlParams } from './utils';
 
-export function getFileList(res, req) {
-  const result = {
-    list: fileList,
-  };
-
+export function gitFileList(req, res, u) {
+  const result = [];
+  let url = u;
+  if (!url || Object.prototype.toString.call(url) !== '[object String]') {
+    url = req.url; // eslint-disable-line
+  }
+  const params = getUrlParams(url);
+  if (params.path === '/') {
+    for (let i = 0; i < 2; i++) {
+      result.push({
+        path: `/file${i}`,
+        isdir: true,
+      });
+    }
+  } else if (params.path === '/file0') {
+    for (let i = 0; i < 2; i++) {
+      result.push({
+        path: `/file1/text${i}`,
+        isdir: false,
+      });
+    }
+  }
   if (res && res.json) {
     res.json(result);
   } else {
@@ -40,10 +29,10 @@ export function getFileList(res, req) {
   }
 }
 
-export function saveFile(res, req) {
+export function saveFileList(req, res) {
   const result = {
     success: true,
-    message: '添加成功',
+    message: '保存成功',
   };
 
   if (res && res.json) {
@@ -53,7 +42,8 @@ export function saveFile(res, req) {
   }
 }
 
+
 export default {
-  getFileList,
-  saveFile,
+  gitFileList,
+  saveFileList,
 };
