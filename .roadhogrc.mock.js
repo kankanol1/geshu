@@ -18,8 +18,9 @@ import { getCandidateModels, updateCandidateModel, deleteCandidateModels, publis
 import { getJobs, cancelJobs, deleteJobs } from './mock/job';
 import { open, save, saveSettings, submit, validate } from './mock/workspace/workspace';
 import { getUserInfo, updatePassword } from './mock/selfmanage';
-import {recentGraph,saveGraph,getGraph,getDataSources,getDataSourceColumns,getGremlinServerAddress,getQueryList,saveQuery} from './mock/graph';
-import {getFileList} from './mock/file';
+import { recentGraph, saveGraph, getGraph, getDataSources, getDataSourceColumns, getGremlinServerAddress, getQueryList, saveQuery} from './mock/graph';
+import { getFileList } from './mock/file';
+import { getServingModels, offlineServingModels } from './mock/servingmodel';
 
 // 是否禁用代理
 const noProxy = process.env.NO_PROXY === 'true';
@@ -107,7 +108,7 @@ const proxy = serverEnabled ?
   // 'POST /api/workspace/sample/:projectId':
 
   // graph
-  'GET /api/graph/recentGraph': recentGraph,
+  'GET /api/graph/recent': recentGraph,
   'GET /api/graph/detail': getGraph,
   'POST /api/graph/save': saveGraph,  
   'GET /api/graph/datasource/list': getDataSources,  
