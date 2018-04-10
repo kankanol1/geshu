@@ -11,8 +11,8 @@ export default class SelectFile extends React.PureComponent {
       loading: true,
       listData: undefined,
       modal: false,
-      path: {},
-      select: {},
+      path: undefined,
+      select: undefined,
     };
     this.openSelectModel = this.openSelectModel.bind(this);
     this.select = this.select.bind(this);
