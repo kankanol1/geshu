@@ -21,6 +21,7 @@ import { getUserInfo, updatePassword } from './mock/selfmanage';
 import {recentGraph,saveGraph,getGraph,getDataSources,getDataSourceColumns,getGremlinServerAddress,getQueryList,saveQuery} from './mock/graph';
 import { getServingModels, offlineServingModels } from './mock/servingmodel';
 import {gitFileList, saveFileList} from './mock/file';
+import {getFileList} from './mock/file';
 
 // 是否禁用代理
 const noProxy = process.env.NO_PROXY === 'true';
@@ -121,9 +122,8 @@ const proxy = serverEnabled ?
   'POST /api/graph/update': updateProject,
   'POST /api/graph/create': createProject,
   
-  // // save file
-  'GET /api/file/getFileLists': gitFileList,
-  'GET /api/file/saveFileLists': saveFileList,
+  // file list
+  'GET /api/fs/ls': getFileList,
   
   // self manage.
   'GET /api/self/info': getUserInfo,

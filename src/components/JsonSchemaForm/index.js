@@ -9,7 +9,7 @@ import SampleWidget from './Widgets/SampleWidget';
 import SwitchSchemaWidget from './Widgets/SwitchSchemaWidget';
 import DefineSchemaWidget from './Widgets/DefineSchemaWidget';
 import SelectWidget from './Widgets/SelectWidget';
-import SelectFile from './Widgets/SelectFile';
+import FileSelectorWidget from './Widgets/FileSelectorWidget';
 import ObjectFieldTemplate from './Templates/ObjectFieldTemplate';
 import AnyValueWidget from './Widgets/AnyValueWidget';
 
@@ -23,7 +23,7 @@ const registeredFields = {
   sample: SampleWidget,
   switch_schema: SwitchSchemaWidget,
   define_schema: DefineSchemaWidget,
-  select_schema: SelectFile,
+  select_schema: FileSelectorWidget,
   any_value: AnyValueWidget,
 };
 
