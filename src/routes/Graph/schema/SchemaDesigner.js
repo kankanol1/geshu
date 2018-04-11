@@ -1,8 +1,10 @@
 import React from 'react';
 import { connect } from 'dva';
-import { Layout, Row, Col, Menu, Icon, Card } from 'antd';
+import { Layout, Row, Col, Menu, Icon, Card, Modal } from 'antd';
 import ElementInspector from './ElementInspector';
 import IndexInspector from './IndexInspector';
+
+const { confirm } = Modal;
 
 
 class GraphDesigner extends React.PureComponent {
@@ -39,6 +41,28 @@ class GraphDesigner extends React.PureComponent {
             }}
             >
               <Icon type="delete" />清空
+            </a>
+          </Menu.Item>
+          <Menu.Item>
+            <a onClick={() => {
+                const self = this;
+                confirm({
+                  title: '确定开始创建数据库？',
+                  content: '系统将会保存当前已进行的设计，并进行创建操作。',
+                  okText: '确定',
+                  cancelText: '取消',
+                  onOk() {
+                    self.props.dispatch({
+                      type: 'graph_schema_editor/saveSchema',
+                      payload: 'execute',
+                    });
+                  },
+                  onCancel() { },
+                });
+              }}
+            >
+              <Icon type="caret-right" />
+              运行
             </a>
           </Menu.Item>
           <Menu.Item>
