@@ -20,7 +20,7 @@ import { open, save, saveSettings, submit, validate } from './mock/workspace/wor
 import { getUserInfo, updatePassword } from './mock/selfmanage';
 import {recentGraph,saveGraph,getGraph,getDataSources,getDataSourceColumns,getGremlinServerAddress,getQueryList,saveQuery,updateQuery,deleteQuery,executeGraph} from './mock/graph';
 import { getFileList } from './mock/file';
-import { getServingModels, offlineServingModels } from './mock/servingmodel';
+import { getServingModels, offlineServingModels, onlineServingModels } from './mock/servingmodel';
 
 // 是否禁用代理
 const noProxy = process.env.NO_PROXY === 'true';
@@ -86,6 +86,7 @@ const proxy = serverEnabled ?
   // // serving model manage.
   'GET /api/models/serving/list': getServingModels,
   'POST /api/models/serving/offline': offlineServingModels,
+  'POST /api/models/serving/online': onlineServingModels,
 
   // job manage.
   'GET /api/jobs/list': getJobs,

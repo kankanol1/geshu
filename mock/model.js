@@ -10,10 +10,11 @@ let models = [
   { id: 'gen-1',
     name: '模型1',
     description: '模型描述',
-    addedBy: 'user1',
+    addedBy: 'admin',
     createdAt: moment('2018-03-02', 'YYYY-MM-DD'),
     addedAt: moment('2018-03-03', 'YYYY-MM-DD'),
     updatedAt: moment('2018-02-0', 'YYYY-MM-DD'),
+    isOnline: false,
   },
 ];
 
@@ -21,11 +22,12 @@ for (let i = 0; i < 66; i += 1) {
   models.push({
     id: `gen${i}`,
     name: `模型${i}`,
-    addedBy: `user${i}`,
+    addedBy: i % 5 === 0 ? `user${i}` : (i % 5 === 1 ? 'admin' : 'user'),
     description: `模型描述${i}`,
     createdAt: moment('2018-03-02', 'YYYY-MM-DD'),
     addedAt: moment('2018-03-03', 'YYYY-MM-DD'),
     updatedAt: moment(`2018-02-0${Math.floor(i / 20) + 1}`, 'YYYY-MM-DD'),
+    isOnline: i % 5 === 0,
   });
 }
 

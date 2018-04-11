@@ -1,5 +1,5 @@
 import { message } from 'antd';
-import { queryModels, removeModels, updateModel } from '../../services/modelsAPI';
+import { queryModels, removeModels, updateModel, onlineModel, offlineServingModels } from '../../services/modelsAPI';
 
 export default {
   namespace: 'models',
@@ -53,6 +53,34 @@ export default {
         message.success(response.message);
         yield put({
           type: 'fetchModelList',
+          payload: payload.refreshParams,
+        });
+      } else {
+        // show message.
+        message.error(response.message);
+      }
+    },
+
+    *onlineModels({ payload }, { call, put }) {
+      const response = yield call(onlineModel, { ...payload });
+      if (response.success) {
+        message.success(response.message);
+        yield put({
+          type: 'fetchCandidateModelList',
+          payload: payload.refreshParams,
+        });
+      } else {
+        // show message.
+        message.error(response.message);
+      }
+    },
+
+    *offlineModels({ payload }, { call, put }) {
+      const response = yield call(offlineServingModels, { ...payload });
+      if (response.success) {
+        message.success(response.message);
+        yield put({
+          type: 'fetchCandidateModelList',
           payload: payload.refreshParams,
         });
       } else {

@@ -57,6 +57,15 @@ export async function publishCandidateModels(params) {
   });
 }
 
+export async function onlineModel(params) {
+  return request('/api/models/serving/online', {
+    method: 'POST',
+    body: {
+      ...params,
+    },
+  });
+}
+
 export async function queryServingModels(params) {
   return request(`/api/models/serving/list?${stringify(params)}`);
 }

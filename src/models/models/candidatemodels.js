@@ -1,5 +1,5 @@
 import { message } from 'antd';
-import { publishCandidateModels, updateCandidateModel, removeCandidateModels, queryCandidateModels } from '../../services/modelsAPI';
+import { publishCandidateModels, updateCandidateModel, removeCandidateModels, queryCandidateModels, onlineModel, offlineServingModels } from '../../services/modelsAPI';
 
 export default {
   namespace: 'candidatemodels',
@@ -63,6 +63,34 @@ export default {
 
     *publishCandidateModels({ payload }, { call, put }) {
       const response = yield call(publishCandidateModels, { ...payload });
+      if (response.success) {
+        message.success(response.message);
+        yield put({
+          type: 'fetchCandidateModelList',
+          payload: payload.refreshParams,
+        });
+      } else {
+        // show message.
+        message.error(response.message);
+      }
+    },
+
+    *onlineCandidateModels({ payload }, { call, put }) {
+      const response = yield call(onlineModel, { ...payload });
+      if (response.success) {
+        message.success(response.message);
+        yield put({
+          type: 'fetchCandidateModelList',
+          payload: payload.refreshParams,
+        });
+      } else {
+        // show message.
+        message.error(response.message);
+      }
+    },
+
+    *offlineCandidateModels({ payload }, { call, put }) {
+      const response = yield call(offlineServingModels, { ...payload });
       if (response.success) {
         message.success(response.message);
         yield put({

@@ -83,7 +83,7 @@ const getValue = obj => Object.keys(obj).map(key => obj[key]).join(',');
   loading: loading.models.candidatemodels,
 }))
 @Form.create()
-export default class ModelList extends PureComponent {
+export default class CandidateModelList extends PureComponent {
   state = {
     modalVisible: false,
     selectedRows: [],
@@ -123,12 +123,32 @@ export default class ModelList extends PureComponent {
       render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
     },
     {
+      title: '状态',
+      dataIndex: 'isOnline',
+      render: val => (val ? '已上线' : '未上线'),
+    },
+    {
       title: '操作',
       render: (text, record) => (
         <Fragment>
-          <Popconfirm title="确认发布吗?" onConfirm={() => this.handlePublish(record)}>
-            <a>发布</a>
+          <Popconfirm title="确认公开至模型库吗?" onConfirm={() => this.changeMakePublic(record)}>
+            <a>公开</a>
           </Popconfirm>
+          <Divider type="vertical" />
+          {
+            record.isOnline
+            ? (
+              <Popconfirm title="确认下线吗?" onConfirm={() => this.handleOfflineModel(record)}>
+                <a>下线</a>
+              </Popconfirm>
+              )
+               :
+               (
+                 <Popconfirm title="确认上线吗?" onConfirm={() => this.handleOnlineModel(record)}>
+                   <a>上线</a>
+                 </Popconfirm>
+              )
+          }
           <Divider type="vertical" />
           <a onClick={() => this.handleEdit(record)} >编辑</a>
           <Divider type="vertical" />
@@ -197,11 +217,33 @@ export default class ModelList extends PureComponent {
     this.handleModalVisible(false);
   }
 
-  handlePublish = (record) => {
+  changeMakePublic = (record) => {
     const { dispatch } = this.props;
 
     dispatch({
       type: 'candidatemodels/publishCandidateModels',
+      payload: {
+        ids: [record.id],
+      },
+    });
+  }
+
+  handleOnlineModel = (record) => {
+    const { dispatch } = this.props;
+
+    dispatch({
+      type: 'candidatemodels/onlineCandidateModels',
+      payload: {
+        ids: [record.id],
+      },
+    });
+  }
+
+  handleOfflineModel = (record) => {
+    const { dispatch } = this.props;
+
+    dispatch({
+      type: 'candidatemodels/offlineCandidateModels',
       payload: {
         ids: [record.id],
       },
