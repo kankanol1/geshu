@@ -55,39 +55,18 @@ class MappingDesigner extends React.PureComponent {
           />
         </Modal>
         <Menu mode="horizontal">
-          <Menu.SubMenu title={<span><Icon type="save" />保存</span>}>
-            <Menu.Item >
-              <a onClick={() => {
+          <Menu.Item >
+
+            <a onClick={() => {
                 this.props.dispatch({
                   type: 'graph_mapping_editor/saveMapping',
                 });
               }}
-              >
+            >
+              <Icon type="save" />
               保存
-              </a>
-            </Menu.Item>
-            <Menu.Item>
-              <a onClick={() => {
-                const self = this;
-                confirm({
-                  title: '确定开始导入数据？',
-                  content: '开始数据导入后对项目的修改不会立即生效',
-                  okText: '确定',
-                  cancelText: '取消',
-                  onOk() {
-                    self.props.dispatch({
-                      type: 'graph_mapping_editor/saveMapping',
-                      payload: 'excute',
-                    });
-                  },
-                  onCancel() { },
-                });
-              }}
-              >
-              保存并开始导入...
-              </a>
-            </Menu.Item>
-          </Menu.SubMenu>
+            </a>
+          </Menu.Item>
           <Menu.Item>
             <a onClick={() => {
               this.props.dispatch({
@@ -104,6 +83,28 @@ class MappingDesigner extends React.PureComponent {
             }}
             >
               <Icon type="file-add" />添加
+            </a>
+          </Menu.Item>
+          <Menu.Item>
+            <a onClick={() => {
+                const self = this;
+                confirm({
+                  title: '确定开始导入数据？',
+                  content: '系统将会保存当前已进行的操作，并开始数据导入。',
+                  okText: '确定',
+                  cancelText: '取消',
+                  onOk() {
+                    self.props.dispatch({
+                      type: 'graph_mapping_editor/saveMapping',
+                      payload: 'excute',
+                    });
+                  },
+                  onCancel() { },
+                });
+              }}
+            >
+              <Icon type="caret-right" />
+              运行
             </a>
           </Menu.Item>
           <Menu.Item>

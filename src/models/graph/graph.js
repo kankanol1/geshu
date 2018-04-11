@@ -92,7 +92,6 @@ export default {
       }
     },
     *createProject({ payload, resolve, reject }, { call, put }) {
-      console.log(555);
       const response = yield call(createProject, { ...payload });
       if (response.success) {
         message.success(response.message);

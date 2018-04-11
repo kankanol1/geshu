@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign,guard-for-in,no-useless-escape */
 
 import { message } from 'antd';
-import { getGremlinServerAddress, queryGremlinServer, getGremlinQueries, saveQuery } from '../../services/graphAPI';
+import { getGremlinServerAddress, queryGremlinServer, getGremlinQueries, createQuery, updateQuery, removeQuery } from '../../services/graphAPI';
 import GojsRelationGraph from '../../utils/GojsRelationGraph';
 
 function graphson3to1(data) {
@@ -105,7 +105,6 @@ export default {
     code: '',
     host: '',
     port: '',
-    loadedCode: false,
     showGraph: true,
     id: '',
     name: '',
@@ -145,26 +144,12 @@ export default {
       return Object.assign({}, {
         ...state,
         code: payload,
-        loadedCode: false,
       });
     },
     saveResponse(state, { payload }) {
       return Object.assign({}, {
         ...state,
         responseJson: formatJson(JSON.stringify(payload)),
-      });
-    },
-    loadQuery(state, { payload }) {
-      return Object.assign({}, {
-        ...state,
-        code: state.queries[payload].query,
-        loadedCode: true,
-      });
-    },
-    startLoadQueries(state, { payload }) {
-      return Object.assign({}, {
-        ...state,
-        queryLoading: true,
       });
     },
     saveQueries(state, { payload }) {
@@ -174,7 +159,6 @@ export default {
       return Object.assign({}, {
         ...state,
         queries: payload,
-        queryLoading: false,
       });
     },
 
@@ -192,7 +176,7 @@ export default {
     },
     *saveQuery({ payload }, { call, put, select }) {
       const { id, code } = yield select(state => state.graph_query);
-      const response = yield call(saveQuery, {
+      const response = yield call(createQuery, {
         graphId: id,
         query: code,
         name: payload,
@@ -232,6 +216,33 @@ export default {
         type: 'saveQueries',
         payload: response.data,
       });
+    },
+    *updateQuery({ payload }, { call, put, select }) {
+      const { graphId } = yield select(state => state.graph_query);
+      const response = yield call(updateQuery, { ...payload, graphId });
+      if (response.success) {
+        message.success(response.message);
+        yield put({
+          type: 'queryList',
+          graphId,
+        });
+      } else {
+        // show message.
+        message.error(response.message);
+      }
+    },
+    *removeQuery({ payload }, { call, put }) {
+      const response = yield call(removeQuery, { ids: payload.ids });
+      if (response.success) {
+        message.success(response.message);
+        yield put({
+          type: 'queryList',
+          payload: payload.refreshParams,
+        });
+      } else {
+        // show message.
+        message.error(response.message);
+      }
     },
   },
 };

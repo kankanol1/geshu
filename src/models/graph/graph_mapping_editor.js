@@ -177,7 +177,7 @@ export default {
           frontendMappingJson,
           backendMappingJson,
           id,
-          excute: !!payload,
+          excute: payload ? 'mapping' : undefined,
         });
       if (!payload) { message.info(response.message); } else {
         yield put(routerRedux.push('/jobs/list'));
