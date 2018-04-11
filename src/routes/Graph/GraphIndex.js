@@ -9,7 +9,7 @@ const { Header } = Layout;
 
 @connect(({ graph, loading }) => ({
   graph,
-  loading: loading.models.project,
+  loading: loading.models.graph,
 }))
 export default class GraphIndex extends Component {
   componentDidMount() {
@@ -29,7 +29,6 @@ export default class GraphIndex extends Component {
   render() {
     const { recentGraph } = this.props.graph;
     const loading = this.props.loading || recentGraph.loading;
-    console.log(this.props.graph);
     return (
       <Layout className={styles.contentLayout} theme="light">
         <Card title="项目列表" className={styles.firstCard}>

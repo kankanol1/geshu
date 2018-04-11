@@ -16,8 +16,8 @@ export async function saveGraph(params) {
     },
   });
 }
-export async function saveQuery(params) {
-  return request('/api/graph/saveQuery', {
+export async function createQuery(params) {
+  return request('/api/graph/query/create', {
     method: 'POST',
     body: {
       ...params,
@@ -94,6 +94,25 @@ export async function createProject(params) {
   });
 }
 
+export async function updateQuery(params) {
+  return request('/api/graph/query/update', {
+    method: 'POST',
+    body: {
+      ...params,
+    },
+  });
+}
+
+export async function removeQuery(params) {
+  return request('/api/graph/query/delete', {
+    method: 'POST',
+    body: {
+      ...params,
+      method: 'delete',
+    },
+  });
+}
+
 export default {
   recentGraph,
   saveGraph,
@@ -102,9 +121,11 @@ export default {
   getGremlinServerAddress,
   queryGremlinServer,
   getGremlinQueries,
-  saveQuery,
+  createQuery,
   queryGraphList,
   removeProject,
   updateProject,
   createProject,
+  updateQuery,
+  removeQuery,
 };

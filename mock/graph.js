@@ -32,18 +32,6 @@ export function saveGraph(req, res) {
   }
 }
 
-export function saveQuery(req, res) {
-  const result = {
-    success: true,
-    message: '保存成功',
-  };
-
-  if (res && res.json) {
-    res.json(result);
-  } else {
-    return result;
-  }
-}
 
 export function getGraph(req, res) {
   const result = {
@@ -91,7 +79,31 @@ export function getGraph(req, res) {
     return result;
   }
 }
+export function saveQuery(req, res, u, b) {
+  let url = u;
+  if (!url || Object.prototype.toString.call(url) !== '[object String]') {
+    url = req.url; // eslint-disable-line
+  }
 
+  const body = (b && b.body) || req.body;
+  const { name, query } = body;
+  queries[i] = {
+    id: i,
+    name,
+    query,
+  };
+  i++;
+  const result = {
+    success: true,
+    message: '添加成功',
+  };
+
+  if (res && res.json) {
+    res.json(result);
+  } else {
+    return result;
+  }
+}
 export function getDataSources(req, res) {
   const fileList = [];
   for (let i = 0; i < 10; i++) { fileList.push({ id: `file${i}`, name: `file${i}.csv` }); }
@@ -124,44 +136,106 @@ export function getGremlinServerAddress(req, res) {
     return result;
   }
 }
+let i = 3;
+let queries = [
+  {
+    id: 0,
+    createdAt: moment('2018-01-01', 'YYYY-MM-DD'),
+    name: 'queryAll',
+    query: `nodes=g.V().limit(5)
+    edges = g.V()
+            .limit(5)
+            .aggregate('node')
+            .outE()
+            .as('edge')
+            .inV()
+            .where(within('node'))
+            .select('edge')
+    [nodes.toList(),edges.toList()]`,
+
+  },
+  {
+    id: 1,
+    name: 'exploreNode',
+    createdAt: moment('2018-01-01', 'YYYY-MM-DD'),
+    query: `nodes =g.V(1).as("node").both().as("node")
+    .select(all,"node").inject(g.V(1)).unfold()
+    edges = g.V(1).bothE()
+    [nodes.toList(),edges.toList()]`,
+  },
+  {
+    id: 2,
+    name: 'searchNodeBy',
+    createdAt: moment('2018-01-01', 'YYYY-MM-DD'),
+    query: `nodes=g.V().has('name','vadas')
+    edges = g.V().
+      has('name','vadas').
+      aggregate('node')
+      .outE().as('edge')
+      .inV()
+      .where(within('node'))
+      .select('edge')
+    [nodes.toList(),edges.toList()]`,
+  },
+];
+for (; i < 20; i++) {
+  queries.push({
+    id: i,
+    name: `query${i}`,
+    query: 'g.V()',
+    createdAt: moment('2018-01-01', 'YYYY-MM-DD'),
+  });
+}
 export function getQueryList(req, res, u) {
   const result = {
     success: true,
     data: [
-      {
-        name: 'queryAll',
-        query: `nodes=g.V().limit(5)
-        edges = g.V()
-                .limit(5)
-                .aggregate('node')
-                .outE()
-                .as('edge')
-                .inV()
-                .where(within('node'))
-                .select('edge')
-        [nodes.toList(),edges.toList()]`,
-
-      },
-      {
-        name: 'exploreNode',
-        query: `nodes =g.V(1).as("node").both().as("node")
-        .select(all,"node").inject(g.V(1)).unfold()
-        edges = g.V(1).bothE()
-        [nodes.toList(),edges.toList()]`,
-      },
-      {
-        name: 'searchNodeBy',
-        query: `nodes=g.V().has('name','vadas')
-        edges = g.V().
-          has('name','vadas').
-          aggregate('node')
-          .outE().as('edge')
-          .inV()
-          .where(within('node'))
-          .select('edge')
-        [nodes.toList(),edges.toList()]`,
-      },
+      ...queries,
     ],
+  };
+
+  if (res && res.json) {
+    res.json(result);
+  } else {
+    return result;
+  }
+}
+
+export function updateQuery(req, res, u, b) {
+  let url = u;
+  if (!url || Object.prototype.toString.call(url) !== '[object String]') {
+    url = req.url; // eslint-disable-line
+  }
+  const body = (b && b.body) || req.body;
+  const { id, name } = body;
+
+  queries[id].name = name;
+  const result = {
+    success: true,
+    message: '修改成功',
+  };
+
+  if (res && res.json) {
+    res.json(result);
+  } else {
+    return result;
+  }
+}
+
+export function deleteQuery(req, res, u, b) {
+  let url = u;
+  if (!url || Object.prototype.toString.call(url) !== '[object String]') {
+    url = req.url; // eslint-disable-line
+  }
+
+  const body = (b && b.body) || req.body;
+  const { ids } = body;
+
+  queries = queries.filter(item => !ids.includes(item.id));
+
+  const result = {
+    success: true,
+    message: '删除成功',
   };
 
   if (res && res.json) {
@@ -178,7 +252,7 @@ export function getDataSourceColumns(req, res, u) {
   }
   const params = getUrlParams(url);
   const columnList = [];
-  for (let i = 0; i < 10; i++) { columnList.push(`${params.id}-column${i}`); }
+  for (let j = 0; j < 10; j++) { columnList.push(`${params.id}-column${j}`); }
   const result = {
     success: true,
     data: columnList,
@@ -190,6 +264,8 @@ export function getDataSourceColumns(req, res, u) {
     return result;
   }
 }
+
+
 export default {
   recentGraph,
   saveGraph,
@@ -198,4 +274,6 @@ export default {
   getDataSourceColumns,
   getQueryList,
   saveQuery,
+  updateQuery,
+  deleteQuery,
 };

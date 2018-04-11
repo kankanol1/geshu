@@ -16,7 +16,7 @@ const getValue = obj => Object.keys(obj).map(key => obj[key]).join(',');
 
 @connect(({ graph, loading }) => ({
   graph,
-  loading: loading.models.project,
+  loading: loading.models.graph,
 }))
 @Form.create()
 export default class ProjectList extends PureComponent {
@@ -46,6 +46,10 @@ export default class ProjectList extends PureComponent {
     {
       title: '项目描述',
       dataIndex: 'description',
+    },
+    {
+      title: '项目状态',
+      dataIndex: 'status',
     },
     {
       title: '更新时间',

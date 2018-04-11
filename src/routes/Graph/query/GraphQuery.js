@@ -8,6 +8,7 @@ import Highlight from 'react-highlight';
 import 'highlight.js/styles/github.css';
 import styles from './GraphQuery.css';
 import './gremlin';
+import QueryTable from './QueryTable';
 
 
 class GraphQuery extends React.PureComponent {
@@ -35,9 +36,6 @@ class GraphQuery extends React.PureComponent {
         },
       },
     });
-  }
-  componentWillReceiveProps(newProps) {
-    if (newProps.loadedCode) { this.codeMirror.getCodeMirror().setValue(newProps.code); }
   }
   handleOk = (e) => {
     this.props.dispatch({
@@ -97,27 +95,19 @@ class GraphQuery extends React.PureComponent {
           visible={this.state.show}
           onOk={this.handleOk}
           onCancel={this.handleCancel}
-          style={{ minWidth: '1000px!important' }}
+          width={800}
         >
-          <Spin spinning={this.props.queryLoading}>
-            <Select
-              showSearch
-              style={{ width: '100%' }}
-              placeholder="选择查询..."
-              optionFilterProp="children"
-              value={this.state.currentQuery}
-              onChange={this.handleChange}
-              filterOption={(input, option) =>
-                option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-            >
-              {
-                this.props.queries
-                .map(value =>
-                  <Select.Option value={value.index} key={value.index}>{value.name}</Select.Option>
-                )
-              }
-            </Select>
-          </Spin>
+          <QueryTable onOpen={(query) => {
+            this.setState({
+              show: false,
+            });
+            this.codeMirror.getCodeMirror().setValue(query);
+            this.props.dispatch({
+              type: 'graph_query/saveCode',
+              payload: query,
+            });
+          }}
+          />
         </Modal>
         <Menu mode="horizontal">
           <strong style={{ marginLeft: '45%' }}>项目名称：{this.props.name}</strong>
