@@ -23,7 +23,7 @@ const registeredFields = {
   sample: SampleWidget,
   switch_schema: SwitchSchemaWidget,
   define_schema: DefineSchemaWidget,
-  select_schema: FileSelectorWidget,
+  file_selector: FileSelectorWidget,
   any_value: AnyValueWidget,
 };
 

@@ -7,7 +7,7 @@ const registeredSpecialJsonSchemas = {
 
 const registeredSpecialUISchemas = {
   Switch_Schema: translateSwitchUISchema,
-  Select_Schema: translateSelectUISchema,
+  Existing_File: translateExistingFileUISchema,
   Fixed_Any: translateFixedAnyUISchema,
 };
 
@@ -43,8 +43,8 @@ function translateSwitchUISchema(originJsonSchema, id, code, name) {
   return { 'ui:field': 'switch_schema', schema: { 'ui:field': 'define_schema' } };
 }
 
-function translateSelectUISchema(originJsonSchema, id, code, name) {
-  return { 'ui:field': 'select_schema', 'ui:options': '/api/fs/ls' };
+function translateExistingFileUISchema(originJsonSchema, id, code, name) {
+  return { 'ui:field': 'file_selector', 'ui:options': '/api/fs/ls' };
 }
 
 /** ======== end translate switch schema ========== */

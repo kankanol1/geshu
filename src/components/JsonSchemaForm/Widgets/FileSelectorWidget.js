@@ -32,7 +32,11 @@ export default class FileSelectorWidget extends React.PureComponent {
     this.setState({ loading: true, path });
     const url = this.props.uiSchema['ui:options'];
     const urlWithParam = `${url}?path=${path}`;
-    fetch(urlWithParam).then(results => results.json())
+    // fetch options
+    const fetchOptions = {
+      credentials: 'include',
+    };
+    fetch(urlWithParam, fetchOptions).then(results => results.json())
       .then((result) => {
         const translatedResult = [];
         result.forEach((r, i) => {
