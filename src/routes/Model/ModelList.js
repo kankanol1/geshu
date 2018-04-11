@@ -78,9 +78,10 @@ const ModifyForm = Form.create()((props) => {
 
 const getValue = obj => Object.keys(obj).map(key => obj[key]).join(',');
 
-@connect(({ models, loading }) => ({
+@connect(({ models, loading, users }) => ({
   models,
   loading: loading.models.models,
+  currentUser: users.currentUser,
 }))
 @Form.create()
 export default class ModelList extends PureComponent {
@@ -99,50 +100,74 @@ export default class ModelList extends PureComponent {
     });
   }
 
-  columns = [
-    {
-      title: '编号',
-      dataIndex: 'id',
-    },
-    {
-      title: '名称',
-      dataIndex: 'name',
-    },
-    {
-      title: '模型描述',
-      dataIndex: 'description',
-    },
-    {
-      title: '添加人',
-      dataIndex: 'addedBy',
-    },
-    {
-      title: '创建时间',
-      dataIndex: 'createdAt',
-      sorter: true,
-      render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
-    },
-    {
-      title: '添加时间',
-      dataIndex: 'addedAt',
-      sorter: true,
-      render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
-    },
-    {
-      title: '操作',
-      render: (text, record) => (
-        <Fragment>
-          <a onClick={() => this.handleEdit(record)} >编辑</a>
-          <Divider type="vertical" />
-          <span>
-            <Popconfirm title="确认删除吗?" onConfirm={() => this.handleRecordDelete(record)}>
-              <a>删除</a>
-            </Popconfirm>
-          </span>
-        </Fragment>
-      ),
-    },
-  ];
+  getColumns = (currentUser) => {
+    return [
+      {
+        title: '编号',
+        dataIndex: 'id',
+      },
+      {
+        title: '名称',
+        dataIndex: 'name',
+      },
+      {
+        title: '模型描述',
+        dataIndex: 'description',
+      },
+      {
+        title: '添加人',
+        dataIndex: 'addedBy',
+      },
+      {
+        title: '创建时间',
+        dataIndex: 'createdAt',
+        sorter: true,
+        render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
+      },
+      {
+        title: '添加时间',
+        dataIndex: 'addedAt',
+        sorter: true,
+        render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
+      },
+      {
+        title: '状态',
+        dataIndex: 'isOnline',
+        render: val => (val ? '已上线' : '未上线'),
+      },
+      {
+        title: '操作',
+        render: (text, record) =>
+          ((record.addedBy === currentUser.userName || currentUser.role === 'admin')
+            ? (
+              <Fragment>
+                {
+                record.isOnline
+                ? (
+                  <Popconfirm title="确认下线吗?" onConfirm={() => this.handleOfflineModel(record)}>
+                    <a>下线</a>
+                  </Popconfirm>
+                  )
+                   :
+                   (
+                     <Popconfirm title="确认上线吗?" onConfirm={() => this.handleOnlineModel(record)}>
+                       <a>上线</a>
+                     </Popconfirm>
+                  )
+              }
+                <Divider type="vertical" />
+                <a onClick={() => this.handleEdit(record)} >编辑</a>
+                <Divider type="vertical" />
+                <span>
+                  <Popconfirm title="确认删除吗?" onConfirm={() => this.handleRecordDelete(record)}>
+                    <a>删除</a>
+                  </Popconfirm>
+                </span>
+              </Fragment>
+            ) : null),
+      },
+    ];
+  }
 
   refreshParams = {}
 
@@ -197,6 +222,28 @@ export default class ModelList extends PureComponent {
       },
     });
     this.handleModalVisible(false);
+  }
+
+  handleOnlineModel = (record) => {
+    const { dispatch } = this.props;
+
+    dispatch({
+      type: 'models/onlineModels',
+      payload: {
+        ids: [record.id],
+      },
+    });
+  }
+
+  handleOfflineModel = (record) => {
+    const { dispatch } = this.props;
+
+    dispatch({
+      type: 'models/offlineModels',
+      payload: {
+        ids: [record.id],
+      },
+    });
   }
 
   handleSearch = (e) => {
@@ -363,7 +410,7 @@ export default class ModelList extends PureComponent {
             selectedRows={selectedRows}
             loading={loading}
             data={data}
-            columns={this.columns}
+            columns={this.getColumns(this.props.currentUser)}
             onSelectRow={this.handleSelectRows}
             onChange={this.handleStandardTableChange}
           />

@@ -6,7 +6,8 @@ let models = [
     name: 'c模型1',
     description: '模型描述',
     url: 'http://localhost:8080/serving/model-xxx',
-    publishedAt: moment('2018-03-02', 'YYYY-MM-DD'),
+    onlinedAt: moment('2018-03-02', 'YYYY-MM-DD'),
+    onlinedBy: 'user',
   },
 ];
 
@@ -16,7 +17,8 @@ for (let i = 0; i < 66; i += 1) {
     name: `c模型${i}`,
     description: `模型描述${i}`,
     url: `http://localhost:8080/serving/model-${i}`,
-    publishedAt: moment('2018-03-02', 'YYYY-MM-DD'),
+    onlinedAt: moment('2018-03-02', 'YYYY-MM-DD'),
+    onlinedBy: i % 5 === 0 ? `user${i}` : (i % 5 === 1 ? 'admin' : 'user'),
   });
 }
 
@@ -48,10 +50,10 @@ export function getServingModels(req, res, u) {
     dataSource = dataSource.filter(data => data.url.indexOf(params.url) >= 0);
   }
 
-  if (params.publishedAt) {
-    const publishedAt = params.publishedAt.split(',').map(t => moment(t, 'YYYYMMDD'));
+  if (params.onlinedAt) {
+    const onlinedAt = params.onlinedAt.split(',').map(t => moment(t, 'YYYYMMDD'));
     dataSource = dataSource.filter((data) => {
-      if (data.publishedAt >= publishedAt[0] && data.publishedAt <= publishedAt[1]) {
+      if (data.onlinedAt >= onlinedAt[0] && data.onlinedAt <= onlinedAt[1]) {
         return true;
       }
       return false;
@@ -74,7 +76,7 @@ export function getServingModels(req, res, u) {
   const formatedDataSource = returnDataSource.map((item) => {
     return {
       ...item,
-      publishedAt: item.publishedAt.format('YYYY-MM-DD HH:mm'),
+      onlinedAt: item.onlinedAt.format('YYYY-MM-DD HH:mm'),
     };
   });
 
@@ -107,7 +109,30 @@ export function offlineServingModels(req, res, u, b) {
 
   const result = {
     success: true,
-    message: '删除成功',
+    message: '下线成功',
+  };
+
+  if (res && res.json) {
+    res.json(result);
+  } else {
+    return result;
+  }
+}
+
+export function onlineServingModels(req, res, u, b) {
+  let url = u;
+  if (!url || Object.prototype.toString.call(url) !== '[object String]') {
+    url = req.url; // eslint-disable-line
+  }
+
+  const body = (b && b.body) || req.body;
+  const { ids } = body;
+
+  models = models.filter(item => !ids.includes(item.id));
+
+  const result = {
+    success: true,
+    message: '上线成功',
   };
 
   if (res && res.json) {
@@ -120,4 +145,5 @@ export function offlineServingModels(req, res, u, b) {
 export default {
   offlineServingModels,
   getServingModels,
+  onlineServingModels,
 };

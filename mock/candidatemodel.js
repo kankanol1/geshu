@@ -3,23 +3,25 @@ import { getUrlParams } from './utils';
 import { addModel } from './model';
 
 let models = [
-  { id: 'gen-1',
+  { id: 'cgen-1',
     name: 'c模型1',
     description: '模型描述',
     projectName: 'project1',
     projectId: '0',
     createdAt: moment('2018-03-02', 'YYYY-MM-DD'),
+    isOnline: true,
   },
 ];
 
 for (let i = 0; i < 66; i += 1) {
   models.push({
-    id: `gen${i}`,
+    id: `cgen${i}`,
     name: `c模型${i}`,
     description: `模型描述${i}`,
     projectName: 'project1',
     projectId: '0',
     createdAt: moment('2018-03-02', 'YYYY-MM-DD'),
+    isOnline: i % 4 === 0,
   });
 }
 

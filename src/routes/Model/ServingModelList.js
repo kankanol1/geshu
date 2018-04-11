@@ -11,9 +11,10 @@ const { RangePicker } = DatePicker;
 
 const getValue = obj => Object.keys(obj).map(key => obj[key]).join(',');
 
-@connect(({ servingmodels, loading }) => ({
+@connect(({ servingmodels, loading, users }) => ({
   servingmodels,
   loading: loading.models.servingmodels,
+  currentUser: users.currentUser,
 }))
 @Form.create()
 export default class ServingModelList extends PureComponent {
@@ -32,39 +33,50 @@ export default class ServingModelList extends PureComponent {
     });
   }
 
-  columns = [
-    {
-      title: '编号',
-      dataIndex: 'id',
-    },
-    {
-      title: '名称',
-      dataIndex: 'name',
-    },
-    {
-      title: '模型描述',
-      dataIndex: 'description',
-    },
-    {
-      title: '发布地址',
-      dataIndex: 'url',
-      render: val => <a href={val}>{val}</a>,
-    },
-    {
-      title: '上线时间',
-      dataIndex: 'publishedAt',
-      sorter: true,
-      render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
-    },
-    {
-      title: '操作',
-      render: (text, record) => (
-        <Popconfirm title="确认下线吗?" onConfirm={() => this.handleRecordDelete(record)}>
-          <a>下线</a>
-        </Popconfirm>
-      ),
-    },
-  ];
+  getColumns = (currentUser) => {
+    return [
+      {
+        title: '编号',
+        dataIndex: 'id',
+      },
+      {
+        title: '名称',
+        dataIndex: 'name',
+      },
+      {
+        title: '模型描述',
+        dataIndex: 'description',
+      },
+      {
+        title: '发布地址',
+        dataIndex: 'url',
+        render: val => <a href={val}>{val}</a>,
+      },
+      {
+        title: '上线时间',
+        dataIndex: 'onlinedAt',
+        sorter: true,
+        render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
+      },
+      {
+        title: '操作人',
+        dataIndex: 'onlinedBy',
+      },
+      {
+        title: '操作',
+        render: (text, record) => (
+          (currentUser.userName === record.onlinedBy || currentUser.role === 'admin')
+            ?
+            (
+              <Popconfirm title="确认下线吗?" onConfirm={() => this.handleRecordDelete(record)}>
+                <a>下线</a>
+              </Popconfirm>
+            )
+            : null
+        ),
+      },
+    ];
+  };
 
   refreshParams = {}
 
@@ -247,7 +259,7 @@ export default class ServingModelList extends PureComponent {
             selectedRows={selectedRows}
             loading={loading}
             data={data}
-            columns={this.columns}
+            columns={this.getColumns(this.props.currentUser)}
             onSelectRow={this.handleSelectRows}
             onChange={this.handleStandardTableChange}
           />
