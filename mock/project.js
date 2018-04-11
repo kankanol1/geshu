@@ -37,6 +37,8 @@ const generatedLabels = [
   ],
 ];
 
+const graphStatus = ['new', 'schema-created', 'schema-executed', 'data-mapped', 'data-loading', 'data-loaded'];
+
 let projectListDataSource = [];
 
 let num = 1000;
@@ -53,6 +55,7 @@ for (let i = 0; i < 66; i += 1) {
     createdAt: moment(`2018-01-0${Math.floor(i / 3) + 1}`, 'YYYY-MM-DD'),
     updatedAt: moment(`2018-02-0${Math.floor(i / 3) + 1}`, 'YYYY-MM-DD'),
     labels: generatedLabels[i % 5],
+    status: graphStatus[i % graphStatus.length],
   });
 }
 
@@ -169,11 +172,13 @@ export function createProject(req, res, u, b) {
     createdAt: moment(`2018-01-0${Math.floor(i / 2) + 1}`, 'YYYY-MM-DD'),
     updatedAt: moment(`2018-02-0${Math.floor(i / 2) + 1}`, 'YYYY-MM-DD'),
     labels: labels ? labels.split(',') : [],
+    status: 'new',
   });
 
   const result = {
     success: true,
     message: '添加成功',
+    data: i,
   };
 
   if (res && res.json) {

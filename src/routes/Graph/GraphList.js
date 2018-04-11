@@ -2,7 +2,7 @@ import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
 import { Link } from 'dva/router';
 import moment from 'moment';
-import { Popconfirm, Dropdown, Icon, Row, Col, Card, Form, Input, Button, Menu, DatePicker, Divider } from 'antd';
+import { Popconfirm, Dropdown, Icon, Row, Col, Card, Form, Input, Button, Menu, DatePicker, Divider, Tag } from 'antd';
 import StandardTable from '../../components/StandardTable';
 import Layout from '../../layouts/PageHeaderLayout';
 import styles from './GraphList.less';
@@ -50,6 +50,9 @@ export default class ProjectList extends PureComponent {
     {
       title: '项目状态',
       dataIndex: 'status',
+      render: val => (
+        <Tag color="blue">{val}</Tag>
+      ),
     },
     {
       title: '更新时间',
