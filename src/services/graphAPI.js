@@ -67,6 +67,9 @@ export async function queryGremlinServer(params) {
 export async function queryGraphList(params) {
   return request(`/api/graph/graphList?${stringify(params)}`);
 }
+export async function execute(params) {
+  return request(`/api/graph/execute?${stringify(params)}`);
+}
 export async function removeProject(params) {
   return request('/api/graph/delete', {
     method: 'POST',
@@ -128,4 +131,5 @@ export default {
   createProject,
   updateQuery,
   removeQuery,
+  execute,
 };

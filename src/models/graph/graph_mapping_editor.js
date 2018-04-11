@@ -1,7 +1,7 @@
 import { routerRedux } from 'dva/router';
 import { message } from 'antd';
 import graphUtil from '../../utils/graph_utils';
-import { getGraph, saveGraph, getDataSources, getDataSourceColumns } from '../../services/graphAPI';
+import { getGraph, saveGraph, getDataSources, getDataSourceColumns, execute } from '../../services/graphAPI';
 
 function inverseMap(map) {
   const inversedMap = {};
@@ -177,10 +177,13 @@ export default {
           frontendMappingJson,
           backendMappingJson,
           id,
-          excute: payload ? 'mapping' : undefined,
         });
-      if (!payload) { message.info(response.message); } else {
-        yield put(routerRedux.push('/jobs/list'));
+
+      if (!payload) {
+        message.info(response.message);
+      } else {
+        const execution = yield call(execute, { type: 'mapping', id });
+        if (execution.success) { yield put(routerRedux.push('/jobs/list')); } else { message.info(execution.message); }
       }
     },
   },

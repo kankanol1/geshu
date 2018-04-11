@@ -18,7 +18,7 @@ import { getCandidateModels, updateCandidateModel, deleteCandidateModels, publis
 import { getJobs, cancelJobs, deleteJobs } from './mock/job';
 import { open, save, saveSettings, submit, validate } from './mock/workspace/workspace';
 import { getUserInfo, updatePassword } from './mock/selfmanage';
-import {recentGraph,saveGraph,getGraph,getDataSources,getDataSourceColumns,getGremlinServerAddress,getQueryList,saveQuery,updateQuery,deleteQuery} from './mock/graph';
+import {recentGraph,saveGraph,getGraph,getDataSources,getDataSourceColumns,getGremlinServerAddress,getQueryList,saveQuery,updateQuery,deleteQuery,executeGraph} from './mock/graph';
 import { getFileList } from './mock/file';
 import { getServingModels, offlineServingModels } from './mock/servingmodel';
 
@@ -122,6 +122,8 @@ const proxy = serverEnabled ?
   'POST /api/graph/create': createProject,
   'POST /api/graph/query/update': updateQuery,
   'POST /api/graph/query/delete': deleteQuery,
+  'GET /api/graph/execute': executeGraph,  
+
   
   // file list
   'GET /api/fs/ls': getFileList,

@@ -1,6 +1,7 @@
+import { routerRedux } from 'dva/router';
 import { message } from 'antd';
 import graphUtil from '../../utils/graph_utils';
-import { getGraph, saveGraph } from '../../services/graphAPI';
+import { getGraph, saveGraph, execute } from '../../services/graphAPI';
 
 function formPropertyKeys(nodeProps, linkProps) {
   const propertyKeys = [];
@@ -185,7 +186,7 @@ export default {
         },
       });
     },
-    *saveSchema({ payload }, { call, select }) {
+    *saveSchema({ payload }, { call, select, put }) {
       const { diagram, indexData, id } =
         yield select(state => state.graph_schema_editor);
       const frontendJson = graphUtil.toJson(diagram);
@@ -209,7 +210,13 @@ export default {
           indexJson,
           id,
         });
-      message.info(response.message);
+      console.log(111);
+      if (!payload) {
+        message.info(response.message);
+      } else {
+        const execution = yield call(execute, { type: 'schema', id });
+        if (execution.success) { yield put(routerRedux.push('/jobs/list')); } else { message.info(execution.message); }
+      }
     },
   },
 

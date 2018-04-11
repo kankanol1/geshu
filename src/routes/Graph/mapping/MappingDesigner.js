@@ -96,7 +96,7 @@ class MappingDesigner extends React.PureComponent {
                   onOk() {
                     self.props.dispatch({
                       type: 'graph_mapping_editor/saveMapping',
-                      payload: 'excute',
+                      payload: 'execute',
                     });
                   },
                   onCancel() { },

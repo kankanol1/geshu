@@ -265,6 +265,19 @@ export function getDataSourceColumns(req, res, u) {
   }
 }
 
+export function executeGraph(req, res) {
+  const result = {
+    success: true,
+    message: 'aaa',
+  };
+
+  if (res && res.json) {
+    res.json(result);
+  } else {
+    return result;
+  }
+}
+
 
 export default {
   recentGraph,
@@ -276,4 +289,5 @@ export default {
   saveQuery,
   updateQuery,
   deleteQuery,
+  executeGraph,
 };
