@@ -1,3 +1,4 @@
+import { routerRedux } from 'dva/router';
 import { message } from 'antd';
 import { recentGraph, queryGraphList, removeProject, updateProject, createProject } from '../../services/graphAPI';
 
@@ -108,6 +109,15 @@ export default {
         if (reject !== undefined) {
           reject(response);
         }
+      }
+    },
+    *createAndRedirect({ payload }, { call, put }) {
+      const response = yield call(createProject, { ...payload });
+      if (response.success) {
+        yield put(routerRedux.push(`/graph/detail/${payload.redirect}/${response.data}`));
+      } else {
+      // show message.
+        message.error(response.message);
       }
     },
   },

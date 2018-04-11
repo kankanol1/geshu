@@ -210,7 +210,6 @@ export default {
           indexJson,
           id,
         });
-      console.log(111);
       if (!payload) {
         message.info(response.message);
       } else {

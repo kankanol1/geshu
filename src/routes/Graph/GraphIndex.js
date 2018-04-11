@@ -4,14 +4,21 @@ import { connect } from 'dva';
 import moment from 'moment';
 import { Link } from 'dva/router';
 import styles from './GraphIndex.less';
+import CreateGraphForm from './CreateGraphForm';
 
-const { Header } = Layout;
 
 @connect(({ graph, loading }) => ({
   graph,
   loading: loading.models.graph,
 }))
 export default class GraphIndex extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      modalVisible: false,
+      currentRecord: undefined,
+    };
+  }
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
@@ -25,12 +32,35 @@ export default class GraphIndex extends Component {
       type: 'graph/resetRecent',
     });
   }
+  handleModalVisible = (visible) => {
+    this.setState({ ...this.state,
+      modalVisible: !!visible,
+      currentRecord: undefined,
+    });
+  }
+  handleAdd = (fieldsValue) => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'graph/createAndRedirect',
+      payload: {
+        ...fieldsValue,
+        redirect: 'schema',
+      },
+    });
 
+    this.handleModalVisible(false);
+  }
   render() {
     const { recentGraph } = this.props.graph;
     const loading = this.props.loading || recentGraph.loading;
     return (
       <Layout className={styles.contentLayout} theme="light">
+        <CreateGraphForm
+          modalVisible={this.state.modalVisible}
+          handleModalVisible={this.handleModalVisible}
+          currentRecord={this.state.currentRecord}
+          handleAdd={this.handleAdd}
+        />
         <Card title="项目列表" className={styles.firstCard}>
           {
             loading ? <Spin /> :
@@ -49,9 +79,15 @@ export default class GraphIndex extends Component {
           }
           <Divider />
           {
-            this.props.match.params.type === 'schema' ?
-              <Button type="primary" className={styles.button}> <Icon type="folder-add" />新建项目</Button>
-            : null
+            this.props.match.params.type === 'schema' ? (
+              <Button
+                type="primary"
+                className={styles.button}
+                onClick={e => this.setState({ modalVisible: true })}
+              >
+                <Icon type="folder-add" />新建项目
+              </Button>
+              ) : null
           }
           <Button className={styles.button}> <Icon type="folder-open" />打开项目</Button>
 
