@@ -22,6 +22,25 @@ const componentList = [
         ],
         outputs: [],
       },
+      {
+        name: 'CollectDataSink',
+        code: 'CollectDataSink',
+        type: 'DataSink',
+        inputs: [
+          {
+            id: 'i1',
+            label: 'data',
+            hint: 'data',
+            x: 3,
+            y: 0.5,
+            connects: [
+              'Dataset',
+              'DatasetRef',
+            ],
+          },
+        ],
+        outputs: [],
+      },
     ],
   },
   {
@@ -207,6 +226,44 @@ const componentList = [
           },
         ],
       },
+      {
+        name: 'MetricsPredictor',
+        code: 'MetricsPredictor',
+        type: 'Predictor',
+        inputs: [
+          {
+            id: 'i1',
+            label: 'model/tunedModel',
+            hint: 'model/tunedModel',
+            x: 3,
+            y: 0.3333333333333333,
+            connects: [
+              'Model',
+              'TunedModel',
+            ],
+          },
+          {
+            id: 'i2',
+            label: 'data',
+            hint: 'data',
+            x: 3,
+            y: 0.6666666666666666,
+            connects: [
+              'Dataset',
+            ],
+          },
+        ],
+        outputs: [
+          {
+            id: 'o1',
+            label: 'dataRef',
+            hint: 'DatasetRef',
+            x: 1,
+            y: 0.5,
+            type: 'DatasetRef',
+          },
+        ],
+      },
     ],
   },
   {
@@ -329,6 +386,33 @@ const componentList = [
     key: 'Tuner',
     components: [
       {
+        name: 'TrainValidationSplitTuner',
+        code: 'TrainValidationSplitTuner',
+        type: 'Tuner',
+        inputs: [
+          {
+            id: 'i1',
+            label: 'model',
+            hint: 'model',
+            x: 3,
+            y: 0.5,
+            connects: [
+              'Model',
+            ],
+          },
+        ],
+        outputs: [
+          {
+            id: 'o1',
+            label: 'tunedModel',
+            hint: 'TunedModel',
+            x: 1,
+            y: 0.5,
+            type: 'TunedModel',
+          },
+        ],
+      },
+      {
         name: 'CrossValidationTuner',
         code: 'CrossValidationTuner',
         type: 'Tuner',
@@ -369,6 +453,54 @@ const componentList = [
       {
         name: 'FileDataSource',
         code: 'FileDataSource',
+        type: 'DataSource',
+        inputs: [],
+        outputs: [
+          {
+            id: 'o1',
+            label: 'dataset',
+            hint: 'Dataset',
+            x: 1,
+            y: 0.5,
+            type: 'Dataset',
+          },
+        ],
+      },
+      {
+        name: 'JsonDataSource',
+        code: 'JsonDataSource',
+        type: 'DataSource',
+        inputs: [],
+        outputs: [
+          {
+            id: 'o1',
+            label: 'dataset',
+            hint: 'Dataset',
+            x: 1,
+            y: 0.5,
+            type: 'Dataset',
+          },
+        ],
+      },
+      {
+        name: 'JdbcDataSource',
+        code: 'JdbcDataSource',
+        type: 'DataSource',
+        inputs: [],
+        outputs: [
+          {
+            id: 'o1',
+            label: 'dataset',
+            hint: 'Dataset',
+            x: 1,
+            y: 0.5,
+            type: 'Dataset',
+          },
+        ],
+      },
+      {
+        name: 'ParquetDataSource',
+        code: 'ParquetDataSource',
         type: 'DataSource',
         inputs: [],
         outputs: [

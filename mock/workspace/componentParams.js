@@ -20,6 +20,38 @@ const allComponents = {
     },
   },
 
+  JsonDataSource: {
+    title: 'JsonDataSourceConf',
+    type: 'object',
+    properties: {
+      path: {
+        title: 'Read_File_Path',
+        type: 'object',
+        properties: {
+          value: {
+            type: 'string',
+          },
+        },
+        description: '文件路径',
+      },
+    },
+  },
+  ParquetDataSource: {
+    title: 'ParquetDataSourceConf',
+    type: 'object',
+    properties: {
+      path: {
+        title: 'Read_File_Path',
+        type: 'object',
+        properties: {
+          value: {
+            type: 'string',
+          },
+        },
+        description: '文件路径',
+      },
+    },
+  },
   TokenizerStage: {
     title: 'TokenizerStageConf',
     type: 'object',
@@ -103,12 +135,12 @@ const allComponents = {
             items: {
               type: 'integer',
             },
-            description: '参数取值',
+            description: '可调值',
           },
           value: {
             required: false,
             type: 'integer',
-            description: '默认值',
+            description: '固定值',
           },
         },
         description: '最大迭代次数',
@@ -132,12 +164,12 @@ const allComponents = {
             items: {
               type: 'number',
             },
-            description: '参数取值',
+            description: '可调值',
           },
           value: {
             required: false,
             type: 'number',
-            description: '默认值',
+            description: '固定值',
           },
         },
         description: '迭代参数',
@@ -148,6 +180,62 @@ const allComponents = {
     title: 'ConsoleDataSinkConf',
     type: 'object',
     properties: {},
+  },
+  JdbcDataSource: {
+    title: 'JdbcDataSourceConf',
+    type: 'object',
+    properties: {
+      dbtable: {
+        title: 'Fixed_String',
+        type: 'object',
+        properties: {
+          value: {
+            type: 'string',
+          },
+        },
+        description: '表名',
+      },
+      driver: {
+        title: 'Fixed_String',
+        type: 'object',
+        properties: {
+          value: {
+            type: 'string',
+          },
+        },
+        description: '驱动',
+      },
+      password: {
+        title: 'Fixed_String',
+        type: 'object',
+        properties: {
+          value: {
+            type: 'string',
+          },
+        },
+        description: '密码',
+      },
+      url: {
+        title: 'Fixed_String',
+        type: 'object',
+        properties: {
+          value: {
+            type: 'string',
+          },
+        },
+        description: 'jdbc url',
+      },
+      user: {
+        title: 'Fixed_String',
+        type: 'object',
+        properties: {
+          value: {
+            type: 'string',
+          },
+        },
+        description: '用户名',
+      },
+    },
   },
   AddLiteralColumnTransformer: {
     title: 'AllLiteralColumnTransformerConf',
@@ -217,6 +305,62 @@ const allComponents = {
   },
   ConsoleModelSink: {
     title: 'ConsoleModelSinkConf',
+    type: 'object',
+    properties: {},
+  },
+  TrainValidationSplitTuner: {
+    title: 'TrainValidationSplitTunerConf',
+    type: 'object',
+    properties: {
+      modelType: {
+        type: 'string',
+        enum: [
+          'BinaryClassification',
+          'MulticlassClassification',
+          'Regression',
+        ],
+        description: '模型类型',
+      },
+      trainRatio: {
+        title: 'Fixed_Double',
+        type: 'object',
+        properties: {
+          value: {
+            type: 'number',
+          },
+        },
+        description: '测试集比例',
+      },
+    },
+  },
+  MetricsPredictor: {
+    title: 'MetricsPredictorConf',
+    type: 'object',
+    properties: {
+      labelColumn: {
+        required: false,
+        title: 'Fixed_Column',
+        type: 'object',
+        properties: {
+          value: {
+            type: 'string',
+          },
+        },
+        description: '标签列',
+      },
+      modelType: {
+        type: 'string',
+        enum: [
+          'BinaryClassification',
+          'MulticlassClassification',
+          'Regression',
+        ],
+        description: '模型类型',
+      },
+    },
+  },
+  CollectDataSink: {
+    title: 'CollectDataSinkConf',
     type: 'object',
     properties: {},
   },
@@ -301,12 +445,11 @@ const allComponents = {
         description: '文件是否包含Header',
       },
       path: {
-        title: 'Select_Schema',
+        title: 'Read_File_Path',
         type: 'object',
         properties: {
           value: {
             type: 'string',
-            url: '/api/file/getFileLists',
           },
         },
         description: '文件路径',
@@ -346,12 +489,12 @@ const allComponents = {
             items: {
               type: 'integer',
             },
-            description: '参数取值',
+            description: '可调值',
           },
           value: {
             required: false,
             type: 'integer',
-            description: '默认值',
+            description: '固定值',
           },
         },
         description: '特征数目',
@@ -372,14 +515,14 @@ const allComponents = {
     title: 'CrossValidationTunerConf',
     type: 'object',
     properties: {
-      evaluator: {
+      modelType: {
         type: 'string',
         enum: [
           'BinaryClassification',
           'MulticlassClassification',
           'Regression',
         ],
-        description: '评价类型',
+        description: '模型类型',
       },
       numFolds: {
         title: 'Fixed_Int',
@@ -389,7 +532,7 @@ const allComponents = {
             type: 'integer',
           },
         },
-        description: 'fold',
+        description: '折叠数',
       },
     },
   },
