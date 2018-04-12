@@ -16,7 +16,8 @@ const OpenProjectForm = Form.create()((props) => {
   const { modalOpenVisible, form, handleSearch, handleOpenModalVisible, searchLoading } = props;
   const { labels, openList } = props;
   const loading = searchLoading || false;
-  const okHandle = () => {
+  const okHandle = (e) => {
+    e.preventDefault();
     form.validateFields((err, fieldsValue) => {
       if (err) return;
       handleSearch(fieldsValue);
@@ -27,11 +28,10 @@ const OpenProjectForm = Form.create()((props) => {
       title="打开项目"
       width={850}
       visible={modalOpenVisible}
-      onOk={okHandle}
       onCancel={() => { handleOpenModalVisible(); }}
       footer={null}
     >
-      <Form onSubmit={okHandle} layout="inline">
+      <Form onSubmit={e => okHandle(e)} layout="inline">
         <Row gutter={{ md: 9, lg: 24, xl: 48 }}>
           <Col md={9} sm={27}>
             <FormItem
