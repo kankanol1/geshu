@@ -23,6 +23,7 @@ export default class GraphIndex extends Component {
       currentRecord: undefined,
       modalOpenVisible: false,
       openList: [],
+      formValues: [],
     };
   }
   componentDidMount() {
@@ -72,7 +73,14 @@ export default class GraphIndex extends Component {
         }
         return l;
       });
-
+    const values = {
+      ...fieldsValue,
+      labels: labels && labels.join(),
+      refreshParams: this.refreshParams,
+    };
+    this.setState({
+      formValues: values,
+    });
     dispatch({
       type: 'graph/fetchProjectList',
       payload: {
@@ -82,7 +90,20 @@ export default class GraphIndex extends Component {
       },
     });
   }
-
+  handleStandardTableChange = (pagination) => {
+    const { formValues } = this.state;
+    const { dispatch } = this.props;
+    const params = {
+      currentPage: pagination.current,
+      pageSize: pagination.pageSize,
+      ...formValues,
+    };
+    dispatch({
+      type: 'graph/fetchProjectList',
+      payload: params,
+    });
+    this.refreshParams = params;
+  }
   handleModalVisible = (visible) => {
     this.setState({ ...this.state,
       modalVisible: !!visible,
@@ -91,6 +112,10 @@ export default class GraphIndex extends Component {
   }
 
   handleOpenModalVisible= (visible) => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'graph/fetchProjectList',
+    });
     this.setState({ ...this.state,
       modalOpenVisible: !!visible,
       currentRecord: undefined,
@@ -106,9 +131,13 @@ export default class GraphIndex extends Component {
       handleSearch: this.handleSearch,
       handleModalVisible: this.handleModalVisible,
       handleOpenModalVisible: this.handleOpenModalVisible,
+      handleStandardTableChange: this.handleStandardTableChange,
       currentRecord: undefined,
       handleUpdate: undefined,
       openList: list,
+      pagination: this.props.graph.data.pagination,
+      searchLoading: loading || false,
+      dispatch: this.props.dispatch,
     };
     const { modalVisible, modalOpenVisible } = this.state;
     return (

@@ -1,7 +1,7 @@
 import React from 'react';
 // import { connect } from 'dva';
-import { Link } from 'dva/router';
-import { Form, Input, Modal, Card, Icon, Button, Row, Col, Spin } from 'antd';
+import { Link, routerRedux } from 'dva/router';
+import { Form, Input, Modal, Card, Icon, Button, Row, Col, Spin, Table, Tooltip } from 'antd';
 import moment from 'moment';
 import { buildTagSelect } from '../../utils/uiUtils';
 import styles from './WorkspaceIndex.less';
@@ -14,15 +14,29 @@ const FormItem = Form.Item;
 
 const OpenProjectForm = Form.create()((props) => {
   const { modalOpenVisible, form, handleSearch, handleOpenModalVisible, searchLoading } = props;
-  const { labels, openList } = props;
+  const { labels, openList, dispatch, pagination, handleStandardTableChange } = props;
+  const { Column } = Table;
   const loading = searchLoading || false;
-  console.log(loading, 'loadingg');
   const okHandle = () => {
     form.validateFields((err, fieldsValue) => {
       if (err) return;
       handleSearch(fieldsValue);
     });
   };
+  const changePage = (pageNum) => {
+    handleStandardTableChange(pageNum);
+  };
+  // const pagination = {
+  //   total: openList.length / 10,
+  //   showSizeChanger: true,
+  //   onShowSizeChange(current, pageSize) {
+  //     console.log('Current: ', current, '; PageSize: ', pageSize);
+  //   },
+  //   onChange(current) {
+  //     console.log('Current: ', current);
+  //   },
+  // };
+
   return (
     <Modal
       title="打开项目"
@@ -68,35 +82,37 @@ const OpenProjectForm = Form.create()((props) => {
           </Col>
         </Row>
       </Form>
-      {
-        loading ? <div className={styles.loadings}> <Spin /> </div> :
-        (
-          openList.length === 0 ? <div className={styles.hasNoData}><Icon className={styles.hasNoDataIcon} type="frown" />暂无数据....</div> :
-          (
-            <Card title="" className={styles.firstCard} style={{ marginTop: 20 }}>
-              {
-                openList.map(item =>
-                  (
-                    <p key={item.id} className={styles.project}>
-                      <Link to={`/project/workspace/editor/${item.id}`} className={styles.clickableItem} title={item.description}>
-                        <span className={styles.projectName} ><Icon type="file" /> {item.name}</span>
-                        <span className={styles.labels} >
-                          {
-                            item.labels.map((laber, index) => (
-                              <span className={styles.label} key={index}>{laber}</span>
-                              )
-                            )
-                          }
-                        </span>
-                      </Link>
-                    </p>
-                  )
-                )
-              }
-            </Card>
-          )
-        )
-      }
+      <Table
+        dataSource={openList}
+        pagination={pagination}
+        loading={loading}
+        showHeader={false}
+        onChange={changePage}
+        style={{ marginTop: 20 }}
+        onRow={(record) => {
+          return {
+            onClick: () => { dispatch(routerRedux.push(`/project/workspace/editor/${record.id}`)); },
+            onMouseEnter: () => { console.log(record.description); },
+          };
+        }}
+      >
+        <Column
+          dataIndex="name"
+          key="name"
+        />
+        <Column
+          className="columslabels"
+          dataIndex="labels"
+          key="labels"
+          align="right"
+          style={{ textAlign: 'right' }}
+          render={(text, record) => (
+            record.labels.map((item, index) => {
+            return <span key={item} className={styles.label} >{item}</span>;
+            })
+          )}
+        />
+      </Table>
     </Modal>
   );
 });
