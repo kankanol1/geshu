@@ -282,7 +282,7 @@ export default class JobList extends PureComponent {
           <Col md={8} sm={24}>
             <FormItem label="状态">
               {getFieldDecorator('status', { initialValue: '' })(
-                <Select defaultValue="">
+                <Select>
                   <Option value="">全部</Option>
                   {
                     Object.entries(statusMap).map(
@@ -327,7 +327,7 @@ export default class JobList extends PureComponent {
           <Col md={8} sm={24}>
             <FormItem label="状态">
               {getFieldDecorator('status', { initialValue: '' })(
-                <Select defaultValue="">
+                <Select>
                   <Option value="">全部</Option>
                   {
                     Object.entries(statusMap).map(

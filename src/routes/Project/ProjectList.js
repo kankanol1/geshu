@@ -79,7 +79,7 @@ export default class ProjectList extends PureComponent {
         <Fragment>
           <a onClick={() => this.handleEdit(record)} >编辑</a>
           <Divider type="vertical" />
-          <Link to={`workspace/editor/${record.id}`}><a>打开</a></Link>
+          <Link to={`workspace/editor/${record.id}`}>打开</Link>
           <Divider type="vertical" />
           <span>
             <Popconfirm title="确认删除吗?" onConfirm={() => this.handleRecordDelete(record)}>

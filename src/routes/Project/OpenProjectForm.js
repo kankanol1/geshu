@@ -16,7 +16,6 @@ const OpenProjectForm = Form.create()((props) => {
   const { modalOpenVisible, form, handleSearch, handleOpenModalVisible, searchLoading } = props;
   const { labels, openList } = props;
   const loading = searchLoading || false;
-  console.log(loading, 'loadingg');
   const okHandle = () => {
     form.validateFields((err, fieldsValue) => {
       if (err) return;
