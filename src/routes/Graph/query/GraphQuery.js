@@ -109,9 +109,17 @@ class GraphQuery extends React.PureComponent {
           }}
           />
         </Modal>
-        <Menu mode="horizontal">
-          <strong style={{ marginLeft: '45%' }}>项目名称：{this.props.name}</strong>
-        </Menu>
+        <div
+          style={{
+             background: 'white',
+             height: '100px',
+             padding: '10px',
+             width: '100%',
+             margin: '2px 0',
+          }}
+        >
+          <strong style={{ marginLeft: '50%' }}>项目名称：{this.props.name}</strong>
+        </div>
         <Row>
           <Col span={8} style={{ padding: '0', height: '100%' }}>
             <div

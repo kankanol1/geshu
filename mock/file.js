@@ -18,10 +18,10 @@ export function getFileList(req, res, u) {
         isdir: true,
       });
     }
-  } else if (params.path === '/file0') {
+  } else if (params.path === '/file0' || params.path === '/file1') {
     for (let i = 0; i < 2; i++) {
       result.push({
-        path: `/file1/text${i}`,
+        path: `${params.path}/text${i}`,
         isdir: false,
       });
     }
