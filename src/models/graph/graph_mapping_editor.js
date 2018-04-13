@@ -17,6 +17,10 @@ function getFileName(path) {
   const list = path.split('/');
   return list[list.length - 1];
 }
+function getPath(str) {
+  const txt = str.replace(/(([a-zA-z0-9]+:\/\/)|(\/)){0,1}((([0-9]{1,3}\.){3}[0-9]{1,3})|(([0-9a-z]+\.)+[0-9a-z]+))(:[0-9]{2,4}){0,1}/i, '');
+  return txt;
+}
 
 function formBackendMappingData(diagram) {
   const mappingData = {
@@ -104,7 +108,6 @@ export default {
       });
     },
     addDataSourcesOnGraph(state, { payload }) {
-      console.log(1);
       const fileData = [];
       payload.forEach((value) => {
         fileData.push({
@@ -150,7 +153,8 @@ export default {
         if (index > 0) {
           newFiles.push({
             ...value,
-            key: value.path,
+            path: getPath(value.path),
+            key: getPath(value.path),
             children: value.isdir ? [] : undefined,
             title: getFileName(value.path),
           });
@@ -160,7 +164,7 @@ export default {
       if (path === '/') {
         files = [...newFiles];
       } else {
-        const dirList = path.split('/');
+        const dirList = getPath(path).split('/');
         const findCurrent = (name, list) => {
           let ret;
           list.forEach((item) => {
@@ -169,7 +173,6 @@ export default {
           return ret;
         };
         let current = findCurrent(dirList[1], files);
-
         dirList.forEach((name, index) => {
           if (current && current.children && index > 1) {
             current = findCurrent(name, current.children);
@@ -211,7 +214,9 @@ export default {
       const { datasourceId2Columns } =
         yield select(state => state.graph_mapping_editor);
       if (!datasourceId2Columns[payload]) {
-        const { data } = yield call(getDataSourceColumns, { id: payload });
+        const { data } = yield call(listFileHead, {
+          file: payload,
+        });
         yield put({
           type: 'saveDataSourceColumn',
           payload: {

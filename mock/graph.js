@@ -252,7 +252,7 @@ export function getDataSourceColumns(req, res, u) {
   }
   const params = getUrlParams(url);
   const columnList = [];
-  for (let j = 0; j < 10; j++) { columnList.push(`${params.id}-column${j}`); }
+  for (let j = 0; j < 10; j++) { columnList.push(`${params.file}-column${j}`); }
   const result = {
     success: true,
     data: columnList,

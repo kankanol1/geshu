@@ -1,6 +1,7 @@
 import { getUrlParams } from './utils';
 
 export function getFileList(req, res, u) {
+  const prefix = 'hdfs://18.217.118.40:9000';
   const result = [];
   let url = u;
   if (!url || Object.prototype.toString.call(url) !== '[object String]') {
@@ -8,23 +9,49 @@ export function getFileList(req, res, u) {
   }
   const params = getUrlParams(url);
   result.push({
-    path: params.path,
+    path: prefix + (params.path === '/' ? '' : params.path),
     isdir: true,
   });
-  if (params.path === '/') {
-    for (let i = 0; i < 2; i++) {
+  switch (params.path) {
+    case '/':
       result.push({
-        path: `/file${i}`,
+        path: `${prefix}/projectx`,
         isdir: true,
       });
-    }
-  } else if (params.path === '/file0' || params.path === '/file1') {
-    for (let i = 0; i < 2; i++) {
       result.push({
-        path: `${params.path}/text${i}`,
+        path: `${prefix}/shenji`,
+        isdir: true,
+      });
+      result.push({
+        path: `${prefix}/rootFile`,
         isdir: false,
       });
-    }
+      break;
+    case '/shenji':
+      for (let i = 0; i < 5; i++) {
+        result.push({
+          path: `${prefix}/shenji/graphData${i}.csv`,
+          isdir: false,
+        });
+      }
+      result.push({
+        path: `${prefix}/shenji/textDir`,
+        isdir: true,
+      });
+      break;
+    case '/projectx':
+      for (let i = 0; i < 10; i++) {
+        result.push({
+          path: `${prefix}/projectx/file${i}.csv`,
+          isdir: false,
+        });
+      }
+      break;
+    default:
+      result.push({
+        path: 'defaultFile',
+        isdir: false,
+      });
   }
   if (res && res.json) {
     res.json(result);
