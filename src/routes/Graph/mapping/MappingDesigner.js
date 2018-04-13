@@ -1,17 +1,35 @@
 import React from 'react';
 import { connect } from 'dva';
+import TreeTransfer from 'lucio-tree-transfer';
 import { Layout, Row, Col, Menu, Icon, Modal, Transfer, Button } from 'antd';
 import MappingInspector from './MappingInspector';
+import styles from '../Inspectors.less';
+
 
 const { confirm } = Modal;
-
+const source = [
+  {
+    key: '0',
+    title: '0',
+    children: [
+      {
+        key: '0-0',
+        title: '0-0',
+      },
+      {
+        key: '0-1',
+        title: '0-1',
+      },
+    ],
+  },
+];
 
 class MappingDesigner extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
       datasourceModal: false,
-      targetKeys: [],
+      target: [],
     };
   }
   componentDidMount() {
@@ -26,8 +44,13 @@ class MappingDesigner extends React.PureComponent {
   filterOption = (inputValue, option) => {
     return option.name.indexOf(inputValue) > -1;
   }
-  handleChange = (targetKeys) => {
-    this.setState({ targetKeys });
+  // handleChange = (targetKeys) => {
+  //   this.setState({ targetKeys });
+  // }
+  handleChange = (target) => {
+    this.setState({
+      target,
+    });
   }
   render() {
     return (
@@ -40,11 +63,12 @@ class MappingDesigner extends React.PureComponent {
             this.setState({ datasourceModal: false });
             this.props.dispatch({
               type: 'graph_mapping_editor/addDataSourcesOnGraph',
-              payload: this.state.targetKeys,
+              payload: this.state.target,
             });
           }}
+          width={600}
         >
-          <Transfer
+          {/* <Transfer
             rowKey={item => item.id}
             dataSource={this.props.dataSource}
             showSearch
@@ -52,6 +76,23 @@ class MappingDesigner extends React.PureComponent {
             targetKeys={this.state.targetKeys}
             onChange={this.handleChange}
             render={item => item.name}
+          /> */}
+          <TreeTransfer
+            source={this.props.files}
+            target={this.state.target}
+            onChange={this.handleChange}
+            onLoadData={node => new Promise((resolve, reject) => {
+              if (node.props.children.length > 0) {
+                resolve();
+              } else {
+              this.props.dispatch({
+                type: 'graph_mapping_editor/loadFile',
+                payload: node.props.path,
+                resolve,
+                reject,
+              });
+            }
+            })}
           />
         </Modal>
         <Menu mode="horizontal">
@@ -110,8 +151,8 @@ class MappingDesigner extends React.PureComponent {
           <Menu.Item>
             <a><Icon type="info-circle-o" />关于</a>
           </Menu.Item>
-          <strong style={{ marginLeft: '15%', marginRight: '10px' }}>项目名称：{this.props.name}</strong>
         </Menu>
+        <div className={styles.projectTitle}><strong>项目名称：{this.props.name}</strong></div>
         <Row>
           <Col span={13} style={{ padding: '0', height: '100%' }}>
             <div

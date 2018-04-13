@@ -123,7 +123,7 @@ export default {
     *createAndRedirect({ payload }, { call, put }) {
       const response = yield call(createProject, { ...payload });
       if (response.success) {
-        yield put(routerRedux.push(`/graph/detail/${payload.redirect}/${response.data}`));
+        yield put(routerRedux.push(`/graph/detail/${payload.redirect}/${response.message}`));
       } else {
       // show message.
         message.error(response.message);

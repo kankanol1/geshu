@@ -161,7 +161,7 @@ export function createProject(req, res, u, b) {
   }
 
   const body = (b && b.body) || req.body;
-  const { name, description, labels } = body;
+  const { name, description, labels, redirect } = body;
 
   const i = gen();
   projectListDataSource.unshift({
@@ -177,8 +177,7 @@ export function createProject(req, res, u, b) {
 
   const result = {
     success: true,
-    message: '添加成功',
-    data: i,
+    message: redirect ? i : '添加成功',
   };
 
   if (res && res.json) {

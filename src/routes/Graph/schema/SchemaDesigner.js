@@ -3,6 +3,7 @@ import { connect } from 'dva';
 import { Layout, Row, Col, Menu, Icon, Card, Modal } from 'antd';
 import ElementInspector from './ElementInspector';
 import IndexInspector from './IndexInspector';
+import styles from '../Inspectors.less';
 
 const { confirm } = Modal;
 
@@ -68,8 +69,8 @@ class GraphDesigner extends React.PureComponent {
           <Menu.Item>
             <a><Icon type="info-circle-o" />关于</a>
           </Menu.Item>
-          <strong style={{ marginLeft: '20%' }}>项目名称：{this.props.name}</strong>
         </Menu>
+        <div className={styles.projectTitle}><strong>项目名称：{this.props.name}</strong></div>
         <Row>
           <Col span={6}>
             <Card title="元素" type="inner">

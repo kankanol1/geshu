@@ -1,7 +1,9 @@
+
 import { routerRedux } from 'dva/router';
 import { message } from 'antd';
 import graphUtil from '../../utils/graph_utils';
 import { getGraph, saveGraph, getDataSources, getDataSourceColumns, execute } from '../../services/graphAPI';
+import { listFile, listFileHead } from '../../services/fileApi';
 
 function inverseMap(map) {
   const inversedMap = {};
@@ -9,6 +11,11 @@ function inverseMap(map) {
     if (key && map[key]) { inversedMap[map[key]] = key; }
   }
   return inversedMap;
+}
+
+function getFileName(path) {
+  const list = path.split('/');
+  return list[list.length - 1];
 }
 
 function formBackendMappingData(diagram) {
@@ -70,6 +77,7 @@ export default {
     datasourceId2Columns: {},
     currentColumns: [],
     loadingColumn: false,
+    files: [],
   },
   reducers: {
     init(state, { payload }) {
@@ -96,10 +104,15 @@ export default {
       });
     },
     addDataSourcesOnGraph(state, { payload }) {
+      console.log(1);
       const fileData = [];
-      for (const i in state.datasources) {
-        if (payload.indexOf(state.datasources[i].id) >= 0) { fileData.push(state.datasources[i]); }
-      }
+      payload.forEach((value) => {
+        fileData.push({
+          name: getFileName(value),
+          id: value,
+          path: value,
+        });
+      });
       graphUtil.addFileNode(state.diagram, fileData);
       return state;
     },
@@ -128,6 +141,48 @@ export default {
         loadingColumn: true,
       };
     },
+    mergeFileTree(state, { payload }) {
+      let files = [...state.files];
+      const { path, response } = payload;
+
+      const newFiles = [];
+      response.forEach((value, index) => {
+        if (index > 0) {
+          newFiles.push({
+            ...value,
+            key: value.path,
+            children: value.isdir ? [] : undefined,
+            title: getFileName(value.path),
+          });
+        }
+      });
+
+      if (path === '/') {
+        files = [...newFiles];
+      } else {
+        const dirList = path.split('/');
+        const findCurrent = (name, list) => {
+          let ret;
+          list.forEach((item) => {
+            if (item.title === name) { ret = item; }
+          });
+          return ret;
+        };
+        let current = findCurrent(dirList[1], files);
+
+        dirList.forEach((name, index) => {
+          if (current && current.children && index > 1) {
+            current = findCurrent(name, current.children);
+          }
+        });
+        current.children = [...newFiles];
+      }
+
+      return {
+        ...state,
+        files,
+      };
+    },
   },
   effects: {
     *initialize({ payload }, { call, put }) {
@@ -143,6 +198,10 @@ export default {
       yield put({
         type: 'saveDataSources',
         payload: data,
+      });
+      yield put({
+        type: 'loadFile',
+        payload: '/',
       });
     },
     *getDataSourceColumns({ payload }, { call, put, select }) {
@@ -184,6 +243,23 @@ export default {
       } else {
         const execution = yield call(execute, { type: 'mapping', id });
         if (execution.success) { yield put(routerRedux.push('/jobs/list')); } else { message.info(execution.message); }
+      }
+    },
+
+    *loadFile({ payload, resolve, reject }, { call, put, select }) {
+      const response = yield call(listFile, { path: payload });
+      if (response) {
+        yield put({
+          type: 'mergeFileTree',
+          payload: {
+            path: payload,
+            response,
+          },
+        });
+        if (resolve) { resolve(); }
+      } else {
+        message.error('文件列表获取失败');
+        if (reject) { reject(); }
       }
     },
   },

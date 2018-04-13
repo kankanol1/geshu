@@ -128,6 +128,8 @@ const proxy = serverEnabled ?
   
   // file list
   'GET /api/fs/ls': getFileList,
+  'GET /api/fs/head': getDataSourceColumns,
+
   
   // self manage.
   'GET /api/self/info': getUserInfo,
