@@ -21,6 +21,7 @@ import { getUserInfo, updatePassword } from './mock/selfmanage';
 import {recentGraph,saveGraph,getGraph,getDataSources,getDataSourceColumns,getGremlinServerAddress,getQueryList,saveQuery,updateQuery,deleteQuery,executeGraph} from './mock/graph';
 import { getFileList } from './mock/file';
 import { getServingModels, offlineServingModels, onlineServingModels } from './mock/servingmodel';
+import { getQueryResult } from './mock/dataquery';
 
 // 是否禁用代理
 const noProxy = process.env.NO_PROXY === 'true';
@@ -136,6 +137,8 @@ const proxy = serverEnabled ?
   'POST /api/self/password': updatePassword,
 
 
+  // data query.
+  'POST /api/data/hive/query': getQueryResult,
 
 
   // a sample test for component settings.

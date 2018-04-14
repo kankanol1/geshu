@@ -89,7 +89,7 @@ export const getRouterData = (app) => {
       component: dynamicWrapper(app, [], () => import('../routes/Project/WorkspaceEditor')),
     },
     '/project/workspace/dataview/:id': {
-      component: dynamicWrapper(app, [], () => import('../routes/Project/WorkspaceDataView')),
+      component: dynamicWrapper(app, ['dataview/dataquery'], () => import('../routes/Project/WorkspaceDataView')),
     },
     '/project/workspace/logview/:id': {
       component: dynamicWrapper(app, [], () => import('../routes/Project/WorkspaceLogView')),
