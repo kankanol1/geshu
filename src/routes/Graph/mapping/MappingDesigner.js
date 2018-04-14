@@ -1,10 +1,9 @@
 import React from 'react';
 import { connect } from 'dva';
 import TreeTransfer from 'lucio-tree-transfer';
-import { Layout, Row, Col, Menu, Icon, Modal, Transfer, Button } from 'antd';
+import { Layout, Row, Col, Menu, Icon, Modal } from 'antd';
 import MappingInspector from './MappingInspector';
 import styles from '../Inspectors.less';
-
 
 const { confirm } = Modal;
 const source = [
@@ -68,31 +67,24 @@ class MappingDesigner extends React.PureComponent {
           }}
           width={600}
         >
-          {/* <Transfer
-            rowKey={item => item.id}
-            dataSource={this.props.dataSource}
-            showSearch
-            filterOption={this.filterOption}
-            targetKeys={this.state.targetKeys}
-            onChange={this.handleChange}
-            render={item => item.name}
-          /> */}
           <TreeTransfer
             source={this.props.files}
             target={this.state.target}
             onChange={this.handleChange}
-            onLoadData={node => new Promise((resolve, reject) => {
-              if (node.props.children.length > 0) {
-                resolve();
-              } else {
-              this.props.dispatch({
-                type: 'graph_mapping_editor/loadFile',
-                payload: node.props.path,
-                resolve,
-                reject,
-              });
+            onLoadData={
+              node => new Promise((resolve, reject) => {
+                if (node.props.children.length > 0) { resolve(); } else {
+                this.props.dispatch({
+                  type: 'graph_mapping_editor/loadFile',
+                  payload: node.props.path,
+                  resolve,
+                  reject,
+                });
+              }
+              }).then(
+                ()=> node.props.expanded = true //eslint-disable-line
+              )
             }
-            })}
           />
         </Modal>
         <Menu mode="horizontal">
