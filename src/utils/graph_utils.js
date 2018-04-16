@@ -1,4 +1,3 @@
-import './gojs/go';
 import iconSvg from './gojs/icons';
 
 const { go } = window;

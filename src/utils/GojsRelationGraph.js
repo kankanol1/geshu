@@ -1,4 +1,3 @@
-import './gojs/go';
 
 const { go } = window;
 const $ = go.GraphObject.make;
