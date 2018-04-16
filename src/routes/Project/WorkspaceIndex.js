@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Layout, Card, Button, Icon, Divider, Spin } from 'antd';
+import { Layout, Card, Button, Icon, Divider, Spin, Table } from 'antd';
 import { connect } from 'dva';
 import moment from 'moment';
 import { Link, routerRedux } from 'dva/router';
@@ -18,6 +18,7 @@ export default class WorkspaceEditor extends Component {
     modalVisible: false,
     modalOpenVisible: false,
     openList: [],
+    formValues: [],
   }
 
   componentDidMount() {
@@ -76,7 +77,14 @@ export default class WorkspaceEditor extends Component {
         }
         return l;
       });
-
+    const values = {
+      ...fieldsValue,
+      labels: labels && labels.join(),
+      refreshParams: this.refreshParams,
+    };
+    this.setState({
+      formValues: values,
+    });
     dispatch({
       type: 'project/fetchProjectList',
       payload: {
@@ -86,6 +94,20 @@ export default class WorkspaceEditor extends Component {
       },
     });
   }
+  handleStandardTableChange = (pagination) => {
+    const { formValues } = this.state;
+    const { dispatch } = this.props;
+    const params = {
+      currentPage: pagination.current,
+      pageSize: pagination.pageSize,
+      ...formValues,
+    };
+    dispatch({
+      type: 'project/fetchProjectList',
+      payload: params,
+    });
+    this.refreshParams = params;
+  }
   handleModalVisible = (visible) => {
     this.setState({ ...this.state,
       modalVisible: !!visible,
@@ -94,6 +116,10 @@ export default class WorkspaceEditor extends Component {
   }
 
   handleOpenModalVisible= (visible) => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'project/fetchProjectList',
+    });
     this.setState({ ...this.state,
       modalOpenVisible: !!visible,
       currentRecord: undefined,
@@ -103,17 +129,21 @@ export default class WorkspaceEditor extends Component {
 
   render() {
     const { recentProjects, data: { labels }, data: { list } } = this.props.project;
-    const loading = this.props.loading || recentProjects.loading;
+    const loading = this.props.loading ||
+      recentProjects.loading || recentProjects.data === undefined;
     const parentMethods = {
       labels,
       handleAdd: this.handleAdd,
       handleSearch: this.handleSearch,
       handleModalVisible: this.handleModalVisible,
       handleOpenModalVisible: this.handleOpenModalVisible,
+      handleStandardTableChange: this.handleStandardTableChange,
       currentRecord: undefined,
       handleUpdate: undefined,
       openList: list,
+      pagination: this.props.project.data.pagination,
       searchLoading: loading || false,
+      dispatch: this.props.dispatch,
     };
     const { modalVisible, modalOpenVisible } = this.state;
     return (

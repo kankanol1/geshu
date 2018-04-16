@@ -132,6 +132,9 @@ const proxy = serverEnabled ?
   'GET /api/fs/head': getDataSourceColumns,
 
   
+  // file list
+  'GET /api/fs/ls': getFileList,
+  
   // self manage.
   'GET /api/self/info': getUserInfo,
   'POST /api/self/password': updatePassword,

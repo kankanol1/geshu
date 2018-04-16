@@ -450,6 +450,7 @@ const allComponents = {
         properties: {
           value: {
             type: 'string',
+            url: '/api/file/getFileLists',
           },
         },
         description: '文件路径',
