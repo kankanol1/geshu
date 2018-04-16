@@ -21,8 +21,9 @@ export function getQueryResult(req, res, u, b) {
   const result = { data,
     pagination,
     meta:
-    [{ size: 1, name: 'value', label: 'value' },
-      { size: 1, name: 'key', label: 'key' }],
+    [
+      { size: 1, name: 'key', label: 'key' },
+      { size: 1, name: 'value', label: 'value' }],
   };
 
   if (res && res.json) {

@@ -51,7 +51,7 @@ export default class WorkspaceDataView extends Component {
       queryResult.meta.map((m) => {
         return { Header: m.label, accessor: m.label };
       });
-    const { pagination } = queryResult;
+    const pagination = (queryResult === undefined) ? undefined : queryResult.pagination;
     const pages = (queryResult === undefined) ? undefined :
       pagination.total / pagination.pageSize;
     const { loading } = this.props;
