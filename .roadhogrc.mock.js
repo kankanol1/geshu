@@ -143,7 +143,7 @@ const proxy = serverEnabled ?
 
 
   // data query.
-  'POST /api/data/hive/query': getQueryResult,
+  'POST /api/data/hive/querytmp': getQueryResult,
 
 
 

@@ -79,7 +79,7 @@ export default class WorkspaceDataView extends Component {
       });
     const pagination = (queryResult === undefined) ? undefined : queryResult.pagination;
     const pages = (queryResult === undefined) ? undefined :
-      pagination.total / pagination.pageSize;
+      Math.ceil(pagination.total / pagination.pagesize);
     const { loading } = this.props;
     const { showSider } = this.state;
 

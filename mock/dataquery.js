@@ -18,7 +18,7 @@ export function getQueryResult(req, res, u, b) {
     data.push({ value: `bye-page-${pageNum}-${i}`, key: `key-page-${pageNum}-${i}` });
   }
 
-  const pagination = { total: pageSize * 10, pageSize, current: pageNum };
+  const pagination = { total: pageSize * 10, pagesize: pageSize, current: pageNum };
 
   const result = { data,
     pagination,
