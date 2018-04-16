@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { Layout, Card, Input, Button, Select, Row, Col, List, Icon, Form, Tooltip } from 'antd';
+import { Layout, Card, Input, Button, Select, Row, Col, List, Icon, Spin, Tooltip } from 'antd';
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
 import { Scrollbars } from 'react-custom-scrollbars';
@@ -24,30 +24,19 @@ export default class WorkspaceDataView extends Component {
       query: '',
       pageNum: 0,
       pageSize: 20,
-      showSider: false,
+      showSider: true,
     };
   }
 
-  sampleData = [
-    { tableName: 'xxx_ttt_xxx',
-      projectId: 1,
-      jobId: '233',
-      jobStartTime: 'xxxx',
-      jobFinishTime: 'yyyy',
-      componentName: 'hi',
-      schema: [{ name: 'key', type: 'varchar' }, { name: 'value', type: 'varchar' }],
-      hideSchema: false,
-    },
-    { tableName: 'xxx_zzz_xxx',
-      projectId: 1,
-      jobId: '233',
-      jobStartTime: 'xxxx',
-      jobFinishTime: 'yzzy',
-      componentName: 'hai',
-      schema: [{ name: 'key', type: 'long' }, { name: 'value', type: 'varchar' }],
-      hideSchema: true,
-    },
-  ];
+  componentWillMount() {
+    const { dispatch, match } = this.props;
+    dispatch({
+      type: 'dataquery/getAvailableDatabases',
+      payload: {
+        id: match.params.id,
+      },
+    });
+  }
 
   performQuery() {
     const { dispatch } = this.props;
@@ -63,12 +52,26 @@ export default class WorkspaceDataView extends Component {
   }
 
   fetchData(state, instance) {
-    console.log('fetch data called');
     this.setState({ pageSize: state.pageSize, pageNum: state.page }, () => this.performQuery());
   }
 
+  toggleTableItemStatus(item) {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'dataquery/toggleItemStatus',
+      payload: item,
+    });
+  }
+
+  copySelectSql(item) {
+    this.props.dispatch({
+      type: 'dataquery/copyItemAsSql',
+      payload: item,
+    });
+  }
+
   render() {
-    const { queryResult } = this.props.dataquery;
+    const { queryResult, availableComponents } = this.props.dataquery;
     const data = (queryResult === undefined) ? undefined : queryResult.data;
     const columns = (queryResult === undefined) ? undefined :
       queryResult.meta.map((m) => {
@@ -79,6 +82,7 @@ export default class WorkspaceDataView extends Component {
       pagination.total / pagination.pageSize;
     const { loading } = this.props;
     const { showSider } = this.state;
+
     return (
       <Layout style={{ padding: '0', height: '100%' }} theme="light" >
         <Header style={{ padding: '0px', height: '48px', lineHeight: '46px', background: '#eee' }}>
@@ -115,11 +119,12 @@ export default class WorkspaceDataView extends Component {
                         pages={pages}
                         onFetchData={(state, instance) => this.fetchData(state, instance)}
                       />
-                    )}
+                    )
+                  }
                 </Card>
               </Scrollbars>
               <div className={styles.toggleTrigger} >
-                <Icon type="double-left" onClick={() => this.setState({ showSider: !showSider })} />
+                <Icon type={showSider ? 'double-right' : 'double-left'} onClick={() => this.setState({ showSider: !showSider })} />
               </div>
             </Col>
             <Col span={showSider ? 6 : 0} className={styles.rightView} >
@@ -131,7 +136,7 @@ export default class WorkspaceDataView extends Component {
                   <List
                     size="small"
                     bordered
-                    dataSource={this.sampleData}
+                    dataSource={availableComponents}
                     renderItem={item => (
                       <List.Item>
                         <div className={styles.componentCell}>

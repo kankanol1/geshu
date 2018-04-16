@@ -48,6 +48,10 @@ export async function validatePipeline({ id }) {
   });
 }
 
+export async function getLatestDatabaseForProject({ id }) {
+  return request(`/api/workspace/dataview?projectId=${id}`);
+}
+
 export default {
   fetchComponentSetting,
   fetchComponentList,
@@ -55,4 +59,5 @@ export default {
   saveProject,
   saveComponentSettings,
   runPipeline,
+  getLatestDatabaseForProject,
 };

@@ -1,3 +1,5 @@
+import { getUrlParams } from './utils';
+
 export function getQueryResult(req, res, u, b) {
   let url = u;
   if (!url || Object.prototype.toString.call(url) !== '[object String]') {
@@ -25,6 +27,39 @@ export function getQueryResult(req, res, u, b) {
       { size: 1, name: 'key', label: 'key' },
       { size: 1, name: 'value', label: 'value' }],
   };
+
+  if (res && res.json) {
+    res.json(result);
+  } else {
+    return result;
+  }
+}
+
+export function getLastestDatabasesForProject(req, res, u, b) {
+  let url = u;
+  if (!url || Object.prototype.toString.call(url) !== '[object String]') {
+    url = req.url; // eslint-disable-line
+  }
+  const params = getUrlParams(url);
+  const projectId = params.projectId === undefined ? 1 : parseInt(params.projectId, 10);
+  const result = [
+    { tableName: 'xxx_ttt_xxx',
+      projectId,
+      jobId: '233',
+      jobStartTime: 'xxxx',
+      jobFinishTime: 'yyyy',
+      componentName: 'hi',
+      schema: [{ name: 'key', type: 'varchar' }, { name: 'value', type: 'varchar' }],
+    },
+    { tableName: 'xxx_zzz_xxx',
+      projectId,
+      jobId: '233',
+      jobStartTime: 'xxxx',
+      jobFinishTime: 'yzzy',
+      componentName: 'hai',
+      schema: [{ name: 'key', type: 'long' }, { name: 'value', type: 'varchar' }],
+    },
+  ];
 
   if (res && res.json) {
     res.json(result);
