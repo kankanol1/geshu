@@ -25,7 +25,10 @@ export function getQueryResult(req, res, u, b) {
     meta:
     [
       { size: 1, name: 'key', label: 'key' },
-      { size: 1, name: 'value', label: 'value' }],
+      { size: 1, name: 'value', label: 'value' },
+    ],
+    success: true,
+    message: '执行错误',
   };
 
   if (res && res.json) {

@@ -1,9 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { Layout, Card, Input, Button, Select, Row, Col, List, Icon, Spin, Tooltip } from 'antd';
+import { Layout, Card, Input, Button, Select, Row, Col, List, Icon, Spin, Tooltip, Alert } from 'antd';
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
 import { Scrollbars } from 'react-custom-scrollbars';
+import CodeMirror from 'react-codemirror';
+import 'codemirror/mode/sql/sql';
+import 'codemirror/lib/codemirror.css';
+import 'codemirror/theme/solarized.css';
+import 'codemirror/addon/display/placeholder';
 import WorkspaceViewMenu from './WorkspaceViewMenu';
 import WorkspaceMenu from './Workspace/Menu/WorkspaceMenu';
 
@@ -72,16 +77,29 @@ export default class WorkspaceDataView extends Component {
 
   render() {
     const { queryResult, availableComponents } = this.props.dataquery;
-    const data = (queryResult === undefined) ? undefined : queryResult.data;
-    const columns = (queryResult === undefined) ? undefined :
-      queryResult.meta.map((m) => {
-        return { Header: m.label, accessor: m.label };
-      });
-    const pagination = (queryResult === undefined) ? undefined : queryResult.pagination;
-    const pages = (queryResult === undefined) ? undefined :
-      Math.ceil(pagination.total / pagination.pagesize);
     const { loading } = this.props;
     const { showSider } = this.state;
+
+    let displayTable = null;
+    if (queryResult !== undefined && queryResult.success) {
+      const { data, pagination } = queryResult;
+      const columns = queryResult.meta.map((m) => {
+        return { Header: m.label, accessor: m.label };
+      });
+      const pages = Math.ceil(pagination.total / pagination.pagesize);
+      displayTable = (
+        <ReactTable
+          manual
+          loading={loading}
+          data={data}
+          columns={columns}
+          defaultPageSize={this.state.pageSize}
+          className="-striped -highlight"
+          pages={pages}
+          onFetchData={(state, instance) => this.fetchData(state, instance)}
+        />
+      );
+    }
 
     return (
       <Layout style={{ padding: '0', height: '100%' }} theme="light" >
@@ -94,7 +112,16 @@ export default class WorkspaceDataView extends Component {
             <Col span={showSider ? 18 : 24} style={{ height: '100%' }}>
               <Scrollbars>
                 <Card>
-                  <TextArea rows={4} placeholder="enter sql here." onChange={e => this.setState({ query: e.target.value })} />
+                  <CodeMirror
+                    options={{
+                      lineNumbers: true,
+                      mode: 'text/x-hive',
+                      theme: 'solarized',
+                      placeholder: '输入查询sql',
+                    }}
+                    onChange={newValue => this.setState({ query: newValue })}
+                    className={styles.codemirror}
+                  />
                   <div className={styles.buttonContainer}>
                     <Button
                       type="primary"
@@ -108,17 +135,15 @@ export default class WorkspaceDataView extends Component {
                 </Card>
                 <Card>
                   {
-                    queryResult === undefined ? null : (
-                      <ReactTable
-                        manual
-                        loading={loading}
-                        data={data}
-                        columns={columns}
-                        defaultPageSize={this.state.pageSize}
-                        className="-striped -highlight"
-                        pages={pages}
-                        onFetchData={(state, instance) => this.fetchData(state, instance)}
-                      />
+                    queryResult === undefined ?
+                     (loading ? <Spin /> : null)
+                     : (
+                       <React.Fragment>
+                         {
+                          queryResult.success ? displayTable :
+                          <Alert message={queryResult.message} type="error" showIcon className={styles.alert} />
+                        }
+                       </React.Fragment>
                     )
                   }
                 </Card>
@@ -129,7 +154,7 @@ export default class WorkspaceDataView extends Component {
             </Col>
             <Col span={showSider ? 6 : 0} className={styles.rightView} >
               <div style={{ height: '100%', background: '#fff' }}>
-                <Card title={(<span>组件列表</span>)}>
+                <Card title={(<span>可查看数据集列表</span>)}>
                   {/* <Select className={styles.componentSelector} placeholder="选择组件">
                     <Option value="lucy">lucy</Option>
                   </Select> */}

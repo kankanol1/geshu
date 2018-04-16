@@ -7,6 +7,18 @@
 
 .dataView {
 
+  .alert {
+    margin-bottom: 10px;
+  }
+
+  .codemirror {
+    height: 100px;
+
+    :global(.CodeMirror-placeholder) {
+      color: #cacaca;
+    }
+  }
+
   .toggleTrigger {
     height: 100%;
     width: 20px;
@@ -21,17 +33,23 @@
       border: 1px solid #afcdec;
       background: #cacaca;
       padding: 14px 2px;
+      transition: background-color 0.2s, color 0.2s;
+      -webkit-transition: background-color 0.2s, color 0.2s;
     }
 
     :global(.anticon:hover) {
       cursor: pointer;
-      background: #096dd9;
+      background-color: #096dd9;
+      transition: background-color 0.2s, color 0.2s;
+      -webkit-transition: background-color 0.2s, color 0.2s;
       color: white;
     }
   }
 
   .rightView {
     height: 100%;
+    transition: width 0.2s;
+    -webkit-transition: width 0.2s;
     :global(.ant-card-head) {
       padding: 0 24px;
     }
