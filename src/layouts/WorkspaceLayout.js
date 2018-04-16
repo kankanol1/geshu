@@ -33,7 +33,6 @@ getMenuData().forEach(getRedirect);
 class WorkspaceLayout extends AbstractBasicLayout {
   getContent() {
     const { routerData, match, fullScreen } = this.props;
-    console.log('current user from abstrat', this.props.currentUser);
     return (
       <Content style={{ height: '100%', overflowX: 'initial' }}>
         <div style={{ height: fullScreen ? '100vh' : 'calc(100vh - 64px)' }}>
