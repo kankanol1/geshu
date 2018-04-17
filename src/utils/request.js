@@ -90,7 +90,7 @@ export default function request(url, options) {
         dispatch(routerRedux.push('/exception/500'));
         return;
       }
-      if (status >= 404 && status < 422) {
+      if (status >= 404 && status < 422 && !url.startsWith('/api')) {
         dispatch(routerRedux.push('/exception/404'));
       }
     });

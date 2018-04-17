@@ -13,7 +13,7 @@ export function recentGraph(req, res) {
     });
   }
   if (res && res.json) {
-    res.json(result);
+    res.json({ success: true, data: result });
   } else {
     return result;
   }
@@ -121,13 +121,7 @@ export function getDataSources(req, res) {
 export function getGremlinServerAddress(req, res) {
   const result = {
     success: true,
-    data: {
-      name: 'test',
-      // host: '20.28.30.28',
-      host: 'localhost',
-      // host: '18.217.118.40',
-      port: '8182',
-    },
+    data: 'http://18.217.118.40:8182',
   };
 
   if (res && res.json) {

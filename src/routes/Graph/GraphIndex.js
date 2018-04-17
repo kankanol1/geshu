@@ -6,10 +6,6 @@ import { Link } from 'dva/router';
 import styles from './GraphIndex.less';
 import CreateGraphForm from './CreateGraphForm';
 
-import CreateProjectForm from '../Project/CreateProjectForm';
-import OpenProjectForm from '../Project/OpenProjectForm';
-
-const { Header } = Layout;
 
 @connect(({ graph, loading }) => ({
   graph,
@@ -180,15 +176,6 @@ export default class GraphIndex extends Component {
             <Icon type="folder-open" />打开项目
           </Button>
         </Card>
-        <CreateProjectForm
-          {...parentMethods}
-          modalVisible={modalVisible}
-        />
-
-        <OpenProjectForm
-          {...parentMethods}
-          modalOpenVisible={modalOpenVisible}
-        />
       </Layout>
     );
   }

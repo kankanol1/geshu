@@ -46,14 +46,14 @@ export async function getGremlinServerAddress() {
   });
 }
 
-export async function getGremlinQueries() {
-  return request('/api/graph/queryList', {
+export async function getGremlinQueries(params) {
+  return request(`/api/graph/query/list?${stringify(params)}`, {
     method: 'GET',
   });
 }
 
 export async function queryGremlinServer(params) {
-  return request(`http://${params.host}:${params.port}`, {
+  return request(`${params.host}`, {
     method: 'POST',
     credentials: null,
     headers: {
@@ -105,6 +105,14 @@ export async function updateQuery(params) {
   });
 }
 
+export async function saveQuery(params) {
+  return request('/api/graph/query/save', { method: 'POST',
+    body: {
+      ...params,
+    },
+  });
+}
+
 export async function removeQuery(params) {
   return request('/api/graph/query/delete', {
     method: 'POST',
@@ -136,4 +144,5 @@ export default {
   removeQuery,
   execute,
   queryProjectLabels,
+  saveQuery,
 };

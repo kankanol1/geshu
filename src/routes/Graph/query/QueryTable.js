@@ -13,7 +13,7 @@ export default class EditableTable extends React.Component {
     this.columns = [{
       title: '名称',
       dataIndex: 'name',
-      width: '45%',
+      align: 'center',
       render: (text, record) => {
         const { editable, name, id } = record;
         return (
@@ -37,23 +37,26 @@ export default class EditableTable extends React.Component {
           : (
             <span>
               <span style={{ margin: '-5px 5px' }}>{name}</span>
-              <a onClick={() => this.edit(id)}><Icon type="edit" />编辑</a>
+              <a onClick={() => this.edit(id)} style={{ marginLeft: '20px' }}><Icon type="edit" />编辑</a>
             </span>
     )
         }
           </div>
         );
       },
-    }, {
-      title: '创建时间',
-      dataIndex: 'createdAt',
-    }, {
+    },
+    // {
+    //   title: '创建时间',
+    //   dataIndex: 'createdAt',
+    // },
+    {
       title: '操作',
       dataIndex: 'operation',
-      width: '100px',
+      width: '40%',
+      align: 'center',
       render: (text, record) => {
         return (
-          <div>
+          <div style={{ margin: 'auto' }}>
             <a onClick={() => this.props.onOpen(record.query)}>打开</a>
             <Divider type="vertical" />
             <span>

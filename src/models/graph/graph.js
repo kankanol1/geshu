@@ -1,6 +1,6 @@
 import { routerRedux } from 'dva/router';
 import { message } from 'antd';
-import { recentGraph, queryGraphList, removeProject, updateProject, createProject, queryProjectLabels } from '../../services/graphAPI';
+import { recentGraph, queryGraphList, removeProject, updateProject, createProject } from '../../services/graphAPI';
 
 export default {
   namespace: 'graph',
@@ -13,7 +13,6 @@ export default {
     data: {
       list: [],
       pagination: {},
-      labels: [],
     },
   },
 
@@ -45,23 +44,16 @@ export default {
         },
       };
     },
-    saveLabelsList(state, { payload }) {
-      return {
-        ...state,
-        data: {
-          ...state.data,
-          labels: payload.list,
-        },
-      };
-    },
   },
   effects: {
     *fetchRecent({ payload }, { call, put }) {
       const response = yield call(recentGraph);
-      yield put({
-        type: 'saveRecent',
-        payload: response,
-      });
+      if (response.success) {
+        yield put({
+          type: 'saveRecent',
+          payload: response.data,
+        });
+      }
     },
     *fetchProjectList({ payload }, { call, put }) {
       const response = yield call(queryGraphList, payload);
@@ -104,7 +96,7 @@ export default {
     *createProject({ payload, resolve, reject }, { call, put }) {
       const response = yield call(createProject, { ...payload });
       if (response.success) {
-        message.success(response.message);
+        message.success('创建成功！');
         yield put({
           type: 'fetchProjectList',
           payload: payload.refreshParams,
@@ -128,14 +120,6 @@ export default {
       // show message.
         message.error(response.message);
       }
-    },
-
-    *fetchLabelsList({ payload }, { call, put }) {
-      const response = yield call(queryProjectLabels, payload);
-      yield put({
-        type: 'saveLabelsList',
-        payload: response,
-      });
     },
   },
   subscriptions: {},

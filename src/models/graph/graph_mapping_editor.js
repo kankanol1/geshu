@@ -2,7 +2,7 @@
 import { routerRedux } from 'dva/router';
 import { message } from 'antd';
 import graphUtil from '../../utils/graph_utils';
-import { getGraph, saveGraph, getDataSources, getDataSourceColumns, execute } from '../../services/graphAPI';
+import { getGraph, saveGraph, execute } from '../../services/graphAPI';
 import { listFile, listFileHead } from '../../services/fileApi';
 
 function inverseMap(map) {
@@ -101,12 +101,6 @@ export default {
       graphUtil.removeDataOfCategory(state.diagram, 'link', undefined);
       return state;
     },
-    saveDataSources(state, { payload }) {
-      return Object.assign({}, {
-        ...state,
-        datasources: payload,
-      });
-    },
     addDataSourcesOnGraph(state, { payload }) {
       const fileData = [];
       payload.forEach((value) => {
@@ -131,6 +125,7 @@ export default {
       });
     },
     saveCurrentDataSourceColumn(state, { payload }) {
+      console.log(state);
       const currentColumns = state.datasourceId2Columns[payload];
       return Object.assign({}, {
         ...state,
@@ -197,11 +192,6 @@ export default {
           ...payload,
         },
       });
-      const { data } = yield call(getDataSources);
-      yield put({
-        type: 'saveDataSources',
-        payload: data,
-      });
       yield put({
         type: 'loadFile',
         payload: '/',
@@ -214,7 +204,7 @@ export default {
       const { datasourceId2Columns } =
         yield select(state => state.graph_mapping_editor);
       if (!datasourceId2Columns[payload]) {
-        const { data } = yield call(listFileHead, {
+        const data  = yield call(listFileHead, {
           file: payload,
         });
         yield put({

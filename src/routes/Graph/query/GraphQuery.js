@@ -121,7 +121,7 @@ class GraphQuery extends React.PureComponent {
           <strong style={{ marginLeft: '50%' }}>项目名称：{this.props.name}</strong>
         </div>
         <Row>
-          <Col span={8} style={{ padding: '0', height: '100%' }}>
+          <Col span={10} style={{ padding: '0', height: '100%' }}>
             <div
               style={{
                 background: '#fff',
@@ -213,7 +213,7 @@ class GraphQuery extends React.PureComponent {
               </div>
             </div>
           </Col>
-          <Col span={16}>
+          <Col span={14}>
             <div
               style={
               {

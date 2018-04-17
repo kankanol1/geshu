@@ -61,6 +61,7 @@ class MappingInspector extends Component {
     };
   }
   componentWillReceiveProps(newProp) {
+    console.log(newProp);
     if (newProp.diagram && !this.state.inited) {
       myDiagram = newProp.diagram;
       myDiagram.addDiagramListener('ChangedSelection', () => {

@@ -44,9 +44,9 @@ export default {
   state: {
     goJsGraph: {},
     host: '',
-    port: '',
     id: '',
     name: '',
+    tableName: 'graph00',
     type2Label2Attrs: {
       node: {},
       link: {},
@@ -63,7 +63,13 @@ export default {
   reducers: {
     init(state, { payload }) {
       const goJsGraph = new GojsRelationGraph();
-      const { nodeDataArray, linkDataArray } = JSON.parse(payload.frontendJson);
+      const graphData = JSON.parse(payload.frontendJson);
+      let nodeDataArray = [];
+      let linkDataArray = [];
+      if (graphData) {
+        nodeDataArray = [...graphData.nodeDataArray];
+        linkDataArray = [...graphData.linkDataArray];
+      }
       const type2Label2Attrs = {};
       const type2Attrs = {};
       const type2Labels = {};
@@ -108,6 +114,7 @@ export default {
         type2Label2Attrs,
         type2Attrs,
         type2Labels,
+        tableName: payload.tableName ? payload.tableName : state.tableName,
       });
     },
     setGraph(state, { payload }) {
@@ -125,18 +132,19 @@ export default {
   effects: {
     *initialize({ payload }, { call, put }) {
       const graphData = yield call(getGraph, { id: payload.id });
-      const response = yield call(getGremlinServerAddress, { id: payload.id });
+      let response = yield call(getGremlinServerAddress, { id: payload.id });
+      if (!response) response = { data: 'http://18.217.118.40:8182' };
       yield put({
         type: 'init',
         payload: {
           ...graphData.data,
-          ...response.data,
+          host: response.data,
           ...payload,
         },
       });
     },
     *searchGraph({ payload }, { call, put, select }) {
-      const { host, port, id, type2Label2Attrs, type2Attrs } =
+      const { host, id, type2Label2Attrs, type2Attrs, tableName } =
         yield select(state => state.graph_explore);
       const { label, name, value, limit } = payload;
       const searchLink =
@@ -161,10 +169,9 @@ export default {
       code += '[nodes.toList(),edges.toList()]';
 
       const response = yield call(queryGremlinServer, {
-        code,
+        code: `g=${tableName}.traversal();${code}`,
         id,
         host,
-        port,
       });
       if (response.status.code > 200) { message.error(`错误：${response.status.message}`); }
       yield put({
@@ -173,13 +180,13 @@ export default {
       });
     },
     *exploreGraph({ payload }, { call, put, select }) {
-      const { host, port, id } = yield select(state => state.graph_explore);
+      const { host, id , tableName } = yield select(state => state.graph_explore);
       const { key } = payload.data;
       const code = `nodes =g.V(${key}).as("node").both().as("node")
         .select(all,"node").inject(g.V(${key})).unfold()
         edges = g.V(${key}).bothE()
         [nodes.toList(),edges.toList()]`;
-      const response = yield call(queryGremlinServer, { code, id, host, port });
+      const response = yield call(queryGremlinServer, { code: `g=${tableName}.traversal();${code}`, id, host });
       yield put({
         type: 'mergeGraph',
         payload: response,
