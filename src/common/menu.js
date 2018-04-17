@@ -42,6 +42,18 @@ const menuData = [{
     name: '作业列表',
     path: 'list',
   }],
+},
+{
+  name: '中心数据存储',
+  icon: 'database',
+  path: 'database',
+  children: [{
+    name: '数据库列表',
+    path: 'list',
+  }, {
+    name: '数据查询',
+    path: 'query',
+  }],
 }, {
   name: '图数据管理',
   icon: 'share-alt',
