@@ -1,14 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { Layout, Card, Input, Button, Select, Row, Col, List, Icon, Spin, Tooltip, Alert } from 'antd';
-import ReactTable from 'react-table';
-import 'react-table/react-table.css';
+import { Layout, Card, Input, Button, Select, Row, Col, List, Icon, Spin, Tooltip } from 'antd';
 import { Scrollbars } from 'react-custom-scrollbars';
-import CodeMirror from 'react-codemirror';
-import 'codemirror/mode/sql/sql';
-import 'codemirror/lib/codemirror.css';
-import 'codemirror/theme/solarized.css';
-import 'codemirror/addon/display/placeholder';
+import SqlQueryTable from '../../components/SqlQueryTable';
 import WorkspaceViewMenu from './WorkspaceViewMenu';
 import WorkspaceMenu from './Workspace/Menu/WorkspaceMenu';
 
@@ -26,9 +20,6 @@ export default class WorkspaceDataView extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      query: '',
-      pageNum: 0,
-      pageSize: 20,
       showSider: true,
     };
   }
@@ -43,21 +34,16 @@ export default class WorkspaceDataView extends Component {
     });
   }
 
-  performQuery() {
+  handleQuery(query, pageNum, pageSize) {
     const { dispatch } = this.props;
     dispatch({
-      type: 'dataquery/querySQL',
+      type: 'dataquery/querySQLTmp',
       payload: {
-        query: this.state.query,
-        pageNum: this.state.pageNum,
-        pageSize: this.state.pageSize,
-        showSider: false,
+        query,
+        pageNum,
+        pageSize,
       },
     });
-  }
-
-  fetchData(state, instance) {
-    this.setState({ pageSize: state.pageSize, pageNum: state.page }, () => this.performQuery());
   }
 
   toggleTableItemStatus(item) {
@@ -80,27 +66,6 @@ export default class WorkspaceDataView extends Component {
     const { loading } = this.props;
     const { showSider } = this.state;
 
-    let displayTable = null;
-    if (queryResult !== undefined && queryResult.success) {
-      const { data, pagination } = queryResult;
-      const columns = queryResult.meta.map((m) => {
-        return { Header: m.label, accessor: m.label };
-      });
-      const pages = Math.ceil(pagination.total / pagination.pagesize);
-      displayTable = (
-        <ReactTable
-          manual
-          loading={loading}
-          data={data}
-          columns={columns}
-          defaultPageSize={this.state.pageSize}
-          className="-striped -highlight"
-          pages={pages}
-          onFetchData={(state, instance) => this.fetchData(state, instance)}
-        />
-      );
-    }
-
     return (
       <Layout style={{ padding: '0', height: '100%' }} theme="light" >
         <Header style={{ padding: '0px', height: '48px', lineHeight: '46px', background: '#eee' }}>
@@ -110,43 +75,14 @@ export default class WorkspaceDataView extends Component {
         <Layout style={{ padding: '0', height: '100%' }} theme="light" className={styles.dataView}>
           <Row style={{ height: '100%' }}>
             <Col span={showSider ? 18 : 24} style={{ height: '100%' }}>
-              <Scrollbars>
-                <Card>
-                  <CodeMirror
-                    options={{
-                      lineNumbers: true,
-                      mode: 'text/x-hive',
-                      theme: 'solarized',
-                      placeholder: '输入查询sql',
-                    }}
-                    onChange={newValue => this.setState({ query: newValue })}
-                    className={styles.codemirror}
-                  />
-                  <div className={styles.buttonContainer}>
-                    <Button
-                      type="primary"
-                      className={styles.button}
-                      onClick={() => { this.setState({ pageNum: 0 }, () => this.performQuery()); }}
-                    >
-                      <Icon type="play-circle" /> 查询
-                    </Button>
-                    <Button type="danger" className={styles.button}>清空</Button>
-                  </div>
-                </Card>
-                <Card>
-                  {
-                    queryResult === undefined ?
-                     (loading ? <Spin /> : null)
-                     : (
-                       <React.Fragment>
-                         {
-                          queryResult.success ? displayTable :
-                          <Alert message={queryResult.message} type="error" showIcon className={styles.alert} />
-                        }
-                       </React.Fragment>
-                    )
-                  }
-                </Card>
+              <Scrollbars >
+                <SqlQueryTable
+                  queryResult={queryResult}
+                  loading={loading}
+                  onQuery={(query, pageNum, pageSize) => this.handleQuery(query, pageNum, pageSize)}
+                  // you can also set the query value like this.
+                  // sql="select * from item"
+                />
               </Scrollbars>
               <div className={styles.toggleTrigger} >
                 <Icon type={showSider ? 'double-right' : 'double-left'} onClick={() => this.setState({ showSider: !showSider })} />

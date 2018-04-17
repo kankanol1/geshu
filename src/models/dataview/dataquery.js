@@ -1,6 +1,6 @@
 import copy from 'copy-to-clipboard';
 import { message } from 'antd';
-import { performDataQuery } from '../../services/dataQueryAPI';
+import { performDataQuery, performDataQueryTmp } from '../../services/dataQueryAPI';
 import { getLatestDatabaseForProject } from '../../services/componentAPI';
 
 export default {
@@ -68,6 +68,14 @@ export default {
   },
 
   effects: {
+    *querySQLTmp({ payload }, { call, put }) {
+      const response = yield call(performDataQueryTmp, payload);
+      yield put({
+        type: 'updateQueryResult',
+        payload: response,
+      });
+    },
+
     *querySQL({ payload }, { call, put }) {
       const response = yield call(performDataQuery, payload);
       yield put({

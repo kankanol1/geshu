@@ -36,6 +36,12 @@ function RouterConfig({ history, app }) {
             redirectPath="/user/login"
           />
           <AuthorizedRoute
+            path="/database/query"
+            render={props => <WorkspaceLayout {...props} />}
+            authority={['admin', 'user']}
+            redirectPath="/user/login"
+          />
+          <AuthorizedRoute
             path="/graph"
             render={props => <GraphLayout {...props} />}
             authority={['admin', 'user']}

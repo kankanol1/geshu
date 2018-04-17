@@ -1,0 +1,112 @@
+import React, { Component } from 'react';
+import { Layout, Menu, Button, Input, Tabs, List, Table, Icon } from 'antd';
+import SplitterLayout from 'react-splitter-layout';
+import 'rc-drawer/assets/index.css';
+import styles from '../DatabaseQuery.less';
+
+const { TabPane } = Tabs;
+
+const dummyList = [
+  {
+    tableName: 'test1',
+    name: 'hai',
+    schema: [{ name: 'key', type: 'long' }, { name: 'value', type: 'varchar' }],
+  },
+  {
+    tableName: 'xxx_zzz_xxxxxx',
+    name: 'hai',
+    schema: [{ name: 'key', type: 'long' }, { name: 'value', type: 'varchar' }, { name: 'rowid', type: 'long' }],
+  },
+];
+
+const columns = [
+  {
+    title: '列名',
+    dataIndex: 'name',
+    key: 'name',
+  }, {
+    title: '类型',
+    dataIndex: 'type',
+    key: 'type',
+  },
+];
+
+export default class SiderBar extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      selectedItem: undefined,
+    };
+  }
+
+
+  renderDatabaseTab = (list) => {
+    return (
+      <React.Fragment>
+        <Input placeholder="filter data tables" />
+        <List
+          bordered
+          size="small"
+          dataSource={list}
+          renderItem={item => (
+            <List.Item
+              onClick={() => this.setState({ selectedItem: item })}
+              className={item === this.state.selectedItem ?
+                styles.selectedItem : null}
+            >
+              <span className={styles.tableName}>{item.tableName}</span>&nbsp;
+              <span className={styles.name}>{item.name}</span>
+            </List.Item>
+    )}
+        />
+      </React.Fragment>
+    );
+  }
+
+  renderSideBarTop() {
+    return (
+      <Tabs defaultActiveKey="public" className={styles.siderTop}>
+        <TabPane tab="公开数据库" key="public">
+          {this.renderDatabaseTab(dummyList)}
+        </TabPane>
+        <TabPane tab="私有数据库" key="private">
+          {this.renderDatabaseTab(dummyList)}
+        </TabPane>
+      </Tabs>
+    );
+  }
+
+  renderSideBarBottom() {
+    const { selectedItem } = this.state;
+    if (selectedItem === undefined) {
+      return null;
+    }
+    const { schema } = selectedItem;
+    return (
+      <Tabs
+        defaultActiveKey="schema"
+        tabBarExtraContent={
+          <Button type="danger" onClick={() => this.setState({ selectedItem: undefined })}>
+            <Icon type="close" />
+          </Button>
+      }
+      >
+        <TabPane tab="表格结构" key="schema">
+          <Table columns={columns} dataSource={schema} size="small" pagination={false} />
+        </TabPane>
+        <TabPane tab="元信息" key="meta">Content of Tab Pane 2</TabPane>
+      </Tabs>
+    );
+  }
+
+  render() {
+    return (
+      <div className={styles.sider}>
+        <SplitterLayout vertical>
+          {this.renderSideBarTop()}
+          {this.renderSideBarBottom()}
+        </SplitterLayout>
+      </div>
+    );
+  }
+}

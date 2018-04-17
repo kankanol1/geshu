@@ -1,4 +1,4 @@
-import { createElement } from 'react';
+import React, { createElement } from 'react';
 import dynamic from 'dva/dynamic';
 import pathToRegexp from 'path-to-regexp';
 import { getMenuData } from './menu';
@@ -128,6 +128,11 @@ export const getRouterData = (app) => {
     /* self manage */
     '/self/:tab?': {
       component: dynamicWrapper(app, [], () => import('../routes/Self/SelfManage')),
+    },
+
+    /* database */
+    '/database/query': {
+      component: dynamicWrapper(app, [], () => import('../routes/Database/DatabaseQuery')),
     },
 
     /**

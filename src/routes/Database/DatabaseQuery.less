@@ -1,0 +1,63 @@
+.drawer {
+  position: relative;
+  height: 100%;
+
+  .sider {
+    width: 300px;
+    height: 100%;
+    background: #fff;
+
+    :global(.ant-tabs-nav-wrap) {
+      background: #fafafa;
+    }
+
+    .siderTop {
+      :global(.ant-list-item:hover), .selectedItem {
+        background-color: #1890ff;
+        color: #fff;
+        cursor: pointer;
+        transition: color 0.2s, background-color 0.2s;
+        -webkit-transition: color 0.2s, background-color 0.2s;
+
+        .name {
+          color: #ddd;
+        }
+      }
+
+      .tableName {
+        font-weight: 500;
+      }
+      .name {
+        font-style: italic;
+        color: #aaa;
+      }
+    }
+  }
+}
+
+.toggleTrigger {
+  height: 100%;
+  width: 20px;
+  top: 0;
+  left: 0;
+  position: absolute;
+  display: flex;
+  display: -webkit-flex;
+  align-items: center;
+
+  :global(.anticon) {
+    border: 1px solid #afcdec;
+    background: #cacaca;
+    padding: 14px 2px;
+    transition: background-color 0.2s, color 0.2s;
+    -webkit-transition: background-color 0.2s, color 0.2s;
+  }
+
+  :global(.anticon:hover) {
+    cursor: pointer;
+    background-color: #096dd9;
+    transition: background-color 0.2s, color 0.2s;
+    -webkit-transition: background-color 0.2s, color 0.2s;
+    color: white;
+  }
+}
