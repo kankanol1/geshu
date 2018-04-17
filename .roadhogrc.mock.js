@@ -12,6 +12,7 @@ import componentList from './mock/workspace/componentList'
 import { wrapResponse } from './mock/response_wrapper'
 import componentParams from './mock/workspace/componentParams'
 import { getProject, createProject, updateProject, deleteProject, getProjectLabels, getRecentProjects } from './mock/project';
+import { getDatabase, createDatabase, updateDatabase, deleteDatabase, getRecentDatabases } from './mock/database';
 import { login, userList, createUser, deleteUser, queryUserName, updateUser } from './mock/user';
 import { getModels, addModel, updateModel, deleteModels } from './mock/model';
 import { getCandidateModels, updateCandidateModel, deleteCandidateModels, publishCandidateModels } from './mock/candidatemodel';
@@ -22,6 +23,8 @@ import {recentGraph,saveGraph,getGraph,getDataSources,getDataSourceColumns,getGr
 import { getFileList } from './mock/file';
 import { getServingModels, offlineServingModels, onlineServingModels } from './mock/servingmodel';
 import { getQueryResult, getLastestDatabasesForProject } from './mock/dataquery';
+// import { createDatabase, updateDatabase } from './src/services/databaseAPI';
+// import { deleteDatabase } from './mock/database';
 
 // 是否禁用代理
 const noProxy = process.env.NO_PROXY === 'true';
@@ -62,7 +65,12 @@ const proxy = serverEnabled ?
   'POST /api/project/delete': deleteProject,
   'GET /api/project/labels':  getProjectLabels,
   'GET /api/project/recent': getRecentProjects,
-
+  // database
+  'GET /api/database/list': getDatabase,
+  'POST /api/database/create': createDatabase,
+  'POST /api/database/update': updateDatabase,
+  'POST /api/database/delete': deleteDatabase,
+  'GET /api/database/recent': getRecentDatabases,
   // login
   'POST /api/login/account': login,
   

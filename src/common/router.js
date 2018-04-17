@@ -202,6 +202,10 @@ export const getRouterData = (app) => {
     '/graph/detail/explore/:id': {
       component: dynamicWrapper(app, ['graph/graph_explore'], () => import('../routes/Graph/explore/GraphExplore')),
     },
+    // database
+    '/database/list': {
+      component: dynamicWrapper(app, ['database'], () => import('../routes/Database/DatabaseList')),
+    },
     // '/user/:id': {
     //   component: dynamicWrapper(app, [], () => import('../routes/User/SomeComponent')),
     // },

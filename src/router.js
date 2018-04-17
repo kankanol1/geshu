@@ -20,6 +20,7 @@ function RouterConfig({ history, app }) {
   const WorkspaceLayout = routerData['/project/workspace'].component;
   const UsersListLayout = routerData['/users/list'].component;
   const GraphLayout = routerData['/graph'].component;
+  // const DatabaseLayout = routerData['/database'].component;
 
   return (
     <LocaleProvider locale={zhCN}>
@@ -41,6 +42,12 @@ function RouterConfig({ history, app }) {
             authority={['admin', 'user']}
             redirectPath="/user/login"
           />
+          {/* <AuthorizedRoute
+          path="/database"
+          render={props => <DatabaseLayout {...props} />}
+          authority={['admin', 'user']}
+          redirectPath="/user/login"
+          /> */}
           <AuthorizedRoute
             path="/graph"
             render={props => <GraphLayout {...props} />}
