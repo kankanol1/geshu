@@ -4,6 +4,7 @@ import { message } from 'antd';
 import { getGremlinServerAddress, queryGremlinServer, getGraph } from '../../services/graphAPI';
 import GojsRelationGraph from '../../utils/GojsRelationGraph';
 
+const GRAPH_NAME = 'graph_explore';
 function graphson3to1(data) {
   // Convert data from graphSON v2 format to graphSON v1
   if (!(Array.isArray(data) || ((typeof data === 'object') && (data !== null)))) return data;
@@ -42,7 +43,6 @@ function graphson3to1(data) {
 export default {
   namespace: 'graph_explore',
   state: {
-    goJsGraph: {},
     host: '',
     id: '',
     name: '',
@@ -107,9 +107,9 @@ export default {
       });
 
       goJsGraph.create(payload);
+      GojsRelationGraph.register(GRAPH_NAME, goJsGraph);
       return Object.assign({}, {
         ...state,
-        goJsGraph,
         ...payload,
         type2Label2Attrs,
         type2Attrs,
@@ -118,14 +118,14 @@ export default {
       });
     },
     setGraph(state, { payload }) {
-      state.goJsGraph.clear();
+      GojsRelationGraph.getGraph(GRAPH_NAME).clear();
       const data = graphson3to1(payload.result.data);
-      state.goJsGraph.mergeData(data);
+      GojsRelationGraph.getGraph(GRAPH_NAME).mergeData(data);
       return state;
     },
     mergeGraph(state, { payload }) {
       const data = graphson3to1(payload.result.data);
-      state.goJsGraph.mergeData(data);
+      GojsRelationGraph.getGraph(GRAPH_NAME).mergeData(data);
       return state;
     },
   },

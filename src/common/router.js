@@ -175,18 +175,18 @@ export const getRouterData = (app) => {
     '/graph/list': {
       component: dynamicWrapper(app, [], () => import('../routes/Graph/GraphList')),
     },
-    '/graph/schema': {
-      component: dynamicWrapper(app, [], () => import('../layouts/GraphLayout')),
-    },
-    '/graph/explore': {
-      component: dynamicWrapper(app, [], () => import('../layouts/GraphLayout')),
-    },
-    '/graph/query': {
-      component: dynamicWrapper(app, [], () => import('../layouts/GraphLayout')),
-    },
-    '/graph/mapper': {
-      component: dynamicWrapper(app, [], () => import('../layouts/GraphLayout')),
-    },
+    // '/graph/schema': {
+    //   component: dynamicWrapper(app, [], () => import('../layouts/GraphLayout')),
+    // },
+    // '/graph/explore': {
+    //   component: dynamicWrapper(app, [], () => import('../layouts/GraphLayout')),
+    // },
+    // '/graph/query': {
+    //   component: dynamicWrapper(app, [], () => import('../layouts/GraphLayout')),
+    // },
+    // '/graph/mapper': {
+    //   component: dynamicWrapper(app, [], () => import('../layouts/GraphLayout')),
+    // },
     '/graph/index/:type': {
       component: dynamicWrapper(app, ['graph/graph'], () => import('../routes/Graph/GraphIndex')),
     },

@@ -129,11 +129,11 @@ const proxy = serverEnabled ?
   
   // file list
   'GET /api/fs/ls': getFileList,
-  'GET /api/fs/head': getDataSourceColumns,
+  'GET /api/fs/columns': getDataSourceColumns,
 
   
-  // file list
-  'GET /api/fs/ls': getFileList,
+  // // file list
+  // 'GET /api/fs/ls': getFileList,
   
   // self manage.
   'GET /api/self/info': getUserInfo,

@@ -342,4 +342,13 @@ util.allLinks = (diagram) => {
 util.clear = (diagram) => {
   diagram.clear();
 };
+
+const name2Diagram = {};
+util.registerDiagram = (name, diagram) => {
+  name2Diagram[name] = diagram;
+};
+util.getDiagram = (name) => {
+  return name2Diagram[name];
+};
+
 export default util;

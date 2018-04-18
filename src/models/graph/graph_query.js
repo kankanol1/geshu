@@ -4,6 +4,7 @@ import { message } from 'antd';
 import { getGraph, getGremlinServerAddress, queryGremlinServer, getGremlinQueries, createQuery, updateQuery, removeQuery, saveQuery } from '../../services/graphAPI';
 import GojsRelationGraph from '../../utils/GojsRelationGraph';
 
+const GRAPH_NAME = 'graph_query';
 function graphson3to1(data) {
   // Convert data from graphSON v2 format to graphSON v1
   if (!(Array.isArray(data) || ((typeof data === 'object') && (data !== null)))) return data;
@@ -101,7 +102,6 @@ function formatJson(json, options) {
 export default {
   namespace: 'graph_query',
   state: {
-    goJsGraph: {},
     code: '',
     host: '',
     showGraph: true,
@@ -116,25 +116,25 @@ export default {
     init(state, { payload }) {
       const goJsGraph = new GojsRelationGraph();
       goJsGraph.create(payload);
+      GojsRelationGraph.register(GRAPH_NAME, goJsGraph);
       return Object.assign({}, {
         ...state,
-        goJsGraph,
         ...payload,
         tableName: payload.tableName ? payload.tableName : state.tableName,
       });
     },
     setGraph(state, { payload }) {
-      state.goJsGraph.clear();
+      GojsRelationGraph.getGraph(GRAPH_NAME).clear();
       const data = graphson3to1(payload.result.data);
       if (data[0] && Array.isArray(data[0]) && data[0].length > 0 && data[0][0] instanceof Object) {
         state.showGraph = true;
-        state.goJsGraph.mergeData(data);
+        GojsRelationGraph.getGraph(GRAPH_NAME).mergeData(data);
       } else state.showGraph = false;
       return state;
     },
     mergeGraph(state, { payload }) {
       const data = graphson3to1(payload.result.data);
-      state.goJsGraph.mergeData(data);
+      GojsRelationGraph.getGraph(GRAPH_NAME).mergeData(data);
       return state;
     },
     saveCode(state, { payload }) {

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { Table, Input, Button, Select, Row, Col } from 'antd';
+import { Table, Select, Row, Col } from 'antd';
 import graphUtils from '../../../utils/graph_utils';
 import styles from '../Inspectors.less';
 
@@ -61,9 +61,8 @@ class MappingInspector extends Component {
     };
   }
   componentWillReceiveProps(newProp) {
-    console.log(newProp);
-    if (newProp.diagram && !this.state.inited) {
-      myDiagram = newProp.diagram;
+    if (!this.state.inited) {
+      myDiagram = graphUtils.getDiagram(newProp.diagramName);
       myDiagram.addDiagramListener('ChangedSelection', () => {
         if (myDiagram.selection.count !== 1) {
           this.setState({
@@ -95,6 +94,7 @@ class MappingInspector extends Component {
       });
       this.setState({ inited: true });
     }
+    console.log(newProp)
     const tableData = [];
     const mappingData = getInspectedObjectMappingData();
     newProp.currentColumns.forEach((record) => {

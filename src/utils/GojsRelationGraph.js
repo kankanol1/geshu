@@ -2,7 +2,7 @@
 const { go } = window;
 const $ = go.GraphObject.make;
 
-export default class GojsRelationGraph {
+class GojsRelationGraph {
   constructor() {
     this.options = {};
     this.pallet = ['#c12e34', '#e6b600', '#0098d9', '#2b821d', '#005eaa', '#339ca8'];
@@ -168,3 +168,11 @@ export default class GojsRelationGraph {
       this.diagram.clear();
     }
 }
+const name2Graph = {};
+GojsRelationGraph.register = (name, graph) => {
+  name2Graph[name] = graph;
+};
+GojsRelationGraph.getGraph = (name) => {
+  return name2Graph[name];
+};
+export default GojsRelationGraph;

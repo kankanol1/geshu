@@ -5,6 +5,7 @@ import graphUtil from '../../utils/graph_utils';
 import { getGraph, saveGraph, execute } from '../../services/graphAPI';
 import { listFile, listFileHead } from '../../services/fileApi';
 
+const DIAGRAM_NAME = 'graph_mapping';
 function inverseMap(map) {
   const inversedMap = {};
   for (const key in map) {
@@ -75,8 +76,8 @@ export default {
   state: {
     id: -1,
     name: '',
-    diagram: {},
     frontendJson: '',
+    diagramName: 'graph_mapping',
     datasources: [],
     datasourceId2Columns: {},
     currentColumns: [],
@@ -89,16 +90,16 @@ export default {
       const diagram = graphUtil.initMappingDiagram(graphContainer,
         frontendMappingJson || frontendJson,
         !frontendMappingJson);
+      graphUtil.registerDiagram(DIAGRAM_NAME, diagram);
       return Object.assign({}, {
         ...state,
-        diagram,
         id,
         name,
       });
     },
     resetMapping(state) {
-      graphUtil.removeDataOfCategory(state.diagram, 'node', 'file');
-      graphUtil.removeDataOfCategory(state.diagram, 'link', undefined);
+      graphUtil.removeDataOfCategory(graphUtil.getDiagram(DIAGRAM_NAME), 'node', 'file');
+      graphUtil.removeDataOfCategory(graphUtil.getDiagram(DIAGRAM_NAME), 'link', undefined);
       return state;
     },
     addDataSourcesOnGraph(state, { payload }) {
@@ -110,7 +111,7 @@ export default {
           path: value,
         });
       });
-      graphUtil.addFileNode(state.diagram, fileData);
+      graphUtil.addFileNode(graphUtil.getDiagram(DIAGRAM_NAME), fileData);
       return state;
     },
     saveDataSourceColumn(state, { payload }) {
@@ -204,7 +205,7 @@ export default {
       const { datasourceId2Columns } =
         yield select(state => state.graph_mapping_editor);
       if (!datasourceId2Columns[payload]) {
-        const data  = yield call(listFileHead, {
+        const data = yield call(listFileHead, {
           file: payload,
         });
         yield put({
@@ -221,7 +222,8 @@ export default {
       });
     },
     *saveMapping({ payload }, { call, put, select }) {
-      const { diagram, id } =
+      const diagram = graphUtil.getDiagram(DIAGRAM_NAME);
+      const { id } =
         yield select(state => state.graph_mapping_editor);
       const frontendMappingJson = graphUtil.toJson(diagram);
       const backendMappingData = formBackendMappingData(diagram);
