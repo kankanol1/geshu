@@ -1,7 +1,7 @@
 import React from 'react';
 import { DraggableCore } from 'react-draggable';
 import styles from './styles.less';
-import { getIconNameForComponent } from './styles';
+import { getIconNameForComponent, getStylesForType } from './styles';
 import './icon.less';
 
 /**
@@ -74,7 +74,7 @@ class NodeLayer extends React.PureComponent {
   }
 
   render() {
-    const { name, id, code } = this.props.model;
+    const { name, id, code, type } = this.props.model;
     const { x, y, height, width } =
       this.props.componentDict === undefined ?
         this.props.model : this.props.componentDict[id];
@@ -90,7 +90,7 @@ class NodeLayer extends React.PureComponent {
             style={{
             width: `${width}px`,
             height: `${height}px`,
-            background: '#722ed1',
+            background: `${getStylesForType(type)}`,
             transform: `translate(${x}px, ${y}px)`,
            }}
             className={styles.nodeDiv}

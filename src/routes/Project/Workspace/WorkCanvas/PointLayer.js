@@ -3,7 +3,7 @@ import { DraggableCore } from 'react-draggable';
 import { calculatePointPositionDict } from '../../../../utils/PositionCalculation';
 import styles from './styles.less';
 
-const R = { normal: 6, large: 8 };
+const R = { normal: 8, large: 9 };
 
 class PointLayer extends React.PureComponent {
   constructor(props) {

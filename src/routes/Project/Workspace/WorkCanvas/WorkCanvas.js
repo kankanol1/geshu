@@ -156,7 +156,22 @@ export default class WorkCanvas extends React.PureComponent {
             className="work-canvas"
           >
             {
-              /* 1. node layer */
+            /* 1. line layer, contains svg. needs to be at bottom */
+            components.map(
+              (component, i) => {
+                return (
+                  <LineLayer
+                    key={i}
+                    model={component}
+                    dispatch={this.props.dispatch}
+                    positionDict={componentPointPosition}
+                    componentDict={componentDict}
+                  />);
+              }
+            )
+          }
+            {
+              /* 2. node layer */
               components.map(
                 (component, i) => {
                   return (
@@ -168,21 +183,6 @@ export default class WorkCanvas extends React.PureComponent {
                       componentDict={componentDict}
                     />
                   );
-                }
-              )
-            }
-            {
-              /* 2. line layer */
-              components.map(
-                (component, i) => {
-                  return (
-                    <LineLayer
-                      key={i}
-                      model={component}
-                      dispatch={this.props.dispatch}
-                      positionDict={componentPointPosition}
-                      componentDict={componentDict}
-                    />);
                 }
               )
             }

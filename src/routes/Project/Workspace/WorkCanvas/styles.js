@@ -7,7 +7,11 @@ const colorMap = {
 };
 
 export const getStylesForType = (str) => {
-  return colorMap[str];
+  if (str === 'DataSink') {
+    return '#ff7a3a';
+  }
+  // return colorMap[str];
+  return '#3B57FF';
 };
 
 

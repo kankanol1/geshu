@@ -9,8 +9,8 @@ const projectInfo = {
     code: 'csv-source',
     x: 150,
     y: 100,
-    width: 110,
-    height: 110,
+    width: 120,
+    height: 120,
     /** type means */
     type: 'source',
     inputs: [
@@ -35,8 +35,8 @@ const projectInfo = {
     code: 'column-transform',
     x: 400,
     y: 100,
-    width: 110,
-    height: 110,
+    width: 120,
+    height: 120,
     type: 'preprocessor',
     inputs: [
       {

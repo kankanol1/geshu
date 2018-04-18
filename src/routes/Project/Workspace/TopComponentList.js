@@ -4,6 +4,7 @@ import { Layout, Collapse, Input, Spin, Tabs } from 'antd';
 import { Scrollbars } from 'react-custom-scrollbars';
 import SiderSingleComponent from './SiderSingleComponent';
 import TopSingleComponent from './TopSingleComponent';
+import styles from './WorkArea.less';
 
 const { Sider } = Layout;
 const { Panel } = Collapse;
@@ -80,7 +81,7 @@ export default class TopComponentList extends React.PureComponent {
     return (
       <React.Fragment>
         {
-          <Tabs type="card">
+          <Tabs type="card" className={styles.topTabs} >
             {
                   groups.map(
                     (group) => {

@@ -24,7 +24,10 @@ class LineLayer extends React.PureComponent {
               const lineStr = calculateLineStr(from.x + r, from.y, to.x - r, to.y);
               return (
                 <React.Fragment key={i}>
-                  <svg style={{ width: '100%', height: '100%' }}>
+                  <svg
+                    style={{ width: '100%', height: '100%', position: 'absolute', top: '0', left: '0' }}
+
+                  >
                     <polyline
                       points={lineStr}
                       style={{ fill: 'none', stroke: '#391085', strokeWidth: 1 }}
