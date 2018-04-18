@@ -94,7 +94,6 @@ class MappingInspector extends Component {
       });
       this.setState({ inited: true });
     }
-    console.log(newProp)
     const tableData = [];
     const mappingData = getInspectedObjectMappingData();
     newProp.currentColumns.forEach((record) => {

@@ -180,7 +180,7 @@ export default {
       });
     },
     *exploreGraph({ payload }, { call, put, select }) {
-      const { host, id , tableName } = yield select(state => state.graph_explore);
+      const { host, id, tableName } = yield select(state => state.graph_explore);
       const { key } = payload.data;
       const code = `nodes =g.V(${key}).as("node").both().as("node")
         .select(all,"node").inject(g.V(${key})).unfold()
