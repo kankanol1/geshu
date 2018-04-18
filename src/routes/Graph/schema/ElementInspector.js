@@ -43,8 +43,9 @@ class ElementInspector extends Component {
     };
   }
   componentWillReceiveProps(newProp) {
-    if (newProp.diagram) {
-      myDiagram = newProp.diagram;
+    const diagram = graphUtils.getDiagram(this.props.diagramName);
+    if (diagram) {
+      myDiagram = diagram;
       myDiagram.addDiagramListener('ChangedSelection', () => {
         if (myDiagram.selection.count !== 1) {
           this.setState({
@@ -70,9 +71,6 @@ class ElementInspector extends Component {
         }
       });
     }
-  }
-  shouldComponentUpdate(newProp, newState) {
-    return true;
   }
   removeAttr(index) {
     this.state.attrList.splice(index, 1);
@@ -239,6 +237,6 @@ class ElementInspector extends Component {
     );
   }
 }
-export default connect((state) => {
-  return { diagram: state.graph_schema_editor.diagram };
+export default connect(({ graph_schema_editor }) => {
+  return { ...graph_schema_editor };
 })(ElementInspector);

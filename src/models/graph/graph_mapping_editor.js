@@ -126,7 +126,6 @@ export default {
       });
     },
     saveCurrentDataSourceColumn(state, { payload }) {
-      console.log(state);
       const currentColumns = state.datasourceId2Columns[payload];
       return Object.assign({}, {
         ...state,

@@ -78,9 +78,10 @@ const IndexForm = Form.create()(
 );
 class IndexFormModal extends Component {
   render() {
-    if (this.props.visible && this.props.diagram) {
-      nodeProps = graphUtils.getNodeProps(this.props.diagram);
-      linkProps = graphUtils.getLinkProps(this.props.diagram);
+    const diagram = graphUtils.getDiagram(this.props.diagramName);
+    if (this.props.visible && diagram) {
+      nodeProps = graphUtils.getNodeProps(diagram);
+      linkProps = graphUtils.getLinkProps(diagram);
     }
     return (
       <Modal
@@ -103,6 +104,6 @@ class IndexFormModal extends Component {
     );
   }
 }
-export default connect((state) => {
-  return { diagram: state.graph_schema_editor.diagram };
+export default connect(({ graph_schema_editor }) => {
+  return { ...graph_schema_editor };
 })(IndexFormModal);

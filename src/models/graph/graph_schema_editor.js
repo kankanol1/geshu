@@ -3,6 +3,7 @@ import { message } from 'antd';
 import graphUtil from '../../utils/graph_utils';
 import { getGraph, saveGraph, execute } from '../../services/graphAPI';
 
+const DIAGRAM_NAME = 'graph_schema';
 function formPropertyKeys(nodeProps, linkProps) {
   const propertyKeys = [];
   const propertyNames = [];
@@ -97,7 +98,7 @@ export default {
   state: {
     id: -1,
     name: '',
-    diagram: {},
+    diagramName: 'graph_schema',
     indexData: {
       indexes: [],
       indexModal: false,
@@ -112,8 +113,9 @@ export default {
       if (frontendJson) graphUtil.fromJson(diagram, frontendJson);
       let indexes = [];
       if (indexJson) indexes = JSON.parse(indexJson);
+
+      graphUtil.registerDiagram(DIAGRAM_NAME, diagram);
       return Object.assign({}, { ...state,
-        diagram,
         id,
         name,
         indexData: {
@@ -165,8 +167,7 @@ export default {
         } });
     },
     clearSchema(state) {
-      graphUtil.clear(state.diagram);
-      state.diagram.clear();
+      graphUtil.clear(graphUtil.getDiagram(DIAGRAM_NAME));
       return Object.assign({}, {
         ...state,
         indexData: {
@@ -187,8 +188,9 @@ export default {
       });
     },
     *saveSchema({ payload }, { call, select, put }) {
-      const { diagram, indexData, id } =
+      const { indexData, id } =
         yield select(state => state.graph_schema_editor);
+      const diagram = graphUtil.getDiagram(DIAGRAM_NAME);
       const frontendJson = graphUtil.toJson(diagram);
       const nodeArr = graphUtil.allNodes(diagram);
       const linkArr = graphUtil.allLinks(diagram);

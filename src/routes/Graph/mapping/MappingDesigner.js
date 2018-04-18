@@ -1,28 +1,11 @@
 import React from 'react';
 import { connect } from 'dva';
-import TreeTransfer from 'lucio-tree-transfer';
 import { Layout, Row, Col, Menu, Icon, Modal } from 'antd';
+import FileSelector from './FileSelector';
 import MappingInspector from './MappingInspector';
 import styles from '../Inspectors.less';
 
 const { confirm } = Modal;
-const source = [
-  {
-    key: '0',
-    title: '0',
-    children: [
-      {
-        key: '0-0',
-        title: '0-0',
-      },
-      {
-        key: '0-1',
-        title: '0-1',
-      },
-    ],
-  },
-];
-
 class MappingDesigner extends React.PureComponent {
   constructor(props) {
     super(props);
@@ -43,9 +26,6 @@ class MappingDesigner extends React.PureComponent {
   filterOption = (inputValue, option) => {
     return option.name.indexOf(inputValue) > -1;
   }
-  // handleChange = (targetKeys) => {
-  //   this.setState({ targetKeys });
-  // }
   handleChange = (target) => {
     this.setState({
       target,
@@ -65,27 +45,9 @@ class MappingDesigner extends React.PureComponent {
               payload: this.state.target,
             });
           }}
-          width={600}
+          width={350}
         >
-          <TreeTransfer
-            source={this.props.files}
-            target={this.state.target}
-            onChange={this.handleChange}
-            onLoadData={
-              node => new Promise((resolve, reject) => {
-                if (node.props.children.length > 0) { resolve(); } else {
-                this.props.dispatch({
-                  type: 'graph_mapping_editor/loadFile',
-                  payload: node.props.path,
-                  resolve,
-                  reject,
-                });
-              }
-              }).then(
-                ()=> node.props.expanded = true //eslint-disable-line
-              )
-            }
-          />
+          <FileSelector checkedKeys={this.state.target} onChange={this.handleChange} />
         </Modal>
         <Menu mode="horizontal">
           <Menu.Item >
