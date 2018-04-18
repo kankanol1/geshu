@@ -57,7 +57,7 @@ export default class EditableTable extends React.Component {
       render: (text, record) => {
         return (
           <div style={{ margin: 'auto' }}>
-            <a onClick={() => this.props.onOpen(record.query)}>打开</a>
+            <a onClick={() => this.props.onOpen(record.query, record.id, record.name)}>打开</a>
             <Divider type="vertical" />
             <span>
               <Popconfirm title="确认删除吗?" onConfirm={() => this.delete(record.id)}>

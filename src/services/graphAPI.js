@@ -106,7 +106,15 @@ export async function updateQuery(params) {
 }
 
 export async function saveQuery(params) {
-  return request('/api/graph/query/save', { method: 'POST',
+  return request('/api/graph/query/update', { method: 'POST',
+    body: {
+      ...params,
+    },
+  });
+}
+export async function saveAsQuery(params) {
+  return request('/api/graph/query/create', {
+    method: 'POST',
     body: {
       ...params,
     },
@@ -145,4 +153,5 @@ export default {
   execute,
   queryProjectLabels,
   saveQuery,
+  saveAsQuery,
 };

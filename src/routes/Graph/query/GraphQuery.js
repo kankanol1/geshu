@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'dva';
 import { Layout, Row, Col, Icon, Button, Tabs, Alert, Modal, Spin, Select, Menu, Input } from 'antd';
 import CodeMirror from 'react-codemirror';
+import SplitterLayout from 'react-splitter-layout';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/solarized.css';
 import Highlight from 'react-highlight';
@@ -20,6 +21,10 @@ class GraphQuery extends React.PureComponent {
       currentQuery: '',
       showSave: false,
       queryName: '',
+      editorName: '',
+      create: false,
+      // queryId: '',
+      // querySaveName: '',
     };
   }
   componentDidMount() {
@@ -51,16 +56,34 @@ class GraphQuery extends React.PureComponent {
       show: false,
     });
   }
-  handleSaveQueryModalOk = (e) => {
+  handleSaveAsQueryModalOk = (e) => {
     this.setState({
       showSave: false,
+      editorName: this.state.queryName,
+      create: true,
     });
     this.props.dispatch({
-      type: 'graph_query/saveQuery',
+      type: 'graph_query/saveAsQuery',
       payload: this.state.queryName,
     });
   }
+  handleSaveQueryOk = (e) => {
+    // console.log(this.props, 'pros1111');
+    // console.log(this.state.create, 'create');
+    if (!this.state.create) {
+      this.setState({ showSave: true, queryName: '' });
+    } else {
+      this.props.dispatch({
+        type: 'graph_query/saveQuery',
+        payload: { query: this.props.code, id: this.props.queryId, name: this.props.name },
+      });
+    }
+  }
   handleSaveQueryModalCancel = (e) => {
+    // this.props.dispatch({
+    //   type: 'graph_query/saveQuery',
+    //   payload: this.state.queryName,
+    // });
     this.setState({
       showSave: false,
     });
@@ -72,12 +95,13 @@ class GraphQuery extends React.PureComponent {
   }
 
   render() {
+    const editorName = this.state.editorName === '' ? 'Gremlin编辑器' : `正在编辑：${this.state.editorName}`;
     return (
       <Layout style={{ padding: '0', height: '100%' }} theme="light">
         <Modal
           title="保存查询"
           visible={this.state.showSave}
-          onOk={this.handleSaveQueryModalOk}
+          onOk={this.handleSaveAsQueryModalOk}
           onCancel={this.handleSaveQueryModalCancel}
         >
           <Row>
@@ -97,14 +121,19 @@ class GraphQuery extends React.PureComponent {
           onCancel={this.handleCancel}
           width={800}
         >
-          <QueryTable onOpen={(query) => {
+          <QueryTable onOpen={(query, id, name) => {
             this.setState({
               show: false,
+              editorName: name,
+              create: true,
+              // queryId: id,
+              // querySaveName: name,
             });
+            console.log(name, 'myid');
             this.codeMirror.getCodeMirror().setValue(query);
             this.props.dispatch({
               type: 'graph_query/saveCode',
-              payload: query,
+              payload: { query: query, queryId: id, querySaveName: name },// eslint-disable-line
             });
           }}
           />
@@ -120,8 +149,15 @@ class GraphQuery extends React.PureComponent {
         >
           <strong style={{ marginLeft: '50%' }}>项目名称：{this.props.name}</strong>
         </div>
-        <Row>
-          <Col span={10} style={{ padding: '0', height: '100%' }}>
+        <SplitterLayout
+          customClassName={styles.layoutBox}
+          onDragEnd={() => {
+            this.props.dispatch({
+              type: 'graph_query/queryGraph',
+            });
+          }}
+        >
+          <Col span={10} style={{ padding: '0', height: '100%', width: '100%' }}>
             <div
               style={{
                 background: '#fff',
@@ -138,7 +174,7 @@ class GraphQuery extends React.PureComponent {
                   borderBottom: '1px solid #e6e7ea',
                 }}
               >
-                <strong>&nbsp;&nbsp;Gremlin编辑器</strong>
+                <strong>&nbsp;&nbsp;{editorName}</strong>
                 <div style={{
                     float: 'right',
                     marginBottom: '-6px',
@@ -166,15 +202,25 @@ class GraphQuery extends React.PureComponent {
                     </Button>
                     <Button
                       title="保存"
+                      onClick={this.handleSaveQueryOk}
+                      size="small"
+                      disabled={!this.props.inited}
+                    >
+                      <Icon type="save" />
+                    </Button>
+                    <Button
+                      title="另存为"
+                      disabled={!this.props.inited}
                       onClick={() => {
                       this.setState({ showSave: true, queryName: '' });
                     }}
                       size="small"
                     >
-                      <Icon type="save" />
+                      <Icon type="form" />
                     </Button>
                     <Button
                       title="运行"
+                      disabled={!this.props.inited}
                       onClick={() => {
                        this.props.dispatch({
                         type: 'graph_query/queryGraph',
@@ -200,7 +246,7 @@ class GraphQuery extends React.PureComponent {
                   onChange={(value) => {
                     this.props.dispatch({
                       type: 'graph_query/saveCode',
-                      payload: value,
+                      payload: { query: value, queryId: this.props.queryId, querySaveName: this.props.querySaveName },// eslint-disable-line
                     });
                   }}
                   className={styles.codeEditor}
@@ -213,7 +259,7 @@ class GraphQuery extends React.PureComponent {
               </div>
             </div>
           </Col>
-          <Col span={14}>
+          <Col span={14} style={{ width: '100%', overflow: 'hidden' }}>
             <div
               style={
               {
@@ -251,7 +297,7 @@ class GraphQuery extends React.PureComponent {
               </Tabs>
             </div>
           </Col>
-        </Row>
+        </SplitterLayout>
       </Layout>
     );
   }

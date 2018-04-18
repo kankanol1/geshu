@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign,guard-for-in,no-useless-escape */
 
 import { message } from 'antd';
-import { getGraph, getGremlinServerAddress, queryGremlinServer, getGremlinQueries, createQuery, updateQuery, removeQuery, saveQuery } from '../../services/graphAPI';
+import { getGraph, getGremlinServerAddress, queryGremlinServer, getGremlinQueries, createQuery, updateQuery, removeQuery, saveQuery, saveAsQuery } from '../../services/graphAPI';
 import GojsRelationGraph from '../../utils/GojsRelationGraph';
 
 const GRAPH_NAME = 'graph_query';
@@ -111,6 +111,7 @@ export default {
     responseJson: '',
     queries: [],
     queryLoading: false,
+    inited: false,
   },
   reducers: {
     init(state, { payload }) {
@@ -121,6 +122,7 @@ export default {
         ...state,
         ...payload,
         tableName: payload.tableName ? payload.tableName : state.tableName,
+        inited: true,
       });
     },
     setGraph(state, { payload }) {
@@ -138,10 +140,22 @@ export default {
       return state;
     },
     saveCode(state, { payload }) {
-      return Object.assign({}, {
-        ...state,
-        code: payload,
-      });
+      if (payload.id) {
+        return Object.assign({}, {
+          ...state,
+          code: payload.query,
+          id: payload.id,
+          queryId: payload.queryId,
+          querySaveName: payload.querySaveName,
+        });
+      } else {
+        return Object.assign({}, {
+          ...state,
+          code: payload.query,
+          queryId: payload.queryId,
+          querySaveName: payload.querySaveName,
+        });
+      }
     },
     saveResponse(state, { payload }) {
       return Object.assign({}, {
@@ -164,19 +178,29 @@ export default {
     *initialize({ payload }, { call, put }) {
       let response = yield call(getGremlinServerAddress, { id: payload.id });
       if (!response) response = { data: 'http://18.217.118.40:8182' };
-      const { tableName } = yield call(getGraph, { id: payload.id });
+      const { data: { name, tableName } } = yield call(getGraph, { id: payload.id });
       yield put({
         type: 'init',
         payload: {
           host: response.data,
           ...payload,
           tableName,
+          name,
         },
       });
     },
     *saveQuery({ payload }, { call, put, select }) {
+      const { queryId, code, querySaveName } = yield select(state => state.graph_query);
+      const response = yield call(saveQuery, {
+        id: queryId,
+        query: code,
+        name: querySaveName,
+      });
+      message.info(response.message);
+    },
+    *saveAsQuery({ payload }, { call, put, select }) {
       const { id, code } = yield select(state => state.graph_query);
-      const response = yield call(createQuery, {
+      const response = yield call(saveAsQuery, {
         graphId: id,
         query: code,
         name: payload,

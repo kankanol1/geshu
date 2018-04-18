@@ -79,7 +79,7 @@ export function getGraph(req, res) {
     return result;
   }
 }
-export function saveQuery(req, res, u, b) {
+export function saveAsQuery(req, res, u, b) {
   let url = u;
   if (!url || Object.prototype.toString.call(url) !== '[object String]') {
     url = req.url; // eslint-disable-line
@@ -93,6 +93,34 @@ export function saveQuery(req, res, u, b) {
     query,
   };
   i++;
+  const result = {
+    success: true,
+    message: '添加成功',
+  };
+
+  if (res && res.json) {
+    res.json(result);
+  } else {
+    return result;
+  }
+}
+export function saveQuery(req, res, u, b) {
+  let url = u;
+  if (!url || Object.prototype.toString.call(url) !== '[object String]') {
+    url = req.url; // eslint-disable-line
+  }
+
+  const body = (b && b.body) || req.body;
+  const { query, id } = body;
+  queries = queries.filter((item) => {
+    if (item.id === id) {
+      console.log(id, 'item');
+      item.query = query; // eslint-disable-line
+      return item;
+    } else {
+      return item;
+    }
+  });
   const result = {
     success: true,
     message: '添加成功',
@@ -278,6 +306,7 @@ export default {
   getDataSourceColumns,
   getQueryList,
   saveQuery,
+  saveAsQuery,
   updateQuery,
   deleteQuery,
   executeGraph,
