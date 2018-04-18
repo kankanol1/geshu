@@ -145,7 +145,6 @@ const proxy = serverEnabled ?
   'POST /api/data/hive/query': getQueryResult,
 
 
-
   // a sample test for component settings.
   'GET /api/component/sample': ["op1", "op2", "op3"],
 
