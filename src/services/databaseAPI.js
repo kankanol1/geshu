@@ -13,7 +13,24 @@ export async function removeDatabase(params) {
     method: 'POST',
     body: {
       ...params,
-      method: 'delete',
+    },
+  });
+}
+
+export async function makePublicDatabase(params) {
+  return request('/api/database/public', {
+    method: 'POST',
+    body: {
+      ...params,
+    },
+  });
+}
+
+export async function makePrivateDatabase(params) {
+  return request('/api/database/private', {
+    method: 'POST',
+    body: {
+      ...params,
     },
   });
 }
@@ -36,19 +53,12 @@ export async function createDatabase(params) {
   });
 }
 
-// export async function queryDatabaseLabels() {
-//   return request('/api/database/labels');
-// }
-
-export async function queryRecentDatabases() {
-  return request('/api/database/recent');
-}
 
 export default {
-  // queryDatabaseLabels,
   queryDatabase,
-  queryRecentDatabases,
   createDatabase,
   removeDatabase,
   updateDatabase,
+  makePrivateDatabase,
+  makePublicDatabase,
 };

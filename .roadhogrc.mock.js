@@ -12,7 +12,7 @@ import componentList from './mock/workspace/componentList'
 import { wrapResponse } from './mock/response_wrapper'
 import componentParams from './mock/workspace/componentParams'
 import { getProject, createProject, updateProject, deleteProject, getProjectLabels, getRecentProjects } from './mock/project';
-import { getDatabase, createDatabase, updateDatabase, deleteDatabase, getRecentDatabases } from './mock/database';
+import { getDatabase, createDatabase, updateDatabase, deleteDatabase, getRecentDatabases, makePublicDatabase, makePrivateDatabase } from './mock/database';
 import { login, userList, createUser, deleteUser, queryUserName, updateUser } from './mock/user';
 import { getModels, addModel, updateModel, deleteModels } from './mock/model';
 import { getCandidateModels, updateCandidateModel, deleteCandidateModels, publishCandidateModels } from './mock/candidatemodel';
@@ -70,7 +70,8 @@ const proxy = serverEnabled ?
   'POST /api/database/create': createDatabase,
   'POST /api/database/update': updateDatabase,
   'POST /api/database/delete': deleteDatabase,
-  'GET /api/database/recent': getRecentDatabases,
+  'POST /api/database/public': makePublicDatabase,
+  'POST /api/database/private': makePrivateDatabase,
   // login
   'POST /api/login/account': login,
   

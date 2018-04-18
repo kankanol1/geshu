@@ -11,6 +11,7 @@ import CreateDatabaseForm from './CreateDatabaseForm';
 
 const FormItem = Form.Item;
 const { RangePicker } = DatePicker;
+const { Option } = Select;
 
 
 const getValue = obj => Object.keys(obj).map(key => obj[key]).join(',');
@@ -42,21 +43,13 @@ export default class DatabaseList extends PureComponent {
       dataIndex: 'id',
     },
     {
-      title: '数据库名',
+      title: '名称',
       dataIndex: 'name',
     },
-    // {
-    //   title: '数据库描述',
-    //   dataIndex: 'description',
-    // },
     {
-      title: '数据库表名',
+      title: '表名',
       dataIndex: 'tableName',
     },
-    // {
-    //   title: '数据库',
-    //   dataIndex: 'schema',
-    // },
     {
       title: '是否公开',
       dataIndex: 'isPublic',
@@ -84,7 +77,12 @@ export default class DatabaseList extends PureComponent {
         <Fragment>
           <a onClick={() => this.handleEdit(record)} >编辑</a>
           <Divider type="vertical" />
-          <a onClick={() => this.handlePublic(record)}>{record.isPublic ? '公开' : '不公开'}</a>
+          <Popconfirm
+            title={record.isPublic ? '确认取消公开吗?' : '确认设为公开吗?'}
+            onConfirm={() => this.handlePublic(record)}
+          >
+            <a>{record.isPublic ? '取消公开' : '设为公开'}</a>
+          </Popconfirm>
           <Divider type="vertical" />
           <span>
             <Popconfirm title="确认删除吗?" onConfirm={() => this.handleRecordDelete(record)}>
@@ -121,12 +119,10 @@ export default class DatabaseList extends PureComponent {
   }
   handlePublic = (record) => {
     const { dispatch } = this.props;
-    console.log(record, 'record');
     dispatch({
-      type: 'database/updateDatabase',
+      type: record.isPublic ? 'database/makePrivateDatabase' : 'database/makePublicDatabase',
       payload: {
-        id: record.id,
-        isPublic: !record.isPublic,
+        ids: [record.id],
       },
     });
   }
@@ -260,15 +256,15 @@ export default class DatabaseList extends PureComponent {
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
-            <FormItem label="数据库名">
-              {getFieldDecorator('name')(
+            <FormItem label="编号">
+              {getFieldDecorator('id')(
                 <Input placeholder="请输入" />
               )}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
-            <FormItem label="数据表名">
-              {getFieldDecorator('taableName')(
+            <FormItem label="名称">
+              {getFieldDecorator('name')(
                 <Input placeholder="请输入" />
               )}
             </FormItem>
@@ -293,33 +289,9 @@ export default class DatabaseList extends PureComponent {
 
   renderAdvancedForm() {
     const { getFieldDecorator } = this.props.form;
-    const { database: { data } } = this.props;
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
-          <Col md={8} sm={24}>
-            <FormItem label="数据库名">
-              {getFieldDecorator('name')(
-                <Input placeholder="请输入" />
-              )}
-            </FormItem>
-          </Col>
-          <Col md={16} sm={24}>
-            <FormItem label="数据表名">
-              {getFieldDecorator('tableName')(
-                <Input placeholder="请输入" />
-              )}
-            </FormItem>
-          </Col>
-        </Row>
-        <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
-          <Col md={8} sm={24}>
-            <FormItem label="创建时间">
-              {getFieldDecorator('createdAt')(
-                <RangePicker style={{ width: '100%' }} placeholder={['开始日期', '结束日期']} />
-              )}
-            </FormItem>
-          </Col>
           <Col md={8} sm={24}>
             <FormItem label="编号">
               {getFieldDecorator('id')(
@@ -328,9 +300,36 @@ export default class DatabaseList extends PureComponent {
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
+            <FormItem label="名称">
+              {getFieldDecorator('name')(
+                <Input placeholder="请输入" />
+              )}
+            </FormItem>
+          </Col>
+          <Col md={8} sm={24}>
             <FormItem label="是否公开">
-              {getFieldDecorator('isPublic')(
-                <Input placeholder="请输入true或false" />
+              {getFieldDecorator('isPublic', { initialValue: '' })(
+                <Select>
+                  <Option value="">全部</Option>
+                  <Option value="true">已公开</Option>
+                  <Option value="false">未公开</Option>
+                </Select>
+              )}
+            </FormItem>
+          </Col>
+        </Row>
+        <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
+          <Col md={8} sm={24}>
+            <FormItem label="数据表名">
+              {getFieldDecorator('tableName')(
+                <Input placeholder="请输入" />
+              )}
+            </FormItem>
+          </Col>
+          <Col md={8} sm={24}>
+            <FormItem label="创建时间">
+              {getFieldDecorator('createdAt')(
+                <RangePicker style={{ width: '100%' }} placeholder={['开始日期', '结束日期']} />
               )}
             </FormItem>
           </Col>
@@ -353,8 +352,6 @@ export default class DatabaseList extends PureComponent {
     const { selectedRows, modalVisible, currentRecord } = this.state;
 
     const parentMethods = {
-      // labels: data.labels,
-      handleAdd: this.handleAdd,
       handleModalVisible: this.handleModalVisible,
       currentRecord,
       handleUpdate: this.handleUpdate,
@@ -368,9 +365,6 @@ export default class DatabaseList extends PureComponent {
               {this.renderForm()}
             </div>
             <div className={styles.tableListOperator}>
-              {/* <Button icon="plus" type="primary" onClick={() => this.handleModalVisible(true)}>
-                新建
-              </Button> */}
               <Popconfirm title="确认删除吗?" onConfirm={() => this.handleMultiDelete()}>
                 {
                   selectedRows.length > 0 && (

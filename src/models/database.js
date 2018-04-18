@@ -1,5 +1,5 @@
 import { message } from 'antd';
-import { queryDatabase, removeDatabase, createDatabase, updateDatabase, queryRecentDatabases } from '../services/databaseAPI';
+import { queryDatabase, removeDatabase, createDatabase, updateDatabase, queryRecentDatabases, makePublicDatabase, makePrivateDatabase } from '../services/databaseAPI';
 
 
 export default {
@@ -58,16 +58,36 @@ export default {
       });
     },
 
-    *fetchRecentDatabase({ payload }, { call, put }) {
-      const response = yield call(queryRecentDatabases);
-      yield put({
-        type: 'saveRecentDatabases',
-        payload: response,
-      });
-    },
-
     *removeDatabase({ payload }, { call, put }) {
       const response = yield call(removeDatabase, { ids: payload.ids });
+      if (response.success) {
+        message.success(response.message);
+        yield put({
+          type: 'fetchDatabaseList',
+          payload: payload.refreshParams,
+        });
+      } else {
+        // show message.
+        message.error(response.message);
+      }
+    },
+
+    *makePublicDatabase({ payload }, { call, put }) {
+      const response = yield call(makePublicDatabase, { ids: payload.ids });
+      if (response.success) {
+        message.success(response.message);
+        yield put({
+          type: 'fetchDatabaseList',
+          payload: payload.refreshParams,
+        });
+      } else {
+        // show message.
+        message.error(response.message);
+      }
+    },
+
+    *makePrivateDatabase({ payload }, { call, put }) {
+      const response = yield call(makePrivateDatabase, { ids: payload.ids });
       if (response.success) {
         message.success(response.message);
         yield put({
