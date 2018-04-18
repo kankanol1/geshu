@@ -1,0 +1,121 @@
+import React from 'react';
+import { connect } from 'dva';
+import { Layout, Collapse, Input, Spin, Tabs } from 'antd';
+import { Scrollbars } from 'react-custom-scrollbars';
+import SiderSingleComponent from './SiderSingleComponent';
+import TopSingleComponent from './TopSingleComponent';
+
+const { Sider } = Layout;
+const { Panel } = Collapse;
+const { Search } = Input;
+const { TabPane } = Tabs;
+
+@connect(({ work_component_list, loading }) => ({
+  work_component_list, loading: loading.models.work_component_list,
+}))
+export default class TopComponentList extends React.PureComponent {
+  constructor(props) {
+    super(props);
+    this.state = {
+      preview: null,
+      // store offset of the scrollbar.
+      offsetY: 0,
+    };
+    this.handlePreviewChange = this.handlePreviewChange.bind(this);
+  }
+
+  componentDidMount() {
+    // fetch data.
+    const { dispatch } = this.props;
+    const { state } = this.props.work_component_list;
+    if (state.lastSync <= 0) {
+      dispatch({
+        type: 'work_component_list/fetchComponentList',
+      });
+    }
+  }
+
+  handlePreviewChange(preview) {
+    if (preview === null) {
+      this.setState({
+        ...this.state,
+        preview: null,
+      });
+    } else {
+      const displayPreview = React.cloneElement(preview, { style: {
+        ...preview.props.style,
+        ...{
+          top: `${parseInt(preview.props.style.top, 0) - this.state.offsetY}px`,
+        },
+      } });
+      this.setState({
+        preview: displayPreview,
+      });
+    }
+  }
+
+  handleSearch = (filter) => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'work_component_list/filterComponent',
+      payload: {
+        filter,
+      },
+    });
+  }
+
+  handleScroll = (event) => {
+    this.setState({
+      ...this.state,
+      offsetY: event.target.scrollTop,
+    });
+  }
+
+  render() {
+    const { activekeys, groups } = this.props.work_component_list;
+    const { loading } = this.props;
+    if (loading) {
+      return null;
+    }
+    return (
+      <React.Fragment>
+        {
+          <Tabs type="card">
+            {
+                  groups.map(
+                    (group) => {
+                      return (
+                        group.components.length === 0 ? null :
+                        (
+                          <TabPane tab={group.name} key={group.key}>
+                            {
+                            group.components.map(
+                              (component, i) => {
+                                return (
+                                  <TopSingleComponent
+                                    key={`${group.key}-${i}`}
+                                    kei={`${group.key}-${i}`}
+                                    name={component.name}
+                                    component={component}
+                                    onItemDragged={this.props.onItemDragged}
+                                    handlePreviewChange={this.handlePreviewChange}
+                                  />
+                                );
+                              }
+                            )
+                          }
+                          </TabPane>
+                        )
+                      );
+                    }
+                  )
+                }
+          </Tabs>
+        }
+
+        {this.state.preview}
+      </React.Fragment>
+    );
+  }
+}
+

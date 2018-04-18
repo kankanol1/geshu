@@ -7,6 +7,7 @@ import SiderComponentList from './SiderComponentList';
 import WorkCanvas from './WorkCanvas/WorkCanvas';
 import ComponentSettings from './ComponentSettings';
 import WorkAreaBottomBar from './WorkAreaBottomBar';
+import TopComponentList from './TopComponentList';
 
 const { Content } = Layout;
 
@@ -31,8 +32,8 @@ export default class WorkArea extends React.PureComponent {
 
 
   handleItemDragged(dragTarget, dragClientTarget, component) {
-    console.log('current ref', ReactDOM.findDOMNode(this.canvasRef));
     const { x, y, width, height } = ReactDOM.findDOMNode(this.canvasRef).getBoundingClientRect();
+    console.log('bounds', x, y, width, height);
     if (dragClientTarget.x > x && dragClientTarget.y > y &&
       dragClientTarget.x < width + x && dragClientTarget.y < height + y) {
       // add new component.
@@ -62,17 +63,18 @@ export default class WorkArea extends React.PureComponent {
     return (
       <React.Fragment>
         {/* <Button onClick={this.exportSvg}> export </Button> */}
-        <SiderComponentList onItemDragged={this.handleItemDragged} />
-        <Content style={{ background: '#fff', padding: 0, margin: 0, height: '100%', width: '100%' }}>
-          <WorkCanvas ref={(e) => { this.canvasRef = e; }} style={{ height: isLoading ? '0' : '100%' }} match={this.props.match} />
+        {/* <SiderComponentList onItemDragged={this.handleItemDragged} /> */}
+        <TopComponentList onItemDragged={this.handleItemDragged} />
+        <Content style={{ background: '#fff', padding: 0, margin: 0, width: '100%', display: 'flex', flexDirection: 'row' }}>
+          <WorkCanvas ref={(e) => { this.canvasRef = e; }} match={this.props.match} />
           {
             isLoading ?
               <Spin size="large" style={{ zIndex: '200', width: '100%', margin: 'auto', paddingTop: '200px', position: 'absolute', left: '0' }} />
             : null
           }
           <WorkAreaBottomBar />
+          <ComponentSettings match={this.props.match} />
         </Content>
-        <ComponentSettings match={this.props.match} />
       </React.Fragment>
     );
   }

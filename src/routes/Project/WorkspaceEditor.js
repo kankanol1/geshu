@@ -16,7 +16,7 @@ export default class WorkspaceEditor extends Component {
     const { name, state: { dirty } } = this.props.work_canvas;
     const { loading } = this.props;
     return (
-      <Layout style={{ padding: '0', height: '100%' }} theme="light" >
+      <Layout style={{ padding: '0', height: '100%', position: 'relative' }} theme="light" >
         <Header style={{ padding: '0px', height: '48px', lineHeight: '46px', background: '#eee' }}>
           <WorkspaceMenu env={['editor']} match={this.props.match} />
           <div style={{ float: 'left', marginLeft: '15%', fontWeight: '900' }}>
@@ -26,7 +26,7 @@ export default class WorkspaceEditor extends Component {
           </div>
           <WorkspaceViewMenu currentPath={this.props.location} />
         </Header>
-        <Layout style={{ padding: '0', height: '100%' }} theme="light">
+        <Layout style={{ padding: '0' }} theme="light">
           <WorkArea match={this.props.match} />
         </Layout>
       </Layout>

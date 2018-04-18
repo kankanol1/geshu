@@ -70,6 +70,7 @@ export default {
     // store all the data fetched from server.
     allGroups: [],
     activekeys: ['input-group', 'transform-group'],
+    show: true,
   },
 
   reducers: {

@@ -140,7 +140,7 @@ export default class WorkCanvas extends React.PureComponent {
     const isLoading = this.props.loading.effects['work_canvas/init'];
 
     return (
-      <div style={{ width: '100%', height: isLoading ? '0' : '99%' }}>
+      <div style={{ width: '100%', display: 'auto' }}>
         <DraggableCore
           onDrag={this.handleDrag}
           onStop={this.handleDragStop}
@@ -148,8 +148,10 @@ export default class WorkCanvas extends React.PureComponent {
         >
           <div
             style={{ width: '100%',
+            height: '100%',
             position: 'relative',
-            height: isLoading ? '0' : '100%',
+            display: 'flex',
+            flex: 'auto',
             cursor: mode === 'move' ? 'move' : 'default' }}
             className="work-canvas"
           >

@@ -11,7 +11,7 @@ const nameMapping = {
   ColumnRenameTransformer: '重命名列',
   SelectTransformer: '选择',
   Predictor: '预测',
-  CommonPredictor: '通用预测',
+  CommonPredictor: '应用模型预测',
   ModelSink: '模型存储',
   Stage: 'Stage',
   LogisticRegressionStage: '逻辑回归',
@@ -22,6 +22,13 @@ const nameMapping = {
   ModelSource: '模型读取',
   DataSource: '数据读取',
   FileDataSource: '文件读取',
+  CollectDataSink: 'Parquet文件存储',
+  RandomSplit: '随机划分',
+  MetricsPredictor: '应用模型预测（带度量）',
+  TrainValidationSplitTuner: '交叉验证训练调优',
+  JsonDataSource: 'Json文件读取',
+  JdbcDataSource: 'Jdbc数据源',
+  ParquetDataSource: 'Parquet文件读取',
 
   /* config name mapping */
   ConsoleDataSinkConf: '控制台数据存储配置项',
