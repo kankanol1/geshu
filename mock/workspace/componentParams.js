@@ -17,6 +17,16 @@ const allComponents = {
           },
         },
       },
+      database: {
+        title: 'Database_Path',
+        type: 'object',
+        description: '选择数据库',
+        properties: {
+          value: {
+            type: 'string',
+          },
+        },
+      },
     },
   },
 

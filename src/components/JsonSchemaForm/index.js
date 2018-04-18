@@ -12,6 +12,7 @@ import SelectWidget from './Widgets/SelectWidget';
 import FileSelectorWidget from './Widgets/FileSelectorWidget';
 import ObjectFieldTemplate from './Templates/ObjectFieldTemplate';
 import AnyValueWidget from './Widgets/AnyValueWidget';
+import DatabaseSelectorWidget from './Widgets/DatabaseSelectorWidget';
 
 const ButtonGroup = Button.Group;
 
@@ -25,6 +26,7 @@ const registeredFields = {
   define_schema: DefineSchemaWidget,
   file_selector: FileSelectorWidget,
   any_value: AnyValueWidget,
+  database_selector: DatabaseSelectorWidget,
 };
 
 const CustomFieldTemplate = (props) => {
