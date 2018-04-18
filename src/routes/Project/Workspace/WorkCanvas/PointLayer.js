@@ -1,9 +1,9 @@
 import React from 'react';
 import { DraggableCore } from 'react-draggable';
 import { calculatePointPositionDict } from '../../../../utils/PositionCalculation';
+import styles from './styles.less';
 
-
-const R = { normal: 8, large: 12 };
+const R = { normal: 6, large: 8 };
 
 class PointLayer extends React.PureComponent {
   constructor(props) {
@@ -37,15 +37,8 @@ class PointLayer extends React.PureComponent {
 
   handleDrag(e, draggableData, point) {
     e.preventDefault();
-    let originx = null;
-    let originy = null;
-    if (draggableData.node.x === undefined) {
-      originx = draggableData.node.cx.baseVal.value;
-      originy = draggableData.node.cy.baseVal.value;
-    } else {
-      originx = draggableData.node.x.baseVal.value;
-      originy = draggableData.node.y.baseVal.value;
-    }
+    const originx = draggableData.x;
+    const originy = draggableData.y;
     let varObj = null;
     if (point.metatype === 'input') {
       varObj = { draggingType: null, draggingConnects: point.connects };
@@ -81,56 +74,27 @@ class PointLayer extends React.PureComponent {
       const point = { ...p, metatype: type };
       const { x, y } = pointDict[point.id];
       const r = this.state.hovering.includes(point.id) ? R.large : R.normal;
+      const offsetX = (type === 'input') ? x - (r * 2) - 10 : x + 10;
       return (
         <React.Fragment key={i}>
-          {
-            // 1.  point background.
-          }
-          <circle
-            cx={x}
-            cy={y}
-            r={r}
-            stroke="#22075e"
-            strokeWidth="1"
-            fill="#b37feb"
-          >
-            <title>{point.hint}</title>
-          </circle>
-          {
-            // 2. text.
-          }
-          <text
-            x={x}
-            y={y}
-            alignmentBaseline="middle"
-            textAnchor="middle"
-            fill="white"
-          >
-            {point.label && (point.label.length > 0) ? point.label.charAt(1) : ''}
-          </text>
-          {
-            // 3. opeartion circle.
-          }
-
           <DraggableCore
             onDrag={(e, draggableData) => this.handleDrag(e, draggableData, point)}
             onStop={this.handleDragStop}
             onStart={this.handleDragStart}
           >
-            <circle
-              cx={x}
-              cy={y}
-              r={R.large}
+            <div
+              style={{
+            width: `${r * 2}px`,
+            height: `${r * 2}px`,
+            transform: `translate(${offsetX}px, ${y - r}px)`,
+            lineHeight: `${r}px`,
+          }}
+              className={styles.pointDiv}
               onMouseEnter={e => this.handleMouseEnter(e, point.id)}
               onMouseLeave={e => this.handleMouseLeave(e, point.id)}
-              style={{ opacity: '0' }}
-              stroke="#22075e"
-              strokeWidth="1"
-              fill="#b37feb"
-              id={point.id}
-              pointtype={point.type}
-              pointconnects={point.connects}
-            />
+            >
+              {point.label && (point.label.length > 0) ? point.label.charAt(1) : ''}
+            </div>
           </DraggableCore>
         </React.Fragment>
       );

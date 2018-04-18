@@ -1,13 +1,6 @@
 import React from 'react';
 import { calculateLineStr } from '../../../../utils/PositionCalculation';
-
-const selectionStyles = {
-  fill: '#fff', stroke: '#22075e', strokeWidth: 1, opacity: 1, cursor: 'move',
-};
-
-const maskStyles = {
-  fill: '#000', stroke: '#22075e', strokeWidth: 1, opacity: 0.3,
-};
+import styles from './styles.less';
 
 
 /**
@@ -21,11 +14,13 @@ class SelectionLayer extends React.PureComponent {
 
     if (dragging) {
       draggingView = (
-        <polyline
-          points={calculateLineStr(draggingSource.x, draggingSource.y,
+        <svg style={{ height: '100%', width: '100%', position: 'absolute', top: '0', left: '0' }}>
+          <polyline
+            points={calculateLineStr(draggingSource.x, draggingSource.y,
             draggingTarget.x, draggingTarget.y)}
-          style={{ fill: 'none', stroke: '#391085', strokeWidth: 1 }}
-        />
+            style={{ fill: 'none', stroke: '#391085', strokeWidth: 1 }}
+          />
+        </svg>
       );
     }
 
@@ -40,33 +35,37 @@ class SelectionLayer extends React.PureComponent {
             const size = 4;
             return (
               <React.Fragment key={i}>
-                <rect
-                  x={x - size}
-                  y={y - size}
-                  width={size * 2}
-                  height={size * 2}
-                  style={{ ...selectionStyles }}
+                <div
+                  className={styles.selectionDiv}
+                  style={{
+                    width: `${size * 2}px`,
+                    height: `${size * 2}px`,
+                  transform: `translate(${x - size}px, ${y - size}px)`,
+                }}
                 />
-                <rect
-                  x={(x + width) - size}
-                  y={y - size}
-                  width={size * 2}
-                  height={size * 2}
-                  style={{ ...selectionStyles }}
+                <div
+                  className={styles.selectionDiv}
+                  style={{
+                    width: `${size * 2}px`,
+                    height: `${size * 2}px`,
+                  transform: `translate(${(x + width) - size}px, ${y - size}px)`,
+                }}
                 />
-                <rect
-                  x={x - size}
-                  y={(y + height) - size}
-                  width={size * 2}
-                  height={size * 2}
-                  style={{ ...selectionStyles }}
+                <div
+                  className={styles.selectionDiv}
+                  style={{
+                    width: `${size * 2}px`,
+                    height: `${size * 2}px`,
+                  transform: `translate(${x - size}px, ${(y + height) - size}px)`,
+                }}
                 />
-                <rect
-                  x={(x + width) - size}
-                  y={(y + height) - size}
-                  width={size * 2}
-                  height={size * 2}
-                  style={{ ...selectionStyles }}
+                <div
+                  className={styles.selectionDiv}
+                  style={{
+                    width: `${size * 2}px`,
+                    height: `${size * 2}px`,
+                  transform: `translate(${(x + width) - size}px, ${(y + height) - size}px)`,
+                }}
                 />
               </React.Fragment>
             );
@@ -76,20 +75,21 @@ class SelectionLayer extends React.PureComponent {
             const toPoint = this.props.positionDict[select.target][select.to];
             return (
               <React.Fragment key={i}>
-                <rect
-                  x={fromPoint.x - size}
-                  y={fromPoint.y - size}
-                  width={size * 2}
-                  height={size * 2}
-                  style={{ ...selectionStyles }}
+                <div
+                  className={styles.selectionDiv}
+                  style={{
+                  width: `${size * 2}px`,
+                  height: `${size * 2}px`,
+                transform: `translate(${fromPoint.x - size}px, ${fromPoint.y - size}px)`,
+              }}
                 />
-
-                <rect
-                  x={toPoint.x - size}
-                  y={toPoint.y - size}
-                  width={size * 2}
-                  height={size * 2}
-                  style={{ ...selectionStyles }}
+                <div
+                  className={styles.selectionDiv}
+                  style={{
+                  width: `${size * 2}px`,
+                  height: `${size * 2}px`,
+                transform: `translate(${toPoint.x - size}px, ${toPoint.y - size}px)`,
+              }}
                 />
               </React.Fragment>
             );
@@ -109,7 +109,7 @@ class SelectionLayer extends React.PureComponent {
           y={startY < stopY ? startY : stopY}
           width={Math.abs(stopX - startX)}
           height={Math.abs(stopY - startY)}
-          style={{ ...maskStyles }}
+          // style={{ ...maskStyles }}
         />
       );
     }

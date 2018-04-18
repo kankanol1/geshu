@@ -11,7 +11,9 @@ class LineLayer extends React.PureComponent {
     });
   }
 
+
   render() {
+    const r = 10 + 6;
     return (
       <React.Fragment>
         {
@@ -19,18 +21,19 @@ class LineLayer extends React.PureComponent {
             (line, i) => {
               const from = this.props.positionDict[line.component][line.from];
               const to = this.props.positionDict[this.props.model.id][line.to];
-              const lineStr = calculateLineStr(from.x, from.y, to.x, to.y);
+              const lineStr = calculateLineStr(from.x + r, from.y, to.x - r, to.y);
               return (
                 <React.Fragment key={i}>
-                  <polyline
-                    points={lineStr}
-                    style={{ fill: 'none', stroke: '#391085', strokeWidth: 1 }}
-                  />
-                  <DraggableCore onStart={e => e.stopPropagation()}>
+                  <svg style={{ width: '100%', height: '100%' }}>
                     <polyline
                       points={lineStr}
-                      style={{ fill: 'none', stroke: '#fff', strokeWidth: 20, opacity: 0 }}
-                      onClick={(e) => {
+                      style={{ fill: 'none', stroke: '#391085', strokeWidth: 1 }}
+                    />
+                    <DraggableCore onStart={e => e.stopPropagation()}>
+                      <polyline
+                        points={lineStr}
+                        style={{ fill: 'none', stroke: '#fff', strokeWidth: 20, opacity: 0 }}
+                        onClick={(e) => {
                         this.handleLineClick(e, {
                           source: line.component,
                           target: this.props.model.id,
@@ -39,8 +42,9 @@ class LineLayer extends React.PureComponent {
                         });
                       }
                       }
-                    />
-                  </DraggableCore>
+                      />
+                    </DraggableCore>
+                  </svg>
                 </React.Fragment>
               );
             }

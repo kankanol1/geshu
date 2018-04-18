@@ -117,8 +117,8 @@ const fillDefaultSize = (component) => {
     ...{
       x: 10,
       y: 0,
-      width: 200,
-      height: 50,
+      width: 100,
+      height: 100,
     } });
 };
 

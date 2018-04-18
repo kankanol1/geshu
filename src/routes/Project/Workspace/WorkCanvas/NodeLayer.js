@@ -1,10 +1,8 @@
 import React from 'react';
 import { DraggableCore } from 'react-draggable';
-
-const styles = {
-  fill: '#722ed1', stroke: '#22075e', strokeWidth: 1, opacity: 1,
-};
-
+import styles from './styles.less';
+import { getIconNameForComponent } from './styles';
+import './icon.less';
 
 /**
  * Node Layer: the bottom/first layer of the work canvas.
@@ -76,46 +74,30 @@ class NodeLayer extends React.PureComponent {
   }
 
   render() {
-    const { name, id } = this.props.model;
+    const { name, id, code } = this.props.model;
     const { x, y, height, width } =
       this.props.componentDict === undefined ?
         this.props.model : this.props.componentDict[id];
+    const icon = getIconNameForComponent(code);
     return (
       <React.Fragment>
-        <rect
-          x={x}
-          y={y}
-          rx="10"
-          ry="10"
-          width={width}
-          height={height}
-          style={{ ...styles }}
-        />
-        <text
-          x={x + (width / 2)}
-          y={y + (height / 2)}
-          alignmentBaseline="middle"
-          textAnchor="middle"
-          fill="white"
-        >
-          &#xE64E;   {name}
-        </text>
-
         <DraggableCore
           onStop={this.handleDragStop}
           onDrag={this.handleDrag}
           onStart={this.handleDragStart}
         >
-          <rect
-            x={x}
-            y={y}
-            rx="10"
-            ry="10"
-            width={width}
-            height={height}
-            onContextMenu={this.handleContextMenu}
-            style={{ fill: '#722ed1', stroke: '#22075e', strokeWidth: 1, opacity: 0, cursor: 'move' }}
-          />
+          <div
+            style={{
+            width: `${width}px`,
+            height: `${height}px`,
+            background: '#722ed1',
+            transform: `translate(${x}px, ${y}px)`,
+           }}
+            className={styles.nodeDiv}
+          >
+            <i className={`${icon} x-icon`} />
+            {name}
+          </div>
         </DraggableCore>
       </React.Fragment>
     );

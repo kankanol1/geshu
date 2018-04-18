@@ -6,10 +6,8 @@ class ComponentPreview extends React.PureComponent {
   render() {
     return (
       <div style={this.props.style}>
-        <svg>
-          <NodeLayer model={this.props.component} />
-          <PointLayer model={this.props.component} />
-        </svg>
+        <NodeLayer model={this.props.component} />
+        <PointLayer model={this.props.component} />
       </div>
     );
   }

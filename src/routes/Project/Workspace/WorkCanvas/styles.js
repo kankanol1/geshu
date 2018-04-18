@@ -2,15 +2,24 @@
  * define all the styles used in work canvas.
  */
 
-
-const getStylesForType = (str) => {
-  switch (str) {
-    case 'source':
-    case 'preprocessor':
-    case 'sink':
-    case 'algorithm':
-    default:
-  }
+const colorMap = {
+  source: '#ff7a3a',
 };
 
-export default { getStylesForType };
+export const getStylesForType = (str) => {
+  return colorMap[str];
+};
+
+
+const componentIconDict = {
+  'csv-source': 'icon-csv-source',
+  'column-transform': 'icon-preparation-transform',
+  // the above are tests.
+
+};
+
+export const getIconNameForComponent = (str) => {
+  return componentIconDict[str];
+};
+
+export default { getStylesForType, getIconNameForComponent };

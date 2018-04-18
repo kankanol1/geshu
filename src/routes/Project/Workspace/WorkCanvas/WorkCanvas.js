@@ -137,8 +137,6 @@ export default class WorkCanvas extends React.PureComponent {
 
     const { components, mode } = this.props.work_canvas;
 
-    console.log('components', components);
-
     const isLoading = this.props.loading.effects['work_canvas/init'];
 
     return (
@@ -148,8 +146,9 @@ export default class WorkCanvas extends React.PureComponent {
           onStop={this.handleDragStop}
           onStart={this.handleDragStart}
         >
-          <svg
+          <div
             style={{ width: '100%',
+            position: 'relative',
             height: isLoading ? '0' : '100%',
             cursor: mode === 'move' ? 'move' : 'default' }}
             className="work-canvas"
@@ -210,7 +209,7 @@ export default class WorkCanvas extends React.PureComponent {
                 componentDict={componentDict}
               />
             }
-          </svg>
+          </div>
         </DraggableCore>
         {
           contextMenuView
