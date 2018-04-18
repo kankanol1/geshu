@@ -5,6 +5,7 @@ import moment from 'moment';
 import { Link } from 'dva/router';
 import styles from './GraphIndex.less';
 import CreateGraphForm from './CreateGraphForm';
+import OpenProjectForm from './OpenGraphForm';
 
 
 @connect(({ graph, loading }) => ({
@@ -134,12 +135,17 @@ export default class GraphIndex extends Component {
       pagination: this.props.graph.data.pagination,
       searchLoading: loading || false,
       dispatch: this.props.dispatch,
+      type: this.props.match.params.type,
     };
     const { modalVisible, modalOpenVisible } = this.state;
     return (
       <Layout className={styles.contentLayout} theme="light">
+        <OpenProjectForm
+          {...parentMethods}
+          modalOpenVisible={modalOpenVisible}
+        />
         <CreateGraphForm
-          modalVisible={this.state.modalVisible}
+          modalVisible={modalVisible}
           handleModalVisible={this.handleModalVisible}
           currentRecord={this.state.currentRecord}
           handleAdd={this.handleAdd}
