@@ -108,7 +108,7 @@ export default class WorkspaceDataView extends Component {
                     renderItem={item => (
                       <List.Item>
                         <div className={styles.componentCell}>
-                          <strong><a>{item.tableName}</a></strong> <span style={{ fontStyle: 'italic' }}>{item.name}</span>
+                          <strong><a style={{ width: '160px', marginRight: '20px', wordBreak: 'break-all', display: 'inline-block' }}>{item.tableName}</a></strong> <span style={{ fontStyle: 'italic' }}>{item.name}</span>
                           <span className={styles.smallIcons}>
                             <Tooltip title={item.hideSchema ? '展开schema信息' : '隐藏schema信息'}>
                               <Icon type={item.hideSchema ? 'plus' : 'minus'} onClick={() => this.toggleTableItemStatus(item)} />
