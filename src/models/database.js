@@ -15,8 +15,8 @@ export default {
       data: [],
     },
     allData: {
-      public: [],
-      private: [],
+      publicList: [],
+      privateList: [],
     },
   },
 

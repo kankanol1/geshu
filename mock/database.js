@@ -33,8 +33,8 @@ export function getAllDatabase(req, res, u) {
   const publicDataSource = databaseListDataSource.filter(data => data.isPublic);
   const privateDataSource = databaseListDataSource.filter(data => !data.isPublic);
   const result = {
-    public: publicDataSource,
-    private: privateDataSource,
+    publicList: publicDataSource,
+    privateList: privateDataSource,
   };
 
   if (res && res.json) {

@@ -31,7 +31,7 @@ export default class SqlQueryTable extends Component {
 
   performQuery() {
     const { onQuery } = this.props;
-    if (onQuery !== undefined) {
+    if (onQuery !== undefined && this.state.query !== '') {
       onQuery(
         this.state.query,
         this.state.pageNum,

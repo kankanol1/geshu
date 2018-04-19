@@ -74,8 +74,7 @@ export default class SiderBar extends Component {
   }
 
   renderSideBarTop() {
-    const publicList = this.props.database.allData.public;
-    const privateList = this.props.database.allData.private;
+    const { publicList, privateList } = this.props.database.allData;
     return (
       <Tabs defaultActiveKey="public" className={styles.siderTop}>
         <TabPane tab="公开数据库" key="public">
