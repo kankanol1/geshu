@@ -1,6 +1,6 @@
 import key from 'keymaster';
 import { message } from 'antd';
-import { calculatePointCenter, updateCache } from '../../utils/PositionCalculation';
+import { calculatePointCenter, updateCache, createCache, updateCacheForComponent } from '../../utils/PositionCalculation';
 import { openProject, saveProject } from '../../services/componentAPI';
 
 function appendMessage(messages, m) {
@@ -174,7 +174,7 @@ export default {
     },
 
     saveProjectInfo(state, { payload }) {
-      return updateCache({ ...state,
+      return createCache({ ...state,
         ...payload.response,
         ...{
           state: { projectId: payload.id, lastSync: Date.now(), dirty: false, loading: false },
@@ -418,11 +418,12 @@ export default {
     newComponent(state, { component }) {
       const { offset } = state;
       const components = Object.assign([], state.components);
-      components.push({ ...component,
+      const nc = { ...component,
         ...{ x: component.x - offset.x,
           y: component.y - offset.y,
         },
-      });
+      };
+      components.push(nc);
       return updateCache(Object.assign({}, { ...state,
         ...{
           state: {

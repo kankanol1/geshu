@@ -34,6 +34,13 @@ export default class WorkspaceDataView extends Component {
     });
   }
 
+  componentWillUnmount() {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'dataquery/clean',
+    });
+  }
+
   handleQuery(query, pageNum, pageSize) {
     const { dispatch } = this.props;
     dispatch({

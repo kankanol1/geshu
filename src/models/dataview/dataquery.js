@@ -9,24 +9,24 @@ export default {
   state: {
     queryResult: undefined,
     availableComponents: [
-      { tableName: 'xxx_ttt_xxx',
-        projectId: 1,
-        jobId: '233',
-        jobStartTime: 'xxxx',
-        jobFinishTime: 'yyyy',
-        componentName: 'hi',
-        schema: [{ name: 'key', type: 'varchar' }, { name: 'value', type: 'varchar' }],
-        hideSchema: false,
-      },
-      { tableName: 'xxx_zzz_xxx',
-        projectId: 1,
-        jobId: '233',
-        jobStartTime: 'xxxx',
-        jobFinishTime: 'yzzy',
-        componentName: 'hai',
-        schema: [{ name: 'key', type: 'long' }, { name: 'value', type: 'varchar' }],
-        hideSchema: true,
-      },
+      // { tableName: 'xxx_ttt_xxx',
+      //   projectId: 1,
+      //   jobId: '233',
+      //   jobStartTime: 'xxxx',
+      //   jobFinishTime: 'yyyy',
+      //   componentName: 'hi',
+      //   schema: [{ name: 'key', type: 'varchar' }, { name: 'value', type: 'varchar' }],
+      //   hideSchema: false,
+      // },
+      // { tableName: 'xxx_zzz_xxx',
+      //   projectId: 1,
+      //   jobId: '233',
+      //   jobStartTime: 'xxxx',
+      //   jobFinishTime: 'yzzy',
+      //   componentName: 'hai',
+      //   schema: [{ name: 'key', type: 'long' }, { name: 'value', type: 'varchar' }],
+      //   hideSchema: true,
+      // },
     ],
   },
 
@@ -42,6 +42,13 @@ export default {
       return {
         ...state,
         availableComponents: action.payload,
+      };
+    },
+
+    clean(state) {
+      return {
+        ...state,
+        queryResult: undefined,
       };
     },
 

@@ -1,25 +1,28 @@
+const pointMargin = 10;
+
 const calculatePointCenter = (x, y, width, height, xIndex, yIndex) => {
   let px = 0;
   let py = 0;
+
   switch (xIndex) {
     case 0:
       // top
       px = x + (yIndex * width);
-      py = y;
+      py = y - pointMargin;
       break;
     case 1:
       // right
-      px = x + width;
+      px = x + width + pointMargin;
       py = y + (height * yIndex);
       break;
     case 2:
       // bottom
       px = x + (height * yIndex);
-      py = y;
+      py = y + pointMargin;
       break;
     case 3:
       // left
-      px = x;
+      px = x - pointMargin;
       py = y + (height * yIndex);
       break;
     default:
@@ -112,6 +115,52 @@ const updateCache = (state) => {
     } });
 };
 
+const updateCacheForComponent = (state, nc) => {
+  const componentDict = {}; // store: componentid: {x, y}
+  const componentPointPosition = {}; // store: componentid: {pointid: {x, y}}
+  const { offset } = state;
+  const calculatedPosition = {
+    x: nc.x + offset.x,
+    y: nc.y + offset.y,
+    height: nc.height,
+    width: nc.width,
+  };
+  componentDict[nc.id] = calculatedPosition;
+  componentPointPosition[nc.id] =
+    calculatePointPositionDict({ ...nc, ...calculatedPosition });
+  return Object.assign({}, { ...state,
+    ...{ cache:
+      { componentDict,
+        pointDict: componentPointPosition,
+      },
+    } });
+};
+
+const createCache = (state) => {
+  const componentDict = {}; // store: componentid: {x, y}
+  const componentPointPosition = {}; // store: componentid: {pointid: {x, y}}
+  const { offset } = state;
+  state.components.forEach(
+    (component) => {
+      const calculatedPosition = {
+        x: component.x + offset.x,
+        y: component.y + offset.y,
+        height: component.height,
+        width: component.width,
+      };
+      componentDict[component.id] = calculatedPosition;
+      componentPointPosition[component.id] =
+        calculatePointPositionDict({ ...component, ...calculatedPosition });
+    }
+  );
+  return Object.assign({}, { ...state,
+    ...{ cache:
+      { componentDict,
+        pointDict: componentPointPosition,
+      },
+    } });
+};
+
 const fillDefaultSize = (component) => {
   return Object.assign({}, { ...component,
     ...{
@@ -128,4 +177,6 @@ export {
   updateCache,
   calculatePointPositionDict,
   fillDefaultSize,
+  createCache,
+  updateCacheForComponent,
 };

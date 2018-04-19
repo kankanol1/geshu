@@ -74,7 +74,7 @@ class PointLayer extends React.PureComponent {
       const point = { ...p, metatype: type };
       const { x, y } = pointDict[point.id];
       const r = this.state.hovering.includes(point.id) ? R.large : R.normal;
-      const offsetX = (type === 'input') ? x - (r * 2) - 10 : x + 10;
+      const offsetX = (type === 'input') ? x - (r * 2) : x;
       return (
         <React.Fragment key={i}>
           <DraggableCore

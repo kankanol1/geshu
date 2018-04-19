@@ -10,6 +10,13 @@ import styles from '../DatabaseQuery.less';
   loading: loading.models.dataquery,
 }))
 export default class QueryTable extends Component {
+  componentWillUnmount() {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'dataquery/clean',
+    });
+  }
+
   handleQuery(query, pageNum, pageSize) {
     const { dispatch } = this.props;
     dispatch({
