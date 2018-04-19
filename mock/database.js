@@ -23,10 +23,25 @@ for (let i = 0; i < 66; i += 1) {
     createdBy: 'admin',
     createdAt: moment(`2018-01-0${Math.floor(i / 3) + 1}`, 'YYYY-MM-DD'),
     updatedAt: moment(`2018-02-0${Math.floor(i / 3) + 1}`, 'YYYY-MM-DD'),
-    schema: [],
-    isPublic: true,
+    schema: [{ name: `name-${i}`, type: `type-${i}` }],
+    isPublic: i % 5 < 3,
     tableName: `数据表 ${i}`,
   });
+}
+
+export function getAllDatabase(req, res, u) {
+  const publicDataSource = databaseListDataSource.filter(data => data.isPublic);
+  const privateDataSource = databaseListDataSource.filter(data => !data.isPublic);
+  const result = {
+    public: publicDataSource,
+    private: privateDataSource,
+  };
+
+  if (res && res.json) {
+    res.json(result);
+  } else {
+    return result;
+  }
 }
 
 export function getDatabase(req, res, u) {
@@ -297,4 +312,5 @@ export default {
   deleteDatabase,
   makePrivateDatabase,
   makePublicDatabase,
+  getAllDatabase,
 };

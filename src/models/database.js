@@ -1,5 +1,5 @@
 import { message } from 'antd';
-import { queryDatabase, removeDatabase, createDatabase, updateDatabase, queryRecentDatabases, makePublicDatabase, makePrivateDatabase } from '../services/databaseAPI';
+import { queryDatabase, removeDatabase, createDatabase, updateDatabase, queryRecentDatabases, makePublicDatabase, makePrivateDatabase, queryAllDatabase } from '../services/databaseAPI';
 
 
 export default {
@@ -14,6 +14,10 @@ export default {
       loading: false,
       data: [],
     },
+    allData: {
+      public: [],
+      private: [],
+    },
   },
 
   reducers: {
@@ -22,6 +26,16 @@ export default {
         ...state,
         data: {
           ...state.data,
+          ...payload,
+        },
+      };
+    },
+
+    saveAllDataList(state, { payload }) {
+      return {
+        ...state,
+        allData: {
+          ...state.allData,
           ...payload,
         },
       };
@@ -54,6 +68,14 @@ export default {
       const response = yield call(queryDatabase, payload);
       yield put({
         type: 'saveDatabasetList',
+        payload: response,
+      });
+    },
+
+    *fetchAllDatabaseList({ payload }, { call, put }) {
+      const response = yield call(queryAllDatabase);
+      yield put({
+        type: 'saveAllDataList',
         payload: response,
       });
     },

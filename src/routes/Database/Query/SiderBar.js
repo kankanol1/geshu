@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'dva';
 import { Layout, Menu, Button, Input, Tabs, List, Table, Icon } from 'antd';
 import SplitterLayout from 'react-splitter-layout';
 import 'rc-drawer/assets/index.css';
@@ -30,7 +31,10 @@ const columns = [
     key: 'type',
   },
 ];
-
+@connect(({ database, loading }) => ({
+  database,
+  loading: loading.models.dataquery,
+}))
 export default class SiderBar extends Component {
   constructor(props) {
     super(props);
@@ -39,6 +43,12 @@ export default class SiderBar extends Component {
     };
   }
 
+  componentWillMount() {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'database/fetchAllDatabaseList',
+    });
+  }
 
   renderDatabaseTab = (list) => {
     return (
@@ -64,13 +74,15 @@ export default class SiderBar extends Component {
   }
 
   renderSideBarTop() {
+    const publicList = this.props.database.allData.public;
+    const privateList = this.props.database.allData.private;
     return (
       <Tabs defaultActiveKey="public" className={styles.siderTop}>
         <TabPane tab="公开数据库" key="public">
-          {this.renderDatabaseTab(dummyList)}
+          {this.renderDatabaseTab(publicList)}
         </TabPane>
         <TabPane tab="私有数据库" key="private">
-          {this.renderDatabaseTab(dummyList)}
+          {this.renderDatabaseTab(privateList)}
         </TabPane>
       </Tabs>
     );
@@ -94,7 +106,9 @@ export default class SiderBar extends Component {
         <TabPane tab="表格结构" key="schema">
           <Table columns={columns} dataSource={schema} size="small" pagination={false} />
         </TabPane>
-        <TabPane tab="元信息" key="meta">Content of Tab Pane 2</TabPane>
+        <TabPane tab="元信息" key="meta">
+          <div style={{ padding: '20px' }}>描述：{selectedItem.description === undefined ? '暂无' : selectedItem.description}</div>
+        </TabPane>
       </Tabs>
     );
   }

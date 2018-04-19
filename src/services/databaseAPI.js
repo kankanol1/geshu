@@ -8,6 +8,10 @@ export async function queryDatabase(params) {
   return request(`/api/database/list?${stringify(params)}`);
 }
 
+export async function queryAllDatabase() {
+  return request('/api/database/all');
+}
+
 export async function removeDatabase(params) {
   return request('/api/database/delete', {
     method: 'POST',
@@ -61,4 +65,5 @@ export default {
   updateDatabase,
   makePrivateDatabase,
   makePublicDatabase,
+  queryAllDatabase,
 };
