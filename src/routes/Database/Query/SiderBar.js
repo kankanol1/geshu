@@ -25,6 +25,8 @@ const columns = [
     title: '列名',
     dataIndex: 'name',
     key: 'name',
+    width: 80,
+    render: v => <span style={{ fontWeight: '500', display: 'inline-block', width: '90px' }}>{v}</span>,
   }, {
     title: '类型',
     dataIndex: 'type',

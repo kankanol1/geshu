@@ -216,7 +216,7 @@ export default class WorkspaceMenu extends React.PureComponent {
             <Menu.Item key="fullScreen" type="command" op={() => this.toggleFullScreen()} >{fullScreen ? '√ ' : null}全屏</Menu.Item>
           </SubMenu>
           <SubMenu title={<span><Icon type="code-o" />调试</span>}>
-            <ScopeMenuItem scope="editor" env={env} key="validate" type="command" op={() => this.validatePipeline()} >Validate</ScopeMenuItem>
+            <ScopeMenuItem scope="editor" env={env} key="validate" type="command" op={() => this.validatePipeline()} >验证</ScopeMenuItem>
             <Menu.Item key="sampledata" >取样执行</Menu.Item>
             <Menu.Item key="samplepipeline">执行至指定组件</Menu.Item>
           </SubMenu>
@@ -224,7 +224,7 @@ export default class WorkspaceMenu extends React.PureComponent {
             <Menu.Item key="submit" type="command" op={() => this.runPipeline()}>提交运行</Menu.Item>
           </SubMenu>
           <Menu.Item key="help">
-            <a href="https://www.google.com" target="_blank" rel="noopener noreferrer"><Icon type="question-circle-o" />帮助</a>
+            <a><Icon type="question-circle-o" />帮助</a>
           </Menu.Item>
         </Menu>
         { this.renderModals() }
