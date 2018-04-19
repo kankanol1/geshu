@@ -3,6 +3,7 @@ const nameMapping = {
   /** component groups and components */
   DataSink: '数据存储',
   ConsoleDataSink: '控制台数据存储',
+  FileDataSink: '文件存储',
   ConsoleModelSink: '控制台模型存储',
   Transformer: '数据转换',
   AddLiteralColumnTransformer: '增加列',
@@ -22,13 +23,20 @@ const nameMapping = {
   ModelSource: '模型读取',
   DataSource: '数据读取',
   FileDataSource: '文件读取',
-  CollectDataSink: 'Parquet文件存储',
+  ParquetDataSink: 'Parquet文件存储',
+  CollectDataSink: 'Collect文件存储',
   RandomSplit: '随机划分',
   MetricsPredictor: '应用模型预测（带度量）',
   TrainValidationSplitTuner: '交叉验证训练调优',
   JsonDataSource: 'Json文件读取',
   JdbcDataSource: 'Jdbc数据源',
   ParquetDataSource: 'Parquet文件读取',
+  FileModelSink: '模型存储',
+  LinearRegressionStage: '线性回归',
+  HashingTF: 'HashingTF',
+  KMeansStage: 'K-Means',
+  FileModelSource: '模型读取',
+
 
   /* config name mapping */
   ConsoleDataSinkConf: '控制台数据存储配置项',

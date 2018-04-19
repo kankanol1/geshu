@@ -60,7 +60,7 @@ class ComponentSettings extends React.PureComponent {
             <Icon type={loading ? 'loading' : 'close'} />
           </Button>
           <div style={{ display: 'inline-block', textAlign: 'center', width: '80%' }}>
-            { loading ? '加载中...' : translateName(displaySettings.title)}
+            { loading ? '加载中...' : displaySettings === undefined ? '未获取到配置' : translateName(displaySettings.title)}
           </div>
         </div>
         { loading ? (

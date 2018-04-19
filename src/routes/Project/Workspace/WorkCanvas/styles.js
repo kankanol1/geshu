@@ -39,6 +39,14 @@ const componentIconDict = {
   HashingTFStage: 'icon-classifier-hashingtf',
   CrossValidationTuner: 'icon-tuning-cv',
 
+  FileModelSink: 'icon-model-default',
+  LinearRegressionStage: 'icon-regression-linear-regression',
+  HashingTF: 'icon-classifier-hashingtf',
+  KMeansStage: 'icon-clustering-kmeans',
+  FileModelSource: 'icon-model-default',
+
+  FileDataSink: 'icon-datasink-csv',
+  ParquetDataSink: 'icon-datasink-parquet',
 };
 
 export const getIconNameForComponent = (str) => {
