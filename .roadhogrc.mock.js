@@ -70,8 +70,8 @@ const proxy = serverEnabled ?
   'POST /api/database/create': createDatabase,
   'POST /api/database/update': updateDatabase,
   'POST /api/database/delete': deleteDatabase,
-  'POST /api/database/public': makePublicDatabase,
-  'POST /api/database/private': makePrivateDatabase,
+  'POST /api/database/publicize': makePublicDatabase,
+  'POST /api/database/privatize': makePrivateDatabase,
   'GET /api/database/all': getAllDatabase,
   // login
   'POST /api/login/account': login,

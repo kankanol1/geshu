@@ -22,7 +22,7 @@ export async function removeDatabase(params) {
 }
 
 export async function makePublicDatabase(params) {
-  return request('/api/database/public', {
+  return request('/api/database/publicize', {
     method: 'POST',
     body: {
       ...params,
@@ -31,7 +31,7 @@ export async function makePublicDatabase(params) {
 }
 
 export async function makePrivateDatabase(params) {
-  return request('/api/database/private', {
+  return request('/api/database/privatize', {
     method: 'POST',
     body: {
       ...params,
