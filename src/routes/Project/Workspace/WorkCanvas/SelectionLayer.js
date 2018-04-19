@@ -104,12 +104,13 @@ class SelectionLayer extends React.PureComponent {
     const { startX, startY, stopX, stopY } = this.props.runtime;
     if (this.props.runtime.dragging) {
       draggingRectView = (
-        <rect
-          x={startX < stopX ? startX : stopX}
-          y={startY < stopY ? startY : stopY}
-          width={Math.abs(stopX - startX)}
-          height={Math.abs(stopY - startY)}
-          // style={{ ...maskStyles }}
+        <div
+          style={{
+          transform: `translate(${startX < stopX ? startX : stopX}px, ${startY < stopY ? startY : stopY}px)`,
+          width: `${Math.abs(stopX - startX)}px`,
+          height: `${Math.abs(stopY - startY)}px`,
+        }}
+          className={styles.selectionDiv}
         />
       );
     }
