@@ -49,7 +49,7 @@ export default {
       const toggleItem = payload;
       const newComponents = state.availableComponents.map(
         (c) => {
-          if (c.tableName === toggleItem.tableName) {
+          if (c.tableName === toggleItem.tableName && c.name === toggleItem.name) {
             return { ...c, hideSchema: !c.hideSchema };
           } else {
             return c;

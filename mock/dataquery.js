@@ -51,7 +51,7 @@ export function getLastestDatabasesForProject(req, res, u, b) {
       jobId: '233',
       jobStartTime: 'xxxx',
       jobFinishTime: 'yyyy',
-      componentName: 'hi',
+      name: 'hi',
       schema: [{ name: 'key', type: 'varchar' }, { name: 'value', type: 'varchar' }],
     },
     { tableName: 'xxx_zzz_xxx',
@@ -59,7 +59,7 @@ export function getLastestDatabasesForProject(req, res, u, b) {
       jobId: '233',
       jobStartTime: 'xxxx',
       jobFinishTime: 'yzzy',
-      componentName: 'hai',
+      name: 'hai',
       schema: [{ name: 'key', type: 'long' }, { name: 'value', type: 'varchar' }],
     },
   ];
