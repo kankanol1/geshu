@@ -2,9 +2,9 @@ const nameMapping = {
 
   /** component groups and components */
   DataSink: '数据存储',
-  ConsoleDataSink: '控制台数据存储',
+  ConsoleDataSink: '数据存储',
   FileDataSink: '文件存储',
-  ConsoleModelSink: '控制台模型存储',
+  ConsoleModelSink: '模型存储',
   Transformer: '数据转换',
   AddLiteralColumnTransformer: '增加列',
   RandomSplitTransformer: 'RandomSplit',

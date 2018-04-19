@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Layout, Icon } from 'antd';
-import SplitterLayout from 'react-splitter-layout';
 import Drawer from 'rc-drawer';
 import 'rc-drawer/assets/index.css';
 import QueryTable from './Query/QueryTable';
