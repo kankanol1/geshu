@@ -55,6 +55,7 @@ class GojsRelationGraph {
           {
             initialContentAlignment: go.Spot.Center,
             layout,
+            initialAutoScale: go.Diagram.UniformToFill,
             'toolManager.hoverDelay': 100,
           });
       myDiagram.nodeTemplate =

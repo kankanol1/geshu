@@ -7,7 +7,7 @@
     "precommit": "npm run lint-staged",
     "start": "cross-env DISABLE_ESLINT=true roadhog dev",
     "start:no-proxy": "cross-env NO_PROXY=true DISABLE_ESLINT=true roadhog dev",
-    "start:it": "cross-env SERVER=http://localhost:8080 DISABLE_ESLINT=true roadhog dev",
+    "start:it": "cross-env SERVER=http://192.168.0.120:8080 DISABLE_ESLINT=true roadhog dev",
     "build": "cross-env DISABLE_ESLINT=true roadhog build",
     "site": "roadhog-api-doc static && gh-pages -d dist",
     "analyze": "cross-env ANALYZE=true roadhog build",

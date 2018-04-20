@@ -36,9 +36,8 @@ function formBackendMappingData(diagram) {
       const toNodeKey = diagram.model.getToKeyForLinkData(linkArr[i]);
       const toNodeData = diagram.model.findNodeDataForKey(toNodeKey);
       const dataMap = {
-        edge: toNodeData.text,
         source: {
-          path: fromNodeData.text,
+          path: fromNodeData.path,
           header: true,
           inferSchema: true,
           schema: '',
@@ -51,6 +50,7 @@ function formBackendMappingData(diagram) {
         const endNodeData = diagram.model.findNodeDataForKey(toNodeData.to);
         mappingData.edgeMaps.push({
           ...dataMap,
+          edge: toNodeData.text,
           edgeLeft: {
             edgeField: linkArr[i].start.nodeAttr,
             vertex: startNodeData.text,
@@ -65,6 +65,7 @@ function formBackendMappingData(diagram) {
       } else {
         mappingData.vertexMaps.push({
           ...dataMap,
+          vertex: toNodeData.text,
         });
       }
     }
@@ -105,11 +106,13 @@ export default {
     addDataSourcesOnGraph(state, { payload }) {
       const fileData = [];
       payload.forEach((value) => {
-        fileData.push({
-          name: getFileName(value),
-          id: value,
-          path: value,
-        });
+        if (value.indexOf('.csv') >= 0) {
+          fileData.push({
+            name: getFileName(value),
+            id: value,
+            path: value,
+          });
+        }
       });
       graphUtil.addFileNode(graphUtil.getDiagram(DIAGRAM_NAME), fileData);
       return state;

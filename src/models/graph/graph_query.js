@@ -121,9 +121,13 @@ export default {
       return Object.assign({}, {
         ...state,
         ...payload,
-        tableName: payload.tableName ? payload.tableName : state.tableName,
         inited: true,
       });
+    },
+    scaleGraph(state) {
+      const { diagram } = GojsRelationGraph.getGraph(GRAPH_NAME);
+      diagram.scale = Math.random();
+      return state;
     },
     setGraph(state, { payload }) {
       GojsRelationGraph.getGraph(GRAPH_NAME).clear();
@@ -209,7 +213,7 @@ export default {
     },
     *queryGraph({ payload }, { call, put, select }) {
       const { host, id, code, tableName } = yield select(state => state.graph_query);
-      const response = yield call(queryGremlinServer, { code: `g=${tableName}.traversal();${code}`, id, host });
+      const response = yield call(queryGremlinServer, { code: !tableName || tableName === 'g' ? code : `g=${tableName}.traversal();${code}`, id, host });
       if (response.status.code > 200) { message.error(`错误：${response.status.message}`); }
       yield put({
         type: 'saveResponse',
@@ -227,7 +231,7 @@ export default {
         .select(all,"node").inject(g.V(${key})).unfold()
         edges = g.V(${key}).bothE()
         [nodes.toList(),edges.toList()]`;
-      const response = yield call(queryGremlinServer, { code: `g=${tableName}.traversal();${code}`, id, host });
+      const response = yield call(queryGremlinServer, { code: !tableName || tableName === 'g' ? code : `g=${tableName}.traversal();${code}`, id, host });
       yield put({
         type: 'mergeGraph',
         payload: response,

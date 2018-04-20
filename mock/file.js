@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { getUrlParams } from './utils';
 
 export function getFileList(req, res, u) {
@@ -40,9 +41,10 @@ export function getFileList(req, res, u) {
       });
       break;
     case '/projectx':
-      for (let i = 0; i < 10; i++) {
+      const files = ['person.csv', 'software.csv', 'knows.csv', 'created.csv'];
+      for (const i in files) {
         result.push({
-          path: `${prefix}/projectx/file${i}.csv`,
+          path: `${prefix}/projectx/${files[i]}`,
           isdir: false,
         });
       }

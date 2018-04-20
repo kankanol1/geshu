@@ -68,8 +68,6 @@ class GraphQuery extends React.PureComponent {
     });
   }
   handleSaveQueryOk = (e) => {
-    // console.log(this.props, 'pros1111');
-    // console.log(this.state.create, 'create');
     if (!this.state.create) {
       this.setState({ showSave: true, queryName: '' });
     } else {
@@ -80,10 +78,6 @@ class GraphQuery extends React.PureComponent {
     }
   }
   handleSaveQueryModalCancel = (e) => {
-    // this.props.dispatch({
-    //   type: 'graph_query/saveQuery',
-    //   payload: this.state.queryName,
-    // });
     this.setState({
       showSave: false,
     });
@@ -126,14 +120,11 @@ class GraphQuery extends React.PureComponent {
               show: false,
               editorName: name,
               create: true,
-              // queryId: id,
-              // querySaveName: name,
             });
-            console.log(name, 'myid');
             this.codeMirror.getCodeMirror().setValue(query);
             this.props.dispatch({
               type: 'graph_query/saveCode',
-              payload: { query: query, queryId: id, querySaveName: name },// eslint-disable-line
+              payload: { query, queryId: id, querySaveName: name },
             });
           }}
           />
@@ -141,7 +132,7 @@ class GraphQuery extends React.PureComponent {
         <div
           style={{
              background: 'white',
-             height: '100px',
+             height: '50px',
              padding: '10px',
              width: '100%',
              margin: '2px 0',
@@ -149,15 +140,16 @@ class GraphQuery extends React.PureComponent {
         >
           <strong style={{ marginLeft: '50%' }}>项目名称：{this.props.name}</strong>
         </div>
-        <SplitterLayout
-          customClassName={styles.layoutBox}
-          onDragEnd={() => {
+        <div style={{ width: '100%', height: '100%', background: 'white', position: 'relative' }}>
+          <SplitterLayout
+            primaryIndex={0}
+            onDragEnd={() => {
+              console.log(123);
             this.props.dispatch({
-              type: 'graph_query/queryGraph',
+              type: 'graph_query/scaleGraph',
             });
           }}
-        >
-          <Col span={10} style={{ padding: '0', height: '100%', width: '100%' }}>
+          >
             <div
               style={{
                 background: '#fff',
@@ -258,46 +250,40 @@ class GraphQuery extends React.PureComponent {
                 />
               </div>
             </div>
-          </Col>
-          <Col span={14} style={{ width: '100%', overflow: 'hidden' }}>
             <div
-              style={
-              {
+              style={{
                 background: '#fff',
                 padding: '3px 10px',
                 margin: '0px 5px',
-                height: `${window.screen.availHeight - 205}px`,
-                width: '100%',
-              }
-            }
+              }}
             >
               <Tabs
                 activeKey={this.state.activeTab}
                 onChange={(value) => { this.setState({ activeTab: value }); }}
               >
-                <Tabs.TabPane tab="JSON" key="1">
-                  <div style={{ height: `${window.screen.availHeight - 324}px`, overflowY: 'auto' }}>
-                    <Highlight className="json">
-                      {this.props.responseJson}
-                    </Highlight>
-                  </div>
-                </Tabs.TabPane>
                 <Tabs.TabPane tab="关系图" disabled={!this.props.showGraph} key="2">
                   <div style={{ marginTop: '-13px' }}>
                     <Alert message="关系图需要以[nodelist,edgelist]的格式返回" type="warning" />
                     <div
                       id="container"
                       style={{
-                      height: `${window.screen.availHeight - 348}px`,
-                      width: '100%',
+                        height: `${window.screen.availHeight - 304}px`,
+                        width: '100%',
                     }}
                     />
                   </div>
                 </Tabs.TabPane>
+                <Tabs.TabPane tab="JSON" key="1">
+                  <div>
+                    <Highlight className="json">
+                      {this.props.responseJson}
+                    </Highlight>
+                  </div>
+                </Tabs.TabPane>
               </Tabs>
             </div>
-          </Col>
-        </SplitterLayout>
+          </SplitterLayout>
+        </div>
       </Layout>
     );
   }

@@ -65,7 +65,7 @@ function formIndexes(indexArr) {
         propertyKeys: indexArr[i].properties,
         composite: indexArr[i].config === 'composite',
         unique: indexArr[i].config === 'unique',
-        mixedIndex: indexArr[i].config === 'mixed',
+        mixedIndex: '',
         indexOnly: '',
       };
       if (indexArr[i].type === 'node') {

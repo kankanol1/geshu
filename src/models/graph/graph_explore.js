@@ -169,7 +169,7 @@ export default {
       code += '[nodes.toList(),edges.toList()]';
 
       const response = yield call(queryGremlinServer, {
-        code: `g=${tableName}.traversal();${code}`,
+        code: !tableName || tableName === 'g' ? code : `g=${tableName}.traversal();${code}`,
         id,
         host,
       });
@@ -186,7 +186,7 @@ export default {
         .select(all,"node").inject(g.V(${key})).unfold()
         edges = g.V(${key}).bothE()
         [nodes.toList(),edges.toList()]`;
-      const response = yield call(queryGremlinServer, { code: `g=${tableName}.traversal();${code}`, id, host });
+      const response = yield call(queryGremlinServer, { code: !tableName || tableName === 'g' ? code : `g=${tableName}.traversal();${code}`, id, host });
       yield put({
         type: 'mergeGraph',
         payload: response,

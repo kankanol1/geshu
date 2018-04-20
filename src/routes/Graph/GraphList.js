@@ -87,7 +87,7 @@ export default class ProjectList extends PureComponent {
             </Menu>
           }
           >
-            <a className="ant-dropdown-link" href="#">
+            <a className="ant-dropdown-link">
               打开
               <Icon type="down" />
             </a>
