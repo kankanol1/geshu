@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Layout, Icon } from 'antd';
 import Drawer from 'rc-drawer';
 import 'rc-drawer/assets/index.css';
+import FloatDrawerTrigger from '../../components/FloatDrawerTrigger';
 import QueryTable from './Query/QueryTable';
 import SiderBar from './Query/SiderBar';
 import styles from './DatabaseQuery.less';
@@ -26,9 +27,7 @@ export default class DatabaseQuery extends Component {
     return (
       <React.Fragment>
         <QueryTable />
-        <div className={styles.toggleTrigger} >
-          <Icon type={this.state.open ? 'double-left' : 'double-right'} onClick={() => this.toggleSideBar()} />
-        </div>
+        <FloatDrawerTrigger position="left" open={this.state.open} toggle={() => this.toggleSideBar()} />
       </React.Fragment>
     );
   }

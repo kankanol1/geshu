@@ -5,6 +5,7 @@ import { Scrollbars } from 'react-custom-scrollbars';
 import SqlQueryTable from '../../components/SqlQueryTable';
 import WorkspaceViewMenu from './WorkspaceViewMenu';
 import WorkspaceMenu from './Workspace/Menu/WorkspaceMenu';
+import FloatDrawerTrigger from '../../components/FloatDrawerTrigger';
 
 import styles from './WorkspaceDataView.less';
 
@@ -91,9 +92,14 @@ export default class WorkspaceDataView extends Component {
                   // sql="select * from item"
                 />
               </Scrollbars>
-              <div className={styles.toggleTrigger} >
-                <Icon type={showSider ? 'double-right' : 'double-left'} onClick={() => this.setState({ showSider: !showSider })} />
-              </div>
+
+              <FloatDrawerTrigger
+                position="right"
+                open={showSider}
+                style={{ right: '4px' }}
+                toggle={() => this.setState({ showSider: !showSider })}
+              />
+
             </Col>
             <Col span={showSider ? 6 : 0} className={styles.rightView} >
               <div style={{ height: '100%', background: '#fff' }}>
