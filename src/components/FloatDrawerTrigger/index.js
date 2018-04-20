@@ -5,17 +5,21 @@ import styles from './index.less';
 
 export default class FloatDrawerTrigger extends React.Component {
   render() {
-    const { position, status, open, toggle, style } = this.props;
+    const { position, open, toggle, style } = this.props;
     let iconType;
     const cx = classNames.bind(styles);
     if (position === 'left') {
-      iconType = open ? 'double-left' : 'double-right';
+      iconType = open ? 'left' : 'right';
     } else if (position === 'right') {
-      iconType = open ? 'double-right' : 'double-left';
+      iconType = open ? 'right' : 'left';
+    } else if (position === 'top') {
+      iconType = open ? 'down' : 'up';
+    } else {
+      iconType = open ? 'up' : 'down';
     }
     return (
       <div className={cx('toggleTrigger', `toggleTrigger-${position}`)} style={style} >
-        <Icon type={iconType} onClick={() => toggle(!status)} />
+        <Icon type={iconType} onClick={() => toggle(!open)} />
       </div>
     );
   }

@@ -8,6 +8,7 @@ import WorkCanvas from './WorkCanvas/WorkCanvas';
 import ComponentSettings from './ComponentSettings';
 import WorkAreaBottomBar from './WorkAreaBottomBar';
 import TopComponentList from './TopComponentList';
+import styles from './WorkArea.less';
 
 const { Content } = Layout;
 
@@ -63,8 +64,8 @@ export default class WorkArea extends React.PureComponent {
       <React.Fragment>
         {/* <Button onClick={this.exportSvg}> export </Button> */}
         {/* <SiderComponentList onItemDragged={this.handleItemDragged} /> */}
-        <TopComponentList onItemDragged={this.handleItemDragged} />
-        <Content style={{ background: '#fff', padding: 0, margin: 0, width: '100%', display: 'flex', flexDirection: 'row' }}>
+        <Content className={styles.workContent}>
+          <TopComponentList onItemDragged={this.handleItemDragged} />
           <WorkCanvas ref={(e) => { this.canvasRef = e; }} match={this.props.match} />
           {
             isLoading ?

@@ -8,9 +8,9 @@
   :global(.anticon) {
     border: 1px solid #afcdec;
     background: #cacaca;
-    padding: 14px 2px;
     transition: background-color 0.2s, color 0.2s;
     -webkit-transition: background-color 0.2s, color 0.2s;
+    margin: auto;
   }
 
   :global(.anticon:hover) {
@@ -26,6 +26,19 @@
   height: 100%;
   width: 20px;
   top: 0;
+
+  :global(.anticon) {
+    padding: 14px 2px;
+  }
+}
+
+.toggleTriggerTB {
+  width: 100%;
+  height: 20px;
+  left: 0;
+  :global(.anticon) {
+    padding: 2px 14px;
+  }
 }
 
 .toggleTrigger-left {
@@ -36,4 +49,14 @@
 .toggleTrigger-right {
   .toggleTriggerLR;
   right: 0;
+}
+
+.toggleTrigger-top {
+  .toggleTriggerTB;
+  top: 0;
+}
+
+.toggleTrigger-bottom {
+  .toggleTriggerTB;
+  bottom: 0;
 }

@@ -8,7 +8,7 @@ import PointLayer from './PointLayer';
 import LineLayer from './LineLayer';
 import SelectionLayer from './SelectionLayer';
 import ContextMenu from './ContextMenu';
-import './WorkCanvas.less';
+import styles from './WorkCanvas.less';
 
 @connect(({ work_canvas, loading }) => ({
   work_canvas,
@@ -139,19 +139,14 @@ export default class WorkCanvas extends React.PureComponent {
     const isLoading = this.props.loading.effects['work_canvas/init'];
 
     return (
-      <div style={{ width: '100%', display: 'auto' }}>
+      <div className={styles.workCanvasWrapper}>
         <DraggableCore
           onDrag={this.handleDrag}
           onStop={this.handleDragStop}
           onStart={this.handleDragStart}
         >
           <div
-            style={{ width: '100%',
-            height: '100%',
-            position: 'relative',
-            display: 'flex',
-            flex: 'auto',
-            cursor: mode === 'move' ? 'move' : 'default' }}
+            style={{ cursor: mode === 'move' ? 'move' : 'default' }}
             className="work-canvas"
           >
             {

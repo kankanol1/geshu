@@ -4,6 +4,7 @@ import { Layout, Collapse, Button, Icon, Spin } from 'antd';
 import BasicParamInput from '../../../components/Inputs/BasicParamInput';
 import ComponentSettingsForm from './ComponentSettingsForm';
 import translateName from '../../../config/ComponentNameMapping';
+import styles from './WorkArea.less';
 
 const { Sider } = Layout;
 const { Panel } = Collapse;
@@ -54,7 +55,7 @@ class ComponentSettings extends React.PureComponent {
     const displaySettings = componentSettings[currentComponent];
     // build required.
     return (
-      <div style={{ background: '#f0f2f5', minWidth: '400px', zIndex: 200 }}>
+      <div className={styles.workSettingDiv}>
         <div style={{ padding: '5px', background: '#fafafa', borderLeft: '1px solid #e8e8e8' }}>
           <Button type="danger" size="default" onClick={this.onCloseClicked} disabled={loading} >
             <Icon type={loading ? 'loading' : 'close'} />

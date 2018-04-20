@@ -4,6 +4,7 @@ import { Layout, Collapse, Input, Spin, Tabs } from 'antd';
 import { Scrollbars } from 'react-custom-scrollbars';
 import SiderSingleComponent from './SiderSingleComponent';
 import TopSingleComponent from './TopSingleComponent';
+import FloatDrawerTrigger from '../../../components/FloatDrawerTrigger';
 import styles from './WorkArea.less';
 
 const { Sider } = Layout;
@@ -21,6 +22,7 @@ export default class TopComponentList extends React.PureComponent {
       preview: null,
       // store offset of the scrollbar.
       offsetY: 0,
+      showTop: true,
     };
     this.handlePreviewChange = this.handlePreviewChange.bind(this);
   }
@@ -79,9 +81,9 @@ export default class TopComponentList extends React.PureComponent {
       return null;
     }
     return (
-      <React.Fragment>
+      <div className={styles.topTabWrapper}>
         {
-          <Tabs type="card" className={styles.topTabs} >
+          <Tabs type="card" style={{ height: this.state.showTop ? undefined : '0px' }} className={styles.topTabs}>
             {
                   groups.map(
                     (group) => {
@@ -113,9 +115,15 @@ export default class TopComponentList extends React.PureComponent {
                 }
           </Tabs>
         }
+        <FloatDrawerTrigger
+          position="bottom"
+          open={this.state.showTop}
+          toggle={() => this.setState({ showTop: !this.state.showTop })}
+          style={{ bottom: 'auto' }}
+        />
 
         {this.state.preview}
-      </React.Fragment>
+      </div>
     );
   }
 }
