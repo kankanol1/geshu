@@ -37,7 +37,7 @@ const CreateDatabaseForm = Form.create()((props) => {
         label="名称"
       >
         {form.getFieldDecorator('name', {
-          rules: [{ required: true, message: '数据库名' }],
+          rules: [{ required: true, message: '名称' }],
           initialValue: currentRecord === undefined ? '' : currentRecord.name,
         })(
           <Input placeholder="请输入" />
@@ -46,25 +46,13 @@ const CreateDatabaseForm = Form.create()((props) => {
       <FormItem
         labelCol={{ span: 5 }}
         wrapperCol={{ span: 15 }}
-        label="数据表名"
+        label="描述"
       >
-        {form.getFieldDecorator('tableName', {
-          rules: [{ required: true, message: '数据表名' }],
-          initialValue: currentRecord === undefined ? [] : currentRecord.tableName,
+        {form.getFieldDecorator('description', {
+          rules: [{ required: true, message: '描述' }],
+          initialValue: currentRecord === undefined ? '' : currentRecord.description,
         })(
-          <Input placeholder="请输入" />
-        )}
-      </FormItem>
-      <FormItem
-        labelCol={{ span: 5 }}
-        wrapperCol={{ span: 15 }}
-        label="是否公开"
-      >
-        {form.getFieldDecorator('isPublic', {
-          rules: [{ required: true, message: '数据库是否公开' }],
-          initialValue: currentRecord === undefined ? '' : currentRecord.isPublic,
-        })(
-          <Input placeholder="请输入true或false" />
+          <TextArea placeholder="请输入" rows={2} />
         )}
       </FormItem>
     </Modal>

@@ -41,38 +41,46 @@ export default class DatabaseList extends PureComponent {
     {
       title: '编号',
       dataIndex: 'id',
+      align: 'center',
     },
     {
       title: '名称',
       dataIndex: 'name',
+      align: 'center',
     },
     {
       title: '表名',
       dataIndex: 'tableName',
+      align: 'center',
     },
     {
       title: '是否公开',
       dataIndex: 'isPublic',
+      align: 'center',
       render: val => <span>{val ? '是' : '否'}</span>,
     },
     {
       title: '创建人',
       dataIndex: 'createdBy',
+      align: 'center',
     },
     {
       title: '创建时间',
       dataIndex: 'createdAt',
       sorter: true,
+      align: 'center',
       render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
     },
     {
       title: '更新时间',
       dataIndex: 'updatedAt',
       sorter: true,
+      align: 'center',
       render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
     },
     {
       title: '操作',
+      align: 'center',
       render: (text, record) => (
         <Fragment>
           <a onClick={() => this.handleEdit(record)} >编辑</a>
@@ -145,7 +153,7 @@ export default class DatabaseList extends PureComponent {
   }
 
   handleUpdate = (fieldsValue, currentRecord) => {
-    const { project: { data }, dispatch } = this.props;
+    const { database: { data }, dispatch } = this.props;
     dispatch({
       type: 'database/updateDatabase',
       payload: {
