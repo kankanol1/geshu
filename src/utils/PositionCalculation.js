@@ -115,9 +115,9 @@ const updateCache = (state) => {
     } });
 };
 
-const updateCacheForComponent = (state, nc) => {
-  const componentDict = {}; // store: componentid: {x, y}
-  const componentPointPosition = {}; // store: componentid: {pointid: {x, y}}
+const addCacheForComponent = (state, nc) => {
+  const { componentDict } = state.cache; // store: componentid: {x, y}
+  const componentPointPosition = state.cache.pointDict; // store: componentid: {pointid: {x, y}}
   const { offset } = state;
   const calculatedPosition = {
     x: nc.x + offset.x,
@@ -178,5 +178,5 @@ export {
   calculatePointPositionDict,
   fillDefaultSize,
   createCache,
-  updateCacheForComponent,
+  addCacheForComponent,
 };

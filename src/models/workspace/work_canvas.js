@@ -1,6 +1,6 @@
 import key from 'keymaster';
 import { message } from 'antd';
-import { calculatePointCenter, updateCache, createCache, updateCacheForComponent } from '../../utils/PositionCalculation';
+import { calculatePointCenter, updateCache, createCache, addCacheForComponent } from '../../utils/PositionCalculation';
 import { openProject, saveProject } from '../../services/componentAPI';
 
 function appendMessage(messages, m) {
@@ -424,7 +424,7 @@ export default {
         },
       };
       components.push(nc);
-      return updateCache(Object.assign({}, { ...state,
+      return addCacheForComponent({ ...state,
         ...{
           state: {
             ...state.state,
@@ -432,7 +432,7 @@ export default {
           },
           components,
         },
-      }));
+      }, nc);
     },
 
     moveComponent(state, { id, deltaX, deltaY, originX, originY }) {
@@ -450,28 +450,28 @@ export default {
         if (selectedComponents.length === 0 && component.id === id) {
           // also update the selection.
           selection = [{ type: 'component', id }];
-          return Object.assign({}, {
+          return {
             ...component,
             ...{
               x: originX + deltaX, y: originY + deltaY,
             },
-          });
+          };
         } else if (selectedComponents.includes(component.id)) {
-          return Object.assign({}, {
+          return {
             ...component,
             ...{
               x: component.x + deltaX, y: component.y + deltaY,
             },
-          });
+          };
         } else if (component.id === id) {
           // change selection & move.
           selection = [{ type: 'component', id }];
-          return Object.assign({}, {
+          return {
             ...component,
             ...{
               x: originX + deltaX, y: originY + deltaY,
             },
-          });
+          };
         } else return component;
       });
 
