@@ -216,7 +216,7 @@ export default {
         message.info(response.message);
       } else {
         const execution = yield call(execute, { type: 'schema', id });
-        if (execution.success) { yield put(routerRedux.push('/jobs/list')); } else { message.info(execution.message); }
+        message.info(execution.message);
       }
     },
   },

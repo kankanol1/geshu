@@ -34,7 +34,7 @@ class GraphLayout extends AbstractBasicLayout {
   getContent() {
     const { routerData, match } = this.props;
     const type = this.props.location.pathname.split('/')[2];
-    if (type === 'list') { return super.getContent(); }
+    if (type === 'list' || type === 'jobs') { return super.getContent(); }
     return (
       <Content>
         <div style={{ height: 'calc(100vh - 84px)', margin: '10px' }}>

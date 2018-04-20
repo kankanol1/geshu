@@ -135,7 +135,13 @@ const proxy = serverEnabled ?
   'POST /api/graph/create': createGraph,
   'POST /api/graph/query/update': updateQuery,
   'POST /api/graph/query/delete': deleteQuery,
-  'GET /api/graph/execute': executeGraph,  
+  'GET /api/graph/execute': executeGraph, 
+  'GET /api/graphjobs/list': getJobs,
+  'POST /api/graphjobs/cancel': cancelJobs,
+  'POST /api/graphjobs/delete': deleteJobs,
+    // 'POST /api/jobs/resume': resumeJobs,
+    // 'POST /api/jobs/pause': pauseJobs,
+    // 'POST /api/jobs/restart': restartJobs,
 
   
   // file list

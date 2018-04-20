@@ -62,8 +62,12 @@ const menuData = [
     icon: 'share-alt',
     path: 'graph',
     children: [{
-      name: '项目列表',
+      name: '图项目列表',
       path: 'list',
+    },
+    {
+      name: '图作业管理',
+      path: 'jobs',
     }, {
       name: '设计器',
       path: 'schema',
