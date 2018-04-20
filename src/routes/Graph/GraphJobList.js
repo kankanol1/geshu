@@ -5,7 +5,7 @@ import moment from 'moment';
 import { Popconfirm, Progress, Row, Col, Card, Form, Input, Select, Icon, Button, Menu, InputNumber, DatePicker, Tag, message, Badge, Divider } from 'antd';
 import StandardTable from '../../components/StandardTable';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
-import styles from './JobList.less';
+import styles from './GraphJobList.less';
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -41,9 +41,9 @@ const statusIconMap = {
 
 const getValue = obj => Object.keys(obj).map(key => obj[key]).join(',');
 
-@connect(({ jobs, loading }) => ({
-  jobs,
-  loading: loading.models.jobs,
+@connect(({ graph_job, loading }) => ({
+  graph_job,
+  loading: loading.models.graph_job,
 }))
 @Form.create()
 export default class JobList extends PureComponent {
@@ -58,7 +58,7 @@ export default class JobList extends PureComponent {
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
-      type: 'jobs/fetchJobList',
+      type: 'graph_job/fetchJobList',
     });
   }
 
@@ -144,7 +144,7 @@ export default class JobList extends PureComponent {
   performQuery = (params) => {
     const { dispatch } = this.props;
     dispatch({
-      type: 'jobs/fetchJobList',
+      type: 'graph_job/fetchJobList',
       payload: params,
     });
 
@@ -154,7 +154,7 @@ export default class JobList extends PureComponent {
   handleRecordDelete = (record) => {
     const { dispatch } = this.props;
     dispatch({
-      type: 'jobs/removeJobs',
+      type: 'graph_job/removeJobs',
       payload: {
         ids: [record.id],
         refreshParams: this.refreshParams,
@@ -165,7 +165,7 @@ export default class JobList extends PureComponent {
   handleRecordCancel = (record) => {
     const { dispatch } = this.props;
     dispatch({
-      type: 'jobs/cancelJobs',
+      type: 'graph_job/cancelJobs',
       payload: {
         ids: [record.id],
         refreshParams: this.refreshParams,
@@ -184,7 +184,7 @@ export default class JobList extends PureComponent {
     e.preventDefault();
 
     const { form } = this.props;
-    const { jobs: { data } } = this.props;
+    const { graph_job: { data } } = this.props;
 
     form.validateFields((err, fieldsValue) => {
       if (err) return;
@@ -238,7 +238,7 @@ export default class JobList extends PureComponent {
     const { dispatch } = this.props;
     const ids = this.state.selectedRows.map(record => record.id);
     dispatch({
-      type: 'jobs/removeJobs',
+      type: 'graph_job/removeJobs',
       payload: {
         ids,
         refreshParams: this.refreshParams,
@@ -268,7 +268,7 @@ export default class JobList extends PureComponent {
 
   renderSimpleForm() {
     const { getFieldDecorator } = this.props.form;
-    const { jobs: { data } } = this.props;
+    const { graph_job: { data } } = this.props;
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
@@ -313,7 +313,7 @@ export default class JobList extends PureComponent {
 
   renderAdvancedForm() {
     const { getFieldDecorator } = this.props.form;
-    const { jobs: { data } } = this.props;
+    const { graph_job: { data } } = this.props;
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
@@ -369,7 +369,8 @@ export default class JobList extends PureComponent {
   }
 
   render() {
-    const { jobs: { data }, loading } = this.props;
+    console.log(this.props, 'props')
+    const { graph_job: { data }, loading } = this.props;
     const { selectedRows, modalVisible, currentRecord } = this.state;
 
     const parentMethods = {

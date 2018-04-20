@@ -177,6 +177,7 @@ class GraphQuery extends React.PureComponent {
                   <Button.Group>
                     <Button
                       title="查询管理"
+                      disabled={!this.props.inited}
                       onClick={() => {
                         this.setState({
                           show: true,

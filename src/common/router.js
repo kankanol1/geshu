@@ -176,7 +176,7 @@ export const getRouterData = (app) => {
       component: dynamicWrapper(app, [], () => import('../routes/Graph/GraphList')),
     },
     '/graph/jobs': {
-      component: dynamicWrapper(app, ['jobs'], () => import('../routes/Job/JobList')),
+      component: dynamicWrapper(app, ['graph/graph_job'], () => import('../routes/Graph/GraphJobList')),
     },
     // '/graph/schema': {
     //   component: dynamicWrapper(app, [], () => import('../layouts/GraphLayout')),

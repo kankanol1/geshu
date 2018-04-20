@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { Table, Select, Row, Col } from 'antd';
+import { Table, Select, Row, Col, Spin } from 'antd';
 import graphUtils from '../../../utils/graph_utils';
 import styles from '../Inspectors.less';
-
 
 let myDiagram;
 let currentInspectedObject;
@@ -107,6 +106,7 @@ class MappingInspector extends Component {
     });
   }
   render() {
+    console.log(this.props, 'this.props');
     if (!this.state.show) {
       return (<p style={{ textAlign: 'center', fontSize: '16px' }}>暂无选中元素</p>);
     }
@@ -271,7 +271,7 @@ class MappingInspector extends Component {
             dataSource={this.state.tableData}
             pagination={false}
             size="small"
-            loading={this.props.loadingColumn}
+            // loading={this.props.loadingColumn}
             rowKey={record => `row-${record.name}`}
           />
         </div>
@@ -279,6 +279,7 @@ class MappingInspector extends Component {
     );
   }
 }
+
 export default connect(({ graph_mapping_editor }) => {
   return {
     ...graph_mapping_editor,
