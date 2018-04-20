@@ -8,7 +8,7 @@ import PointLayer from './PointLayer';
 import LineLayer from './LineLayer';
 import SelectionLayer from './SelectionLayer';
 import ContextMenu from './ContextMenu';
-import styles from './WorkCanvas.less';
+import styles from '../WorkArea.less';
 
 @connect(({ work_canvas, loading }) => ({
   work_canvas,
