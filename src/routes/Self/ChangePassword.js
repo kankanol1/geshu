@@ -36,9 +36,7 @@ export default class ChangePassword extends React.PureComponent {
           });
         })
           .then(
-            () => { console.log('yeap'); form.resetFields(); }
-            ,
-            () => console.log('nope')
+            () => { form.resetFields(); }
           );
       }
     });

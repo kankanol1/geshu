@@ -6,7 +6,8 @@ import moment from 'moment';
 const FormItem = Form.Item;
 
 const OpenProjectForm = Form.create()((props) => {
-  const { modalOpenVisible, form, handleSearch, handleOpenModalVisible, searchLoading , type } = props;
+  const { modalOpenVisible, form, handleSearch,
+    handleOpenModalVisible, searchLoading, type } = props;
   const { openList, dispatch, pagination, handleStandardTableChange } = props;
   const { Column } = Table;
   const loading = searchLoading || false;

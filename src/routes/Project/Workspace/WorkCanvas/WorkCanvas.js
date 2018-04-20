@@ -51,7 +51,6 @@ export default class WorkCanvas extends React.PureComponent {
     });
     key('⌘+s, ctrl+s', (e) => {
       e.preventDefault();
-      console.log('save');
       return dispatch({
         type: 'work_canvas/saveComponents',
         payload: {
@@ -121,7 +120,6 @@ export default class WorkCanvas extends React.PureComponent {
     const { componentDict } = this.props.work_canvas.cache;
     // store: componentid: {pointid: {x, y}}
     const componentPointPosition = this.props.work_canvas.cache.pointDict;
-    console.log('component-position', componentPointPosition);
 
     const { contextmenu } = this.props.work_canvas;
     let contextMenuView = null;

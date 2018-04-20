@@ -106,7 +106,6 @@ class MappingInspector extends Component {
     });
   }
   render() {
-    console.log(this.props, 'this.props');
     if (!this.state.show) {
       return (<p style={{ textAlign: 'center', fontSize: '16px' }}>暂无选中元素</p>);
     }

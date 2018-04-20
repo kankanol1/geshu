@@ -15,6 +15,7 @@ export default class SampleWidget extends React.PureComponent {
   }
   componentWillMount() {
     const { url } = this.props.uiSchema['ui:options'];
+    // eslint-disable-next-line
     console.log('url', url);
     fetch(url).then(results => results.json())
       .then(result => this.setState({ loading: false, listData: result }));
@@ -31,7 +32,6 @@ export default class SampleWidget extends React.PureComponent {
       return <div>Sample loading...</div>;
     }
     const { value } = this.state;
-    console.log('sample, props', this.props);
     return (
       <div>Sample
         <select value={value} onChange={e => this.onChange(e)}>

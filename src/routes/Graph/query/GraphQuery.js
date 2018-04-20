@@ -144,7 +144,6 @@ class GraphQuery extends React.PureComponent {
           <SplitterLayout
             primaryIndex={0}
             onDragEnd={() => {
-              console.log(123);
             this.props.dispatch({
               type: 'graph_query/scaleGraph',
             });

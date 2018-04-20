@@ -125,6 +125,7 @@ export function save(req, res, u, b) {
 
   const body = (b && b.body) || req.body;
 
+  // eslint-disable-next-line
   console.log('save: project id', req.params.projectId);
   // console.log('saved', body);
 
@@ -150,6 +151,7 @@ export function saveSettings(req, res, u, b) {
 
   const body = (b && b.body) || req.body;
 
+  // eslint-disable-next-line
   console.log('save: project id, component id', req.params.projectId, req.params.componentId);
   // console.log('saved', body);
 

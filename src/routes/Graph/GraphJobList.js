@@ -369,7 +369,6 @@ export default class JobList extends PureComponent {
   }
 
   render() {
-    console.log(this.props, 'props')
     const { graph_job: { data }, loading } = this.props;
     const { selectedRows, modalVisible, currentRecord } = this.state;
 

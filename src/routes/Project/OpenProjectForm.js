@@ -6,7 +6,6 @@ import { buildTagSelect } from '../../utils/uiUtils';
 import styles from './WorkspaceIndex.less';
 
 const FormItem = Form.Item;
-// const { TextArea } = Input;
 
 
 /** the open form. */
@@ -84,7 +83,6 @@ const OpenProjectForm = Form.create()((props) => {
         onRow={(record) => {
           return {
             onClick: () => { dispatch(routerRedux.push(`/project/workspace/editor/${record.id}`)); },
-            onMouseEnter: () => { console.log(record.description); },
           };
         }}
       >

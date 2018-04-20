@@ -26,6 +26,7 @@
     "react/no-find-dom-node": [1],
     "react/jsx-boolean-value": [1],
     "camelcase": [1],
+    "no-console":[2],
     "no-unused-vars": [1],
     "no-plusplus": [0],
     "react/jsx-wrap-multilines": ["error", {

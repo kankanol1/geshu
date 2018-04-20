@@ -32,7 +32,6 @@ export default class ComponentSettingsForm extends React.PureComponent {
     const { formData } = value;
     const { work_component_settings, dispatch, match } = this.props;
     const { currentComponent } = work_component_settings;
-    console.log('submitted', value);
 
     this.setState({
       dirty: false,
@@ -87,7 +86,6 @@ export default class ComponentSettingsForm extends React.PureComponent {
             uiSchema={uiSchema}
             onChange={v => this.handleFormChange(v)}
             onSubmit={v => this.handleFormSubmit(v)}
-            onError={v => console.log('errors', v)}
           >
             <button ref={(btn) => { this.submitButton = btn; }} className={styles.hidden} />
           </JsonSchemaForm>
