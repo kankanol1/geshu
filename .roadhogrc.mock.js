@@ -151,7 +151,9 @@ const proxy = serverEnabled ?
   'GET /api/fs/ls': getFileList,
   'GET /api/fs/columns': getDataSourceColumns,
 
-  
+  // data Insert list
+  'GET /api/dataSelect/all': getAllDatabase,
+
   // // file list
   // 'GET /api/fs/ls': getFileList,
   

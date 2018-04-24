@@ -49,7 +49,7 @@ function translateReadFilePathUISchema(originJsonSchema, id, code, name) {
 }
 
 function translateDatabasePathUISchema(originJsonSchema, id, code, name) {
-  return { 'ui:field': 'database_selector' };
+  return { 'ui:field': 'database_selector', 'ui:options': '/api/dataSelect/all' };
 }
 
 /** ======== end translate switch schema ========== */
