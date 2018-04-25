@@ -52,14 +52,16 @@ export function getLastestDatabasesForProject(req, res, u, b) {
       jobStartTime: 'xxxx',
       jobFinishTime: 'yyyy',
       name: 'hi',
+      persist: true,
       schema: [{ name: 'key', type: 'varchar' }, { name: 'value', type: 'varchar' }],
     },
     { tableName: 'xxx_zzz_xxx',
       projectId,
-      jobId: '233',
+      jobId: '234',
       jobStartTime: 'xxxx',
       jobFinishTime: 'yzzy',
       name: 'hai',
+      persist: false,
       schema: [{ name: 'key', type: 'long' }, { name: 'value', type: 'varchar' }],
     },
   ];
@@ -70,3 +72,44 @@ export function getLastestDatabasesForProject(req, res, u, b) {
     return result;
   }
 }
+
+export function persistDataQuery(req, res, u, b) {
+  let url = u;
+  if (!url || Object.prototype.toString.call(url) !== '[object String]') {
+    url = req.url; // eslint-disable-line
+  }
+  const params = getUrlParams(url);
+  const body = (b && b.body) || req.body;
+  const projectId = params.projectId === undefined ? 1 : parseInt(params.projectId, 10);
+  const result = [
+    { tableName: 'xxx_ttt_xxx',
+      projectId,
+      jobId: '233',
+      jobStartTime: 'xxxx',
+      jobFinishTime: 'yyyy',
+      name: 'hi',
+      persist: true,
+      schema: [{ name: 'key', type: 'varchar' }, { name: 'value', type: 'varchar' }],
+    },
+    { tableName: 'xxx_zzz_xxx',
+      projectId,
+      jobId: '234',
+      jobStartTime: 'xxxx',
+      jobFinishTime: 'yzzy',
+      name: 'hai',
+      persist: true,
+      schema: [{ name: 'key', type: 'long' }, { name: 'value', type: 'varchar' }],
+    },
+  ];
+
+  if (res && res.json) {
+    res.json(result);
+  } else {
+    return result;
+  }
+}
+export default {
+  persistDataQuery,
+  getLastestDatabasesForProject,
+  getQueryResult,
+};

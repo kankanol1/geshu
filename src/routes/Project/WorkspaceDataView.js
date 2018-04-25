@@ -1,17 +1,17 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { Layout, Card, Input, Button, Select, Row, Col, List, Icon, Spin, Tooltip } from 'antd';
+import { Layout, Card, Input, Select, Row, Col, List, Icon, Spin, Tooltip } from 'antd';
 import { Scrollbars } from 'react-custom-scrollbars';
 import SqlQueryTable from '../../components/SqlQueryTable';
 import WorkspaceViewMenu from './WorkspaceViewMenu';
 import WorkspaceMenu from './Workspace/Menu/WorkspaceMenu';
 import FloatDrawerTrigger from '../../components/FloatDrawerTrigger';
+import PersistDataForm from './PersistDataForm';
 
 import styles from './WorkspaceDataView.less';
 
 const { Option } = Select;
 const { Header } = Layout;
-const { TextArea } = Input;
 
 @connect(({ dataquery, loading }) => ({
   dataquery,
@@ -22,6 +22,8 @@ export default class WorkspaceDataView extends Component {
     super(props);
     this.state = {
       showSider: true,
+      modalVisible: false,
+      selectItem: {},
     };
   }
 
@@ -68,12 +70,31 @@ export default class WorkspaceDataView extends Component {
       payload: item,
     });
   }
+  persistSelectSql(item) {
+    this.props.dispatch({
+      type: 'dataquery/persistQuery',
+      payload: item,
+    });
+  }
+  handleModalVisible = (visible, item) => {
+    this.setState({ ...this.state,
+      modalVisible: !!visible,
+      selectItem: item,
+    });
+  }
 
   render() {
     const { queryResult, availableComponents } = this.props.dataquery;
     const { loading } = this.props;
-    const { showSider } = this.state;
+    const { showSider, selectItem } = this.state;
 
+    const parentMethods = {
+      handleModalVisible: this.handleModalVisible,
+      persistSelectSql: this.persistSelectSql,
+      dispatch: this.props.dispatch,
+      selectItem,
+    };
+    const { modalVisible } = this.state;
     return (
       <Layout style={{ padding: '0', height: '100%' }} theme="light" >
         <Header style={{ padding: '0px', height: '48px', lineHeight: '46px', background: '#eee' }}>
@@ -114,7 +135,7 @@ export default class WorkspaceDataView extends Component {
                     renderItem={item => (
                       <List.Item>
                         <div className={styles.componentCell}>
-                          <strong><a style={{ width: '160px', marginRight: '20px', wordBreak: 'break-all', display: 'inline-block' }}>{item.tableName}</a></strong> <span style={{ fontStyle: 'italic' }}>{item.name}</span>
+                          <strong><a style={{ width: '140px', marginRight: '20px', wordBreak: 'break-all', display: 'inline-block' }}>{item.tableName}</a></strong> <span style={{ fontStyle: 'italic' }}>{item.name}</span>
                           <span className={styles.smallIcons}>
                             <Tooltip title={item.hideSchema ? '展开schema信息' : '隐藏schema信息'}>
                               <Icon type={item.hideSchema ? 'plus' : 'minus'} onClick={() => this.toggleTableItemStatus(item)} />
@@ -122,6 +143,14 @@ export default class WorkspaceDataView extends Component {
                             <Tooltip title="复制选择语句" onClick={() => this.copySelectSql(item)} >
                               <Icon type="copy" />
                             </Tooltip>
+                            {
+                              item.persist ? null :
+                              (
+                                <Tooltip title="持久化于数据库" onClick={() => this.handleModalVisible(true, item)} >
+                                  <Icon type="cloud-upload" />
+                                </Tooltip>
+                              )
+                            }
                           </span>
                           {item.hideSchema ? null : (
                             <List
@@ -144,9 +173,12 @@ export default class WorkspaceDataView extends Component {
                   />
                 </Card>
               </div>
-
             </Col>
           </Row>
+          <PersistDataForm
+            {...parentMethods}
+            modalVisible={modalVisible}
+          />
         </Layout>
       </Layout>
     );

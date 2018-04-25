@@ -13,3 +13,10 @@ export async function performDataQuery(params) {
     body: params,
   });
 }
+
+export async function persistDataQuery(params) {
+  return request('/api/data/hive/persist', {
+    method: 'POST',
+    body: params,
+  });
+}

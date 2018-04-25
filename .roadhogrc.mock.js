@@ -22,7 +22,7 @@ import { getUserInfo, updatePassword } from './mock/selfmanage';
 import {recentGraph,saveGraph,getGraph,deleteGraph,getDataSources,getDataSourceColumns,getGraphList,getGremlinServerAddress,getQueryList,saveQuery,saveAsQuery,updateQuery,deleteQuery,executeGraph,createGraph} from './mock/graph';
 import { getFileList } from './mock/file';
 import { getServingModels, offlineServingModels, onlineServingModels } from './mock/servingmodel';
-import { getQueryResult, getLastestDatabasesForProject } from './mock/dataquery';
+import { getQueryResult, getLastestDatabasesForProject, persistDataQuery } from './mock/dataquery';
 import { fetchSchema } from './mock/workspace/components';
 // import { createDatabase, updateDatabase } from './src/services/databaseAPI';
 // import { deleteDatabase } from './mock/database';
@@ -166,6 +166,7 @@ const proxy = serverEnabled ?
   // data query.
   'POST /api/data/hive/querytmp': getQueryResult,
   'POST /api/data/hive/query': getQueryResult,
+  'POST /api/data/hive/persist': persistDataQuery,
 
   /** component: component utils */
   'POST /api/component/schema/prefetch': fetchSchema,

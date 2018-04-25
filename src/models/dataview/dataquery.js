@@ -1,6 +1,6 @@
 import copy from 'copy-to-clipboard';
 import { message } from 'antd';
-import { performDataQuery, performDataQueryTmp } from '../../services/dataQueryAPI';
+import { performDataQuery, performDataQueryTmp, persistDataQuery } from '../../services/dataQueryAPI';
 import { getLatestDatabaseForProject } from '../../services/componentAPI';
 
 export default {
@@ -72,6 +72,13 @@ export default {
       message.success('已复制至剪切板');
       return state;
     },
+
+    // persistItemAsSql(state, { payload }) {
+    //   const item = payload;
+    //   // copy(`select * from ${item.tableName}`);
+    //   message.success('已持久化于数据库');
+    //   return state;
+    // },
   },
 
   effects: {
@@ -87,6 +94,13 @@ export default {
       const response = yield call(performDataQuery, payload);
       yield put({
         type: 'updateQueryResult',
+        payload: response,
+      });
+    },
+    *persistQuery({ payload }, { call, put }) {
+      const response = yield call(persistDataQuery, payload);
+      yield put({
+        type: 'updateDatabases',
         payload: response,
       });
     },
