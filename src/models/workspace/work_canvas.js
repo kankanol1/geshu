@@ -456,7 +456,7 @@ export default {
               x: originX + deltaX, y: originY + deltaY,
             },
           };
-        } else if (selectedComponents.includes(component.id) && component.id === id) {
+        } else if (selectedComponents.includes(component.id) && selectedComponents.includes(id)) {
           return {
             ...component,
             ...{

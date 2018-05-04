@@ -70,7 +70,8 @@ class SelectionLayer extends React.PureComponent {
               </React.Fragment>
             );
           } else if (select.type === 'line') {
-            const size = 6;
+            const size = 8;
+            const halfSize = size / 2;
             const fromPoint = this.props.positionDict[select.source][select.from];
             const toPoint = this.props.positionDict[select.target][select.to];
             return (
@@ -80,7 +81,7 @@ class SelectionLayer extends React.PureComponent {
                   style={{
                   width: `${size * 2}px`,
                   height: `${size * 2}px`,
-                transform: `translate(${fromPoint.x - size}px, ${fromPoint.y - size}px)`,
+                transform: `translate(${(fromPoint.x)}px, ${fromPoint.y - size}px)`,
               }}
                 />
                 <div
@@ -88,7 +89,7 @@ class SelectionLayer extends React.PureComponent {
                   style={{
                   width: `${size * 2}px`,
                   height: `${size * 2}px`,
-                transform: `translate(${toPoint.x - size}px, ${toPoint.y - size}px)`,
+                transform: `translate(${toPoint.x - (2 * size)}px, ${toPoint.y - size}px)`,
               }}
                 />
               </React.Fragment>
