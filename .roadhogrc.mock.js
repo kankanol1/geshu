@@ -167,7 +167,8 @@ const proxy = serverEnabled ?
   'POST /api/data/hive/querytmp': getQueryResult,
   'POST /api/data/hive/query': getQueryResult,
 
-  'POST /api/component/fetchschema': fetchSchema,
+  /** component: component utils */
+  'POST /api/component/schema/prefetch': fetchSchema,
 
 
   // a sample test for component settings.

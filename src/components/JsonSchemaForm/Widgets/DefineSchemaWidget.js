@@ -6,6 +6,12 @@ import styles from './DefineSchemaWidget.less';
 
 const { Option } = Select;
 
+const schemaTypes = [
+  { name: 'String', value: '"string"' },
+  { name: 'Double', value: '"double"' },
+  { name: 'Integer', value: '"integer"' },
+];
+
 export default class DefineSchemaWidget extends React.PureComponent {
   constructor(props) {
     super(props);
@@ -52,7 +58,7 @@ export default class DefineSchemaWidget extends React.PureComponent {
     }, () => this.props.onChange(this.state.data));
   }
 
-  renderItem = (item, index) => {
+  renderItem = (item, index, showExtraOp) => {
     return (
       <Row key={index} className={styles.contentRow} >
         <Col span={6}>
@@ -66,16 +72,23 @@ export default class DefineSchemaWidget extends React.PureComponent {
         <Col span={8}>
           {/* <Input value={item.type} onChange={v => this.onChange(item, index, 'type', v)} />  */}
           <Select style={{ width: 120 }} onChange={v => this.onChange(item, index, 'type', v)} defaultValue={item.type} value={item.type} >
-            <Option value={'"string"'}>String</Option>
-            <Option value={'"int"'}>Int</Option>
-            <Option value={'"double"'}>Double</Option>
+            {schemaTypes.map(
+              type => <Option value={type.value} key={type.name}>{type.name}</Option>
+            )}
           </Select>
         </Col>
-        <Col span={2}>
-          <Button type="danger" size="small" className={styles.contentButton} onClick={() => this.handleItemDelete(item, index)} >
-            <Icon type="close" />
-          </Button>
-        </Col>
+        {
+          showExtraOp ?
+            (
+              <Col span={2}>
+                <Button type="danger" size="small" className={styles.contentButton} onClick={() => this.handleItemDelete(item, index)} >
+                  <Icon type="close" />
+                </Button>
+              </Col>
+          )
+        :
+        null
+        }
       </Row>
     );
   }
@@ -83,6 +96,9 @@ export default class DefineSchemaWidget extends React.PureComponent {
 
   render() {
     const maxHeight = this.props.height || 200;
+    // mode: normal (can add, delete, modify), modify (can only modify)
+    const { mode } = this.props.mode || 'normal';
+    const showExtraOp = (mode === 'normal');
     return (
       <div className={styles.tableWidget}>
         <span >
@@ -95,16 +111,23 @@ export default class DefineSchemaWidget extends React.PureComponent {
               <Col span={8}><div className={styles.header}>列名</div></Col>
               <Col span={8}><div className={styles.header}>类型</div></Col>
               <Col span={2}>
-                <Button size="small" type="primary" onClick={() => this.handleNewItem()}>
-                  <Icon type="plus" />
-                </Button>
+                {
+                showExtraOp ?
+                  (
+                    <Button size="small" type="primary" onClick={() => this.handleNewItem()}>
+                      <Icon type="plus" />
+                    </Button>
+                  )
+                :
+                null
+              }
               </Col>
             </Row>
           </div>
           <Scrollbars autoHeight autoHeightMin={0} autoHeightMax={maxHeight} >
             <div className={styles.tableContent} >
               {this.state.data.map(
-                (item, k) => this.renderItem(item, k)
+                (item, k) => this.renderItem(item, k, showExtraOp)
               )}
             </div>
           </Scrollbars>

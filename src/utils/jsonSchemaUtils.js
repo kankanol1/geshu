@@ -54,7 +54,7 @@ function translateDatabasePathUISchema(originJsonSchema, id, code, name) {
 }
 
 function translateFileSourceConfUISchema(originJsonSchema, id, code, name) {
-  return { 'ui:field': 'file_source_conf' };
+  return { 'ui:field': 'file_source_conf', 'ui:options': { url: '/api/component/schema/prefetch' } };
 }
 
 /** ======== end translate switch schema ========== */

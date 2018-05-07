@@ -13,19 +13,19 @@ export default class FileSourceConfWidget extends React.PureComponent {
 
   componentWillReceiveProps(props) {
     this.setState({
-      formData: { ...props.formData, header: { value: true } },
+      formData: { ...props.formData },
     });
   }
 
   onPropertyChange(name, value) {
     const dataCopy = Object.assign({}, { ...this.state.formData, [name]: value });
-    const lastShowExtra = this.showExtra(this.state.formData);
     const showExtra = this.showExtra(dataCopy);
+    const needRefreshSchema = this.needRefreshSchema(dataCopy, this.state.formData);
     this.setState({
       formData: dataCopy,
     }, () => {
       this.props.onChange(dataCopy);
-      if (showExtra && !lastShowExtra) {
+      if (showExtra && needRefreshSchema) {
         this.fetchSchema();
       }
     });
@@ -35,17 +35,34 @@ export default class FileSourceConfWidget extends React.PureComponent {
     return formData.format.value !== undefined && formData.path.value !== undefined;
   }
 
+  needRefreshSchema = (newFormData, oldFormData) => {
+    return newFormData.format.value !== oldFormData.format.value ||
+      newFormData.path.value !== oldFormData.path.value ||
+      newFormData.header.value !== oldFormData.header.value;
+  }
+
   fetchSchema() {
+    const { url } = this.props.uiSchema['ui:options'];
     this.setState({
       loading: true,
     });
     const { formData } = this.state;
+    const data = JSON.stringify({
+      format: formData.format.value,
+      header: formData.header.value,
+      path: formData.path.value,
+    });
     // fetch options
     const fetchOptions = {
       credentials: 'include',
       method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json; charset=utf-8',
+      },
+      body: data,
     };
-    fetch('/api/component/fetchschema', fetchOptions).then(results => results.json())
+    fetch(url, fetchOptions).then(results => results.json())
       .then(
         (result) => {
           // change schema
@@ -57,7 +74,7 @@ export default class FileSourceConfWidget extends React.PureComponent {
       );
   }
 
-  renderSchema(name) {
+  renderSchema(name, extraProps = {}) {
     const { registry, schema, idSchema, formData, uiSchema,
       errorSchema, onBlur, onFocus, disabled, readonly } = this.props;
     const { fields } = registry;
@@ -78,6 +95,7 @@ export default class FileSourceConfWidget extends React.PureComponent {
         registry={registry}
         disabled={disabled}
         readonly={readonly}
+        {...extraProps}
       />
     );
   }
@@ -88,13 +106,13 @@ export default class FileSourceConfWidget extends React.PureComponent {
     const renderSchema = formData.format.value !== undefined && formData.path.value !== undefined;
     return (
       <div >
-        {this.renderSchema('format')}
-        {this.renderSchema('path')}
-        {this.renderSchema('header')}
+        {this.renderSchema('format', { disabled: loading })}
+        {this.renderSchema('path', { disabled: loading })}
+        {this.renderSchema('header', { disabled: loading })}
         {
           loading ?
             <div className={styles.spin} ><Spin /></div> :
-          (renderSchema ? this.renderSchema('definedSchema') : null)
+          (renderSchema ? this.renderSchema('definedSchema', { mode: 'modify' }) : null)
         }
       </div>
     );

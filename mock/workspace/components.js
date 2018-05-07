@@ -19,7 +19,7 @@ export function fetchSchema(req, res, u, b) {
     data: [
       {
         name: 'test',
-        type: '"String"',
+        type: '"string"',
         nullable: true,
       },
     ],
