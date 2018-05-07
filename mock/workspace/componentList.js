@@ -4,6 +4,63 @@ const componentList = [
     key: 'DataSink',
     components: [
       {
+        name: 'CollectDataSink',
+        code: 'CollectDataSink',
+        type: 'DataSink',
+        inputs: [
+          {
+            id: 'i1',
+            label: 'data',
+            hint: 'data',
+            x: 3,
+            y: 0.5,
+            connects: [
+              'Dataset',
+              'DatasetRef',
+            ],
+          },
+        ],
+        outputs: [],
+      },
+      {
+        name: 'FileDataSink',
+        code: 'FileDataSink',
+        type: 'DataSink',
+        inputs: [
+          {
+            id: 'i1',
+            label: 'data',
+            hint: 'data',
+            x: 3,
+            y: 0.5,
+            connects: [
+              'Dataset',
+              'DatasetRef',
+            ],
+          },
+        ],
+        outputs: [],
+      },
+      {
+        name: 'ParquetDataSink',
+        code: 'ParquetDataSink',
+        type: 'DataSink',
+        inputs: [
+          {
+            id: 'i1',
+            label: 'data',
+            hint: 'data',
+            x: 3,
+            y: 0.5,
+            connects: [
+              'Dataset',
+              'DatasetRef',
+            ],
+          },
+        ],
+        outputs: [],
+      },
+      {
         name: 'ConsoleDataSink',
         code: 'ConsoleDataSink',
         type: 'DataSink',
@@ -23,8 +80,8 @@ const componentList = [
         outputs: [],
       },
       {
-        name: 'CollectDataSink',
-        code: 'CollectDataSink',
+        name: 'HiveDataSink',
+        code: 'HiveDataSink',
         type: 'DataSink',
         inputs: [
           {
@@ -289,40 +346,31 @@ const componentList = [
         ],
         outputs: [],
       },
+      {
+        name: 'FileModelSink',
+        code: 'FileModelSink',
+        type: 'ModelSink',
+        inputs: [
+          {
+            id: 'i1',
+            label: 'model/tunedModel',
+            hint: 'model/tunedModel',
+            x: 3,
+            y: 0.5,
+            connects: [
+              'Model',
+              'TunedModel',
+            ],
+          },
+        ],
+        outputs: [],
+      },
     ],
   },
   {
     name: 'Stage',
     key: 'Stage',
     components: [
-      {
-        name: 'LogisticRegressionStage',
-        code: 'LogisticRegressionStage',
-        type: 'Stage',
-        inputs: [
-          {
-            id: 'i1',
-            label: 'data/model',
-            hint: 'data/model',
-            x: 3,
-            y: 0.5,
-            connects: [
-              'Model',
-              'Dataset',
-            ],
-          },
-        ],
-        outputs: [
-          {
-            id: 'o1',
-            label: 'model',
-            hint: 'Model',
-            x: 1,
-            y: 0.5,
-            type: 'Model',
-          },
-        ],
-      },
       {
         name: 'TokenizerStage',
         code: 'TokenizerStage',
@@ -352,8 +400,92 @@ const componentList = [
         ],
       },
       {
+        name: 'LinearRegressionStage',
+        code: 'LinearRegressionStage',
+        type: 'Stage',
+        inputs: [
+          {
+            id: 'i1',
+            label: 'data/model',
+            hint: 'data/model',
+            x: 3,
+            y: 0.5,
+            connects: [
+              'Model',
+              'Dataset',
+            ],
+          },
+        ],
+        outputs: [
+          {
+            id: 'o1',
+            label: 'model',
+            hint: 'Model',
+            x: 1,
+            y: 0.5,
+            type: 'Model',
+          },
+        ],
+      },
+      {
         name: 'HashingTFStage',
         code: 'HashingTFStage',
+        type: 'Stage',
+        inputs: [
+          {
+            id: 'i1',
+            label: 'data/model',
+            hint: 'data/model',
+            x: 3,
+            y: 0.5,
+            connects: [
+              'Model',
+              'Dataset',
+            ],
+          },
+        ],
+        outputs: [
+          {
+            id: 'o1',
+            label: 'model',
+            hint: 'Model',
+            x: 1,
+            y: 0.5,
+            type: 'Model',
+          },
+        ],
+      },
+      {
+        name: 'KMeansStage',
+        code: 'KMeansStage',
+        type: 'Stage',
+        inputs: [
+          {
+            id: 'i1',
+            label: 'data/model',
+            hint: 'data/model',
+            x: 3,
+            y: 0.5,
+            connects: [
+              'Model',
+              'Dataset',
+            ],
+          },
+        ],
+        outputs: [
+          {
+            id: 'o1',
+            label: 'model',
+            hint: 'Model',
+            x: 1,
+            y: 0.5,
+            type: 'Model',
+          },
+        ],
+      },
+      {
+        name: 'LogisticRegressionStage',
+        code: 'LogisticRegressionStage',
         type: 'Stage',
         inputs: [
           {
@@ -444,7 +576,24 @@ const componentList = [
   {
     name: 'ModelSource',
     key: 'ModelSource',
-    components: [],
+    components: [
+      {
+        name: 'FileModelSource',
+        code: 'FileModelSource',
+        type: 'ModelSource',
+        inputs: [],
+        outputs: [
+          {
+            id: 'o1',
+            label: 'model',
+            hint: 'Model',
+            x: 1,
+            y: 0.5,
+            type: 'Model',
+          },
+        ],
+      },
+    ],
   },
   {
     name: 'DataSource',

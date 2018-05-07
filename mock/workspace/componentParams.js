@@ -30,6 +30,430 @@ const allComponents = {
     },
   },
 
+  FileDataSink: {
+    title: 'FileDataSinkConf',
+    type: 'object',
+    properties: {
+      relativePath: {
+        title: 'Fixed_Remote_Path',
+        type: 'object',
+        properties: {
+          value: {
+            type: 'string',
+          },
+        },
+        description: '相对路径',
+      },
+    },
+  },
+  LogisticRegressionStage: {
+    title: 'LogisticRegressionStageConf',
+    type: 'object',
+    properties: {
+      maxIter: {
+        title: 'Tunable_Int',
+        type: 'object',
+        properties: {
+          tunableType: {
+            type: 'string',
+            enum: [
+              'FIXED',
+              'GRID',
+              'RANGE',
+            ],
+            description: '调节类型',
+          },
+          tunableValue: {
+            type: 'array',
+            items: {
+              type: 'integer',
+            },
+            description: '可调值',
+          },
+          value: {
+            type: 'integer',
+            description: '固定值',
+          },
+        },
+        description: '最大迭代次数',
+      },
+      regParam: {
+        title: 'Tunable_Double',
+        type: 'object',
+        properties: {
+          tunableType: {
+            type: 'string',
+            enum: [
+              'FIXED',
+              'GRID',
+              'RANGE',
+            ],
+            description: '调节类型',
+          },
+          tunableValue: {
+            type: 'array',
+            items: {
+              type: 'number',
+            },
+            description: '可调值',
+          },
+          value: {
+            type: 'number',
+            description: '固定值',
+          },
+        },
+        description: '迭代参数',
+      },
+    },
+  },
+  JdbcDataSource: {
+    title: 'JdbcDataSourceConf',
+    type: 'object',
+    properties: {
+      dbtable: {
+        title: 'Fixed_String',
+        type: 'object',
+        properties: {
+          value: {
+            type: 'string',
+          },
+        },
+        description: '表名',
+      },
+      driver: {
+        type: 'string',
+        enum: [
+          'com.mysql.cj.jdbc.Driver',
+        ],
+        description: '驱动',
+      },
+      password: {
+        title: 'Fixed_Password',
+        type: 'object',
+        properties: {
+          PASSWORD: {
+            type: 'string',
+          },
+          SALT: {
+            type: 'string',
+          },
+          encrypted: {
+            type: 'boolean',
+          },
+          value: {
+            type: 'string',
+          },
+        },
+        description: '密码',
+      },
+      query: {
+        required: false,
+        title: 'Fixed_String',
+        type: 'object',
+        properties: {
+          value: {
+            type: 'string',
+          },
+        },
+        description: '查询',
+      },
+      url: {
+        title: 'Fixed_String',
+        type: 'object',
+        properties: {
+          value: {
+            type: 'string',
+          },
+        },
+        description: 'jdbc url',
+      },
+      user: {
+        title: 'Fixed_String',
+        type: 'object',
+        properties: {
+          value: {
+            type: 'string',
+          },
+        },
+        description: '用户名',
+      },
+    },
+  },
+  ParquetDataSink: {
+    title: 'ParquetDataSinkConf',
+    type: 'object',
+    properties: {
+      relativePath: {
+        title: 'Fixed_Remote_Path',
+        type: 'object',
+        properties: {
+          value: {
+            type: 'string',
+          },
+        },
+        description: '相对路径',
+      },
+    },
+  },
+  SelectTransformer: {
+    title: 'SelectTransformerConf',
+    type: 'object',
+    properties: {
+      cols: {
+        title: 'Fixed_String_Array',
+        type: 'object',
+        properties: {
+          value: {
+            type: 'array',
+            items: {
+              type: 'string',
+            },
+          },
+        },
+        description: '选择列',
+      },
+    },
+  },
+  TrainValidationSplitTuner: {
+    title: 'TrainValidationSplitTunerConf',
+    type: 'object',
+    properties: {
+      modelType: {
+        type: 'string',
+        enum: [
+          'BinaryClassification',
+          'MulticlassClassification',
+          'Regression',
+          'Clustering',
+        ],
+        description: '模型类型',
+      },
+      trainRatio: {
+        title: 'Fixed_Double',
+        type: 'object',
+        properties: {
+          value: {
+            type: 'number',
+          },
+        },
+        description: '测试集比例',
+      },
+    },
+  },
+  HiveDataSink: {
+    title: 'HiveDataSinkConf',
+    type: 'object',
+    properties: {},
+  },
+  FileDataSource: {
+    title: 'FileDataSourceConf',
+    type: 'object',
+    properties: {
+      sourceConf: {
+        title: 'File_Source_Conf',
+        type: 'object',
+        properties: {
+          definedSchema: {
+            title: 'Switch_Schema',
+            type: 'object',
+            properties: {
+              on: {
+                type: 'boolean',
+              },
+              schema: {
+                type: 'array',
+                items: {
+                  title: 'StructFieldMapping',
+                  type: 'object',
+                  properties: {
+                    name: {
+                      type: 'string',
+                    },
+                    nullable: {
+                      type: 'boolean',
+                    },
+                    type: {
+                      type: 'string',
+                    },
+                  },
+                },
+              },
+            },
+            description: '是否指定表格Schema',
+          },
+          format: {
+            title: 'Fixed_String',
+            type: 'object',
+            properties: {
+              value: {
+                type: 'string',
+              },
+            },
+            description: '文件格式',
+          },
+          header: {
+            title: 'Fixed_Boolean',
+            type: 'object',
+            properties: {
+              value: {
+                type: 'boolean',
+              },
+            },
+            description: '文件是否包含Header',
+          },
+          path: {
+            title: 'Read_File_Path',
+            type: 'object',
+            properties: {
+              value: {
+                type: 'string',
+              },
+            },
+            description: '文件路径',
+          },
+        },
+      },
+    },
+  },
+  HashingTFStage: {
+    title: 'HashingTFStageConf',
+    type: 'object',
+    properties: {
+      inputCol: {
+        title: 'Fixed_String',
+        type: 'object',
+        properties: {
+          value: {
+            type: 'string',
+          },
+        },
+        description: '输入列',
+      },
+      numFeatures: {
+        title: 'Tunable_Int',
+        type: 'object',
+        properties: {
+          tunableType: {
+            type: 'string',
+            enum: [
+              'FIXED',
+              'GRID',
+              'RANGE',
+            ],
+            description: '调节类型',
+          },
+          tunableValue: {
+            type: 'array',
+            items: {
+              type: 'integer',
+            },
+            description: '可调值',
+          },
+          value: {
+            type: 'integer',
+            description: '固定值',
+          },
+        },
+        description: '特征数目',
+      },
+      outputCol: {
+        title: 'Fixed_String',
+        type: 'object',
+        properties: {
+          value: {
+            type: 'string',
+          },
+        },
+        description: '输出列',
+      },
+    },
+  },
+  CrossValidationTuner: {
+    title: 'CrossValidationTunerConf',
+    type: 'object',
+    properties: {
+      modelType: {
+        type: 'string',
+        enum: [
+          'BinaryClassification',
+          'MulticlassClassification',
+          'Regression',
+          'Clustering',
+        ],
+        description: '模型类型',
+      },
+      numFolds: {
+        title: 'Fixed_Int',
+        type: 'object',
+        properties: {
+          value: {
+            type: 'integer',
+          },
+        },
+        description: '折叠数',
+      },
+    },
+  },
+  FileModelSink: {
+    title: 'ConsoleModelSinkConf',
+    type: 'object',
+    properties: {},
+  },
+  KMeansStage: {
+    title: 'KMeansStageConf',
+    type: 'object',
+    properties: {
+      featuresCol: {
+        required: false,
+        title: 'Fixed_Column',
+        type: 'object',
+        properties: {
+          value: {
+            type: 'string',
+          },
+        },
+        description: '特征列',
+      },
+      k: {
+        title: 'Tunable_Int',
+        type: 'object',
+        properties: {
+          tunableType: {
+            type: 'string',
+            enum: [
+              'FIXED',
+              'GRID',
+              'RANGE',
+            ],
+            description: '调节类型',
+          },
+          tunableValue: {
+            type: 'array',
+            items: {
+              type: 'integer',
+            },
+            description: '可调值',
+          },
+          value: {
+            type: 'integer',
+            description: '固定值',
+          },
+        },
+        description: 'K取值',
+      },
+      predictionCol: {
+        required: false,
+        title: 'Fixed_Column',
+        type: 'object',
+        properties: {
+          value: {
+            type: 'string',
+          },
+        },
+        description: '预测列',
+      },
+    },
+  },
   JsonDataSource: {
     title: 'JsonDataSourceConf',
     type: 'object',
@@ -122,8 +546,8 @@ const allComponents = {
     type: 'object',
     properties: {},
   },
-  LogisticRegressionStage: {
-    title: 'LogisticRegressionStageConf',
+  LinearRegressionStage: {
+    title: 'LinearRegressionStageConf',
     type: 'object',
     properties: {
       maxIter: {
@@ -140,7 +564,6 @@ const allComponents = {
             description: '调节类型',
           },
           tunableValue: {
-            required: false,
             type: 'array',
             items: {
               type: 'integer',
@@ -148,7 +571,6 @@ const allComponents = {
             description: '可调值',
           },
           value: {
-            required: false,
             type: 'integer',
             description: '固定值',
           },
@@ -169,7 +591,6 @@ const allComponents = {
             description: '调节类型',
           },
           tunableValue: {
-            required: false,
             type: 'array',
             items: {
               type: 'number',
@@ -177,12 +598,11 @@ const allComponents = {
             description: '可调值',
           },
           value: {
-            required: false,
             type: 'number',
             description: '固定值',
           },
         },
-        description: '迭代参数',
+        description: '正则化参数',
       },
     },
   },
@@ -190,62 +610,6 @@ const allComponents = {
     title: 'ConsoleDataSinkConf',
     type: 'object',
     properties: {},
-  },
-  JdbcDataSource: {
-    title: 'JdbcDataSourceConf',
-    type: 'object',
-    properties: {
-      dbtable: {
-        title: 'Fixed_String',
-        type: 'object',
-        properties: {
-          value: {
-            type: 'string',
-          },
-        },
-        description: '表名',
-      },
-      driver: {
-        title: 'Fixed_String',
-        type: 'object',
-        properties: {
-          value: {
-            type: 'string',
-          },
-        },
-        description: '驱动',
-      },
-      password: {
-        title: 'Fixed_String',
-        type: 'object',
-        properties: {
-          value: {
-            type: 'string',
-          },
-        },
-        description: '密码',
-      },
-      url: {
-        title: 'Fixed_String',
-        type: 'object',
-        properties: {
-          value: {
-            type: 'string',
-          },
-        },
-        description: 'jdbc url',
-      },
-      user: {
-        title: 'Fixed_String',
-        type: 'object',
-        properties: {
-          value: {
-            type: 'string',
-          },
-        },
-        description: '用户名',
-      },
-    },
   },
   AddLiteralColumnTransformer: {
     title: 'AllLiteralColumnTransformerConf',
@@ -294,59 +658,26 @@ const allComponents = {
       },
     },
   },
-  SelectTransformer: {
-    title: 'SelectTransformerConf',
-    type: 'object',
-    properties: {
-      cols: {
-        title: 'Fixed_String_Array',
-        type: 'object',
-        properties: {
-          value: {
-            type: 'array',
-            items: {
-              type: 'string',
-            },
-          },
-        },
-        description: '选择列',
-      },
-    },
-  },
   ConsoleModelSink: {
     title: 'ConsoleModelSinkConf',
     type: 'object',
     properties: {},
   },
-  TrainValidationSplitTuner: {
-    title: 'TrainValidationSplitTunerConf',
-    type: 'object',
-    properties: {
-      modelType: {
-        type: 'string',
-        enum: [
-          'BinaryClassification',
-          'MulticlassClassification',
-          'Regression',
-        ],
-        description: '模型类型',
-      },
-      trainRatio: {
-        title: 'Fixed_Double',
-        type: 'object',
-        properties: {
-          value: {
-            type: 'number',
-          },
-        },
-        description: '测试集比例',
-      },
-    },
-  },
   MetricsPredictor: {
     title: 'MetricsPredictorConf',
     type: 'object',
     properties: {
+      featuresCol: {
+        required: false,
+        title: 'Fixed_Column',
+        type: 'object',
+        properties: {
+          value: {
+            type: 'string',
+          },
+        },
+        description: '特征列',
+      },
       labelColumn: {
         required: false,
         title: 'Fixed_Column',
@@ -364,8 +695,36 @@ const allComponents = {
           'BinaryClassification',
           'MulticlassClassification',
           'Regression',
+          'Clustering',
         ],
         description: '模型类型',
+      },
+      predictionCol: {
+        required: false,
+        title: 'Fixed_Column',
+        type: 'object',
+        properties: {
+          value: {
+            type: 'string',
+          },
+        },
+        description: '预测列',
+      },
+    },
+  },
+  FileModelSource: {
+    title: 'FileModelSourceConf',
+    type: 'object',
+    properties: {
+      relativePath: {
+        title: 'Fixed_Model_Path',
+        type: 'object',
+        properties: {
+          value: {
+            type: 'string',
+          },
+        },
+        description: '模型位置',
       },
     },
   },
@@ -397,153 +756,6 @@ const allComponents = {
           },
         },
         description: '新列名',
-      },
-    },
-  },
-  FileDataSource: {
-    title: 'FileDataSourceConf',
-    type: 'object',
-    properties: {
-      definedSchema: {
-        title: 'Switch_Schema',
-        type: 'object',
-        properties: {
-          on: {
-            type: 'boolean',
-          },
-          schema: {
-            required: false,
-            type: 'array',
-            items: {
-              title: 'StructFieldMapping',
-              type: 'object',
-              properties: {
-                name: {
-                  type: 'string',
-                },
-                nullable: {
-                  type: 'boolean',
-                },
-                type: {
-                  type: 'string',
-                },
-              },
-            },
-          },
-        },
-        description: '是否指定表格Schema',
-      },
-      format: {
-        title: 'Fixed_String',
-        type: 'object',
-        properties: {
-          value: {
-            type: 'string',
-          },
-        },
-        description: '文件格式',
-      },
-      header: {
-        required: false,
-        title: 'Fixed_Boolean',
-        type: 'object',
-        properties: {
-          value: {
-            type: 'boolean',
-          },
-        },
-        description: '文件是否包含Header',
-      },
-      path: {
-        title: 'Read_File_Path',
-        type: 'object',
-        properties: {
-          value: {
-            type: 'string',
-            url: '/api/file/getFileLists',
-          },
-        },
-        description: '文件路径',
-      },
-    },
-  },
-  HashingTFStage: {
-    title: 'HashingTFStageConf',
-    type: 'object',
-    properties: {
-      inputCol: {
-        title: 'Fixed_String',
-        type: 'object',
-        properties: {
-          value: {
-            type: 'string',
-          },
-        },
-        description: '输入列',
-      },
-      numFeatures: {
-        title: 'Tunable_Int',
-        type: 'object',
-        properties: {
-          tunableType: {
-            type: 'string',
-            enum: [
-              'FIXED',
-              'GRID',
-              'RANGE',
-            ],
-            description: '调节类型',
-          },
-          tunableValue: {
-            required: false,
-            type: 'array',
-            items: {
-              type: 'integer',
-            },
-            description: '可调值',
-          },
-          value: {
-            required: false,
-            type: 'integer',
-            description: '固定值',
-          },
-        },
-        description: '特征数目',
-      },
-      outputCol: {
-        title: 'Fixed_String',
-        type: 'object',
-        properties: {
-          value: {
-            type: 'string',
-          },
-        },
-        description: '输出列',
-      },
-    },
-  },
-  CrossValidationTuner: {
-    title: 'CrossValidationTunerConf',
-    type: 'object',
-    properties: {
-      modelType: {
-        type: 'string',
-        enum: [
-          'BinaryClassification',
-          'MulticlassClassification',
-          'Regression',
-        ],
-        description: '模型类型',
-      },
-      numFolds: {
-        title: 'Fixed_Int',
-        type: 'object',
-        properties: {
-          value: {
-            type: 'integer',
-          },
-        },
-        description: '折叠数',
       },
     },
   },

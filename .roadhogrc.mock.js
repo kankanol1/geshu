@@ -23,6 +23,7 @@ import {recentGraph,saveGraph,getGraph,deleteGraph,getDataSources,getDataSourceC
 import { getFileList } from './mock/file';
 import { getServingModels, offlineServingModels, onlineServingModels } from './mock/servingmodel';
 import { getQueryResult, getLastestDatabasesForProject } from './mock/dataquery';
+import { fetchSchema } from './mock/workspace/components';
 // import { createDatabase, updateDatabase } from './src/services/databaseAPI';
 // import { deleteDatabase } from './mock/database';
 
@@ -165,6 +166,8 @@ const proxy = serverEnabled ?
   // data query.
   'POST /api/data/hive/querytmp': getQueryResult,
   'POST /api/data/hive/query': getQueryResult,
+
+  'POST /api/component/fetchschema': fetchSchema,
 
 
   // a sample test for component settings.

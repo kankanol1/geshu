@@ -95,6 +95,30 @@ class NodeLayer extends React.PureComponent {
            }}
             className={styles.nodeDiv}
           >
+            <div
+              style={{
+              width: '20px',
+              height: '20px',
+              background: 'red',
+              position: 'absolute',
+              cursor: 'pointer',
+            }}
+            >!
+            </div>
+
+            <div
+              style={{
+              width: '20px',
+              height: '20px',
+              background: 'grey',
+              position: 'absolute',
+              right: '0',
+              top: '0',
+              cursor: 'pointer',
+            }}
+              onClick={(e) => { e.stopPropagation(); e.preventDefault(); }}
+            >i
+            </div>
             <i className={`${icon} x-icon`} />
             {name}
           </div>

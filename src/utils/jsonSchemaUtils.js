@@ -10,6 +10,7 @@ const registeredSpecialUISchemas = {
   Read_File_Path: translateReadFilePathUISchema,
   Database_Path: translateDatabasePathUISchema,
   Fixed_Any: translateFixedAnyUISchema,
+  File_Source_Conf: translateFileSourceConfUISchema,
 };
 
 /* fixed any */
@@ -50,6 +51,10 @@ function translateReadFilePathUISchema(originJsonSchema, id, code, name) {
 
 function translateDatabasePathUISchema(originJsonSchema, id, code, name) {
   return { 'ui:field': 'database_selector', 'ui:options': '/api/dataSelect/all' };
+}
+
+function translateFileSourceConfUISchema(originJsonSchema, id, code, name) {
+  return { 'ui:field': 'file_source_conf' };
 }
 
 /** ======== end translate switch schema ========== */
@@ -126,7 +131,12 @@ export function extractUISchema(originJsonSchema, id, code, name) {
     const translateFunc = registeredSpecialUISchemas[value.title];
     if (translateFunc !== undefined) {
       // translate.
-      uiSchema[key] = translateFunc(value, id, code, name);
+      if (uiSchema[key] === undefined) {
+        uiSchema[key] = translateFunc(value, id, code, name);
+      } else {
+        const obj = translateFunc(value, id, code, name);
+        uiSchema[key] = { ...uiSchema[key], ...obj };
+      }
     }
   }
   return uiSchema;

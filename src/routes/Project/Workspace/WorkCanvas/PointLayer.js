@@ -87,13 +87,14 @@ class PointLayer extends React.PureComponent {
             width: `${r * 2}px`,
             height: `${r * 2}px`,
             transform: `translate(${offsetX}px, ${y - r}px)`,
-            lineHeight: `${r}px`,
+            lineHeight: `${(r * 2) - 6}px`,
+            fontSize: `${r}px`,
           }}
               className={styles.pointDiv}
               onMouseEnter={e => this.handleMouseEnter(e, point.id)}
               onMouseLeave={e => this.handleMouseLeave(e, point.id)}
             >
-              {point.label && (point.label.length > 0) ? point.label.charAt(1) : ''}
+              {point.label && (point.label.length > 0) ? point.label.charAt(0).toUpperCase() : ''}
             </div>
           </DraggableCore>
         </React.Fragment>

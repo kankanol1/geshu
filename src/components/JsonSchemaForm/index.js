@@ -13,6 +13,7 @@ import FileSelectorWidget from './Widgets/FileSelectorWidget';
 import ObjectFieldTemplate from './Templates/ObjectFieldTemplate';
 import AnyValueWidget from './Widgets/AnyValueWidget';
 import DatabaseSelectorWidget from './Widgets/DatabaseSelectorWidget';
+import FileSourceConfWidget from './Widgets/Composite/FileSourceConfWidget';
 
 const ButtonGroup = Button.Group;
 
@@ -27,6 +28,7 @@ const registeredFields = {
   file_selector: FileSelectorWidget,
   any_value: AnyValueWidget,
   database_selector: DatabaseSelectorWidget,
+  file_source_conf: FileSourceConfWidget,
 };
 
 const CustomFieldTemplate = (props) => {
