@@ -491,7 +491,7 @@ const allComponents = {
     type: 'object',
     properties: {
       inputCol: {
-        title: 'Fixed_String',
+        title: 'Input_Column',
         type: 'object',
         properties: {
           value: {

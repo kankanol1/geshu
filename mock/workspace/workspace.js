@@ -116,6 +116,32 @@ export function validate(req, res, u, q) {
   }, 2000);
 }
 
+let schema = {};
+
+export function generateSchema(components) {
+  schema = {};
+  components.forEach(
+    (item) => {
+      if (item.name.indexOf('文件读取') > -1) {
+        schema[item.id] = {
+          default: [
+            {
+              name: 'key',
+              type: '"string"',
+              nullable: false,
+            },
+            {
+              name: 'value',
+              type: '"string"',
+              nullable: true,
+            },
+          ],
+        };
+      }
+    }
+  );
+}
+
 export function save(req, res, u, b) {
   let url = u;
   if (!url || Object.prototype.toString.call(url) !== '[object String]') {
@@ -125,6 +151,9 @@ export function save(req, res, u, b) {
 
   const body = (b && b.body) || req.body;
 
+  const { components } = body;
+  generateSchema(components);
+
   // eslint-disable-next-line
   console.log('save: project id', req.params.projectId);
   // console.log('saved', body);
@@ -133,6 +162,7 @@ export function save(req, res, u, b) {
   const result = {
     success: true,
     message: '保存成功',
+    schema,
   };
 
   if (res && res.json) {

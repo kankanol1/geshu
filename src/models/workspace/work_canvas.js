@@ -152,6 +152,7 @@ export default {
       x: 0,
       y: 0,
     },
+    schema: undefined,
   },
 
   reducers: {
@@ -686,7 +687,11 @@ export default {
         }
       );
       // apply.
-      return Object.assign({}, { ...state, selection: newSelection });
+      return { ...state, selection: newSelection };
+    },
+
+    saveSchema(state, { payload: { schema } }) {
+      return { ...state, schema };
     },
   },
 
@@ -745,6 +750,12 @@ export default {
       );
       if (response.success) {
         message.info('保存成功');
+        yield put({
+          type: 'saveSchema',
+          payload: {
+            schema: response.schema,
+          },
+        });
         yield put({
           type: 'saveState',
           payload: {

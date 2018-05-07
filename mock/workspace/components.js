@@ -18,7 +18,12 @@ export function fetchSchema(req, res, u, b) {
     message: '错了',
     data: [
       {
-        name: 'test',
+        name: 'key',
+        type: '"string"',
+        nullable: false,
+      },
+      {
+        name: 'value',
         type: '"string"',
         nullable: true,
       },

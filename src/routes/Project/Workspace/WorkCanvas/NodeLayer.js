@@ -96,26 +96,12 @@ class NodeLayer extends React.PureComponent {
             className={styles.nodeDiv}
           >
             <div
-              style={{
-              width: '20px',
-              height: '20px',
-              background: 'red',
-              position: 'absolute',
-              cursor: 'pointer',
-            }}
+              className={styles.errorTip}
             >!
             </div>
 
             <div
-              style={{
-              width: '20px',
-              height: '20px',
-              background: 'grey',
-              position: 'absolute',
-              right: '0',
-              top: '0',
-              cursor: 'pointer',
-            }}
+              className={styles.infoTip}
               onClick={(e) => { e.stopPropagation(); e.preventDefault(); }}
             >i
             </div>

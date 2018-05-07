@@ -133,7 +133,13 @@ export default {
       const response = yield call(saveComponentSettings,
         { id: projectId, component: componentId, payload: formData });
       if (response.success) {
-        message.info(response.message);
+        // message.info(response.message);
+        yield put({
+          type: 'work_canvas/saveComponents',
+          payload: {
+            id: projectId,
+          },
+        });
       } else {
         message.error(response.message);
       }

@@ -14,6 +14,7 @@ import ObjectFieldTemplate from './Templates/ObjectFieldTemplate';
 import AnyValueWidget from './Widgets/AnyValueWidget';
 import DatabaseSelectorWidget from './Widgets/DatabaseSelectorWidget';
 import FileSourceConfWidget from './Widgets/Composite/FileSourceConfWidget';
+import InputColumnWidget from './Widgets/InputColumnWidget';
 
 const ButtonGroup = Button.Group;
 
@@ -29,6 +30,7 @@ const registeredFields = {
   any_value: AnyValueWidget,
   database_selector: DatabaseSelectorWidget,
   file_source_conf: FileSourceConfWidget,
+  input_column: InputColumnWidget,
 };
 
 const CustomFieldTemplate = (props) => {

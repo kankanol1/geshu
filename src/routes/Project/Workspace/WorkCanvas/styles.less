@@ -1,3 +1,32 @@
+@breath-start: 0.7;
+@breath-end: 1;
+
+/* stylelint-disable */
+@-webkit-keyframes breath {
+  0%    {opacity: @breath-start;}
+  60%   {opacity:   @breath-end;}
+  100%  {opacity: @breath-start;}
+}
+
+@-o-keyframes breath {
+  0%    {opacity: @breath-start;}
+  60%   {opacity:   @breath-end;}
+  100%  {opacity: @breath-start;}
+}
+
+@-moz-keyframes breath {
+  0%    {opacity: @breath-start;}
+  60%   {opacity:   @breath-end;}
+  100%  {opacity: @breath-start;}
+}
+
+@keyframes breath {
+  0%    {opacity: @breath-start;}
+  60%   {opacity:   @breath-end;}
+  100%  {opacity: @breath-start;}
+}
+/* stylelint-enable */
+
 .selectionDiv {
   position: absolute;
   top: 0;
@@ -16,9 +45,7 @@
   border-radius: 10px;
   line-height: 2em;
   //  transition: width 0.2s, height 0.2s;
-  :hover {
-    cursor: pointer;
-  }
+  cursor: pointer;
 }
 
 .nodeDiv {
@@ -29,8 +56,30 @@
   color: #fff;
   border-radius: 10px;
   box-shadow: 6px 6px 3px #acacacaa;
+  cursor: move;
+}
 
-  :hover {
-    cursor: move;
-  }
+.nodeTip {
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  cursor: pointer;
+}
+
+.errorTip {
+  .nodeTip;
+  border-radius: 10px 0 0 0;
+  background-color: #fb2626;
+  -webkit-animation: breath 3s;
+  animation: breath 3s;
+  -webkit-animation-iteration-count: infinite;
+  animation-iteration-count: infinite;
+}
+
+.infoTip {
+  .nodeTip;
+  border-radius: 0 10px 0 0;
+  background: #999;
+  right: 0;
+  top: 0;
 }

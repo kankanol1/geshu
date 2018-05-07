@@ -1,4 +1,5 @@
 /** utils to translate json schema. */
+import FuncUtils from './workspace/ComponentWidgetFunctions';
 
 // stores schema titls => translate function.
 const registeredSpecialJsonSchemas = {
@@ -11,6 +12,7 @@ const registeredSpecialUISchemas = {
   Database_Path: translateDatabasePathUISchema,
   Fixed_Any: translateFixedAnyUISchema,
   File_Source_Conf: translateFileSourceConfUISchema,
+  Input_Column: translateInputColumnUISchema,
 };
 
 /* fixed any */
@@ -55,6 +57,12 @@ function translateDatabasePathUISchema(originJsonSchema, id, code, name) {
 
 function translateFileSourceConfUISchema(originJsonSchema, id, code, name) {
   return { 'ui:field': 'file_source_conf', 'ui:options': { url: '/api/component/schema/prefetch' } };
+}
+
+function translateInputColumnUISchema(originJsonSchema, id, code, name) {
+  return { 'ui:field': 'input_column',
+    'ui:options': { getField: () => FuncUtils.getAllColumnsFromUpstream(),
+    } };
 }
 
 /** ======== end translate switch schema ========== */
