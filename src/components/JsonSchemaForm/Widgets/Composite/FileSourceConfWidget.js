@@ -91,8 +91,11 @@ export default class FileSourceConfWidget extends React.PureComponent {
         {this.renderSchema('format')}
         {this.renderSchema('path')}
         {this.renderSchema('header')}
-        {loading ? <Spin /> : null}
-        {renderSchema ? this.renderSchema('definedSchema') : null}
+        {
+          loading ?
+            <div className={styles.spin} ><Spin /></div> :
+          (renderSchema ? this.renderSchema('definedSchema') : null)
+        }
       </div>
     );
   }
