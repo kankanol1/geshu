@@ -1,7 +1,7 @@
 /** generate form using json schema */
 
 import React from 'react';
-import { Row, Col, Input, Button, Icon } from 'antd';
+import { Row, Col, Input, Button, Icon, Card } from 'antd';
 import Form from 'react-jsonschema-form';
 import JsonPath from 'jsonpath';
 import styles from './index.less';
@@ -120,6 +120,23 @@ const replaceLastPathTo = (pathSelector, lastPath) => {
   return pathArr.join('.');
 };
 
+const ErrorListTemplate = (props) => {
+  const { errors } = props;
+  return (
+    <Card type="inner" title="配置项错误" style={{ background: 'transparent' }}>
+      <ul className="list-group">
+        {errors.map((error, i) => {
+        return (
+          <li key={i} className="list-group-item text-danger">
+            {error.stack}
+          </li>
+        );
+      })}
+      </ul>
+    </Card>
+  );
+};
+
 export default class JsonSchemaForm extends React.PureComponent {
   constructor(props) {
     super(props);
@@ -155,6 +172,7 @@ export default class JsonSchemaForm extends React.PureComponent {
         noHtml5Validate
         // disable error list display.
         showErrorList
+        ErrorList={ErrorListTemplate}
         safeRenderCompletion
       >
         {this.props.children}
