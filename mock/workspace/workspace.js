@@ -124,7 +124,7 @@ export function generateSchema(components) {
     (item) => {
       if (item.name.indexOf('文件读取') > -1) {
         schema[item.id] = {
-          default: [
+          o1: [
             {
               name: 'key',
               type: '"string"',

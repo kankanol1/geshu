@@ -61,7 +61,7 @@ function translateFileSourceConfUISchema(originJsonSchema, id, code, name) {
 
 function translateInputColumnUISchema(originJsonSchema, id, code, name) {
   return { 'ui:field': 'input_column',
-    'ui:options': { getField: () => FuncUtils.getAllColumnsFromUpstream(),
+    'ui:options': { getField: () => FuncUtils.getAllColumnsFromUpstream(id),
     } };
 }
 
