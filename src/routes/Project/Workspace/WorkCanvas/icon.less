@@ -4,215 +4,415 @@
 
   .icon-common {
     background-repeat: no-repeat;
-    background-size: contain;
     display: block;
     margin: auto;
+    // original size : 1200 * 400
+    background-image: url("@{basePath}/component_icons.png");
   }
 
   .x-icon {
-    width: 85px;
-    height: 80px;
+    @width: 86;
+    @height: 86;
+    width: @height*1px;
+    height: @width*1px;
     .icon-common;
     margin: 6px auto;
+    background-size: 1200%;
+
+    &.icon-csv-source {
+      background-position: @width*-1px @height*-3px;
+    }
+
+    &.icon-classifier-boost-tree {
+      background-position: @width*-3px @height*-1px;
+    }
+
+    &.icon-classifier-cv {
+      background-position: @width*-6px @height*-1px;
+    }
+
+    &.icon-classifier-decision-tree {
+      background-position: 0 @height*-1px;
+    }
+
+    &.icon-classifier-hashingtf {
+      background-position: @width*-4px @height*-1px;
+    }
+
+    &.icon-classifier-logistic-regression {
+      background-position: @width*-7px @height*-1px;
+    }
+
+    &.icon-classifier-model-metrics {
+      background-position: @width*-8px @height*-1px;
+    }
+
+    &.icon-classifier-naive-bayes {
+      background-position: @width*-9px @height*-1px;
+    }
+
+    &.icon-classifier-nn {
+      background-position: @width*-10px @height*-1px;
+    }
+
+    &.icon-classifier-random-forest {
+      background-position: @width*-1px @height*-1px;
+    }
+
+    &.icon-classifier-svm {
+      background-position: @width*-11px @height*-1px;
+    }
+
+    &.icon-classifier-word-split {
+      background-position: @width*-5px @height*-1px;
+    }
+
+    &.icon-classifier-xg-boost {
+      background-position: @width*-2px @height*-1px;
+    }
+
+    &.icon-clustering-bisecting-means {
+      background-position: @width*-10px @height*-2px;
+    }
+
+    &.icon-clustering-kmeans {
+      background-position: @width*-11px @height*-2px;
+    }
+
+    &.icon-datasink-avro {
+      background-position: 0 @height*-3px;
+    }
+
+    &.icon-datasink-csv {
+      background-position: @width*-1px @height*-3px;
+    }
+
+    &.icon-datasink-db {
+      background-position: @width*-3px @height*-3px;
+    }
+
+    &.icon-datasink-parquet {
+      background-position: @width*-2px @height*-3px;
+    }
+
+    &.icon-datasource-avro {
+      background-position: @width*-4px @height*-3px;
+    }
+
+    &.icon-datasource-csv {
+      background-position: @width*-5px @height*-3px;
+    }
+
+    &.icon-datasource-db {
+      background-position: @width*-7px @height*-3px;
+    }
+
+    &.icon-datasource-parquet {
+      background-position: @width*-6px @height*-3px;
+    }
+
+    &.icon-model-default {
+      background-position: @width*-10px @height*-3px;
+    }
+
+    &.icon-prediction-common {
+      background-position: @width*-3px @height*-8px;
+    }
+
+    &.icon-preparation-add-column {
+      background-position: @width*-9px 0;
+    }
+
+    &.icon-preparation-add-null {
+      background-position: @width*-2px 0;
+    }
+
+    &.icon-preparation-filter {
+      background-position: @width*-4px 0;
+    }
+
+    &.icon-preparation-fn {
+      background-position: @width*-6px;
+    }
+
+    &.icon-preparation-join {
+      background-position: 0 0;
+    }
+
+    &.icon-preparation-random-split {
+      background-position: @width*-7px 0;
+    }
+
+    &.icon-preparation-rename {
+      background-position: @width*-10px 0;
+    }
+
+    &.icon-preparation-select {
+      background-position: @width*-8px 0;
+    }
+
+    &.icon-preparation-split-column {
+      background-position: @width*-3px 0;
+    }
+
+    &.icon-preparation-transform {
+      background-position: @width*-11px 0;
+    }
+
+    &.icon-preparation-union {
+      background-position: @width*-1px 0;
+    }
+
+    &.icon-preparation-unique {
+      background-position: @width*-5px 0;
+    }
+
+    &.icon-regression-boost-tree {
+      background-position: @width*-3px @height*-2px;
+    }
+
+    &.icon-regression-cv {
+      background-position: @width*-4px @height*-2px;
+    }
+
+    &.icon-regression-decision-tree {
+      background-position: 0 @height*-2px;
+    }
+
+    &.icon-regression-linear-regression {
+      background-position: @width*-8px @height*-2px;
+    }
+
+    &.icon-regression-model-metrics {
+      background-position: @width*-5px @height*-2px;
+    }
+
+    &.icon-regression-naive-bayes {
+      background-position: @width*-6px @height*-2px;
+    }
+
+    &.icon-regression-nn {
+      background-position: @width*-7px @height*-2px;
+    }
+
+    &.icon-regression-random-forest {
+      background-position: @width*-1px @height*-2px;
+    }
+
+    &.icon-regression-svm {
+      background-position: @width*-9px @height*-2px;
+    }
+
+    &.icon-regression-xg-boost {
+      background-position: @width*-2px @height*-2px;
+    }
+
+    &.icon-tuning-cv {
+      background-position: @width*-9px @height*-3px;
+    }
   }
 
   .x-icon-small {
-    width: 58px;
-    height: 53px;
+    @width: 52;
+    @height: 52;
+    width: @width*1px;
+    height: @height*1px;
     padding: 4px 0;
     margin: 5px auto;
     .icon-common;
-  }
+    background-size: 1200%;
+    background-image: url("@{basePath}/component_icons.png");
 
-  .icon-csv-source {
-    background-image: url("@{basePath}/datasource/csv.png");
-  }
+    &.icon-csv-source {
+      background-position: @width*-1px @height*-3px;
+    }
 
-  .icon-classifier-boost-tree {
-    background-image: url("@{basePath}/classifier/BoostTree.png");
-  }
+    &.icon-classifier-boost-tree {
+      background-position: @width*-3px @height*-1px;
+    }
 
-  .icon-classifier-cv {
-    background-image: url("@{basePath}/classifier/crossvalidation.png");
-  }
+    &.icon-classifier-cv {
+      background-position: @width*-6px @height*-1px;
+    }
 
-  .icon-classifier-decision-tree {
-    background-image: url("@{basePath}/classifier/decisiontree.png");
-  }
+    &.icon-classifier-decision-tree {
+      background-position: 0 @height*-1px;
+    }
 
-  .icon-classifier-hashingtf {
-    background-image: url("@{basePath}/classifier/HashingTF.png");
-  }
+    &.icon-classifier-hashingtf {
+      background-position: @width*-4px @height*-1px;
+    }
 
-  .icon-classifier-logistic-regression {
-    background-image: url("@{basePath}/classifier/logisticregression.png");
-  }
+    &.icon-classifier-logistic-regression {
+      background-position: @width*-7px @height*-1px;
+    }
 
-  .icon-classifier-model-metrics {
-    background-image: url("@{basePath}/classifier/modelmetrics.png");
-  }
+    &.icon-classifier-model-metrics {
+      background-position: @width*-8px @height*-1px;
+    }
 
-  .icon-classifier-naive-bayes {
-    background-image: url("@{basePath}/classifier/naivebayes.png");
-  }
+    &.icon-classifier-naive-bayes {
+      background-position: @width*-9px @height*-1px;
+    }
 
-  .icon-classifier-nn {
-    background-image: url("@{basePath}/classifier/nn.png");
-  }
+    &.icon-classifier-nn {
+      background-position: @width*-10px @height*-1px;
+    }
 
-  .icon-classifier-random-forest {
-    background-image: url("@{basePath}/classifier/randomforest.png");
-  }
+    &.icon-classifier-random-forest {
+      background-position: @width*-1px @height*-1px;
+    }
 
-  .icon-classifier-svm {
-    background-image: url("@{basePath}/classifier/svm.png");
-  }
+    &.icon-classifier-svm {
+      background-position: @width*-11px @height*-1px;
+    }
 
-  .icon-classifier-word-split {
-    background-image: url("@{basePath}/classifier/wordsplit.png");
-  }
+    &.icon-classifier-word-split {
+      background-position: @width*-5px @height*-1px;
+    }
 
-  .icon-classifier-xg-boost {
-    background-image: url("@{basePath}/classifier/xgboost.png");
-  }
+    &.icon-classifier-xg-boost {
+      background-position: @width*-2px @height*-1px;
+    }
 
-  .icon-clustering-bisecting-means {
-    background-image: url("@{basePath}/clustering/bisectingmeans.png");
-  }
+    &.icon-clustering-bisecting-means {
+      background-position: @width*-10px @height*-2px;
+    }
 
-  .icon-clustering-kmeans {
-    background-image: url("@{basePath}/clustering/kmeans.png");
-  }
+    &.icon-clustering-kmeans {
+      background-position: @width*-11px @height*-2px;
+    }
 
-  .icon-datasink-avro {
-    background-image: url("@{basePath}/datasink/avro.png");
-  }
+    &.icon-datasink-avro {
+      background-position: 0 @height*-3px;
+    }
 
-  .icon-datasink-csv {
-    background-image: url("@{basePath}/datasink/csv.png");
-  }
+    &.icon-datasink-csv {
+      background-position: @width*-1px @height*-3px;
+    }
 
-  .icon-datasink-db {
-    background-image: url("@{basePath}/datasink/db.png");
-  }
+    &.icon-datasink-db {
+      background-position: @width*-3px @height*-3px;
+    }
 
-  .icon-datasink-parquet {
-    background-image: url("@{basePath}/datasink/parquet.png");
-  }
+    &.icon-datasink-parquet {
+      background-position: @width*-2px @height*-3px;
+    }
 
-  .icon-datasource-avro {
-    background-image: url("@{basePath}/datasource/avro.png");
-  }
+    &.icon-datasource-avro {
+      background-position: @width*-4px @height*-3px;
+    }
 
-  .icon-datasource-csv {
-    background-image: url("@{basePath}/datasource/csv.png");
-  }
+    &.icon-datasource-csv {
+      background-position: @width*-5px @height*-3px;
+    }
 
-  .icon-datasource-db {
-    background-image: url("@{basePath}/datasource/db.png");
-  }
+    &.icon-datasource-db {
+      background-position: @width*-7px @height*-3px;
+    }
 
-  .icon-datasource-parquet {
-    background-image: url("@{basePath}/datasource/parquet.png");
-  }
+    &.icon-datasource-parquet {
+      background-position: @width*-6px @height*-3px;
+    }
 
-  .icon-model-default {
-    background-image: url("@{basePath}/model/default.png");
-  }
+    &.icon-model-default {
+      background-position: @width*-10px @height*-3px;
+    }
 
-  .icon-prediction-common {
-    background-image: url("@{basePath}/prediction/common.png");
-  }
+    &.icon-prediction-common {
+      background-position: @width*-3px @height*-8px;
+    }
 
-  .icon-preparation-add-column {
-    background-image: url("@{basePath}/preparation/addcolumn.png");
-  }
+    &.icon-preparation-add-column {
+      background-position: @width*-9px 0;
+    }
 
-  .icon-preparation-add-null {
-    background-image: url("@{basePath}/preparation/addnull.png");
-  }
+    &.icon-preparation-add-null {
+      background-position: @width*-2px 0;
+    }
 
-  .icon-preparation-filter {
-    background-image: url("@{basePath}/preparation/filter.png");
-  }
+    &.icon-preparation-filter {
+      background-position: @width*-4px 0;
+    }
 
-  .icon-preparation-fn {
-    background-image: url("@{basePath}/preparation/fn.png");
-  }
+    &.icon-preparation-fn {
+      background-position: @width*-6px;
+    }
 
-  .icon-preparation-join {
-    background-image: url("@{basePath}/preparation/Join.png");
-  }
+    &.icon-preparation-join {
+      background-position: 0 0;
+    }
 
-  .icon-preparation-random-split {
-    background-image: url("@{basePath}/preparation/randomsplit.png");
-  }
+    &.icon-preparation-random-split {
+      background-position: @width*-7px 0;
+    }
 
-  .icon-preparation-rename {
-    background-image: url("@{basePath}/preparation/rename.png");
-  }
+    &.icon-preparation-rename {
+      background-position: @width*-10px 0;
+    }
 
-  .icon-preparation-select {
-    background-image: url("@{basePath}/preparation/select.png");
-  }
+    &.icon-preparation-select {
+      background-position: @width*-8px 0;
+    }
 
-  .icon-preparation-split-column {
-    background-image: url("@{basePath}/preparation/splitcolumn.png");
-  }
+    &.icon-preparation-split-column {
+      background-position: @width*-3px 0;
+    }
 
-  .icon-preparation-transform {
-    background-image: url("@{basePath}/preparation/transform.png");
-  }
+    &.icon-preparation-transform {
+      background-position: @width*-11px 0;
+    }
 
-  .icon-preparation-union {
-    background-image: url("@{basePath}/preparation/Union.png");
-  }
+    &.icon-preparation-union {
+      background-position: @width*-1px 0;
+    }
 
-  .icon-preparation-unique {
-    background-image: url("@{basePath}/preparation/unique.png");
-  }
+    &.icon-preparation-unique {
+      background-position: @width*-5px 0;
+    }
 
-  .icon-regression-boost-tree {
-    background-image: url("@{basePath}/regression/BoostTree.png");
-  }
+    &.icon-regression-boost-tree {
+      background-position: @width*-3px @height*-2px;
+    }
 
-  .icon-regression-cv {
-    background-image: url("@{basePath}/regression/crossvalidation.png");
-  }
+    &.icon-regression-cv {
+      background-position: @width*-4px @height*-2px;
+    }
 
-  .icon-regression-decision-tree {
-    background-image: url("@{basePath}/regression/decisiontree.png");
-  }
+    &.icon-regression-decision-tree {
+      background-position: 0 @height*-2px;
+    }
 
-  .icon-regression-linear-regression {
-    background-image: url("@{basePath}/regression/linearregression.png");
-  }
+    &.icon-regression-linear-regression {
+      background-position: @width*-8px @height*-2px;
+    }
 
-  .icon-regression-model-metrics {
-    background-image: url("@{basePath}/regression/modelmetrics.png");
-  }
+    &.icon-regression-model-metrics {
+      background-position: @width*-5px @height*-2px;
+    }
 
-  .icon-regression-naive-bayes {
-    background-image: url("@{basePath}/regression/naivebayes.png");
-  }
+    &.icon-regression-naive-bayes {
+      background-position: @width*-6px @height*-2px;
+    }
 
-  .icon-regression-nn {
-    background-image: url("@{basePath}/regression/nn.png");
-  }
+    &.icon-regression-nn {
+      background-position: @width*-7px @height*-2px;
+    }
 
-  .icon-regression-random-forest {
-    background-image: url("@{basePath}/regression/randomforest.png");
-  }
+    &.icon-regression-random-forest {
+      background-position: @width*-1px @height*-2px;
+    }
 
-  .icon-regression-svm {
-    background-image: url("@{basePath}/regression/svm.png");
-  }
+    &.icon-regression-svm {
+      background-position: @width*-9px @height*-2px;
+    }
 
-  .icon-regression-xg-boost {
-    background-image: url("@{basePath}/regression/xgboost.png");
-  }
+    &.icon-regression-xg-boost {
+      background-position: @width*-2px @height*-2px;
+    }
 
-  .icon-tuning-cv {
-    background-image: url("@{basePath}/tuning/crossvalidation.png");
+    &.icon-tuning-cv {
+      background-position: @width*-9px @height*-3px;
+    }
   }
 }

@@ -29,7 +29,6 @@ const allComponents = {
       },
     },
   },
-
   FileDataSink: {
     title: 'FileDataSinkConf',
     type: 'object',
@@ -195,6 +194,25 @@ const allComponents = {
       },
     },
   },
+  DropDuplicatesTransformer: {
+    title: 'DropDuplicatesTransformerConf',
+    type: 'object',
+    properties: {
+      columns: {
+        title: 'Fixed_Column_Array',
+        type: 'object',
+        properties: {
+          value: {
+            type: 'array',
+            items: {
+              type: 'string',
+            },
+          },
+        },
+        description: '去重列',
+      },
+    },
+  },
   SelectTransformer: {
     title: 'SelectTransformerConf',
     type: 'object',
@@ -237,6 +255,45 @@ const allComponents = {
           },
         },
         description: '测试集比例',
+      },
+    },
+  },
+  ColumnSplitTransformer: {
+    title: 'ColumnSplitTransformerConf',
+    type: 'object',
+    properties: {
+      pattern: {
+        title: 'Fixed_String',
+        type: 'object',
+        properties: {
+          value: {
+            type: 'string',
+          },
+        },
+        description: '拆分模式',
+      },
+      sourceColumn: {
+        title: 'Fixed_Column',
+        type: 'object',
+        properties: {
+          value: {
+            type: 'string',
+          },
+        },
+        description: '拆分列',
+      },
+      targetColumns: {
+        title: 'Fixed_String_Array',
+        type: 'object',
+        properties: {
+          value: {
+            type: 'array',
+            items: {
+              type: 'string',
+            },
+          },
+        },
+        description: '目标列',
       },
     },
   },
@@ -454,22 +511,6 @@ const allComponents = {
       },
     },
   },
-  JsonDataSource: {
-    title: 'JsonDataSourceConf',
-    type: 'object',
-    properties: {
-      path: {
-        title: 'Read_File_Path',
-        type: 'object',
-        properties: {
-          value: {
-            type: 'string',
-          },
-        },
-        description: '文件路径',
-      },
-    },
-  },
   ParquetDataSource: {
     title: 'ParquetDataSourceConf',
     type: 'object',
@@ -486,34 +527,24 @@ const allComponents = {
       },
     },
   },
-  TokenizerStage: {
-    title: 'TokenizerStageConf',
+  JsonDataSource: {
+    title: 'JsonDataSourceConf',
     type: 'object',
     properties: {
-      inputCol: {
-        title: 'Input_Column',
+      path: {
+        title: 'Read_File_Path',
         type: 'object',
         properties: {
           value: {
             type: 'string',
           },
         },
-        description: '输入列',
-      },
-      outputCol: {
-        title: 'Fixed_String',
-        type: 'object',
-        properties: {
-          value: {
-            type: 'string',
-          },
-        },
-        description: '输出列',
+        description: '文件路径',
       },
     },
   },
-  ColumnFilterTransformer: {
-    title: 'ColumnFilterTransformerConf',
+  ColumnValueInTransformer: {
+    title: 'ColumnValueInTransformerConf',
     type: 'object',
     properties: {
       columnName: {
@@ -538,6 +569,48 @@ const allComponents = {
           },
         },
         description: '过滤值',
+      },
+    },
+  },
+  TokenizerStage: {
+    title: 'TokenizerStageConf',
+    type: 'object',
+    properties: {
+      inputCol: {
+        title: 'Fixed_String',
+        type: 'object',
+        properties: {
+          value: {
+            type: 'string',
+          },
+        },
+        description: '输入列',
+      },
+      outputCol: {
+        title: 'Fixed_String',
+        type: 'object',
+        properties: {
+          value: {
+            type: 'string',
+          },
+        },
+        description: '输出列',
+      },
+    },
+  },
+  ColumnFilterTransformer: {
+    title: 'ColumnFilterTransformerConf',
+    type: 'object',
+    properties: {
+      conditionExpr: {
+        title: 'Fixed_String',
+        type: 'object',
+        properties: {
+          value: {
+            type: 'string',
+          },
+        },
+        description: '条件表达式',
       },
     },
   },
@@ -662,6 +735,38 @@ const allComponents = {
     title: 'ConsoleModelSinkConf',
     type: 'object',
     properties: {},
+  },
+  DecisionTreeClassifierPStage: {
+    title: 'DecisionTreeClassifierPStageConf',
+    type: 'object',
+    properties: {},
+  },
+  AvroDataSource: {
+    title: 'AvroDataSourceConf',
+    type: 'object',
+    properties: {
+      path: {
+        title: 'Read_File_Path',
+        type: 'object',
+        properties: {
+          value: {
+            type: 'string',
+          },
+        },
+        description: '文件路径',
+      },
+      schemaPath: {
+        required: false,
+        title: 'Read_File_Path',
+        type: 'object',
+        properties: {
+          value: {
+            type: 'string',
+          },
+        },
+        description: 'Schema路径',
+      },
+    },
   },
   MetricsPredictor: {
     title: 'MetricsPredictorConf',

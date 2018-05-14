@@ -111,8 +111,8 @@ const componentList = [
         inputs: [
           {
             id: 'i1',
-            label: 'dataset',
-            hint: 'dataset',
+            label: 'data',
+            hint: 'data',
             x: 3,
             y: 0.5,
             connects: [
@@ -123,7 +123,7 @@ const componentList = [
         outputs: [
           {
             id: 'o1',
-            label: 'dataset',
+            label: 'data',
             hint: 'Dataset',
             x: 1,
             y: 0.5,
@@ -138,8 +138,8 @@ const componentList = [
         inputs: [
           {
             id: 'i1',
-            label: 'dataset',
-            hint: 'dataset',
+            label: 'data',
+            hint: 'data',
             x: 3,
             y: 0.5,
             connects: [
@@ -150,7 +150,34 @@ const componentList = [
         outputs: [
           {
             id: 'o1',
-            label: 'dataset',
+            label: 'data',
+            hint: 'Dataset',
+            x: 1,
+            y: 0.5,
+            type: 'Dataset',
+          },
+        ],
+      },
+      {
+        name: 'ColumnSplitTransformer',
+        code: 'ColumnSplitTransformer',
+        type: 'Transformer',
+        inputs: [
+          {
+            id: 'i1',
+            label: 'data',
+            hint: 'data',
+            x: 3,
+            y: 0.5,
+            connects: [
+              'Dataset',
+            ],
+          },
+        ],
+        outputs: [
+          {
+            id: 'o1',
+            label: 'data',
             hint: 'Dataset',
             x: 1,
             y: 0.5,
@@ -165,8 +192,8 @@ const componentList = [
         inputs: [
           {
             id: 'i1',
-            label: 'dataset',
-            hint: 'dataset',
+            label: 'data',
+            hint: 'data',
             x: 3,
             y: 0.5,
             connects: [
@@ -177,7 +204,34 @@ const componentList = [
         outputs: [
           {
             id: 'o1',
-            label: 'dataset',
+            label: 'data',
+            hint: 'Dataset',
+            x: 1,
+            y: 0.5,
+            type: 'Dataset',
+          },
+        ],
+      },
+      {
+        name: 'ColumnValueInTransformer',
+        code: 'ColumnValueInTransformer',
+        type: 'Transformer',
+        inputs: [
+          {
+            id: 'i1',
+            label: 'data',
+            hint: 'data',
+            x: 3,
+            y: 0.5,
+            connects: [
+              'Dataset',
+            ],
+          },
+        ],
+        outputs: [
+          {
+            id: 'o1',
+            label: 'data',
             hint: 'Dataset',
             x: 1,
             y: 0.5,
@@ -192,8 +246,8 @@ const componentList = [
         inputs: [
           {
             id: 'i1',
-            label: 'dataset',
-            hint: 'dataset',
+            label: 'data',
+            hint: 'data',
             x: 3,
             y: 0.5,
             connects: [
@@ -204,7 +258,7 @@ const componentList = [
         outputs: [
           {
             id: 'o1',
-            label: 'dataset',
+            label: 'data',
             hint: 'Dataset',
             x: 1,
             y: 0.5,
@@ -219,8 +273,8 @@ const componentList = [
         inputs: [
           {
             id: 'i1',
-            label: 'dataset',
-            hint: 'dataset',
+            label: 'data',
+            hint: 'data',
             x: 3,
             y: 0.5,
             connects: [
@@ -231,7 +285,34 @@ const componentList = [
         outputs: [
           {
             id: 'o1',
-            label: 'dataset',
+            label: 'data',
+            hint: 'Dataset',
+            x: 1,
+            y: 0.5,
+            type: 'Dataset',
+          },
+        ],
+      },
+      {
+        name: 'DropDuplicatesTransformer',
+        code: 'DropDuplicatesTransformer',
+        type: 'Transformer',
+        inputs: [
+          {
+            id: 'i1',
+            label: 'data',
+            hint: 'data',
+            x: 3,
+            y: 0.5,
+            connects: [
+              'Dataset',
+            ],
+          },
+        ],
+        outputs: [
+          {
+            id: 'o1',
+            label: 'data',
             hint: 'Dataset',
             x: 1,
             y: 0.5,
@@ -252,8 +333,8 @@ const componentList = [
         inputs: [
           {
             id: 'i1',
-            label: 'model/tunedModel',
-            hint: 'model/tunedModel',
+            label: 'model',
+            hint: 'model',
             x: 3,
             y: 0.3333333333333333,
             connects: [
@@ -290,8 +371,8 @@ const componentList = [
         inputs: [
           {
             id: 'i1',
-            label: 'model/tunedModel',
-            hint: 'model/tunedModel',
+            label: 'model',
+            hint: 'model',
             x: 3,
             y: 0.3333333333333333,
             connects: [
@@ -324,6 +405,11 @@ const componentList = [
     ],
   },
   {
+    name: 'PStage',
+    key: 'PStage',
+    components: [],
+  },
+  {
     name: 'ModelSink',
     key: 'ModelSink',
     components: [
@@ -334,8 +420,8 @@ const componentList = [
         inputs: [
           {
             id: 'i1',
-            label: 'model/tunedModel',
-            hint: 'model/tunedModel',
+            label: 'model',
+            hint: 'model',
             x: 3,
             y: 0.5,
             connects: [
@@ -353,8 +439,8 @@ const componentList = [
         inputs: [
           {
             id: 'i1',
-            label: 'model/tunedModel',
-            hint: 'model/tunedModel',
+            label: 'model',
+            hint: 'model',
             x: 3,
             y: 0.5,
             connects: [
@@ -372,14 +458,51 @@ const componentList = [
     key: 'Stage',
     components: [
       {
+        name: 'DecisionTreeClassifierPStage',
+        code: 'DecisionTreeClassifierPStage',
+        type: 'PStage',
+        inputs: [
+          {
+            id: 'i1',
+            label: 'trainSet',
+            hint: 'trainSet',
+            x: 3,
+            y: 0.3333333333333333,
+            connects: [
+              'Dataset',
+            ],
+          },
+          {
+            id: 'i2',
+            label: 'fullSet',
+            hint: 'fullSet',
+            x: 3,
+            y: 0.6666666666666666,
+            connects: [
+              'Dataset',
+            ],
+          },
+        ],
+        outputs: [
+          {
+            id: 'o1',
+            label: 'model',
+            hint: 'Model',
+            x: 1,
+            y: 0.5,
+            type: 'Model',
+          },
+        ],
+      },
+      {
         name: 'TokenizerStage',
         code: 'TokenizerStage',
         type: 'Stage',
         inputs: [
           {
             id: 'i1',
-            label: 'data/model',
-            hint: 'data/model',
+            label: 'all',
+            hint: 'all',
             x: 3,
             y: 0.5,
             connects: [
@@ -406,8 +529,8 @@ const componentList = [
         inputs: [
           {
             id: 'i1',
-            label: 'data/model',
-            hint: 'data/model',
+            label: 'all',
+            hint: 'all',
             x: 3,
             y: 0.5,
             connects: [
@@ -434,8 +557,8 @@ const componentList = [
         inputs: [
           {
             id: 'i1',
-            label: 'data/model',
-            hint: 'data/model',
+            label: 'all',
+            hint: 'all',
             x: 3,
             y: 0.5,
             connects: [
@@ -462,8 +585,8 @@ const componentList = [
         inputs: [
           {
             id: 'i1',
-            label: 'data/model',
-            hint: 'data/model',
+            label: 'all',
+            hint: 'all',
             x: 3,
             y: 0.5,
             connects: [
@@ -490,8 +613,8 @@ const componentList = [
         inputs: [
           {
             id: 'i1',
-            label: 'data/model',
-            hint: 'data/model',
+            label: 'all',
+            hint: 'all',
             x: 3,
             y: 0.5,
             connects: [
@@ -536,7 +659,7 @@ const componentList = [
         outputs: [
           {
             id: 'o1',
-            label: 'tunedModel',
+            label: 'Model',
             hint: 'TunedModel',
             x: 1,
             y: 0.5,
@@ -563,7 +686,7 @@ const componentList = [
         outputs: [
           {
             id: 'o1',
-            label: 'tunedModel',
+            label: 'Model',
             hint: 'TunedModel',
             x: 1,
             y: 0.5,
@@ -607,39 +730,7 @@ const componentList = [
         outputs: [
           {
             id: 'o1',
-            label: 'dataset',
-            hint: 'Dataset',
-            x: 1,
-            y: 0.5,
-            type: 'Dataset',
-          },
-        ],
-      },
-      {
-        name: 'JsonDataSource',
-        code: 'JsonDataSource',
-        type: 'DataSource',
-        inputs: [],
-        outputs: [
-          {
-            id: 'o1',
-            label: 'dataset',
-            hint: 'Dataset',
-            x: 1,
-            y: 0.5,
-            type: 'Dataset',
-          },
-        ],
-      },
-      {
-        name: 'JdbcDataSource',
-        code: 'JdbcDataSource',
-        type: 'DataSource',
-        inputs: [],
-        outputs: [
-          {
-            id: 'o1',
-            label: 'dataset',
+            label: 'data',
             hint: 'Dataset',
             x: 1,
             y: 0.5,
@@ -655,7 +746,55 @@ const componentList = [
         outputs: [
           {
             id: 'o1',
-            label: 'dataset',
+            label: 'data',
+            hint: 'Dataset',
+            x: 1,
+            y: 0.5,
+            type: 'Dataset',
+          },
+        ],
+      },
+      {
+        name: 'JsonDataSource',
+        code: 'JsonDataSource',
+        type: 'DataSource',
+        inputs: [],
+        outputs: [
+          {
+            id: 'o1',
+            label: 'data',
+            hint: 'Dataset',
+            x: 1,
+            y: 0.5,
+            type: 'Dataset',
+          },
+        ],
+      },
+      {
+        name: 'JdbcDataSource',
+        code: 'JdbcDataSource',
+        type: 'DataSource',
+        inputs: [],
+        outputs: [
+          {
+            id: 'o1',
+            label: 'data',
+            hint: 'Dataset',
+            x: 1,
+            y: 0.5,
+            type: 'Dataset',
+          },
+        ],
+      },
+      {
+        name: 'AvroDataSource',
+        code: 'AvroDataSource',
+        type: 'DataSource',
+        inputs: [],
+        outputs: [
+          {
+            id: 'o1',
+            label: 'data',
             hint: 'Dataset',
             x: 1,
             y: 0.5,
