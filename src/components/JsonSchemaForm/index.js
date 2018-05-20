@@ -117,7 +117,7 @@ const ArrayFieldTemplate = (props) => {
 const replaceLastPathTo = (pathSelector, lastPath) => {
   const pathArr = pathSelector.split('.');
   pathArr[pathArr.length - 1] = lastPath;
-  return pathArr.join('.');
+  return pathArr.join('..');
 };
 
 const ErrorListTemplate = (props) => {
@@ -147,12 +147,13 @@ export default class JsonSchemaForm extends React.PureComponent {
     const schema = this.props.jsonSchema;
     const transformedErrors = errors.map((e) => {
       if (e.name === 'required') {
-        const title = JsonPath.query(schema, `$.${replaceLastPathTo(e.property, 'title')}`);
-        const description = JsonPath.query(schema, `$.${replaceLastPathTo(e.property, 'description')}`);
+        const title = JsonPath.query(schema, `$${replaceLastPathTo(e.property, 'title')}`);
+        const description = JsonPath.query(schema, `$${replaceLastPathTo(e.property, 'description')}`);
         return { ...e, stack: `"${description.length === 0 ? title[0] : description[0]}" 为必填项`, message: '必填' };
       } else return e;
     });
     return transformedErrors;
+    // return errors;
   }
 
   render() {

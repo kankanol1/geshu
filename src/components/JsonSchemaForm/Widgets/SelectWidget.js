@@ -95,7 +95,7 @@ class SelectWidget extends React.PureComponent {
     const { selected } = this.state;
     return (
       <Row>
-        <Col span={8}><legend> {description} </legend></Col>
+        <Col span={8}><legend> {description} {required ? '*' : null} </legend></Col>
         <Col span={16}>
           <Select
             id={id}

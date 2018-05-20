@@ -1,7 +1,7 @@
 
 
 import React from 'react';
-import { Modal, Button } from 'antd';
+import { Modal, Button, Row, Col } from 'antd';
 import SelectWidget from './SelectWidget';
 
 export default class InputColumnWidget extends React.PureComponent {
@@ -28,7 +28,16 @@ export default class InputColumnWidget extends React.PureComponent {
         />
       );
     } else {
-      return <p style={{ color: 'red' }}>{error.message}</p>;
+      const { required } = this.props;
+      const { description } = this.props.schema;
+      return (
+        <Row>
+          <Col span={8}><legend> {description} {required ? '*' : null}</legend></Col>
+          <Col span={16}>
+            <p style={{ color: 'red' }}>{error.message}</p>
+          </Col>
+        </Row>
+      );
     }
   }
 }

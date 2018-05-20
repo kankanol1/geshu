@@ -42,6 +42,7 @@ export default class FileSourceConfWidget extends React.PureComponent {
   }
 
   fetchSchema() {
+    const { name } = this.props;
     const { url } = this.props.uiSchema['ui:options'];
     this.setState({
       loading: true,

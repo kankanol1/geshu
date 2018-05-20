@@ -89,6 +89,7 @@ class PointLayer extends React.PureComponent {
             transform: `translate(${offsetX}px, ${y - r}px)`,
             lineHeight: `${(r * 2) - 6}px`,
             fontSize: `${r}px`,
+            background: 'white',
           }}
               className={styles.pointDiv}
               onMouseEnter={e => this.handleMouseEnter(e, point.id)}

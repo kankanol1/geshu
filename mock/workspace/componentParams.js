@@ -577,7 +577,7 @@ const allComponents = {
     type: 'object',
     properties: {
       inputCol: {
-        title: 'Fixed_String',
+        title: 'Input_Column',
         type: 'object',
         properties: {
           value: {
@@ -587,7 +587,7 @@ const allComponents = {
         description: '输入列',
       },
       outputCol: {
-        title: 'Fixed_String',
+        title: 'Output_Column',
         type: 'object',
         properties: {
           value: {
