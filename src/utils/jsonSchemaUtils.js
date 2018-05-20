@@ -13,6 +13,8 @@ const registeredSpecialUISchemas = {
   Fixed_Any: translateFixedAnyUISchema,
   File_Source_Conf: translateFileSourceConfUISchema,
   Input_Column: translateInputColumnUISchema,
+  Fixed_Double: translateFixedDoubleUISchema,
+  Fixed_Int: translateFixedIntUISchema,
 };
 
 /* fixed any */
@@ -63,6 +65,14 @@ function translateInputColumnUISchema(originJsonSchema, id, code, name) {
   return { 'ui:field': 'input_column',
     'ui:options': { getField: () => FuncUtils.getAllColumnsFromUpstream(id),
     } };
+}
+
+function translateFixedDoubleUISchema(originJsonSchema, id, code, name) {
+  return { 'ui:field': 'number_input', 'ui:options': { min: 0, max: undefined, step: 0.001 } };
+}
+
+function translateFixedIntUISchema(originJsonSchema, id, code, name) {
+  return { 'ui:field': 'number_input', 'ui:options': { min: 0, max: undefined, step: 1 } };
 }
 
 /** ======== end translate switch schema ========== */
