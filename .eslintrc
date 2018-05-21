@@ -11,6 +11,7 @@
     "jasmine": true
   },
   "rules": {
+    "no-underscore-dangle": [0],
     "import/no-named-as-default": [0],
     "import/no-named-as-default-member": [0],
     "generator-star-spacing": [0],

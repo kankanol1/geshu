@@ -2,9 +2,9 @@
 
 import React from 'react';
 import { Row, Col, Input, Button, Icon, Card } from 'antd';
-import Form from 'react-jsonschema-form';
 import JsonPath from 'jsonpath';
 import styles from './index.less';
+import Form from './RefinedForm';
 import SampleWidget from './Widgets/SampleWidget';
 import SwitchSchemaWidget from './Widgets/SwitchSchemaWidget';
 import DefineSchemaWidget from './Widgets/DefineSchemaWidget';
