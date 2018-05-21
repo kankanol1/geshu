@@ -8,6 +8,7 @@ import { Row, Col, Input, Button, Affix, Icon, Switch } from 'antd';
 import { Scrollbars } from 'react-custom-scrollbars';
 
 import JsonSchemaForm from '../../../components/JsonSchemaForm';
+import validate from '../../../utils/workspace/formValidation';
 import styles from './ComponentSettingsForm.less';
 
 @connect(({ work_component_settings }) => ({
@@ -86,6 +87,8 @@ export default class ComponentSettingsForm extends React.PureComponent {
             uiSchema={uiSchema}
             onChange={v => this.handleFormChange(v)}
             onSubmit={v => this.handleFormSubmit(v)}
+            validate={(formData, errors) =>
+               validate(formData, errors, jsonSchema, uiSchema, currentComponent)}
           >
             <button ref={(btn) => { this.submitButton = btn; }} className={styles.hidden} />
           </JsonSchemaForm>

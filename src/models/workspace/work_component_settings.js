@@ -1,6 +1,6 @@
 import { message } from 'antd';
 import { fetchComponentSetting, saveComponentSettings } from '../../services/componentAPI';
-import { extractJsonSchema, extractUISchema, extractUISchemaForSample } from '../../utils/jsonSchemaUtils';
+import { extractJsonSchema, extractUISchema, extractUISchemaForSample } from '../../utils/workspace/jsonSchemaUtils';
 
 
 export default {

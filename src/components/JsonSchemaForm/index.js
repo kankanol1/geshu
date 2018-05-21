@@ -17,6 +17,7 @@ import FileSourceConfWidget from './Widgets/Composite/FileSourceConfWidget';
 import InputColumnWidget from './Widgets/InputColumnWidget';
 import NumberSliderWidget from './Widgets/NumberSliderWidget';
 import NumberInputWidget from './Widgets/NumberInputWidget';
+import TunableNumberWidget from './Widgets/Composite/TunableNumberWidget';
 
 const ButtonGroup = Button.Group;
 
@@ -35,6 +36,7 @@ const registeredFields = {
   input_column: InputColumnWidget,
   number_slider: NumberSliderWidget,
   number_input: NumberInputWidget,
+  tunable_int: TunableNumberWidget,
 };
 
 const CustomFieldTemplate = (props) => {

@@ -1,5 +1,5 @@
 /** utils to translate json schema. */
-import FuncUtils from './workspace/ComponentWidgetFunctions';
+import FuncUtils from './ComponentWidgetFunctions';
 
 // stores schema titls => translate function.
 const registeredSpecialJsonSchemas = {
@@ -15,6 +15,7 @@ const registeredSpecialUISchemas = {
   Input_Column: translateInputColumnUISchema,
   Fixed_Double: translateFixedDoubleUISchema,
   Fixed_Int: translateFixedIntUISchema,
+  Tunable_Int: translateTunableIntUISchema,
 };
 
 /* fixed any */
@@ -73,6 +74,10 @@ function translateFixedDoubleUISchema(originJsonSchema, id, code, name) {
 
 function translateFixedIntUISchema(originJsonSchema, id, code, name) {
   return { 'ui:field': 'number_input', 'ui:options': { min: 0, max: undefined, step: 1 } };
+}
+
+function translateTunableIntUISchema(originJsonSchema, id, code, name) {
+  return { 'ui:field': 'tunable_int' };
 }
 
 /** ======== end translate switch schema ========== */
