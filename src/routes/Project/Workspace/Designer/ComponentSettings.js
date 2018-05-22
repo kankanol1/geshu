@@ -1,9 +1,9 @@
 import React from 'react';
 import { connect } from 'dva';
 import { Layout, Collapse, Button, Icon, Spin } from 'antd';
-import BasicParamInput from '../../../components/Inputs/BasicParamInput';
+import BasicParamInput from '../../../../components/Inputs/BasicParamInput';
 import ComponentSettingsForm from './ComponentSettingsForm';
-import translateName from '../../../config/ComponentNameMapping';
+import translateName from '../../../../config/ComponentNameMapping';
 import styles from './WorkArea.less';
 
 const { Sider } = Layout;

@@ -5,8 +5,8 @@ import moment from 'moment';
 import { Link, routerRedux } from 'dva/router';
 import styles from './WorkspaceIndex.less';
 
-import CreateProjectForm from './CreateProjectForm';
-import OpenProjectForm from './OpenProjectForm';
+import CreateProjectForm from '../CreateProjectForm';
+import OpenProjectForm from '../OpenProjectForm';
 
 // const { Header } = Layout;it stat
 @connect(({ project, loading }) => ({

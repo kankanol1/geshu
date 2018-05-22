@@ -1,11 +1,10 @@
 import React from 'react';
-import Radium from 'radium';
-import DraggableWithPreview from '../../../components/DraggableWithPreview';
+import DraggableWithPreview from '../../../../components/DraggableWithPreview';
 import ComponentPreview from './ComponentPreview';
-import { fillDefaultSize } from '../../../utils/PositionCalculation';
+import { fillDefaultSize } from '../../../../utils/PositionCalculation';
 import styles from './TopSingleComponent.less';
-import { getIconNameForComponent } from './WorkCanvas/styles';
-import './WorkCanvas/icon.less';
+import { getIconNameForComponent } from '../WorkCanvas/styles';
+import '../WorkCanvas/icon.less';
 
 export default class TopSingleComponent extends React.PureComponent {
   render() {

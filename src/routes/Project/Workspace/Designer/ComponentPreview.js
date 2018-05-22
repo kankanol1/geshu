@@ -1,6 +1,6 @@
 import React from 'react';
-import NodeLayer from './WorkCanvas/NodeLayer';
-import PointLayer from './WorkCanvas/PointLayer';
+import NodeLayer from '../WorkCanvas/NodeLayer';
+import PointLayer from '../WorkCanvas/PointLayer';
 
 class ComponentPreview extends React.PureComponent {
   render() {

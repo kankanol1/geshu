@@ -1,9 +1,5 @@
 import React from 'react';
-// import { connect } from 'dva';
-import { routerRedux } from 'dva/router';
 import { Form, Input, Modal, Card, Icon, Button, Row, Col, Spin, Table, Select } from 'antd';
-import { buildTagSelect } from '../../utils/uiUtils';
-import styles from './WorkspaceDataView.less';
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -11,7 +7,7 @@ const { TextArea } = Input;
 /** the persist form. */
 
 const PersistTableForm = Form.create()((props) => {
-  const { handleModalVisible, persistSelectSql, form } = props;
+  const { handleModalVisible, form } = props;
   const { selectItem, dispatch, modalVisible } = props;
   const okHandle = (e) => {
     e.preventDefault();
@@ -23,7 +19,6 @@ const PersistTableForm = Form.create()((props) => {
         payload: formData,
       });
       handleModalVisible(false);
-      // persistSelectSql(fieldsValue);
     });
   };
 

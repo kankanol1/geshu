@@ -4,7 +4,7 @@ import { Layout, Collapse, Input, Spin, Tabs } from 'antd';
 import { Scrollbars } from 'react-custom-scrollbars';
 import SiderSingleComponent from './SiderSingleComponent';
 import TopSingleComponent from './TopSingleComponent';
-import FloatDrawerTrigger from '../../../components/FloatDrawerTrigger';
+import FloatDrawerTrigger from '../../../../components/FloatDrawerTrigger';
 import styles from './WorkArea.less';
 
 const { Sider } = Layout;

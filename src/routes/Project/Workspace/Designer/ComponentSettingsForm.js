@@ -7,8 +7,8 @@ import { connect } from 'dva';
 import { Row, Col, Input, Button, Affix, Icon, Switch } from 'antd';
 import { Scrollbars } from 'react-custom-scrollbars';
 
-import JsonSchemaForm from '../../../components/JsonSchemaForm';
-import validate from '../../../utils/workspace/formValidation';
+import JsonSchemaForm from '../../../../components/JsonSchemaForm';
+import validate from '../../../../utils/workspace/formValidation';
 import styles from './ComponentSettingsForm.less';
 
 @connect(({ work_component_settings }) => ({

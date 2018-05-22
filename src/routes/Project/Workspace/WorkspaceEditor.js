@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { Icon, Layout } from 'antd';
 import { connect } from 'dva';
-import WorkArea from './Workspace/WorkArea';
+import WorkArea from './Designer/WorkArea';
 import WorkspaceViewMenu from './WorkspaceViewMenu';
-import WorkspaceMenu from './Workspace/Menu/WorkspaceMenu';
+import WorkspaceMenu from './Menu/WorkspaceMenu';
 
 const { Header } = Layout;
 @connect(({ work_canvas, loading }, { history }) => ({

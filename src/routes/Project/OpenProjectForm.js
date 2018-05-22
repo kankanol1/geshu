@@ -3,7 +3,7 @@ import React from 'react';
 import { routerRedux } from 'dva/router';
 import { Form, Input, Modal, Card, Icon, Button, Row, Col, Spin, Table } from 'antd';
 import { buildTagSelect } from '../../utils/uiUtils';
-import styles from './WorkspaceIndex.less';
+import styles from './Workspace/WorkspaceIndex.less';
 
 const FormItem = Form.Item;
 

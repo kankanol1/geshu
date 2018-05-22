@@ -1,8 +1,8 @@
 import React from 'react';
 import Radium from 'radium';
-import DraggableWithPreview from '../../../components/DraggableWithPreview';
+import DraggableWithPreview from '../../../../components/DraggableWithPreview';
 import ComponentPreview from './ComponentPreview';
-import { fillDefaultSize } from '../../../utils/PositionCalculation';
+import { fillDefaultSize } from '../../../../utils/PositionCalculation';
 
 class SiderSingleComponent extends React.PureComponent {
   render() {
