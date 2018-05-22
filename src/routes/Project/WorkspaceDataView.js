@@ -6,7 +6,7 @@ import SqlQueryTable from '../../components/SqlQueryTable';
 import WorkspaceViewMenu from './WorkspaceViewMenu';
 import WorkspaceMenu from './Workspace/Menu/WorkspaceMenu';
 import FloatDrawerTrigger from '../../components/FloatDrawerTrigger';
-import PersistDataForm from './PersistDataForm';
+import PersistTableForm from './PersistDataForm';
 
 import styles from './WorkspaceDataView.less';
 
@@ -175,7 +175,7 @@ export default class WorkspaceDataView extends Component {
               </div>
             </Col>
           </Row>
-          <PersistDataForm
+          <PersistTableForm
             {...parentMethods}
             modalVisible={modalVisible}
           />

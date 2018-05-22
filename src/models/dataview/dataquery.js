@@ -97,7 +97,8 @@ export default {
         payload: response,
       });
     },
-    *persistQuery({ payload }, { call, put }) {
+
+    *persistTable({ payload }, { call, put }) {
       const response = yield call(persistDataQuery, payload);
       yield put({
         type: 'updateDatabases',

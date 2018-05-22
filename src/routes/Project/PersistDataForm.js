@@ -10,7 +10,7 @@ const { Option } = Select;
 const { TextArea } = Input;
 /** the persist form. */
 
-const PersistDataForm = Form.create()((props) => {
+const PersistTableForm = Form.create()((props) => {
   const { handleModalVisible, persistSelectSql, form } = props;
   const { selectItem, dispatch, modalVisible } = props;
   const okHandle = (e) => {
@@ -19,7 +19,7 @@ const PersistDataForm = Form.create()((props) => {
       if (err) return;
       const formData = { ...fieldsValue, projectId: selectItem.projectId, jobId: selectItem.jobId };
       dispatch({
-        type: 'dataquery/persistQuery',
+        type: 'dataquery/persistTable',
         payload: formData,
       });
       handleModalVisible(false);
@@ -29,7 +29,7 @@ const PersistDataForm = Form.create()((props) => {
 
   return (
     <Modal
-      title="打开项目"
+      title="持久化存储"
       visible={modalVisible}
       onOk={e => okHandle(e)}
       onCancel={() => { handleModalVisible(); }}
@@ -95,4 +95,4 @@ const PersistDataForm = Form.create()((props) => {
   );
 });
 
-export default PersistDataForm;
+export default PersistTableForm;
