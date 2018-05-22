@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'dva';
 import { Layout, Menu, Button, Input, Tabs, List, Table, Icon } from 'antd';
 import { Scrollbars } from 'react-custom-scrollbars';
-import SqlQueryTable from '../../../components/SqlQueryTable';
+import SqlQueryTable from '../../SqlQueryTable';
 import styles from '../DatabaseQuery.less';
 
 @connect(({ dataquery, loading }) => ({

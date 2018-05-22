@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'dva';
 import { Layout, Card, Input, Select, Row, Col, List, Icon, Spin, Tooltip } from 'antd';
 import { Scrollbars } from 'react-custom-scrollbars';
-import SqlQueryTable from '../../../components/SqlQueryTable';
+import SqlQueryTable from '../../SqlQueryTable';
 import WorkspaceViewMenu from './WorkspaceViewMenu';
 import WorkspaceMenu from './Menu/WorkspaceMenu';
 import FloatDrawerTrigger from '../../../components/FloatDrawerTrigger';

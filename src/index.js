@@ -8,6 +8,7 @@ import createHistory from 'history/createHashHistory';
 import createLoading from 'dva-loading';
 import 'moment/locale/zh-cn';
 import FastClick from 'fastclick';
+import { G2 } from 'bizcharts';
 
 import './index.less';
 // 1. Initialize
@@ -29,5 +30,7 @@ app.start('#root');
 
 
 FastClick.attach(document.body);
+
+G2.track(false);
 
 export default app._store;  // eslint-disable-line
