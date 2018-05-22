@@ -2,7 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { connect } from 'dva';
 import { Layout, Button, Spin } from 'antd';
-import { saveSvgAsPng } from 'save-svg-as-png';
 import SiderComponentList from './SiderComponentList';
 import WorkCanvas from '../WorkCanvas/WorkCanvas';
 import ComponentSettings from './ComponentSettings';

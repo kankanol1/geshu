@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Card, Button, Icon, Spin, Tooltip, Alert } from 'antd';
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
-import CodeMirror from 'react-codemirror';
+import { Controlled as CodeMirror } from 'react-codemirror2';
 import 'codemirror/mode/sql/sql';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/solarized.css';
@@ -41,7 +41,7 @@ export default class SqlQueryTable extends Component {
   }
 
   render() {
-    const { queryResult, loading, sql } = this.props;
+    const { queryResult, loading } = this.props;
 
 
     let displayTable = null;
@@ -68,14 +68,16 @@ export default class SqlQueryTable extends Component {
       <React.Fragment>
         <Card>
           <CodeMirror
-            value={sql}
+            value={this.state.query}
             options={{
-        lineNumbers: true,
-        mode: 'text/x-hive',
-        theme: 'solarized',
-        placeholder: '输入查询sql',
-      }}
-            onChange={newValue => this.setState({ query: newValue })}
+              lineNumbers: true,
+              mode: 'text/x-hive',
+              theme: 'solarized',
+              placeholder: '输入查询sql',
+            }}
+            onBeforeChange={(editor, data, value) => {
+              this.setState({ query: value });
+            }}
             className={styles.codemirror}
           />
           <div className={styles.buttonContainer}>
@@ -86,7 +88,13 @@ export default class SqlQueryTable extends Component {
             >
               <Icon type="play-circle" /> 查询
             </Button>
-            <Button type="danger" className={styles.button}>清空</Button>
+            <Button
+              type="danger"
+              className={styles.button}
+              onClick={() => this.setState({ query: '' })}
+              disabled={this.state.query === undefined || this.state.query === ''}
+            >清空
+            </Button>
           </div>
         </Card>
         <Card>
