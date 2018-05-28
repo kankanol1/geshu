@@ -1,45 +1,75 @@
 import React, { Component } from 'react';
-import { Row, Col, Card, Tabs, Button, Icon, Tooltip, Tag, Modal } from 'antd';
+import { Row, Col, Card, Tabs, Button, Icon, Tooltip, Tag, Modal, Form } from 'antd';
 import FullScreen from 'react-fullscreen';
 import DisplaySettingsForm from './Forms/DisplaySettingsForm';
 
 const ButtonGroup = Button.Group;
 const { TabPane } = Tabs;
 
-// const FormHolder = Form.create()();
+const ConnectedDisplaySettingsForm = Form.create()(DisplaySettingsForm);
 
 export default class ConfiguredChart extends Component {
   state={
-    // fullScreen: false,
+    fullScreen: false,
   }
 
+  getDisplaySettingsForm = () => { return ConnectedDisplaySettingsForm; }
+  getDataSettingsForm = () => { return undefined; }
+
   handleSubmit() {
+    const { dataForm, displayForm } = this;
     let displaySettings;
     let dataSettings;
-    this.dataForm.props.form.validateFields((err, values) => {
-      if (!err) {
-        dataSettings = values;
-      }
-    });
-    this.displayForm.props.form.validateFields((err, values) => {
-      if (!err) {
-        displaySettings = values;
-      }
-    });
+
+    if (dataForm === undefined) {
+      dataSettings = this.state.initialDataSettings;
+    } else {
+      dataForm.props.form.validateFields((err, values) => {
+        if (!err) {
+          dataSettings = values;
+        }
+      });
+    }
+
+    if (displayForm === undefined) {
+      displaySettings = this.state.initialDisplaySettings;
+    } else {
+      displayForm.props.form.validateFields((err, values) => {
+        if (!err) {
+          displaySettings = values;
+        }
+      });
+    }
+
     if (displaySettings && dataSettings) {
       this.updateSettings(displaySettings, dataSettings);
     }
   }
 
-  // toggleFullscreenChart() {
-  //   this.setState({ fullScreen: true });
-  // }
+  toggleFullscreenChart() {
+    this.setState({ fullScreen: !this.state.fullScreen });
+  }
 
   renderDisplayConfiguration() {
-    return (<DisplaySettingsForm
+    const DisplaySF = this.getDisplaySettingsForm();
+    return (<DisplaySF
       wrappedComponentRef={(ref) => { this.displayForm = ref; }}
+      initialValue={this.state.initialDisplaySettings}
     />
     );
+  }
+
+  renderDataConfiguration() {
+    const DataSF = this.getDataSettingsForm();
+    if (DataSF !== undefined) {
+      return (
+        <DataSF
+          wrappedComponentRef={(ref) => { this.dataForm = ref; }}
+          initialValue={this.state.initialDataSettings}
+        />
+      );
+    }
+    return null;
   }
 
   render() {
@@ -67,8 +97,7 @@ export default class ConfiguredChart extends Component {
         }
             >
               <TabPane tab="数据配置" key="1">
-                {this.renderConfiguration({
-                  wrappedComponentRef: (ref) => { this.dataForm = ref; } })}
+                {this.renderDataConfiguration()}
               </TabPane>
               <TabPane tab="展示配置" key="2">
                 {this.renderDisplayConfiguration()}
@@ -97,6 +126,34 @@ export default class ConfiguredChart extends Component {
         </Col>
         {
           // render a fullscreen modal chart.
+        }
+        {
+          this.state.fullScreen ?
+            (
+              <div
+                style={{
+            position: 'fixed',
+            top: '0',
+            right: '0',
+            bottom: '0',
+            left: '0',
+            overflow: 'hidden',
+            zIndex: '500',
+            background: 'white',
+            paddingTop: '50px',
+          }}
+              >
+                <div style={{ textAlign: 'right' }}>
+                  <Tooltip title="恢复" placement="leftTop">
+                    <Tag onClick={() => this.toggleFullscreenChart()} >
+                      <Icon type="shrink" />
+                    </Tag>
+                  </Tooltip>
+                </div>
+                {chart}
+              </div>
+            )
+          : null
         }
       </Row>
     );

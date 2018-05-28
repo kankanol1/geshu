@@ -5,10 +5,14 @@ import PropTypes from 'prop-types';
 const FormItem = Form.Item;
 const { Option } = Select;
 
-@Form.create()
 export default class BarChartSettingsForm extends Component {
+  static defaultProps = {
+    initialValue: {},
+  }
+
   render() {
     const { getFieldDecorator } = this.props.form;
+    const { initialValue } = this.props;
     return (
       <Form onSubmit={e => this.handleSubmit(e)} layout="horizontal">
         <FormItem label="数据库" labelCol={{ span: 6 }} wrapperCol={{ span: 18 }}>
@@ -16,7 +20,7 @@ export default class BarChartSettingsForm extends Component {
             rules: [{
               required: true, message: '请输入数据库名',
             }],
-            initialValue: 'whatever',
+            initialValue: initialValue.table,
           })(
             <Input />
           )}
@@ -26,7 +30,7 @@ export default class BarChartSettingsForm extends Component {
             rules: [{
               required: true, message: '请设置X轴',
             }],
-            initialValue: 'year',
+            initialValue: initialValue.xsource,
           })(
             <Select>
               <Option value="year">year</Option>
@@ -39,7 +43,7 @@ export default class BarChartSettingsForm extends Component {
             rules: [{
               required: true, message: '请设置Y轴',
             }],
-            initialValue: 'sales',
+            initialValue: initialValue.ysource,
           })(
             <Select>
               <Option value="year">year</Option>
@@ -52,6 +56,6 @@ export default class BarChartSettingsForm extends Component {
   }
 }
 
-// BarChartSettingsForm.propTypes = {
-//   initialValue: PropTypes.object,
-// };
+BarChartSettingsForm.propTypes = {
+  initialValue: PropTypes.object,
+};

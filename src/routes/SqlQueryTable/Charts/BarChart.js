@@ -3,6 +3,7 @@ import { Form, Input, Button, Icon } from 'antd';
 import { Chart, Axis, Geom, Tooltip, Coord } from 'bizcharts';
 import ConfiguredChart from './ConfiguredChart';
 import BarChartSettingsForm from './Forms/BarChartSettingsForm';
+import BarChartDisplaySettingsForm from './Forms/BarChartDisplaySettingsForm';
 
 const FormItem = Form.Item;
 const ButtonGroup = Button.Group;
@@ -22,15 +23,29 @@ const cols = {
   sales: { tickInterval: 20 },
 };
 
+const DataSettingForm = Form.create()(BarChartSettingsForm);
+const DisplaySettingForm = Form.create()(BarChartDisplaySettingsForm);
 
 export default class BarChart extends ConfiguredChart {
   state = {
+    initialDisplaySettings: {
+      height: 400,
+      enablex: true,
+      enabley: true,
+    },
+    initialDataSettings: {
+      xsource: 'year',
+      ysource: 'sales',
+      table: 'whatever',
+    },
   }
 
-  renderConfiguration = (props) => {
-    return (
-      <BarChartSettingsForm {...props} />
-    );
+  getDataSettingsForm = () => {
+    return DataSettingForm;
+  }
+
+  getDisplaySettingsForm = () => {
+    return DisplaySettingForm;
   }
 
   updateSettings = (displaySettings, dataSettings) => {
@@ -44,9 +59,16 @@ export default class BarChart extends ConfiguredChart {
     }
     return (
       <Chart height={displaySettings.height} data={data} scale={cols} forceFit>
-        <Coord />
-        <Axis name={dataSettings.xsource} title />
-        <Axis name={dataSettings.ysource} />
+        <Coord transpose={displaySettings.transpose ? true : undefined} />
+        {displaySettings.enablex ?
+          <Axis name={dataSettings.xsource} title />
+        : null
+        }
+        {
+          displaySettings.enabley ?
+            <Axis name={dataSettings.ysource} />
+          : null
+        }
         <Tooltip crosshairs={{ type: 'y' }} />
         <Geom type="interval" position={`${dataSettings.xsource}*${dataSettings.ysource}`} />
       </Chart>
