@@ -30,4 +30,5 @@ export default class VisualizationModal extends Component {
 
 VisualizationModal.propTypes = {
   onSelected: PropTypes.func.isRequired,
+  sql: PropTypes.string.isRequired,
 };
