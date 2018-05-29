@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Row, Col, Card, Tabs, Button, Icon, Tooltip, Tag, Modal, Form } from 'antd';
-import FullScreen from 'react-fullscreen';
 import DisplaySettingsForm from './Forms/DisplaySettingsForm';
 
 const ButtonGroup = Button.Group;
