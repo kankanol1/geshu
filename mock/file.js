@@ -62,7 +62,29 @@ export function getFileList(req, res, u) {
   }
 }
 
+export function postFileUpload(req, res, u, b) {
+  let url = u;
+  if (!url || Object.prototype.toString.call(url) !== '[object String]') {
+    url = req.url; // eslint-disable-line
+  }
+
+  const body = (b && b.body) || req.body;
+  const { ids } = body;
+
+  const result = {
+    success: true,
+    message: '上传成功',
+  };
+
+  if (res && res.json) {
+    res.json(result);
+  } else {
+    return result;
+  }
+}
+
 
 export default {
   getFileList,
+  postFileUpload
 };

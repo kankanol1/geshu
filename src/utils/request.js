@@ -59,7 +59,8 @@ export default function request(url, options) {
       // newOptions.body is FormData
       newOptions.headers = {
         Accept: 'application/json',
-        'Content-Type': 'multipart/form-data',
+        // set content-type to undefined to allow the browser set boundary for multipart.
+        // 'Content-Type': undefined,
         ...newOptions.headers,
       };
     }

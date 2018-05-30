@@ -135,6 +135,11 @@ export const getRouterData = (app) => {
       component: dynamicWrapper(app, [], () => import('../routes/Database/DatabaseQuery')),
     },
 
+    /* center storage */
+    '/storage/list': {
+      component: dynamicWrapper(app, [], () => import('../routes/Storage/StorageList')),
+    },
+
     /**
      * The followings are used by our project. Adapted from ant-design-pro.
      */

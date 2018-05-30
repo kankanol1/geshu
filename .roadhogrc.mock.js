@@ -20,7 +20,7 @@ import { getJobs, cancelJobs, deleteJobs } from './mock/job';
 import { open, save, saveSettings, submit, validate } from './mock/workspace/workspace';
 import { getUserInfo, updatePassword } from './mock/selfmanage';
 import {recentGraph,saveGraph,getGraph,deleteGraph,getDataSources,getDataSourceColumns,getGraphList,getGremlinServerAddress,getQueryList,saveQuery,saveAsQuery,updateQuery,deleteQuery,executeGraph,createGraph} from './mock/graph';
-import { getFileList } from './mock/file';
+import { getFileList, postFileUpload } from './mock/file';
 import { getServingModels, offlineServingModels, onlineServingModels } from './mock/servingmodel';
 import { getQueryResult, getLastestDatabasesForProject, persistDataQuery } from './mock/dataquery';
 import { fetchSchema } from './mock/workspace/components';
@@ -47,11 +47,15 @@ const proxy = serverEnabled ?
         credentials: 'include',
         url: server+req.url})).pipe(res);
     },
-    "POST /api**": (req, res) => {
+    "POST /api**": (req, res, body) => {
       try{
-        req.pipe(request.post(server+req.url, {
-          credentials: 'include',
-          json: req.body}), {end: false}).pipe(res);
+        if (req.url === '/api/fs/upload') {
+          req.pipe(request(server+req.url), {end: false}).pipe(res);
+        } else {
+          req.pipe(request.post(server+req.url, {
+            credentials: 'include',
+            json: req.body}), {end: false}).pipe(res);  
+        }
       } catch (e){
         console.log(e);
       }
@@ -151,6 +155,7 @@ const proxy = serverEnabled ?
   // file list
   'GET /api/fs/ls': getFileList,
   'GET /api/fs/columns': getDataSourceColumns,
+  'POST /api/fs/upload': postFileUpload,
 
   // data Insert list
   'GET /api/dataSelect/all': getAllDatabase,

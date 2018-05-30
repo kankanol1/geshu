@@ -47,7 +47,7 @@ const menuData = [
     }],
   },
   {
-    name: '中心数据存储',
+    name: '中心数据库',
     icon: 'database',
     path: 'database',
     children: [{
@@ -56,6 +56,14 @@ const menuData = [
     }, {
       name: '数据查询',
       path: 'query',
+    }],
+  }, {
+    name: '中心存储',
+    icon: 'file',
+    path: 'storage',
+    children: [{
+      name: '文件列表',
+      path: 'list',
     }],
   }, {
     name: '图数据管理',
