@@ -1,8 +1,26 @@
 .buttonBar {
-  margin-bottom: 10px;
+  padding: 10px;
 
   :global(.ant-btn) {
-    margin-right: 10px;
+    margin-right: 5px;
+    padding: 0 8px;
+  }
+}
+
+.mainCard {
+  margin: 0;
+  :global {
+    .ant-card-body {
+      padding: 2px;
+    }
+    .ant-card-head-title {
+      font-size: 14px;
+      padding: 6px 0;
+    }
+    .ant-card-head {
+      min-height: 32px;
+      padding: 0 12px;
+    }
   }
 }
 
@@ -17,9 +35,9 @@
 
 .indexItems {
   width: 100%;
-  padding: 12px;
+  padding: 8px;
 
-  &:hover {
+  &:hover, &.selectedItem {
     background: #e6f7ff;
     cursor: pointer;
 

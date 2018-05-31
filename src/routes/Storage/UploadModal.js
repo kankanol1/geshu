@@ -24,6 +24,9 @@ export default class UploadModal extends PureComponent {
     const { fileList } = this.state;
 
     form.validateFields((err, values) => {
+      if (err) {
+        return;
+      }
       const formData = new FormData();
       formData.append('type', type);
       formData.append('projectId', projectId);
@@ -37,7 +40,7 @@ export default class UploadModal extends PureComponent {
       });
 
       // upload.
-      fetch(`${urls.fsUploadUrl}/dd`, {
+      fetch(`${urls.fsUploadUrl}`, {
         credentials: 'include',
         method: 'POST',
         processData: false,
@@ -52,7 +55,7 @@ export default class UploadModal extends PureComponent {
           error.response = response;
           throw error;
         } else {
-          response.json();
+          return response.json();
         }
       }).then((response) => {
         if (response.success) {

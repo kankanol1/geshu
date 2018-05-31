@@ -1,13 +1,16 @@
 import React, { PureComponent } from 'react';
-import { Button, Input, Icon, message, Form, Modal } from 'antd';
+import { Button, Input, Select, message, Form, Modal } from 'antd';
 import fetch from 'dva/fetch';
 import PropTypes from 'prop-types';
 import urls from '../../utils/urlUtils';
+import { extractFileName } from '../../utils/conversionUtils';
+import StorageFilePicker from './StorageFilePicker';
 
 const FormItem = Form.Item;
+const { Option } = Select;
 
 @Form.create()
-export default class CreateModal extends PureComponent {
+export default class MoveModal extends PureComponent {
   static defaultProps = {
     onOk: undefined,
     onCancel: undefined,
@@ -18,7 +21,7 @@ export default class CreateModal extends PureComponent {
   }
 
   handleSubmit = () => {
-    const { onOk, form, type, projectId, path } = this.props;
+    const { onOk, form, type, projectId, path, fileItem } = this.props;
 
     form.validateFields((err, values) => {
       if (err) {
@@ -29,13 +32,14 @@ export default class CreateModal extends PureComponent {
         type,
         projectId,
         path,
+        oldPath: fileItem.rpath,
       };
       this.setState({
         loading: true,
       });
 
       // upload.
-      fetch(`${urls.fsMkdirUrl}`, {
+      fetch(`${urls.fsRenameUrl}`, {
         credentials: 'include',
         method: 'POST',
         processData: false,
@@ -66,13 +70,13 @@ export default class CreateModal extends PureComponent {
           this.setState({
             loading: false,
           });
-          message.error(`创建失败, 失败详情: ${response.message}`);
+          message.error(`操作失败, 失败详情: ${response.message}`);
         }
       }).catch((e) => {
         this.setState({
           loading: false,
         });
-        message.error(`创建出错: ${e.name}`);
+        message.error(`操作出错: ${e.name}`);
       });
     });
   }
@@ -86,7 +90,9 @@ export default class CreateModal extends PureComponent {
 
   render() {
     const { loading } = this.state;
-    const { getFieldDecorator } = this.props.form;
+    const { fileItem, form } = this.props;
+    const { getFieldDecorator } = form;
+    const fileOrDir = fileItem.isdir ? '文件夹' : '文件';
     const formItemLayout = {
       labelCol: { span: 6 },
       wrapperCol: { span: 18 },
@@ -95,7 +101,7 @@ export default class CreateModal extends PureComponent {
       <Modal
         visible={this.props.visible}
         onCancel={() => this.handleCancel()}
-        title={loading ? '文件夹创建中...' : '创建文件夹'}
+        title={loading ? `${fileOrDir}移动中...` : `移动${fileOrDir}`}
         closable={!loading}
         destroyOnClose
         footer={
@@ -110,14 +116,27 @@ export default class CreateModal extends PureComponent {
         <Form layout="horizontal">
           <FormItem
             {...formItemLayout}
-            label="文件夹名称"
+            label={`原${fileOrDir}位置`}
           >
-            {getFieldDecorator('name', {
+            {getFieldDecorator('oldPath', {
+              initialValue: fileItem.rpath,
+          })(
+            <Input disabled />
+          )}
+          </FormItem>
+
+          <FormItem
+            {...formItemLayout}
+            label="目标地址"
+          >
+            {getFieldDecorator('newName', {
               rules: [{
-                required: true, message: '请输入文件名',
+                required: true, message: '请选择移动位置',
               }],
           })(
-            <Input />
+            <StorageFilePicker
+              smallSize
+            />
           )}
           </FormItem>
 
@@ -127,11 +146,12 @@ export default class CreateModal extends PureComponent {
   }
 }
 
-CreateModal.propTypes = {
+MoveModal.propTypes = {
   visible: PropTypes.bool.isRequired,
   onCancel: PropTypes.func,
   onOk: PropTypes.func,
   type: PropTypes.string.isRequired,
   path: PropTypes.string.isRequired,
   projectId: PropTypes.number.isRequired,
+  fileItem: PropTypes.object.isRequired,
 };

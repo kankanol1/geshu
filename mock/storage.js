@@ -133,7 +133,62 @@ export function mkdirForType(req, res, u, b) {
   }
 }
 
+export function renameForType(req, res, u, b) {
+  const body = (b && b.body) || req.body;
+  const { oldPath, newName, type, projectId, path } = body;
+  
+  console.log(`rename ${oldPath} to ${newName}`);
+  const result = {
+    success: true,
+    message: '重命名成功',
+  };
+
+  if (res && res.json) {
+    res.json(result);
+  } else {
+    return result;
+  }
+}
+
+
+export function moveForType(req, res, u, b) {
+  const body = (b && b.body) || req.body;
+  const { oldPath, newPath, type, projectId, path } = body;
+  
+  console.log(`move from :${oldPath}] to {}`, oldPath, newPath);
+  const result = {
+    success: true,
+    message: '移动成功',
+  };
+
+  if (res && res.json) {
+    res.json(result);
+  } else {
+    return result;
+  }
+}
+
+export function deleteForType(req, res, u, b) {
+  const body = (b && b.body) || req.body;
+  const { file , type, projectId, path } = body;
+  
+  console.log(`delete file: ${file}`);
+  const result = {
+    success: true,
+    message: '删除成功',
+  };
+
+  if (res && res.json) {
+    res.json(result);
+  } else {
+    return result;
+  }
+}
+
 export default {
   allProjectListForStorage, 
-  listFileForType
+  listFileForType,
+  renameForType,
+  moveForType,
+  deleteForType,
 };

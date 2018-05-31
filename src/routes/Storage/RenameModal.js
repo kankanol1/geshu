@@ -19,21 +19,25 @@ export default class RenameModal extends PureComponent {
   }
 
   handleSubmit = () => {
-    const { onOk, form, type, projectId, path } = this.props;
+    const { onOk, form, type, projectId, path, fileItem } = this.props;
 
     form.validateFields((err, values) => {
+      if (err) {
+        return;
+      }
       const formJson = {
         ...values,
         type,
         projectId,
         path,
+        oldPath: fileItem.rpath,
       };
       this.setState({
         loading: true,
       });
 
       // upload.
-      fetch(`${urls.fsMkdirUrl}`, {
+      fetch(`${urls.fsRenameUrl}`, {
         credentials: 'include',
         method: 'POST',
         processData: false,
@@ -64,13 +68,13 @@ export default class RenameModal extends PureComponent {
           this.setState({
             loading: false,
           });
-          message.error(`创建失败, 失败详情: ${response.message}`);
+          message.error(`重命名失败, 失败详情: ${response.message}`);
         }
       }).catch((e) => {
         this.setState({
           loading: false,
         });
-        message.error(`创建出错: ${e.name}`);
+        message.error(`重命名出错: ${e.name}`);
       });
     });
   }
@@ -112,15 +116,12 @@ export default class RenameModal extends PureComponent {
             {...formItemLayout}
             label={`原${fileOrDir}名称`}
           >
-            {getFieldDecorator('oldName', {
+            {getFieldDecorator('oldPath', {
               initialValue: extractFileName(fileItem.rpath),
           })(
             <Input disabled />
           )}
           </FormItem>
-
-        </Form>
-        <Form layout="horizontal">
           <FormItem
             {...formItemLayout}
             label={`新${fileOrDir}名称`}
