@@ -1,10 +1,13 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
-import { Button, Upload, Icon, message, Card, List, Tooltip, Modal } from 'antd';
+import { Button, Modal, Icon, message, Card, List, Tooltip } from 'antd';
 import request from '../../utils/request';
 import urls from '../../utils/urlUtils';
+import { extractFileName } from '../../utils/conversionUtils';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import UploadModal from './UploadModal';
+import CreateModal from './CreateModal';
+import RenameModal from './RenameModal';
 import styles from './StorageList.less';
 
 const data = [
@@ -28,11 +31,6 @@ const data = [
   },
 ];
 
-const extractFileName = (path) => {
-  const nameArr = path.split('/');
-  return nameArr[nameArr.length - 1];
-};
-
 @connect(({ storage, loading }) => ({
   storage,
   loading: loading.models.storage,
@@ -45,7 +43,7 @@ export default class StorageList extends PureComponent {
      * 2. 'project' => need to show all the available projects.
      * 3. 'file' => show file list.
      */
-    view: 'index',
+    view: 'file',
     path: '/',
     /**
      * type is used only when view is 'file'.
@@ -54,13 +52,21 @@ export default class StorageList extends PureComponent {
      * 2. 'public' public files.
      * 3. 'project' project files.
      */
-    type: undefined,
+    type: 'private',
     project: {
       id: 0,
       name: '项目',
     },
+
+    /**
+     * selected file item, will be used in renameModal and moveModal.
+     */
+    fileItem: {},
     /** modals */
     uploadModal: false,
+    createModal: false,
+    renameModal: false,
+    // moveModal: false,
   }
 
   generateTitle = () => {
@@ -181,6 +187,19 @@ export default class StorageList extends PureComponent {
     }
   }
 
+  deleteFile = (fileItem) => {
+    Modal.confirm({
+      title: '删除确认',
+      content: `确定要删除文件${fileItem.isdir ? '夹' : ''}：${extractFileName(fileItem.path)} 吗？`,
+      okText: '删除',
+      okType: 'danger',
+      cancelText: '取消',
+      onOk() {
+        // console.log('OK');
+      },
+    });
+  }
+
   renderIndexList = () => {
     return (
       <List
@@ -209,10 +228,31 @@ export default class StorageList extends PureComponent {
         loading={loading}
         renderItem={item => (
           <List.Item>
-            <div onClick={() => this.visitFile(item)} className={styles.indexItems}>
+            <div
+              onClick={() => this.visitFile(item)}
+              className={styles.indexItems}
+            >
               <div className={styles.listTitle}>
                 <Icon type={item.isdir ? 'folder' : 'file'} className={styles.indexIcon} />
-                {item.rpath === this.state.path ? '..' : extractFileName(item.rpath)}
+                <span>{item.rpath === this.state.path ? '..' : extractFileName(item.rpath)}</span>
+                {
+                  item.rpath === this.state.path ? null :
+                  (
+                    <div className={styles.opIcons} onClick={e => e.stopPropagation()}>
+                      <Tooltip title="删除">
+                        <Icon type="delete" onClick={() => this.deleteFile(item)} />
+                      </Tooltip>
+
+                      <Tooltip title="重命名">
+                        <Icon type="edit" onClick={() => this.setState({ renameModal: true, fileItem: item })} />
+                      </Tooltip>
+                      {/* <Tooltip title="移动">
+                        <Icon type="folder-open"
+                         onClick={() => this.setState({ moveModal: true, fileItem: item })} />
+                      </Tooltip> */}
+                    </div>
+                  )
+                }
               </div>
             </div>
           </List.Item>
@@ -243,31 +283,72 @@ export default class StorageList extends PureComponent {
   }
 
   renderModals() {
-    const { uploadModal, type, project, path, view } = this.state;
+    const { renameModal, createModal, uploadModal, type, project, path, view } = this.state;
+    const refreshFileList = () => {
+      if (view === 'file') {
+        this.props.dispatch({
+          type: 'storage/fetchFileListForType',
+          payload: {
+            id: type === 'project' ? project.id : -1,
+            type,
+            path,
+          },
+        });
+      }
+    };
     return (
       <React.Fragment>
-        <UploadModal
-          visible={uploadModal}
-          type={type}
-          projectId={project ? project.id : -1}
-          path={path}
-          onCancel={() => this.setState({ uploadModal: false })}
-          onOk={() => {
+        {uploadModal ? (
+          <UploadModal
+            visible={uploadModal}
+            type={type}
+            projectId={project ? project.id : -1}
+            path={path}
+            onCancel={() => this.setState({ uploadModal: false })}
+            onOk={() => {
               this.setState({ uploadModal: false });
               // refresh file.
-              if (view === 'file') {
-                this.props.dispatch({
-                  type: 'storage/fetchFileListForType',
-                  payload: {
-                    id: type === 'project' ? project.id : -1,
-                    type,
-                    path,
-                  },
-                });
-              }
+              refreshFileList();
             }
           }
-        />
+          />
+          ) : null
+        }
+        {
+          createModal ? (
+            <CreateModal
+              visible={createModal}
+              type={type}
+              projectId={project ? project.id : -1}
+              path={path}
+              onCancel={() => this.setState({ createModal: false })}
+              onOk={() => {
+                this.setState({ createModal: false });
+                // refresh file.
+                refreshFileList();
+              }
+            }
+            />
+          ) : null
+        }
+        {
+          renameModal ? (
+            <RenameModal
+              visible={renameModal}
+              type={type}
+              projectId={project ? project.id : -1}
+              fileItem={this.state.fileItem}
+              path={path}
+              onCancel={() => this.setState({ renameModal: false })}
+              onOk={() => {
+                this.setState({ renameModal: false });
+                // refresh file.
+                refreshFileList();
+              }
+            }
+            />
+          ) : null
+        }
       </React.Fragment>
     );
   }
@@ -292,7 +373,7 @@ export default class StorageList extends PureComponent {
             { this.state.view === 'file' ? (
               <React.Fragment>
                 <Button type="primary" onClick={() => this.setState({ uploadModal: true })}><Icon type="upload" />上传文件</Button>
-                <Button><Icon type="folder-add" />创建文件夹</Button>
+                <Button onClick={() => this.setState({ createModal: true })}><Icon type="folder-add" />创建文件夹</Button>
               </React.Fragment>
             ) : null}
           </div>

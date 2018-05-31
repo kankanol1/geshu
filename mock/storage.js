@@ -116,6 +116,23 @@ export function listFileForType(req, res, u, b) {
   }
 }
 
+export function mkdirForType(req, res, u, b) {
+  const body = (b && b.body) || req.body;
+  const { name, type, projectId, path } = body;
+  
+  console.log('create folder', name);
+  const result = {
+    success: true,
+    message: '创建成功',
+  };
+
+  if (res && res.json) {
+    res.json(result);
+  } else {
+    return result;
+  }
+}
+
 export default {
   allProjectListForStorage, 
   listFileForType

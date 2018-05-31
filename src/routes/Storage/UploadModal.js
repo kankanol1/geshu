@@ -1,26 +1,33 @@
 import React, { PureComponent } from 'react';
 import { Button, Upload, Icon, message, Form, Modal } from 'antd';
-import request from '../../utils/request';
+import fetch from 'dva/fetch';
+import PropTypes from 'prop-types';
+import { requestThrowError } from '../../utils/request';
 import urls from '../../utils/urlUtils';
 
 const FormItem = Form.Item;
 
 @Form.create()
 export default class UploadModal extends PureComponent {
+  static defaultProps = {
+    onOk: undefined,
+    onCancel: undefined,
+  }
+
   state = {
     uploading: false,
     fileList: [],
   }
 
   handleSubmit = () => {
-    const { onOk, form } = this.props;
+    const { onOk, form, type, projectId, path } = this.props;
     const { fileList } = this.state;
 
     form.validateFields((err, values) => {
       const formData = new FormData();
-      formData.append('type', this.props.type);
-      formData.append('projectId', this.props.projectId);
-      formData.append('path', this.props.path);
+      formData.append('type', type);
+      formData.append('projectId', projectId);
+      formData.append('path', path);
       fileList.forEach((file) => {
         formData.append('files', file);
       });
@@ -30,11 +37,23 @@ export default class UploadModal extends PureComponent {
       });
 
       // upload.
-      request(urls.fsUploadUrl, {
+      fetch(`${urls.fsUploadUrl}/dd`, {
         credentials: 'include',
         method: 'POST',
         processData: false,
         body: formData,
+        headers: {
+          Accept: 'application/json',
+        },
+      }).then((response) => {
+        if (response.status !== 200) {
+          const error = new Error(response.status);
+          error.name = `HTTP错误${response.status}`;
+          error.response = response;
+          throw error;
+        } else {
+          response.json();
+        }
       }).then((response) => {
         if (response.success) {
           this.setState({
@@ -50,6 +69,11 @@ export default class UploadModal extends PureComponent {
           });
           message.error(`上传失败!请重试, 失败详情: ${response.message}`);
         }
+      }).catch((e) => {
+        this.setState({
+          uploading: false,
+        });
+        message.error(`上传出错: ${e.name}`);
       });
     });
   }
@@ -135,3 +159,12 @@ export default class UploadModal extends PureComponent {
     );
   }
 }
+
+UploadModal.propTypes = {
+  visible: PropTypes.bool.isRequired,
+  onCancel: PropTypes.func,
+  onOk: PropTypes.func,
+  type: PropTypes.string.isRequired,
+  path: PropTypes.string.isRequired,
+  projectId: PropTypes.number.isRequired,
+};

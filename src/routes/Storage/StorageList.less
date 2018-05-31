@@ -10,15 +10,22 @@
   :global(.ant-card-body) {
     padding: 0 10px;
   }
+  :global(.ant-list-item) {
+    padding: 0;
+  }
 }
 
 .indexItems {
   width: 100%;
-  padding: 5px;
+  padding: 12px;
 
   &:hover {
     background: #e6f7ff;
     cursor: pointer;
+
+    .opIcons {
+      opacity: 1;
+    }
   }
 
   .indexIcon {
@@ -32,5 +39,25 @@
 
   .listDesc {
     color: #8c8c8c;
+  }
+}
+
+.opIcons {
+  float: right;
+  padding-left: 20px;
+  opacity: 0;
+
+  &:hover {
+    opacity: 1;
+  }
+
+  :global {
+    .anticon {
+      margin-left: 15px;
+    }
+
+    .anticon:hover {
+      color: #1890ff;
+    }
   }
 }

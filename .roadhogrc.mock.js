@@ -24,7 +24,7 @@ import { getFileList, postFileUpload } from './mock/file';
 import { getServingModels, offlineServingModels, onlineServingModels } from './mock/servingmodel';
 import { getQueryResult, getLastestDatabasesForProject, persistDataQuery } from './mock/dataquery';
 import { fetchSchema } from './mock/workspace/components';
-import { allProjectListForStorage, listFileForType } from './mock/storage';
+import { allProjectListForStorage, listFileForType, mkdirForType } from './mock/storage';
 // import { createDatabase, updateDatabase } from './src/services/databaseAPI';
 // import { deleteDatabase } from './mock/database';
 
@@ -159,6 +159,7 @@ const proxy = serverEnabled ?
   'POST /api/fs/upload': postFileUpload,
   'GET /api/fs/projectsls': allProjectListForStorage,
   'GET /api/fs/ls4type': listFileForType,
+  'POST /api/fs/mkdir4type': mkdirForType,
 
   // data Insert list
   'GET /api/dataSelect/all': getAllDatabase,
