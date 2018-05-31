@@ -60,12 +60,12 @@ export default class StorageList extends PureComponent {
       name: '项目',
     },
     /** modals */
-    uploadModal: true,
+    uploadModal: false,
   }
 
   generateTitle = () => {
     const { view, path, type, project } = this.state;
-    if (view === 'index') return '文件管理首页';
+    if (view === 'index') return undefined;
     if (view === 'project') return '当前位置:项目文件首页';
     if (view === 'file') {
       switch (type) {
@@ -91,7 +91,7 @@ export default class StorageList extends PureComponent {
       this.props.dispatch({
         type: 'storage/fetchFileListForType',
         payload: {
-          id: type === 'project' ? project.id : 0,
+          id: type === 'project' ? project.id : -1,
           type,
           path: newPath,
         },
@@ -166,11 +166,12 @@ export default class StorageList extends PureComponent {
     if (fileItem.rpath === this.state.path) {
       this.backOneStep();
     } else {
+      if (!fileItem.isdir) return;
       const { type, project } = this.state;
       this.props.dispatch({
         type: 'storage/fetchFileListForType',
         payload: {
-          id: type === 'project' ? project.id : 0,
+          id: type === 'project' ? project.id : -1,
           type,
           path: fileItem.rpath,
         },
@@ -242,11 +243,30 @@ export default class StorageList extends PureComponent {
   }
 
   renderModals() {
+    const { uploadModal, type, project, path, view } = this.state;
     return (
       <React.Fragment>
         <UploadModal
-          visible={this.state.uploadModal}
+          visible={uploadModal}
+          type={type}
+          projectId={project ? project.id : -1}
+          path={path}
           onCancel={() => this.setState({ uploadModal: false })}
+          onOk={() => {
+              this.setState({ uploadModal: false });
+              // refresh file.
+              if (view === 'file') {
+                this.props.dispatch({
+                  type: 'storage/fetchFileListForType',
+                  payload: {
+                    id: type === 'project' ? project.id : -1,
+                    type,
+                    path,
+                  },
+                });
+              }
+            }
+          }
         />
       </React.Fragment>
     );
@@ -269,8 +289,12 @@ export default class StorageList extends PureComponent {
                 </Tooltip>
               </React.Fragment>
               )}
-            <Button type="primary" onClick={() => this.setState({ uploadModal: true })}><Icon type="upload" />上传文件</Button>
-            { this.state.view === 'file' ? <Button><Icon type="folder-add" />创建文件夹</Button> : null}
+            { this.state.view === 'file' ? (
+              <React.Fragment>
+                <Button type="primary" onClick={() => this.setState({ uploadModal: true })}><Icon type="upload" />上传文件</Button>
+                <Button><Icon type="folder-add" />创建文件夹</Button>
+              </React.Fragment>
+            ) : null}
           </div>
           <Card className={styles.bodyCard}>
             {this.state.view === 'index' ? this.renderIndexList() : null}
