@@ -156,7 +156,8 @@ class AbstractBasicLayout extends React.PureComponent {
     // Remove the parameters in the url
     if (redirect) {
       delete urlParams.redirect;
-      window.history.replaceState(null, 'redirect', replaceUrlWithParams(url, urlParams));
+      const redirectPath = replaceUrlWithParams(url, urlParams);
+      window.history.replaceState(null, 'redirect', redirectPath);
     } else {
       return '/project/list';
     }

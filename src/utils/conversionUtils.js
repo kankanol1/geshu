@@ -38,7 +38,7 @@ export function getUrlParams(url) {
 }
 
 export function replaceUrlWithParams(url, newParams) {
-  return `${url.split('?')[1]}?${stringify(newParams)}`;
+  return `${url.split('?')[0]}?${stringify(newParams)}`;
 }
 
 export default {

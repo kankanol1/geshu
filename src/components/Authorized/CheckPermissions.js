@@ -2,6 +2,8 @@ import React from 'react';
 import PromiseRender from './PromiseRender';
 import { CURRENT } from './index';
 
+const promiseCache = [];
+
 function isPromise(obj) {
   return (
     !!obj &&
@@ -24,8 +26,35 @@ const checkPermissions = (authority, currentAuthority, target, Exception) => {
   if (!authority) {
     return target;
   }
+
   // 数组处理
   if (Array.isArray(authority)) {
+    // Support the Promise type of currentAuthority, use for async, such as
+    // validate token in server side!
+    if (isPromise(currentAuthority)) {
+      if (promiseCache.length === 0) {
+        return (
+          <PromiseRender
+            ok={target}
+            error={Exception}
+            promise={currentAuthority.then(
+              (a) => {
+                promiseCache[0] = a;
+                if (authority.indexOf(a) >= 0) {
+                  return true;
+                } else {
+                  throw new Error();
+                }
+              }
+            )}
+          />
+        );
+      } else if (authority.indexOf(promiseCache[0]) >= 0) {
+        return target;
+      } else {
+        return Exception;
+      }
+    }
     if (authority.indexOf(currentAuthority) >= 0) {
       return target;
     }
@@ -57,6 +86,7 @@ const checkPermissions = (authority, currentAuthority, target, Exception) => {
       throw error;
     }
   }
+
   throw new Error('unsupported parameters');
 };
 

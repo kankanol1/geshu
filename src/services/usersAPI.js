@@ -53,3 +53,16 @@ export async function updatePassword(params) {
     },
   });
 }
+
+export async function userLogin(params) {
+  return request('/api/login/account', {
+    method: 'POST',
+    body: params,
+  });
+}
+
+export async function userLogout() {
+  return request('/api/login/logout', {
+    method: 'GET',
+  });
+}
