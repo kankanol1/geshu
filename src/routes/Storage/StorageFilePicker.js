@@ -1,8 +1,7 @@
 import React, { PureComponent } from 'react';
-import { Button, Modal, Icon, message, Card, List, Tooltip } from 'antd';
-import fetch from 'dva/fetch';
+import { Button, Icon, Card, List, Tooltip } from 'antd';
+import { Scrollbars } from 'react-custom-scrollbars';
 import PropTypes from 'prop-types';
-import urls from '../../utils/urlUtils';
 import { extractFileName } from '../../utils/conversionUtils';
 import { indexListData } from './StorageUtils';
 import UploadModal from './UploadModal';
@@ -22,6 +21,7 @@ export default class StorageFilePicker extends PureComponent {
     enableUpload: false,
     enableMkdir: false,
     allowSelectFolder: false,
+    height: undefined,
   }
 
   state = {
@@ -76,12 +76,12 @@ export default class StorageFilePicker extends PureComponent {
     selectedProject: undefined,
   }
 
-  onChange(type, path, projectId) {
+  onChange(type, path, project) {
     const selected = {
-      type, path, projectId,
+      type, path, projectId: project.id, projectName: project.name,
     };
     const { onChange } = this.props;
-    if (onChange) onChange(onChange);
+    if (onChange) onChange(selected);
   }
 
   generateTitle = () => {
@@ -225,17 +225,17 @@ export default class StorageFilePicker extends PureComponent {
   handleTypeSelect(selectedType) {
     this.setState({ selectedType });
     // onchange.
-    this.onChange(selectedType, '/', -1);
+    this.onChange(selectedType, '/', this.state.project);
   }
 
   handleFileSelect(selectedFile) {
     this.setState({ selectedFile });
-    this.onChange(this.state.type, selectedFile.rpath, this.state.project.id);
+    this.onChange(this.state.type, selectedFile.rpath, this.state.project);
   }
 
   handleProjectSelect(selectedProject) {
     this.setState({ selectedProject });
-    this.onChange(this.state.type, '/', this.state.project.id);
+    this.onChange('project', '/', this.state.project);
   }
 
   renderIndexList = () => {
@@ -248,7 +248,7 @@ export default class StorageFilePicker extends PureComponent {
         renderItem={item => (
           <List.Item>
             <div
-              onClick={allowSelectFolder ?
+              onClick={allowSelectFolder && item.type !== 'project' ?
                 () => this.handleTypeSelect(item.type) : () => this.changeView(item.type)}
               onDoubleClick={allowSelectFolder ?
                 () => this.changeView(item.type) : null
@@ -351,14 +351,15 @@ export default class StorageFilePicker extends PureComponent {
       uploadModal, type, project, path, view } = this.state;
     const refreshFileList = () => {
       if (view === 'file') {
-        this.props.dispatch({
-          type: 'storage/fetchFileListForType',
-          payload: {
-            id: type === 'project' ? project.id : -1,
-            type,
-            path,
-          },
-        });
+        this.fetchFileListForType(
+          {
+            payload: {
+              id: type === 'project' ? project.id : -1,
+              type,
+              path,
+            },
+          }
+        );
       }
     };
     return (
@@ -509,7 +510,14 @@ export default class StorageFilePicker extends PureComponent {
   }
 
   render() {
-    const { styles } = this.props;
+    const { styles, height } = this.props;
+    const listContent = (
+      <React.Fragment>
+        {this.state.view === 'index' ? this.renderIndexList() : null}
+        {this.state.view === 'project' ? this.renderProjectList() : null}
+        {this.state.view === 'file' ? this.renderFileList() : null}
+      </React.Fragment>
+    );
     return (
       <Card title={this.generateTitle()} className={styles.mainCard}>
         <div className={styles.buttonBar}>
@@ -517,9 +525,13 @@ export default class StorageFilePicker extends PureComponent {
           {this.renderOperationButton()}
         </div>
         <Card className={styles.bodyCard}>
-          {this.state.view === 'index' ? this.renderIndexList() : null}
-          {this.state.view === 'project' ? this.renderProjectList() : null}
-          {this.state.view === 'file' ? this.renderFileList() : null}
+          {
+            height ? (
+              <Scrollbars style={{ height }}>
+                {listContent}
+              </Scrollbars>
+            ) : listContent
+          }
         </Card>
         {this.renderModals()}
       </Card>
@@ -578,4 +590,6 @@ StorageFilePicker.propTypes = {
   enableMkdir: PropTypes.bool,
 
   allowSelectFolder: PropTypes.bool,
+
+  height: PropTypes.number,
 };

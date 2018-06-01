@@ -1,13 +1,12 @@
 import React, { PureComponent } from 'react';
-import { Button, Input, Select, message, Form, Modal } from 'antd';
+import { Button, Input, message, Form, Modal } from 'antd';
 import fetch from 'dva/fetch';
 import PropTypes from 'prop-types';
 import urls from '../../utils/urlUtils';
 import { extractFileName } from '../../utils/conversionUtils';
-import StorageFilePicker from './StorageFilePicker';
+import FilePickerForForm from './FilePickerForForm';
 
 const FormItem = Form.Item;
-const { Option } = Select;
 
 @Form.create()
 export default class MoveModal extends PureComponent {
@@ -97,6 +96,7 @@ export default class MoveModal extends PureComponent {
       labelCol: { span: 6 },
       wrapperCol: { span: 18 },
     };
+
     return (
       <Modal
         visible={this.props.visible}
@@ -108,12 +108,15 @@ export default class MoveModal extends PureComponent {
           [
             <Button key="back" onClick={() => this.handleCancel()} disabled={loading}>取消</Button>,
             <Button key="submit" type="primary" loading={loading} onClick={() => this.handleSubmit()}>
-              创建
+              移动
             </Button>,
           ]
         }
       >
-        <Form layout="horizontal">
+        <Form
+          layout="horizontal"
+          style={{ height: '500px' }}
+        >
           <FormItem
             {...formItemLayout}
             label={`原${fileOrDir}位置`}
@@ -129,14 +132,12 @@ export default class MoveModal extends PureComponent {
             {...formItemLayout}
             label="目标地址"
           >
-            {getFieldDecorator('newName', {
+            {getFieldDecorator('newPath', {
               rules: [{
                 required: true, message: '请选择移动位置',
               }],
           })(
-            <StorageFilePicker
-              smallSize
-            />
+            <FilePickerForForm />
           )}
           </FormItem>
 
