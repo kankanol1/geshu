@@ -27,18 +27,21 @@ export default class MoveModal extends PureComponent {
         return;
       }
       const formJson = {
-        ...values,
-        type,
-        projectId,
-        path,
-        oldPath: fileItem.rpath,
+        oldPath: {
+          type,
+          projectId,
+          path: fileItem.rpath,
+        },
+        newPath: {
+          ...values.newPath,
+        },
       };
       this.setState({
         loading: true,
       });
 
       // upload.
-      fetch(`${urls.fsRenameUrl}`, {
+      fetch(`${urls.fsMoveUrl}`, {
         credentials: 'include',
         method: 'POST',
         processData: false,
@@ -115,7 +118,7 @@ export default class MoveModal extends PureComponent {
       >
         <Form
           layout="horizontal"
-          style={{ height: '500px' }}
+          style={{ height: '520px' }}
         >
           <FormItem
             {...formItemLayout}

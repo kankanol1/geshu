@@ -155,7 +155,7 @@ export function moveForType(req, res, u, b) {
   const body = (b && b.body) || req.body;
   const { oldPath, newPath, type, projectId, path } = body;
   
-  console.log(`move from :${oldPath}] to {}`, oldPath, newPath);
+  console.log(`move from :${oldPath.path}] to ${newPath.path}`);
   const result = {
     success: true,
     message: '移动成功',
