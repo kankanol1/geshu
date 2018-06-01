@@ -14,6 +14,7 @@ import { getRoutes } from '../utils/utils';
 import Authorized from '../utils/Authorized';
 import { getMenuData } from '../common/menu';
 import logo from '../assets/logo.png';
+import { getUrlParams, replaceUrlWithParams } from '../utils/conversionUtils';
 
 const { Content, Header, Footer } = Layout;
 const { AuthorizedRoute } = Authorized;
@@ -148,13 +149,14 @@ class AbstractBasicLayout extends React.PureComponent {
   getBashRedirect = () => {
     // According to the url parameter to redirect
     // 这里是重定向的,重定向到 url 的 redirect 参数所示地址
-    const urlParams = new URL(window.location.href);
+    const url = window.location.href;
+    const urlParams = getUrlParams(url);
 
-    const redirect = urlParams.searchParams.get('redirect');
+    const { redirect } = urlParams;
     // Remove the parameters in the url
     if (redirect) {
-      urlParams.searchParams.delete('redirect');
-      window.history.replaceState(null, 'redirect', urlParams.href);
+      delete urlParams.redirect;
+      window.history.replaceState(null, 'redirect', replaceUrlWithParams(url, urlParams));
     } else {
       return '/project/list';
     }
