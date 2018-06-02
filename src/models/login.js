@@ -20,7 +20,9 @@ export default {
       });
       // Login successfully
       if (response.status === 'ok') {
-        reloadAuthorized();
+        yield put({
+          type: 'global/fetchUserRole',
+        });
         yield put(routerRedux.push('/'));
       }
     },
@@ -30,11 +32,12 @@ export default {
       // do not redirect twice.
       if (pathname === '/user/login') { return; }
       try {
-        // get location pathname
-        const url = window.location.href;
-        const urlParams = getUrlParams(url);
-        // add the parameters in the url
-        const redirectPath = replaceUrlWithParams('/#/user/login', { urlParams, redirect: pathname });
+        // // get location pathname
+        // const url = window.location.href;
+        // const urlParams = getUrlParams(url);
+        // // add the parameters in the url
+        // const redirectPath = replaceUrlWithParams('/#/user/login',
+        // { urlParams, redirect: pathname });
         const response = yield call(userLogout);
         if (response.success) {
           message.info(response.message);
@@ -49,7 +52,9 @@ export default {
             currentAuthority: 'guest',
           },
         });
-        reloadAuthorized();
+        yield put({
+          type: 'global/fetchUserRole',
+        });
         yield put(routerRedux.push('/user/login'));
       }
     },

@@ -18,6 +18,7 @@ class AuthorizedRoute extends React.Component {
           <Route
             {...rest}
             render={() => <Redirect to={{ pathname: redirectPath }} />}
+            // render={() => null}
           />
         }
       >
