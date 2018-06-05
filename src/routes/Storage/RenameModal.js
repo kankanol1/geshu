@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { Button, Input, Icon, message, Form, Modal } from 'antd';
+import { Button, Input, message, Form, Modal } from 'antd';
 import fetch from 'dva/fetch';
 import PropTypes from 'prop-types';
 import urls from '../../utils/urlUtils';

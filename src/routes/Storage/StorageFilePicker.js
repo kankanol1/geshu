@@ -297,7 +297,7 @@ export default class StorageFilePicker extends PureComponent {
         renderItem={item => (
           <List.Item>
             <div
-              onClick={allowSelectFolder ?
+              onClick={allowSelectFolder || !item.isdir ?
                 () => this.handleFileSelect(item) : () => this.visitFile(item)}
               onDoubleClick={allowSelectFolder ?
                 () => this.visitFile(item) : null

@@ -3,7 +3,6 @@ import { Button, Input, message, Form, Modal } from 'antd';
 import fetch from 'dva/fetch';
 import PropTypes from 'prop-types';
 import urls from '../../utils/urlUtils';
-import { extractFileName } from '../../utils/conversionUtils';
 import FilePickerForForm from './FilePickerForForm';
 
 const FormItem = Form.Item;
