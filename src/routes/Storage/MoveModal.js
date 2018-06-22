@@ -3,6 +3,7 @@ import { Button, Input, message, Form, Modal } from 'antd';
 import fetch from 'dva/fetch';
 import PropTypes from 'prop-types';
 import urls from '../../utils/urlUtils';
+import { wrapOptions } from '../../utils/request';
 import FilePickerForForm from './FilePickerForForm';
 
 const FormItem = Form.Item;
@@ -40,16 +41,11 @@ export default class MoveModal extends PureComponent {
       });
 
       // upload.
-      fetch(`${urls.fsMoveUrl}`, {
-        credentials: 'include',
+      fetch(`${urls.fsMoveUrl}`, wrapOptions({
         method: 'POST',
         processData: false,
-        body: JSON.stringify(formJson),
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json; charset=utf-8',
-        },
-      }).then((response) => {
+        body: formJson,
+      })).then((response) => {
         if (response.status !== 200) {
           const error = new Error(response.status);
           error.name = `HTTP错误${response.status}`;

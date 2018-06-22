@@ -2,8 +2,8 @@ import React, { PureComponent } from 'react';
 import { Button, Upload, Icon, message, Form, Modal } from 'antd';
 import fetch from 'dva/fetch';
 import PropTypes from 'prop-types';
-import { requestThrowError } from '../../utils/request';
 import urls from '../../utils/urlUtils';
+import { wrapOptions } from '../../utils/request';
 
 const FormItem = Form.Item;
 
@@ -40,15 +40,11 @@ export default class UploadModal extends PureComponent {
       });
 
       // upload.
-      fetch(`${urls.fsUploadUrl}`, {
-        credentials: 'include',
+      fetch(`${urls.fsUploadUrl}`, wrapOptions({
         method: 'POST',
         processData: false,
         body: formData,
-        headers: {
-          Accept: 'application/json',
-        },
-      }).then((response) => {
+      })).then((response) => {
         if (response.status !== 200) {
           const error = new Error(response.status);
           error.name = `HTTP错误${response.status}`;

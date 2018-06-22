@@ -83,8 +83,31 @@ export function postFileUpload(req, res, u, b) {
   }
 }
 
+export function getPreviewData(req, res, u, b) {
+  const result=[];
+  for(let i=0;i<5;i++){
+    result.push('data1-'+i+','
+      +'data2-'+i+','
+      +'data3-'+i+','
+      +'data4-'+i+','
+      +'data5-'+i+','
+      +'data6-'+i+','
+      +'data7-'+i+','
+      +'data8-'+i+','
+      +'data9-'+i+','
+      +'data10-'+i+','
+    )
+  }
+  if (res && res.json) {
+    res.json(result);
+  } else {
+    return result;
+  }
+}
+
 
 export default {
   getFileList,
-  postFileUpload
+  postFileUpload,
+  getPreviewData
 };

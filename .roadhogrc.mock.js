@@ -20,11 +20,11 @@ import { getJobs, cancelJobs, deleteJobs } from './mock/job';
 import { open, save, saveSettings, submit, validate } from './mock/workspace/workspace';
 import { getUserInfo, updatePassword } from './mock/selfmanage';
 import {recentGraph,saveGraph,getGraph,deleteGraph,getDataSources,getDataSourceColumns,getGraphList,getGremlinServerAddress,getQueryList,saveQuery,saveAsQuery,updateQuery,deleteQuery,executeGraph,createGraph} from './mock/graph';
-import { getFileList, postFileUpload } from './mock/file';
+import { getFileList, postFileUpload,getPreviewData } from './mock/file';
 import { getServingModels, offlineServingModels, onlineServingModels } from './mock/servingmodel';
 import { getQueryResult, getLastestDatabasesForProject, persistDataQuery } from './mock/dataquery';
 import { fetchSchema } from './mock/workspace/components';
-import { allProjectListForStorage, listFileForType, mkdirForType, renameForType, moveForType, deleteForType } from './mock/storage';
+import { allProjectListForStorage, listFileForType, mkdirForType, renameForType, moveForType, deleteForType, registeredStoreTypes } from './mock/storage';
 // import { createDatabase, updateDatabase } from './src/services/databaseAPI';
 // import { deleteDatabase } from './mock/database';
 
@@ -155,14 +155,16 @@ const proxy = serverEnabled ?
   
   // file list
   'GET /api/fs/ls': getFileList,
+  'GET /api/fs/sample': getPreviewData,
   'GET /api/fs/columns': getDataSourceColumns,
   'POST /api/fs/upload': postFileUpload,
-  'GET /api/fs/projectsls': allProjectListForStorage,
   'GET /api/fs/ls4type': listFileForType,
   'POST /api/fs/mkdir4type': mkdirForType,
   'POST /api/fs/rename4type': renameForType,
   'POST /api/fs/move4type': moveForType,
   'POST /api/fs/delete4type': deleteForType,
+  'GET /api/fs/registered': registeredStoreTypes,
+  'GET /api/fs/graph/projectls': allProjectListForStorage,
 
   // data Insert list
   'GET /api/dataSelect/all': getAllDatabase,

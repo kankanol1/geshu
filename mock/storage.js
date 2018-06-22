@@ -39,6 +39,16 @@ export function allProjectListForStorage(req, res, u, b) {
   }
 }
 
+export function registeredStoreTypes(req, res, u, b) {
+  const result = ['public','private','graph', 'pipeline'];
+  
+  if (res && res.json) {
+    res.json(result);
+  } else {
+    return result;
+  }
+}
+
 export function listFileForType(req, res, u, b) {
   let url = u;
   if (!url || Object.prototype.toString.call(url) !== '[object String]') {
@@ -191,4 +201,5 @@ export default {
   renameForType,
   moveForType,
   deleteForType,
+  registeredStoreTypes
 };

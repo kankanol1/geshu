@@ -3,16 +3,16 @@ import { Button, Icon, Card, List, Tooltip } from 'antd';
 import { Scrollbars } from 'react-custom-scrollbars';
 import PropTypes from 'prop-types';
 import { extractFileName } from '../../utils/conversionUtils';
-import { indexListData } from './StorageUtils';
+import { getDisplayDataForTypes } from './StorageUtils';
 import UploadModal from './UploadModal';
 import CreateModal from './CreateModal';
 import RenameModal from './RenameModal';
 import DeleteModal from './DeleteModal';
 import MoveModal from './MoveModal';
-import { queryProjectsForFile, queryFileForType } from '../../services/storageAPI';
+import { queryProjectsForFile, queryFileForType, queryRegisteredTypes } from '../../services/storageAPI';
 import defaultStyles from './StorageFilePicker.less';
 
-export default class StorageFilePicker extends PureComponent {
+export default class StorageFilePicker extends React.Component {
   static defaultProps = {
     onChange: undefined,
     styles: defaultStyles,
@@ -22,6 +22,14 @@ export default class StorageFilePicker extends PureComponent {
     enableMkdir: false,
     allowSelectFolder: false,
     height: undefined,
+    mode: 'all',
+    view: 'index',
+    type: undefined,
+    project: {
+      id: -1,
+      name: '无项目',
+    },
+    path: '/',
   }
 
   state = {
@@ -31,8 +39,8 @@ export default class StorageFilePicker extends PureComponent {
      * 2. 'project' => need to show all the available projects.
      * 3. 'file' => show file list.
      */
-    view: 'index',
-    path: '/',
+    view: this.props.view,
+    path: this.props.path,
     /**
      * type is used only when view is 'file'.
      * type can be following:
@@ -40,11 +48,8 @@ export default class StorageFilePicker extends PureComponent {
      * 2. 'public' public files.
      * 3. 'project' project files.
      */
-    type: undefined,
-    project: {
-      id: 0,
-      name: '项目',
-    },
+    type: this.props.type,
+    project: this.props.project,
 
     /**
      * selected file item, will be used in renameModal, deleteModal and moveModal.
@@ -66,6 +71,10 @@ export default class StorageFilePicker extends PureComponent {
      */
     files: [],
     /**
+     * index fetched from remote.
+     */
+    indexData: [],
+    /**
      * loading...
      */
     loading: false,
@@ -76,6 +85,24 @@ export default class StorageFilePicker extends PureComponent {
     selectedProject: undefined,
   }
 
+  componentDidMount() {
+    const { view, type, project, path } = this.props;
+    if (view === 'index') {
+    // init index.
+      this.fetchIndex();
+    } else if (view === 'file' && type !== undefined) {
+      // init for file.
+      // fetch
+      this.fetchFileListForType({
+        payload: {
+          projectId: (type === 'pipeline' || type === 'graph') ? project.id : -1,
+          type,
+          path,
+        },
+      });
+    }
+  }
+
   onChange(type, path, project) {
     const selected = {
       type, path, projectId: project.id, projectName: project.name,
@@ -83,6 +110,7 @@ export default class StorageFilePicker extends PureComponent {
     const { onChange } = this.props;
     if (onChange) onChange(selected);
   }
+
 
   generateTitle = () => {
     const { view, path, type, project } = this.state;
@@ -94,7 +122,7 @@ export default class StorageFilePicker extends PureComponent {
           return `当前位置：个人文件(路径:${path})`;
         case 'public':
           return `当前位置：公开文件(路径:${path})`;
-        case 'project':
+        case 'graph':
           return `当前位置：项目文件[${project.name}](路径:${path})`;
         default:
           return undefined;
@@ -107,11 +135,14 @@ export default class StorageFilePicker extends PureComponent {
     if (view === 'file' && path !== '/') {
       // just go to upper state.
       const nameArr = path.split('/');
-      const newPath = path.substr(0, path.length - nameArr[nameArr.length - 1].length);
+      // notice: remove the last '/' as well.
+
+      const newPath = nameArr.length === 2 ? '/' :
+        path.substr(0, path.length - nameArr[nameArr.length - 1].length - 1);
       // fetch again.
       this.fetchFileListForType({
         payload: {
-          id: type === 'project' ? project.id : -1,
+          projectId: (type === 'graph' || type === 'pipeline') ? project.id : -1,
           type,
           path: newPath,
         },
@@ -119,20 +150,35 @@ export default class StorageFilePicker extends PureComponent {
           path: newPath,
         },
       });
-    } else if (view === 'file' && type === 'project') {
+    } else if (view === 'file' && (type === 'graph' || type === 'pipeline') && this.props.mode === 'all') {
       // just show the project.
-      this.setState({ view: 'project', type: undefined });
+      this.setState({ view: 'project' });
     } else {
       this.setState({ view: 'index', type: undefined });
     }
   }
 
   backHome = () => {
-    this.setState({
-      view: 'index',
-      type: undefined,
-      path: '/',
-    });
+    const { view, type, project, path } = this.props;
+    const newStates = {
+      view: this.props.view,
+      type: this.props.type,
+      path: this.props.path,
+    };
+    if (view === 'file' && type !== undefined) {
+      // fetch
+      this.fetchFileListForType({
+        payload: {
+          projectId: (type === 'graph' || type === 'pipeline') ? project.id : -1,
+          type,
+          path,
+        },
+        newStates,
+      });
+    } else {
+      // set state.
+      this.setState(newStates);
+    }
   }
 
   fetchFileListForType = ({ payload, newStates }) => {
@@ -157,12 +203,24 @@ export default class StorageFilePicker extends PureComponent {
     });
   }
 
+  fetchIndex = () => {
+    this.setState({ loading: true });
+    queryRegisteredTypes().then((response) => {
+      const excludeList = (this.props.mode === 'project' ? ['private'] : []);
+      const transformed = getDisplayDataForTypes(response, excludeList);
+      this.setState({
+        indexData: transformed,
+        loading: false,
+      });
+    });
+  }
+
   changeView = (type) => {
     switch (type) {
       case 'private':
         this.fetchFileListForType({
           payload: {
-            id: 0,
+            projectId: 0,
             type: 'private',
             path: '/',
           },
@@ -172,32 +230,44 @@ export default class StorageFilePicker extends PureComponent {
       case 'public':
         this.fetchFileListForType({
           payload: {
-            id: 0,
+            projectId: 0,
             type: 'public',
             path: '/',
           },
           newStates: { view: 'file', type: 'public', path: '/', selectedType: undefined },
         });
         break;
-      case 'project':
-        this.fetchProjectsForFile({
-          newStates: { view: 'project', path: '/', selectedType: undefined },
-        });
+      case 'graph':
+      case 'pipeline':
+        if (this.props.mode === 'all') {
+          this.fetchProjectsForFile({
+            newStates: { view: 'project', type, path: '/', selectedType: undefined },
+          });
+        } else if (this.props.mode === 'project') {
+          this.fetchFileListForType({
+            payload: {
+              projectId: this.props.project.id,
+              type: this.props.type,
+              path: '/',
+            },
+            newStates: { view: 'file', type: this.props.type, path: '/', selectedType: undefined },
+          });
+        }
         break;
       default:
         break;
     }
   }
 
-  visitProject = (projectItem) => {
+  visitProject = (projectItem, type) => {
     this.fetchFileListForType({
       payload: {
-        id: projectItem.id,
-        type: 'project',
+        projectId: projectItem.id,
+        type,
         path: this.state.path,
       },
       newStates: {
-        view: 'file', path: '/', type: 'project', project: projectItem, selectedProject: undefined,
+        view: 'file', path: '/', type, project: projectItem, selectedProject: undefined,
       },
     });
   }
@@ -210,7 +280,7 @@ export default class StorageFilePicker extends PureComponent {
       const { type, project } = this.state;
       this.fetchFileListForType({
         payload: {
-          id: type === 'project' ? project.id : -1,
+          projectId: (type === 'graph' || type === 'pipeline') ? project.id : -1,
           type,
           path: fileItem.rpath,
         },
@@ -235,20 +305,20 @@ export default class StorageFilePicker extends PureComponent {
 
   handleProjectSelect(selectedProject) {
     this.setState({ selectedProject });
-    this.onChange('project', '/', this.state.project);
+    this.onChange('project', '/', selectedProject);
   }
 
   renderIndexList = () => {
-    const { styles, allowSelectFolder } = this.props;
-    const { loading, selectedType } = this.state;
+    const { styles, allowSelectFolder, mode } = this.props;
+    const { loading, selectedType, indexData } = this.state;
     return (
       <List
-        dataSource={indexListData}
+        dataSource={indexData}
         loading={loading}
         renderItem={item => (
           <List.Item>
             <div
-              onClick={allowSelectFolder && item.type !== 'project' ?
+              onClick={allowSelectFolder && ((item.type !== 'pipeline' && item.type !== 'graph') || mode === 'project') ?
                 () => this.handleTypeSelect(item.type) : () => this.changeView(item.type)}
               onDoubleClick={allowSelectFolder ?
                 () => this.changeView(item.type) : null
@@ -290,9 +360,18 @@ export default class StorageFilePicker extends PureComponent {
         );
       }
     };
+    let renderItems;
+    if (this.props.type === this.state.type && this.props.view === this.state.view &&
+          this.props.path === this.state.path && this.props.project.id === this.state.project.id) {
+      // hide the first item.
+      const [, ...rest] = files;
+      renderItems = rest;
+    } else {
+      renderItems = files;
+    }
     return (
       <List
-        dataSource={files}
+        dataSource={renderItems}
         loading={loading}
         renderItem={item => (
           <List.Item>
@@ -319,7 +398,7 @@ export default class StorageFilePicker extends PureComponent {
   }
 
   renderProjectList = () => {
-    const { loading, projects, selectedProject } = this.state;
+    const { loading, projects, selectedProject, type } = this.state;
     const { styles, allowSelectFolder } = this.props;
     return (
       <List
@@ -329,9 +408,9 @@ export default class StorageFilePicker extends PureComponent {
           <List.Item>
             <div
               onClick={allowSelectFolder ?
-                () => this.handleProjectSelect(item) : () => this.visitProject(item)}
+                () => this.handleProjectSelect(item) : () => this.visitProject(item, type)}
               onDoubleClick={allowSelectFolder ?
-                () => this.visitProject(item) : null
+                () => this.visitProject(item, type) : null
               }
               className={`${styles.indexItems} ${selectedProject && selectedProject.id === item.id ? styles.selectedItem : ''}`}
             >
@@ -354,7 +433,7 @@ export default class StorageFilePicker extends PureComponent {
         this.fetchFileListForType(
           {
             payload: {
-              id: type === 'project' ? project.id : -1,
+              projectId: (type === 'graph' || type === 'pipeline') ? project.id : -1,
               type,
               path,
             },
@@ -456,7 +535,8 @@ export default class StorageFilePicker extends PureComponent {
   }
 
   renderNavigationButton() {
-    if (this.state.view !== 'index') {
+    if (this.state.view !== this.props.view || this.state.type !== this.props.type ||
+        this.state.path !== this.props.path || this.state.project.id !== this.props.project.id) {
       return (
         <React.Fragment>
           <Tooltip title="首页">
@@ -552,32 +632,33 @@ StorageFilePicker.propTypes = {
   //  * handle selected.
   //  */
   // onOk: PropTypes.func,
-  // /**
-  //  * the selection mode.
-  //  * all: show all files.(private, all projects, public)
-  //  * project: show only given projects and private, public
-  //  */
-  // mode: PropTypes.string,
+  /**
+   * the selection mode.
+   * all: show all files.(private, all projects, public)
+   * project: show only given projects and public
+   */
+  mode: PropTypes.string,
 
-  // /**
-  //  * default view.
-  //  */
-  // view: PropTypes.string,
+  /**
+   * default view.
+   */
+  view: PropTypes.string,
 
-  // /**
-  //  * default type.
-  //  */
-  // type: PropTypes.string,
+  /**
+   * default type.
+   * 'public', 'private', 'graph', 'pipeline'
+   */
+  type: PropTypes.string,
 
-  // /**
-  //  * path: default path,
-  //  */
-  // path: PropTypes.string,
+  /**
+   * path: default path,
+   */
+  path: PropTypes.string,
 
-  // /**
-  //  * default project id,
-  //  */
-  // projectId: PropTypes.number,
+  /**
+   * default project: {id, name}
+   */
+  project: PropTypes.object,
 
   styles: PropTypes.object,
 

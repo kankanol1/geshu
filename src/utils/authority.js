@@ -1,12 +1,11 @@
-
+// use localStorage to store the authority info, which might be sent from server in actual project.
 import store from '../index';
 
-// use localStorage to store the authority info, which might be sent from server in actual project.
 export function getAuthority() {
-  if (store) {
-    return store.getState().global.role;
+  if (store && store.getState().global.currentUser.role !== undefined) {
+    return store.getState().global.currentUser.role;
   } else {
-    return 'guest';
+    return localStorage.getItem('projectx-authority') || 'guest';
   }
 }
 

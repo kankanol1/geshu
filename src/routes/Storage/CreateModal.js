@@ -3,6 +3,7 @@ import { Button, Input, Icon, message, Form, Modal } from 'antd';
 import fetch from 'dva/fetch';
 import PropTypes from 'prop-types';
 import urls from '../../utils/urlUtils';
+import { wrapOptions } from '../../utils/request';
 
 const FormItem = Form.Item;
 
@@ -35,16 +36,11 @@ export default class CreateModal extends PureComponent {
       });
 
       // upload.
-      fetch(`${urls.fsMkdirUrl}`, {
-        credentials: 'include',
+      fetch(`${urls.fsMkdirUrl}`, wrapOptions({
         method: 'POST',
         processData: false,
-        body: JSON.stringify(formJson),
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json; charset=utf-8',
-        },
-      }).then((response) => {
+        body: formJson,
+      })).then((response) => {
         if (response.status !== 200) {
           const error = new Error(response.status);
           error.name = `HTTP错误${response.status}`;

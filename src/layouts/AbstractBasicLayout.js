@@ -15,6 +15,7 @@ import Authorized from '../utils/Authorized';
 import { getMenuData } from '../common/menu';
 import logo from '../assets/logo.png';
 import { getUrlParams, replaceUrlWithParams } from '../utils/conversionUtils';
+import LoadedLayout from './LoadedLayout';
 
 const { Content, Header, Footer } = Layout;
 const { AuthorizedRoute } = Authorized;
@@ -64,7 +65,7 @@ enquireScreen((b) => {
   isMobile = b;
 });
 
-class AbstractBasicLayout extends React.PureComponent {
+class AbstractBasicLayout extends LoadedLayout {
   static childContextTypes = {
     location: PropTypes.object,
     breadcrumbNameMap: PropTypes.object,
@@ -197,7 +198,7 @@ class AbstractBasicLayout extends React.PureComponent {
   //     });
   //   }
   // }
-  render() {
+  renderLayout() {
     const {
       currentUser, collapsed, fetchingNotices, notices, location, fullScreen,
     } = this.props;

@@ -137,7 +137,7 @@ export const getRouterData = (app) => {
 
     /* center storage */
     '/storage/list': {
-      component: dynamicWrapper(app, ['storage'], () => import('../routes/Storage/StorageList')),
+      component: dynamicWrapper(app, [], () => import('../routes/Storage/StorageList')),
     },
 
     /**

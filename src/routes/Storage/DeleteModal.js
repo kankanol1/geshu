@@ -3,6 +3,7 @@ import { Button, message, Modal } from 'antd';
 import fetch from 'dva/fetch';
 import PropTypes from 'prop-types';
 import urls from '../../utils/urlUtils';
+import { wrapOptions } from '../../utils/request';
 
 export default class DeleteModal extends PureComponent {
   static defaultProps = {
@@ -27,16 +28,11 @@ export default class DeleteModal extends PureComponent {
     });
 
     // upload.
-    fetch(`${urls.fsDeleteUrl}`, {
-      credentials: 'include',
+    fetch(`${urls.fsDeleteUrl}`, wrapOptions({
       method: 'POST',
       processData: false,
-      body: JSON.stringify(formJson),
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json; charset=utf-8',
-      },
-    }).then((response) => {
+      body: formJson,
+    })).then((response) => {
       if (response.status !== 200) {
         const error = new Error(response.status);
         error.name = `HTTP错误${response.status}`;

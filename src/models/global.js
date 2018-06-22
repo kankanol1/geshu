@@ -1,8 +1,9 @@
 
 import fetch from 'dva/fetch';
+import { routerRedux } from 'dva/router';
 import { message } from 'antd';
 import { reloadAuthorized } from '../utils/Authorized';
-import { getUrlParams, replaceUrlWithParams } from '../utils/conversionUtils';
+import { setAuthority } from '../utils/authority';
 
 export default {
   namespace: 'global',
@@ -10,21 +11,21 @@ export default {
   state: {
     collapsed: false,
     fullScreen: false,
-    role: undefined,
-    loadingRole: true,
+    currentUser: {},
+    loadingUser: true,
   },
 
   effects: {
-    *fetchUserRole({ payload }, { select, put }) {
+    *queryCurrentUser({ callback, payload }, { call, put }) {
       // first set loading.
       yield put({
-        type: 'saveUserRole',
+        type: 'saveCurrentUser',
         payload: {
-          loadingRole: true,
+          loadingUser: true,
         },
       });
       // const pathname = yield select(state => state.routing.location.pathname);
-      const role = yield fetch('/api/self/info', {
+      const currentUser = yield fetch('/api/self/info', {
         credentials: 'include',
         headers: {
           Accept: 'application/json',
@@ -38,40 +39,51 @@ export default {
         } else {
           return response.json();
         }
-      }).then((response) => {
-        if (response.role === 'admin') {
-          return 'user';
-        }
-        return response.role;
       }).catch((e) => {
         if (e.name === 401) {
           message.info('请先登录');
         } else {
           message.info(`服务器错误，状态:${e.name}`);
         }
-        return 'guest';
+        return { role: 'guest' };
       });
       // first save role.
       yield put({
-        type: 'saveUserRole',
+        type: 'saveCurrentUser',
         payload: {
-          role,
+          currentUser,
         },
       });
+      setAuthority(currentUser.role);
       // then reload.
       reloadAuthorized();
       // last set loading.
       yield put({
-        type: 'saveUserRole',
+        type: 'saveCurrentUser',
         payload: {
-          loadingRole: false,
+          loadingUser: false,
         },
       });
+      if (callback) {
+        callback();
+      }
+      /** rediret to index */
+      const redirect = payload && payload.redirect;
+
+      if (redirect) {
+        yield put(routerRedux.push('/'));
+      }
+
+      if (currentUser.role === 'guest') {
+        yield put(routerRedux.push('/user/login'));
+        // redirect.
+      }
     },
+
   },
 
   reducers: {
-    saveUserRole(state, { payload }) {
+    saveCurrentUser(state, { payload }) {
       return { ...state, ...payload };
     },
 
@@ -88,7 +100,6 @@ export default {
         collapsed: payload,
       };
     },
-
   },
 
   subscriptions: {

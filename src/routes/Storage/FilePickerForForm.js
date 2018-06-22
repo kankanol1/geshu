@@ -24,7 +24,7 @@ export default class FilePickerForForm extends React.PureComponent {
     return (
       <div>
         <span style={{ lineHeight: '16px', display: 'inline-block' }}>{selected ?
-          `已选择:${this.generateDescription(selected)}文件名要长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长`
+          `已选择:${this.generateDescription(selected)}`
           : '请选择'}
         </span>
         <StorageFilePicker

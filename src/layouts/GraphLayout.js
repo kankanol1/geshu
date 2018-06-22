@@ -70,8 +70,8 @@ class GraphLayout extends AbstractBasicLayout {
   }
 }
 
-export default connect(({ users, global, loading }) => ({
-  currentUser: users.currentUser,
+export default connect(({ global, loading }) => ({
+  currentUser: global.currentUser,
   loading,
   collapsed: global.collapsed,
   // fetchingNotices: loading.effects['global/fetchNotices'],

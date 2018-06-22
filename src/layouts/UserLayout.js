@@ -6,6 +6,7 @@ import GlobalFooter from '../components/GlobalFooter';
 import styles from './UserLayout.less';
 import logo from '../assets/logo.png';
 import { getRoutes } from '../utils/utils';
+import LoadedLayout from './LoadedLayout';
 
 const links = [{
   key: 'help',
@@ -23,7 +24,7 @@ const links = [{
 
 const copyright = <Fragment>Copyright <Icon type="copyright" /> 2018 观澜数据</Fragment>;
 
-class UserLayout extends React.PureComponent {
+class UserLayout extends LoadedLayout {
   getPageTitle() {
     const { routerData, location } = this.props;
     const { pathname } = location;
@@ -33,7 +34,7 @@ class UserLayout extends React.PureComponent {
     }
     return title;
   }
-  render() {
+  renderLayout() {
     const { routerData, match } = this.props;
     return (
       <DocumentTitle title={this.getPageTitle()}>

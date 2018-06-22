@@ -11,8 +11,8 @@ class BasicLayout extends AbstractBasicLayout {
   }
 }
 
-export default connect(({ user, global, loading }) => ({
-  currentUser: user.currentUser,
+export default connect(({ global, loading }) => ({
+  currentUser: global.currentUser,
   collapsed: global.collapsed,
   fetchingNotices: loading.effects['global/fetchNotices'],
   notices: global.notices,

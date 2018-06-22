@@ -3,6 +3,7 @@ import { Button, Input, message, Form, Modal } from 'antd';
 import fetch from 'dva/fetch';
 import PropTypes from 'prop-types';
 import urls from '../../utils/urlUtils';
+import { wrapOptions } from '../../utils/request';
 import { extractFileName } from '../../utils/conversionUtils';
 
 const FormItem = Form.Item;
@@ -37,16 +38,11 @@ export default class RenameModal extends PureComponent {
       });
 
       // upload.
-      fetch(`${urls.fsRenameUrl}`, {
-        credentials: 'include',
+      fetch(`${urls.fsRenameUrl}`, wrapOptions({
         method: 'POST',
         processData: false,
-        body: JSON.stringify(formJson),
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json; charset=utf-8',
-        },
-      }).then((response) => {
+        body: formJson,
+      })).then((response) => {
         if (response.status !== 200) {
           const error = new Error(response.status);
           error.name = `HTTP错误${response.status}`;
@@ -106,7 +102,7 @@ export default class RenameModal extends PureComponent {
           [
             <Button key="back" onClick={() => this.handleCancel()} disabled={loading}>取消</Button>,
             <Button key="submit" type="primary" loading={loading} onClick={() => this.handleSubmit()}>
-              创建
+              重命名
             </Button>,
           ]
         }
@@ -130,6 +126,7 @@ export default class RenameModal extends PureComponent {
               rules: [{
                 required: true, message: `请输入新${fileOrDir}名`,
               }],
+              initialValue: extractFileName(fileItem.rpath),
           })(
             <Input />
           )}

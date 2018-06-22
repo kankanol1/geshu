@@ -1,6 +1,7 @@
-import fetch from 'dva/fetch';
 import { notification } from 'antd';
 import { routerRedux } from 'dva/router';
+import fetch from 'dva/fetch';
+import Cookie from 'js-cookie';
 import store from '../index';
 
 const codeMessage = {
@@ -35,14 +36,7 @@ function checkStatus(response) {
   throw error;
 }
 
-/**
- * Requests a URL, returning a promise.
- *
- * @param  {string} url       The URL we want to request
- * @param  {object} [options] The options we want to pass to "fetch"
- * @return {object}           An object containing either "data" or "err"
- */
-export default function request(url, options) {
+export function wrapOptions(options) {
   const defaultOptions = {
     credentials: 'include',
   };
@@ -53,19 +47,30 @@ export default function request(url, options) {
         Accept: 'application/json',
         'Content-Type': 'application/json; charset=utf-8',
         ...newOptions.headers,
+        'X-XSRF-TOKEN': Cookie.get('XSRF-TOKEN'),
       };
       newOptions.body = JSON.stringify(newOptions.body);
     } else {
       // newOptions.body is FormData
       newOptions.headers = {
         Accept: 'application/json',
-        // set content-type to undefined to allow the browser set boundary for multipart.
-        // 'Content-Type': undefined,
+        'X-XSRF-TOKEN': Cookie.get('XSRF-TOKEN'),
         ...newOptions.headers,
       };
     }
   }
+  return newOptions;
+}
 
+/**
+ * Requests a URL, returning a promise.
+ *
+ * @param  {string} url       The URL we want to request
+ * @param  {object} [options] The options we want to pass to "fetch"
+ * @return {object}           An object containing either "data" or "err"
+ */
+export default function request(url, options) {
+  const newOptions = wrapOptions(options);
   return fetch(url, newOptions)
     .then(checkStatus)
     .then((response) => {
