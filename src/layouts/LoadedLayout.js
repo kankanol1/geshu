@@ -7,7 +7,7 @@ export default class LoadedLayout extends React.Component {
   }
 
   render() {
-    if (this.state.layoutLoading) {
+    if (this.state.layoutLoading !== false) {
       return <GlobalLoading onLoaded={() => this.setState({ layoutLoading: false })} />;
     } else {
       return this.renderLayout();
