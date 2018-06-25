@@ -187,7 +187,9 @@ export default class SqlQueryTable extends Component {
             })}
           </Tabs>
         </Card>
-        {this.renderVisualizationModal()}
+        {
+          // this.renderVisualizationModal()
+          }
       </React.Fragment>
     );
   }
