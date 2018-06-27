@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import { Button, Icon, Card, List, Tooltip } from 'antd';
 import { Scrollbars } from 'react-custom-scrollbars';
 import PropTypes from 'prop-types';
+import download from 'downloadjs';
 import { extractFileName } from '../../utils/conversionUtils';
 import { getDisplayDataForTypes } from './StorageUtils';
 import UploadModal from './UploadModal';
@@ -374,6 +375,15 @@ export default class StorageFilePicker extends React.Component {
                 onClick={() => this.setState({ moveModal: true, fileItem: item })}
               />
             </Tooltip>
+            <Tooltip title="下载">
+              <Icon
+                type="download"
+                onClick={() => {
+                  download(`/api/fs/download?projectId=${this.state.project ?
+                    this.state.project.id : -1}&type=${this.state.type}&path=${item.rpath}`);
+                  }}
+              />
+            </Tooltip>
           </div>
         );
       }
@@ -404,6 +414,8 @@ export default class StorageFilePicker extends React.Component {
               <div className={styles.listTitle}>
                 <Icon type={item.isdir ? 'folder' : 'file'} className={styles.indexIcon} />
                 <span>{item.rpath === this.state.path ? '..' : extractFileName(item.rpath)}</span>
+                {/* <span style={{ color: '#ddd', fontStyle: 'italic',
+                  fontSize: '0.9em', paddingLeft: '10px' }}> 3.2M </span> */}
                 {
                   enableItemOp ? renderItemOp(item) : null
                 }

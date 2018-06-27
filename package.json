@@ -30,6 +30,7 @@
     "classnames": "^2.2.5",
     "copy-to-clipboard": "^3.0.8",
     "create-react-class": "^15.6.3",
+    "downloadjs": "^1.4.7",
     "dva": "^2.2.3",
     "dva-loading": "^1.0.4",
     "enquire-js": "^0.1.3",
