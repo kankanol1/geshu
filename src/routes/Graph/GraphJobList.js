@@ -10,7 +10,6 @@ import styles from './GraphJobList.less';
 const FormItem = Form.Item;
 const { Option } = Select;
 const { RangePicker } = DatePicker;
-const { TextArea } = Input;
 
 const statusMap = {
   initialized: '初始化',

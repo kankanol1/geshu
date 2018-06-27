@@ -1,8 +1,12 @@
 import { stringify } from 'qs';
 import request from '../utils/request';
 
-export async function queryProjectsForFile() {
+export async function queryGraphProjectsForFile() {
   return request('/api/fs/graph/projectls');
+}
+
+export async function queryPipelineProjectsForFile() {
+  return request('/api/fs/pipeline/projectls');
 }
 
 export async function queryRegisteredTypes() {
@@ -14,7 +18,8 @@ export async function queryFileForType(params) {
 }
 
 export default {
-  queryProjectsForFile,
+  queryGraphProjectsForFile,
+  queryPipelineProjectsForFile,
   queryFileForType,
   queryRegisteredTypes,
 };

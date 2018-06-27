@@ -109,12 +109,6 @@ const proxy = serverEnabled ?
   'GET /api/jobs/list': getJobs,
   'POST /api/jobs/cancel': cancelJobs,
   'POST /api/jobs/delete': deleteJobs,
-  'GET /api/graphjob/list': getJobs,
-  'POST /api/graphjob/cancel': cancelJobs,
-  'POST /api/graphjob/delete': deleteJobs,
-  // 'POST /api/jobs/resume': resumeJobs,
-  // 'POST /api/jobs/pause': pauseJobs,
-  // 'POST /api/jobs/restart': restartJobs,
 
   // workspace related.
   'GET /api/workspace/component_list': componentList,
@@ -131,27 +125,25 @@ const proxy = serverEnabled ?
   'GET /api/workspace/dataview/': getLastestDatabasesForProject,
 
   // graph
-  'GET /api/graph/recent': recentGraph,
-  'GET /api/graph/detail': getGraph,
-  'POST /api/graph/save': saveGraph,  
+  'GET /api/graph/project/recent': recentGraph,
+  'GET /api/graph/project/detail': getGraph,
+  'POST /api/graph/project/save': saveGraph,  
+  'GET /api/graph/project/list': getGraphList,  
+  'POST /api/graph/project/delete': deleteGraph,
+  'POST /api/graph/project/update': saveGraph,
+  'POST /api/graph/project/create': createGraph,
+  'GET /api/graph/project/execute': executeGraph, 
+
   'GET /api/graph/gremlinserver/address': getGremlinServerAddress,  
   'POST /api/graph/query/create': saveAsQuery,  
   'POST /api/graph/query/update': saveQuery, 
-  'GET /api/graph/graphList': getGraphList,  
   'GET /api/graph/query/list': getQueryList,  
-  'POST /api/graph/delete': deleteGraph,
-  'POST /api/graph/update': saveGraph,
-  'POST /api/graph/create': createGraph,
   'POST /api/graph/query/update': updateQuery,
   'POST /api/graph/query/delete': deleteQuery,
-  'GET /api/graph/execute': executeGraph, 
-  'GET /api/graphjobs/list': getJobs,
-  'POST /api/graphjobs/cancel': cancelJobs,
-  'POST /api/graphjobs/delete': deleteJobs,
-    // 'POST /api/jobs/resume': resumeJobs,
-    // 'POST /api/jobs/pause': pauseJobs,
-    // 'POST /api/jobs/restart': restartJobs,
 
+  'GET /api/graph/jobs/list': getJobs,
+  'POST /api/graph/jobs/cancel': cancelJobs,
+  'POST /api/graph/jobs/delete': deleteJobs,
   
   // file list
   'GET /api/fs/ls': getFileList,
@@ -165,6 +157,7 @@ const proxy = serverEnabled ?
   'POST /api/fs/delete4type': deleteForType,
   'GET /api/fs/registered': registeredStoreTypes,
   'GET /api/fs/graph/projectls': allProjectListForStorage,
+  'GET /api/fs/pipeline/projectls': allProjectListForStorage,
 
   // data Insert list
   'GET /api/dataSelect/all': getAllDatabase,

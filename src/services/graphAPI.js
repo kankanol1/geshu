@@ -5,11 +5,11 @@ import { stringify } from 'qs';
 import request from '../utils/request';
 
 export async function recentGraph() {
-  return request('/api/graph/recent');
+  return request('/api/graph/project/recent');
 }
 
 export async function saveGraph(params) {
-  return request('/api/graph/save', {
+  return request('/api/graph/project/save', {
     method: 'POST',
     body: {
       ...params,
@@ -26,7 +26,7 @@ export async function createQuery(params) {
 }
 
 export async function getGraph(params) {
-  return request(`/api/graph/detail?${stringify(params)}`, {
+  return request(`/api/graph/project/detail?${stringify(params)}`, {
     method: 'GET',
   });
 }
@@ -65,13 +65,13 @@ export async function queryGremlinServer(params) {
   });
 }
 export async function queryGraphList(params) {
-  return request(`/api/graph/graphList?${stringify(params)}`);
+  return request(`/api/graph/project/list?${stringify(params)}`);
 }
 export async function execute(params) {
-  return request(`/api/graph/execute?${stringify(params)}`);
+  return request(`/api/graph/project/execute?${stringify(params)}`);
 }
 export async function removeProject(params) {
-  return request('/api/graph/delete', {
+  return request('/api/graph/project/delete', {
     method: 'POST',
     body: {
       ...params,
@@ -81,7 +81,7 @@ export async function removeProject(params) {
 }
 
 export async function updateProject(params) {
-  return request('/api/graph/update', {
+  return request('/api/graph/project/update', {
     method: 'POST',
     body: {
       ...params,
@@ -89,7 +89,7 @@ export async function updateProject(params) {
   });
 }
 export async function createProject(params) {
-  return request('/api/graph/create', {
+  return request('/api/graph/project/create', {
     method: 'POST',
     body: {
       ...params,

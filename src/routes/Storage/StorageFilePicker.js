@@ -9,7 +9,7 @@ import CreateModal from './CreateModal';
 import RenameModal from './RenameModal';
 import DeleteModal from './DeleteModal';
 import MoveModal from './MoveModal';
-import { queryProjectsForFile, queryFileForType, queryRegisteredTypes } from '../../services/storageAPI';
+import { queryProjectsForFile, queryFileForType, queryRegisteredTypes, queryGraphProjectsForFile, queryPipelineProjectsForFile } from '../../services/storageAPI';
 import defaultStyles from './StorageFilePicker.less';
 
 export default class StorageFilePicker extends React.Component {
@@ -192,9 +192,20 @@ export default class StorageFilePicker extends React.Component {
     });
   }
 
-  fetchProjectsForFile = ({ newStates }) => {
+  fetchGraphProjectsForFile = ({ newStates }) => {
     this.setState({ loading: true });
-    queryProjectsForFile().then((response) => {
+    queryGraphProjectsForFile().then((response) => {
+      this.setState({
+        projects: response,
+        ...newStates,
+        loading: false,
+      });
+    });
+  }
+
+  fetchPipelineProjectsForFile = ({ newStates }) => {
+    this.setState({ loading: true });
+    queryPipelineProjectsForFile().then((response) => {
       this.setState({
         projects: response,
         ...newStates,
@@ -240,9 +251,16 @@ export default class StorageFilePicker extends React.Component {
       case 'graph':
       case 'pipeline':
         if (this.props.mode === 'all') {
-          this.fetchProjectsForFile({
-            newStates: { view: 'project', type, path: '/', selectedType: undefined },
-          });
+          if (type === 'pipeline') {
+            this.fetchPipelineProjectsForFile({
+              newStates: { view: 'project', type, path: '/', selectedType: undefined },
+            });
+          } else {
+            this.fetchGraphProjectsForFile({
+              newStates: { view: 'project', type, path: '/', selectedType: undefined },
+
+            });
+          }
         } else if (this.props.mode === 'project') {
           this.fetchFileListForType({
             payload: {
