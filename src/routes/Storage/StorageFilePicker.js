@@ -12,6 +12,7 @@ import DeleteModal from './DeleteModal';
 import MoveModal from './MoveModal';
 import { queryProjectsForFile, queryFileForType, queryRegisteredTypes, queryGraphProjectsForFile, queryPipelineProjectsForFile } from '../../services/storageAPI';
 import defaultStyles from './StorageFilePicker.less';
+import { humanFileSize } from '../../utils/utils';
 
 export default class StorageFilePicker extends React.Component {
   static defaultProps = {
@@ -414,8 +415,9 @@ export default class StorageFilePicker extends React.Component {
               <div className={styles.listTitle}>
                 <Icon type={item.isdir ? 'folder' : 'file'} className={styles.indexIcon} />
                 <span>{item.rpath === this.state.path ? '..' : extractFileName(item.rpath)}</span>
-                {/* <span style={{ color: '#ddd', fontStyle: 'italic',
-                  fontSize: '0.9em', paddingLeft: '10px' }}> 3.2M </span> */}
+                { item.rpath === this.state.path || item.isdir ? null :
+                  (<span className={styles.listDetail}> { humanFileSize(item.fileSize)} </span>)
+                }
                 {
                   enableItemOp ? renderItemOp(item) : null
                 }

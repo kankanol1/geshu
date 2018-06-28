@@ -76,16 +76,19 @@ export function listFileForType(req, res, u, b) {
         path: `${prefix}/${type}-projectx`,
         rpath: `/${type}-projectx`,
         isdir: true,
+        fileSize: 10000,
       });
       result.push({
         path: `${prefix}/${type}-shenji`,
         rpath: `/${type}-shenji`,
         isdir: true,
+        fileSize: 10000,
       });
       result.push({
         path: `${prefix}/${type}-rootFile`,
         rpath: `/${type}-rootFile`,
         isdir: false,
+        fileSize: 10200,
       });
       break;
     case `/${type}-shenji`:
@@ -94,12 +97,14 @@ export function listFileForType(req, res, u, b) {
           path: `${prefix}/${type}-shenji/graphData${i}.csv`,
           rpath: `/${type}-shenji/graphData${i}.csv`,
           isdir: false,
+          fileSize: 10100,
         });
       }
       result.push({
         path: `${prefix}/${type}-shenji/textDir`,
         rpath: `/${type}-shenji/textDir`,
         isdir: true,
+        fileSize: 10000,
       });
       break;
     case `/${type}-projectx`:
@@ -109,6 +114,7 @@ export function listFileForType(req, res, u, b) {
           path: `${prefix}/${type}-projectx/${files[i]}`,
           rpath: `/${type}-projectx/${files[i]}`,
           isdir: false,
+          fileSize: 10000,
         });
       }
       break;
@@ -116,6 +122,7 @@ export function listFileForType(req, res, u, b) {
       result.push({
         path: 'defaultFile',
         isdir: false,
+        fileSize: 10000,
       });
   }
   
