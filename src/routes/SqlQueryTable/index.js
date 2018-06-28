@@ -19,6 +19,7 @@ export default class SqlQueryTable extends Component {
     sql: undefined,
     queryResult: undefined,
     loading: undefined,
+    fetchSize: 1000,
   }
 
   constructor(props) {
@@ -32,6 +33,8 @@ export default class SqlQueryTable extends Component {
       activePane: 'default',
       count: 0,
       lastQuerySql: undefined,
+      fetchPage: 0,
+      fetched: false,
     };
   }
 
@@ -42,17 +45,31 @@ export default class SqlQueryTable extends Component {
   }
 
   fetchData(state, instance) {
-    this.setState({ pageSize: state.pageSize, pageNum: state.page }, () => this.performQuery());
+    if (state.pageSize !== this.state.pageSize || state.page !== this.state.pageNum) {
+      this.setState({ pageSize: state.pageSize, pageNum: state.page }, () => this.performQuery());
+    }
   }
 
   performQuery() {
-    const { onQuery } = this.props;
+    const { onQuery, fetchSize } = this.props;
     if (onQuery !== undefined && this.state.query !== '') {
-      onQuery(
-        this.state.query,
-        this.state.pageNum,
-        this.state.pageSize
-      );
+      const { fetched, query, pageNum, pageSize, fetchPage } = this.state;
+      if (!fetched) {
+        this.setState({ fetched: true }, onQuery(query, fetchPage, fetchSize));
+      } else {
+        const startNum = pageSize * pageNum;
+        const endNum = startNum + pageSize;
+        const fetchStart = fetchPage * fetchSize;
+        const fetchEnd = fetchStart + fetchSize;
+        if (fetchEnd >= endNum && fetchStart <= startNum) {
+          // safe.
+        } else {
+          const pageToFetch = Math.floor(startNum / fetchSize);
+          this.setState({ fetchPage: pageToFetch }, onQuery(
+            query, pageToFetch, fetchSize
+          ));
+        }
+      }
       this.setState({ lastQuerySql: this.state.query });
     }
   }
@@ -86,7 +103,7 @@ export default class SqlQueryTable extends Component {
   }
 
   render() {
-    const { queryResult, loading } = this.props;
+    const { queryResult, loading, fetchSize } = this.props;
 
     let displayTable = null;
     if (queryResult !== undefined && queryResult.success) {
@@ -94,12 +111,15 @@ export default class SqlQueryTable extends Component {
       const columns = queryResult.meta.map((m) => {
         return { Header: m.label, accessor: m.label };
       });
-      const pages = Math.ceil(pagination.total / pagination.pagesize);
+      const { pageSize, pageNum, fetchPage } = this.state;
+      const pages = Math.ceil(pagination.total / pageSize);
+      const startNum = (pageNum * pageSize) % fetchSize;
+      const displayData = data.slice(startNum, startNum + pageSize);
       displayTable = (
         <ReactTable
           manual
           loading={loading}
-          data={data}
+          data={displayData}
           columns={columns}
           defaultPageSize={this.state.pageSize}
           className="-striped -highlight"
@@ -128,7 +148,7 @@ export default class SqlQueryTable extends Component {
             <Button
               type="primary"
               className={styles.button}
-              onClick={() => { this.setState({ pageNum: 0, activePane: 'default' }, () => this.performQuery()); }}
+              onClick={() => { this.setState({ pageNum: 0, fetchPage: 0, fetched: false, activePane: 'default' }, () => this.performQuery()); }}
             >
               <Icon type="play-circle" /> 查询
             </Button>
@@ -200,4 +220,5 @@ SqlQueryTable.propTypes = {
   loading: PropTypes.bool,
   onQuery: PropTypes.func.isRequired,
   sql: PropTypes.string,
+  fetchSize: PropTypes.number,
 };
