@@ -708,9 +708,10 @@ export default {
       yield put({ type: 'work_component_settings/initSettings', payload: { settings: response.settings } });
     },
 
-    *updateComponentSelectionAndDisplaySettings({ component }, { put }) {
+    *updateComponentSelectionAndDisplaySettings({ component }, { put, select }) {
+      const projectId = yield select(state => state.work_canvas.state.projectId);
       yield put({ type: 'updateComponentSelection', id: component.id });
-      yield put({ type: 'work_component_settings/displayComponentSetting', component });
+      yield put({ type: 'work_component_settings/displayComponentSetting', component, projectId });
     },
 
     *moveComponentAndDisplaySettingsIfNeeded(

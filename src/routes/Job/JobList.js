@@ -13,6 +13,7 @@ const { RangePicker } = DatePicker;
 const { TextArea } = Input;
 
 const statusMap = {
+  waiting: '排队中',
   initialized: '初始化',
   queued: '等待中',
   canceled: '已取消',
@@ -22,6 +23,7 @@ const statusMap = {
 };
 
 const statusColorMap = {
+  waiting: 'blue',
   initialized: 'cyan',
   queued: 'blue',
   canceled: '#8c8c8c',
@@ -31,6 +33,7 @@ const statusColorMap = {
 };
 
 const statusIconMap = {
+  waiting: 'clock-circle',
   initialized: 'loading-3-quarters',
   queued: 'clock-circle-o',
   canceled: 'close-circle-o',

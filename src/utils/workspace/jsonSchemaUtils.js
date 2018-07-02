@@ -26,7 +26,7 @@ function translateFixedAnyUISchema(originJsonSchema, id, code, name) {
 
 
 /** ======== translate switch schema ========== */
-function translateSwitchJsonSchema(originJsonSchema, id, code, name) {
+function translateSwitchJsonSchema(originJsonSchema, id, code, name, projectId) {
   const newProps = {};
   const dependencies = {};
   for (const [key, value] of Object.entries(originJsonSchema.properties)) {
@@ -46,44 +46,44 @@ function translateSwitchJsonSchema(originJsonSchema, id, code, name) {
   return translated;
 }
 
-function translateSwitchUISchema(originJsonSchema, id, code, name) {
+function translateSwitchUISchema(originJsonSchema, id, code, name, projectId) {
   return { 'ui:field': 'switch_schema', schema: { 'ui:field': 'define_schema' } };
 }
 
-function translateReadFilePathUISchema(originJsonSchema, id, code, name) {
-  return { 'ui:field': 'file_selector', 'ui:options': '/api/fs/ls' };
+function translateReadFilePathUISchema(originJsonSchema, id, code, name, projectId) {
+  return { 'ui:field': 'file_selector', 'ui:options': { projectId } };
 }
 
-function translateDatabasePathUISchema(originJsonSchema, id, code, name) {
+function translateDatabasePathUISchema(originJsonSchema, id, code, name, projectId) {
   return { 'ui:field': 'database_selector', 'ui:options': '/api/dataSelect/all' };
 }
 
-function translateFileSourceConfUISchema(originJsonSchema, id, code, name) {
+function translateFileSourceConfUISchema(originJsonSchema, id, code, name, projectId) {
   return { 'ui:field': 'file_source_conf', 'ui:options': { url: '/api/component/schema/prefetch' } };
 }
 
-function translateInputColumnUISchema(originJsonSchema, id, code, name) {
+function translateInputColumnUISchema(originJsonSchema, id, code, name, projectId) {
   return { 'ui:field': 'input_column',
     'ui:options': { getField: () => FuncUtils.getAllColumnsFromUpstream(id),
     } };
 }
 
-function translateFixedDoubleUISchema(originJsonSchema, id, code, name) {
+function translateFixedDoubleUISchema(originJsonSchema, id, code, name, projectId) {
   return { 'ui:field': 'number_input', 'ui:options': { min: 0, max: undefined, step: 0.001 } };
 }
 
-function translateFixedIntUISchema(originJsonSchema, id, code, name) {
+function translateFixedIntUISchema(originJsonSchema, id, code, name, projectId) {
   return { 'ui:field': 'number_input', 'ui:options': { min: 0, max: undefined, step: 1 } };
 }
 
-function translateTunableIntUISchema(originJsonSchema, id, code, name) {
+function translateTunableIntUISchema(originJsonSchema, id, code, name, projectId) {
   return { 'ui:field': 'tunable_int' };
 }
 
 /** ======== end translate switch schema ========== */
 
 /** general translation */
-export function extractJsonSchema(originJsonSchema, id, code, name) {
+export function extractJsonSchema(originJsonSchema, id, code, name, projectId) {
   // extract required fields.
   const schemaClone = Object.assign({}, originJsonSchema);
   const required = [];
@@ -114,14 +114,14 @@ export function extractJsonSchema(originJsonSchema, id, code, name) {
       // default all booleans to false,
       value.default = false;
     } else if (value.type === 'object') {
-      schemaClone.properties[key] = extractJsonSchema(value, id, code, name);
+      schemaClone.properties[key] = extractJsonSchema(value, id, code, name, projectId);
     }
 
     const translateFunc = registeredSpecialJsonSchemas[value.title];
 
     if (translateFunc !== undefined) {
       // translate.
-      schemaClone.properties[key] = translateFunc(value, id, code, name);
+      schemaClone.properties[key] = translateFunc(value, id, code, name, projectId);
     }
   }
   if (required.length > 0) {
@@ -131,11 +131,11 @@ export function extractJsonSchema(originJsonSchema, id, code, name) {
   }
 }
 
-export function extractUISchema(originJsonSchema, id, code, name) {
+export function extractUISchema(originJsonSchema, id, code, name, projectId) {
   const uiSchema = {};
   for (const [key, value] of Object.entries(originJsonSchema.properties)) {
     if (value.type === 'object') {
-      uiSchema[key] = extractUISchema(value, id, code, name);
+      uiSchema[key] = extractUISchema(value, id, code, name, projectId);
       if (Object.keys(value.properties).length === 1) {
         // hide labels.
         uiSchema[key][Object.keys(value.properties)[0]] = { 'ui:options': { label: false } };
@@ -155,9 +155,9 @@ export function extractUISchema(originJsonSchema, id, code, name) {
     if (translateFunc !== undefined) {
       // translate.
       if (uiSchema[key] === undefined) {
-        uiSchema[key] = translateFunc(value, id, code, name);
+        uiSchema[key] = translateFunc(value, id, code, name, projectId);
       } else {
-        const obj = translateFunc(value, id, code, name);
+        const obj = translateFunc(value, id, code, name, projectId);
         uiSchema[key] = { ...uiSchema[key], ...obj };
       }
     }

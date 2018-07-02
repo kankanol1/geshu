@@ -40,14 +40,15 @@ export default {
         { ...state, componentMetaDict });
     },
 
-    initComponentSettingsForId(state, { id, code, name }) {
+    initComponentSettingsForId(state, { id, code, name, projectId }) {
       // 1. copy meta settings from MetaDict.
       const componentMetaSettings = state.componentMetaDict[code];
       // 2. set this to the component settings.
       const { componentSettings, jsonSchemaDict, uiSchemaDict } = state;
       componentSettings[id] = { ...componentMetaSettings, id, name };
-      const translatedJsonSchema = extractJsonSchema(componentMetaSettings, id, code, name);
-      const translatedUISchema = extractUISchema(componentMetaSettings, id, code, name);
+      const translatedJsonSchema =
+        extractJsonSchema(componentMetaSettings, id, code, name, projectId);
+      const translatedUISchema = extractUISchema(componentMetaSettings, id, code, name, projectId);
 
       jsonSchemaDict[id] = { ...translatedJsonSchema, id, name };
       uiSchemaDict[id] = { ...translatedUISchema, id, name };
@@ -81,7 +82,7 @@ export default {
   },
 
   effects: {
-    *fetchComponentSettings({ code, id, name }, { call, put }) {
+    *fetchComponentSettings({ code, id, name, projectId }, { call, put }) {
       yield put({ type: 'work_canvas/addMessage', payload: { message: `加载配置[${code}](${name})...` } });
       const data = yield call(fetchComponentSetting, code);
       yield put({ type: 'registerComponentMetaDict', component: data, code, id, name });
@@ -90,6 +91,7 @@ export default {
         id,
         code,
         name,
+        projectId,
       });
       yield put({ type: 'work_canvas/addMessage', payload: { message: `配置[${code}](${name})加载完毕` } });
     },
@@ -105,20 +107,21 @@ export default {
      * @param {*} component
      * @param {*} param2
      */
-    *displayComponentSetting({ component }, { put, select }) {
+    *displayComponentSetting({ component, projectId }, { put, select }) {
       const { componentMetaDict, componentSettings } =
         yield select(state => state.work_component_settings);
       const alreadyHaveTheSettings = componentSettings[component.id] !== undefined;
       // set the id first.
       yield put({ type: 'setCurrentComponent', id: component.id });
       if (componentMetaDict[component.code] === undefined) {
-        yield put({ type: 'fetchComponentSettings', code: component.code, id: component.id, name: component.name });
+        yield put({ type: 'fetchComponentSettings', code: component.code, id: component.id, name: component.name, projectId });
       } else if (!alreadyHaveTheSettings) {
         yield put({
           type: 'initComponentSettingsForId',
           id: component.id,
           code: component.code,
           name: component.name,
+          projectId,
         });
       }
     },

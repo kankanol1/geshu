@@ -18,6 +18,7 @@ import InputColumnWidget from './Widgets/InputColumnWidget';
 import NumberSliderWidget from './Widgets/NumberSliderWidget';
 import NumberInputWidget from './Widgets/NumberInputWidget';
 import TunableNumberWidget from './Widgets/Composite/TunableNumberWidget';
+import CategorizedFileSelectorWidget from './Widgets/CategorizedFileSelectorWidget';
 
 const ButtonGroup = Button.Group;
 
@@ -29,7 +30,7 @@ const registeredFields = {
   sample: SampleWidget,
   switch_schema: SwitchSchemaWidget,
   define_schema: DefineSchemaWidget,
-  file_selector: FileSelectorWidget,
+  file_selector: CategorizedFileSelectorWidget,
   any_value: AnyValueWidget,
   database_selector: DatabaseSelectorWidget,
   file_source_conf: FileSourceConfWidget,

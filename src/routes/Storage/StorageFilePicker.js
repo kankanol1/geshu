@@ -105,9 +105,9 @@ export default class StorageFilePicker extends React.Component {
     }
   }
 
-  onChange(type, path, project) {
+  onChange(type, path, project, fullPath) {
     const selected = {
-      type, path, projectId: project.id, projectName: project.name,
+      type, path, projectId: project.id, projectName: project.name, fullPath,
     };
     const { onChange } = this.props;
     if (onChange) onChange(selected);
@@ -219,7 +219,15 @@ export default class StorageFilePicker extends React.Component {
   fetchIndex = () => {
     this.setState({ loading: true });
     queryRegisteredTypes().then((response) => {
-      const excludeList = (this.props.mode === 'project' ? ['private'] : []);
+      const excludeList = [];
+      if (this.props.mode === 'project') {
+        excludeList.unshift('private');
+        if (this.props.type === 'graph') {
+          excludeList.unshift('pipeline');
+        } else if (this.props.type === 'pipeline') {
+          excludeList.unshift('graph');
+        }
+      }
       const transformed = getDisplayDataForTypes(response, excludeList);
       this.setState({
         indexData: transformed,
@@ -315,17 +323,17 @@ export default class StorageFilePicker extends React.Component {
   handleTypeSelect(selectedType) {
     this.setState({ selectedType });
     // onchange.
-    this.onChange(selectedType, '/', this.state.project);
+    this.onChange(selectedType, '/', this.state.project, undefined);
   }
 
   handleFileSelect(selectedFile) {
     this.setState({ selectedFile });
-    this.onChange(this.state.type, selectedFile.rpath, this.state.project);
+    this.onChange(this.state.type, selectedFile.rpath, this.state.project, selectedFile.path);
   }
 
   handleProjectSelect(selectedProject) {
     this.setState({ selectedProject });
-    this.onChange('project', '/', selectedProject);
+    this.onChange('project', '/', selectedProject, undefined);
   }
 
   renderIndexList = () => {
