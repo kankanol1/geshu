@@ -20,7 +20,7 @@ export default class WorkAreaBottomBar extends React.PureComponent {
   }
 
   renderMessage = (message, k = null) => {
-    return <div key={k}>{moment(message.time).format('HH:mm:ss.SSS')}: {message.message}</div>;
+    return message ? <div key={k}>{moment(message.time).format('HH:mm:ss.SSS')}: {message.message}</div> : null;
   }
 
   render() {
