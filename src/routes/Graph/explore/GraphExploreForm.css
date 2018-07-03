@@ -1,0 +1,35 @@
+.tabsBox{
+
+}
+.typeBox{
+  width: 100%;
+  border: 1px solid #e8e8e8;
+  padding: 10px;
+  padding-top: 0;
+  border-radius: 4px; 
+  margin-top: 5px;
+  float: left;
+  overflow: hidden;
+}
+.attrTypeRange{
+  display: inline-block;
+  width: 40%;
+}
+.attrTypeSpan{
+  display: inline-block;
+  margin: 0 10px;
+}
+.radioStyle{
+  display: block;
+  height: 30px;
+  line-height: 30px;
+}
+.change{
+  position: absolute;
+  top: 30px;
+  right: 20px;
+  z-index: 1;
+}
+.change:hover{
+  color: #1890ff
+}

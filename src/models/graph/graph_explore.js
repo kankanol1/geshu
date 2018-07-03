@@ -46,18 +46,23 @@ export default {
     host: '',
     id: '',
     name: '',
-    tableName: 'graph00',
     type2Label2Attrs: {
       node: {},
       link: {},
+      nodeType: {},
+      linkType: {},
     },
     type2Attrs: {
       node: [],
       link: [],
+      nodeType: [],
+      linkType: [],
     },
     type2Labels: {
       node: [],
       link: [],
+      nodeType: [],
+      linkType: [],
     },
   },
   reducers: {
@@ -74,18 +79,25 @@ export default {
       const type2Attrs = {};
       const type2Labels = {};
 
+
       type2Label2Attrs.node = {};
       type2Attrs.node = [];
       type2Labels.node = [];
+      type2Label2Attrs.nodeType = {};
+      type2Attrs.nodeType = [];
+      type2Labels.nodeType = [];
       nodeDataArray.forEach((value) => {
         type2Label2Attrs.node[value.text] = [];
+        type2Label2Attrs.nodeType[value.text] = [];
         type2Labels.node.push(value.text);
-        value.attrList.forEach(({ name }) => {
+        value.attrList.forEach(({ name, type }) => {
           if (type2Label2Attrs.node[value.text].indexOf(name) < 0) {
             type2Label2Attrs.node[value.text].push(name);
+            type2Label2Attrs.nodeType[value.text].push(type);
           }
           if (type2Attrs.node.indexOf(name) < 0) {
             type2Attrs.node.push(name);
+            type2Attrs.nodeType.push(type);
           }
         });
       });
@@ -93,15 +105,21 @@ export default {
       type2Label2Attrs.link = {};
       type2Attrs.link = [];
       type2Labels.link = [];
+      type2Label2Attrs.linkType = {};
+      type2Attrs.linkType = [];
+      type2Labels.linkType = [];
       linkDataArray.forEach((value) => {
         type2Label2Attrs.link[value.text] = [];
+        type2Label2Attrs.linkType[value.text] = [];
         type2Labels.link.push(value.text);
-        value.attrList.forEach(({ name }) => {
+        value.attrList.forEach(({ name, type }) => {
           if (type2Label2Attrs.link[value.text].indexOf(name) < 0) {
             type2Label2Attrs.link[value.text].push(name);
+            type2Label2Attrs.linkType[value.text].push(type);
           }
           if (type2Attrs.link.indexOf(name) < 0) {
             type2Attrs.link.push(name);
+            type2Attrs.linkType.push(type);
           }
         });
       });
@@ -146,18 +164,55 @@ export default {
     *searchGraph({ payload }, { call, put, select }) {
       const { host, id, type2Label2Attrs, type2Attrs, tableName } =
         yield select(state => state.graph_explore);
-      const { label, name, value, limit } = payload;
-      const searchLink =
-        (label && type2Label2Attrs.link[label]) || (name && type2Attrs.link.indexOf(name) >= 0);
+      const { searchValue, type, limit } = payload;
+      // const searchLink =
+      //   (label && type2Label2Attrs.link[label]) || (name && type2Attrs.link.indexOf(name) >= 0);
 
       let code;
       let basicSearch;
-      basicSearch = searchLink ? 'g.E()' : 'g.V()';
-      if (label) { basicSearch += `.hasLabel('${label}')`; }
-      if (name) { basicSearch += `.has('${name}',${Number(value) ? value : `'${value}'`})`; }
-
-      basicSearch += `.limit(${limit})`;
-      code = searchLink ?
+      if (searchValue.length <= 1) {
+        basicSearch = type === 'link' ? 'g.E()' : 'g.V()';
+        searchValue.map((item) => {
+          if (item.type) {
+            basicSearch += `.hasLabel('${item.type}')`;
+          }
+          if (item.attr && item.attrData) {
+            basicSearch += `.has('${item.attr}',${Number(item.attrData) ? item.attrData : `'${item.attrData}'`})`;
+          }
+          if (item.attr && item.attrDataMax && item.attrDataMin) {
+            basicSearch += `.has('${item.attr}',inside(${item.attrDataMin},${item.attrDataMax}))`;
+          }
+          // if (item.attr && item.attrDataMin) {
+          //   basicSearch += `.has('${item.attr}',${item.attrDataMin}).min()`;
+          // }
+          return basicSearch;
+        });
+        basicSearch += `.limit(${limit})`;
+      } else {
+        basicSearch = type === 'link' ? 'g.E().or(' : 'g.V().or(';
+        searchValue.map((item) => {
+          let query = '';
+          if (item.type) {
+            query += `.hasLabel('${item.type}')`;
+          }
+          if (item.attr && item.attrData) {
+            query += `.has('${item.attr}',${Number(item.attrData) ? item.attrData : `'${item.attrData}'`})`;
+          }
+          if (item.attr && item.attrDataMax && item.attrDataMin) {
+            query += `.has('${item.attr}',inside(${item.attrDataMin},${item.attrDataMax}))`;
+          }
+          if (query) {
+            basicSearch += `__ ${query},`;
+          }
+          // console.log(basicSearch, 'basicSearch');
+          return basicSearch;
+        });
+        basicSearch += `).limit(${limit})`;
+      }
+      // console.log(searchValue, 'searchValue')
+      // if (label) { basicSearch += `.hasLabel('${label}')`; }
+      // if (name) { basicSearch += `.has('${name}',${Number(value) ? value : `'${value}'`})`; }
+      code = type === 'link' ?
         `edges=${basicSearch}\nnodes=${basicSearch}.bothV()\n` :
         `nodes=${basicSearch}
         edges = ${basicSearch}.

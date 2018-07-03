@@ -3,4 +3,90 @@
 }
 .codeEditor{
     height: 100%;
+    height: 158px;
+}
+.pullBox{
+    background: #fff;
+    height: 150px;
+    width: 100%;
+    border-radius: 3px;
+    border: 1px solid #e6e7ea;
+    margin-bottom: 30px;
+}
+.queryVariable{
+  width: 30%;
+  height: 100%;
+  display: inline-block;
+  overflow-y: scroll;
+  border: 1px solid #ccc;
+}
+.queryVariableHide{
+  display: none;
+}
+.variableRangeBox{
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  background: rgb(238,238,238);
+  position: absolute;
+  top: 0;
+  left: -2px;
+}
+.variableRangeBoxHide{
+  display: none;
+}
+.variableRange{
+  display: block;
+  width: 100%;
+  height: 40px;
+  position: absolute;
+  /* top:50%;
+  left: 0;
+  margin-top: -20px; */
+  font-size: 14px;
+  font-style: normal;
+  text-align: center;
+  line-height: 40px;
+  background: #cacaca;
+  border: 1px solid #ccc;
+}
+
+.variableRange::before{
+  content: "\E620";
+  display: inline-block;
+  font-family: "anticon" !important;
+  box-sizing: border-box;
+  width: 20px;
+  height: 40px;
+}
+.variableRange:hover{
+  cursor: pointer;
+  background-color: #096dd9;
+  color: white;
+}
+.variableRangeHide{
+  display: block;
+  width: 100%;
+  height: 40px;
+  position: absolute;
+  font-size: 14px;
+  font-style: normal;
+  text-align: center;
+  line-height: 40px;
+  background: #cacaca;
+  border: 1px solid #ccc;
+}
+
+.variableRangeHide::before{
+  content: "\E61F";
+  display: inline-block;
+  font-family: "anticon" !important;
+  box-sizing: border-box;
+  width: 20px;
+  height: 40px;
+}
+.variableRangeHide:hover{
+  cursor: pointer;
+  background-color: #096dd9;
+  color: white;
 }
