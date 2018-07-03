@@ -65,7 +65,9 @@ util.init = (palletContainer, graphContainer) => {
           margin: 6,
           editable: true,
         },
-        new go.Binding('text', 'text').makeTwoWay())
+        new go.Binding('text', 'text').makeTwoWay(),
+        new go.Binding('stroke', 'stroke'))
+
     );
   myDiagram.linkTemplate =
     $(go.Link,

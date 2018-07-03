@@ -3,7 +3,6 @@ import { connect } from 'dva';
 import { Layout, Row, Col, Menu, Icon, Modal, Spin } from 'antd';
 import FileSelector from './FileSelector';
 import MappingInspector from './MappingInspector';
-import styles from '../Inspectors.less';
 
 const { confirm } = Modal;
 class MappingDesigner extends React.PureComponent {
@@ -108,7 +107,6 @@ class MappingDesigner extends React.PureComponent {
               <a><Icon type="info-circle-o" />关于</a>
             </Menu.Item>
           </Menu>
-          <div className={styles.projectTitle}><strong>项目名称：{this.props.name}</strong></div>
           <Row>
             <Col span={13} style={{ padding: '0', height: '100%' }}>
               <div

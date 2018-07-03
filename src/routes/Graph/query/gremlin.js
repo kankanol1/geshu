@@ -28,6 +28,13 @@
     let curPunc;
     function tokenBase(stream, state) {
       const ch = stream.next();
+      if (ch == '$') { 
+        if (stream.eat(/{/)){
+          stream.eatWhile(/\w/); 
+          if(stream.eat(/}/))
+          return 'number'
+        }
+      }
       if (ch == '"' || ch == "'") {
         return startString(ch, stream, state);
       }
@@ -225,4 +232,3 @@
 
   CodeMirror.defineMIME('text/x-groovy', 'groovy');
 }));
-

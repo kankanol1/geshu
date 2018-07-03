@@ -12,7 +12,7 @@ const defaultData = {
   text: '',
   partition: false,
   useStatic: false,
-  unidirected: true,
+  unidirected: false,
   multiplicity: 'MULTI',
 };
 
@@ -231,8 +231,43 @@ class ElementInspector extends Component {
             />
           </div>
         </div>
+        {
+          this.state.isNode ?
+        (
+          <div className={styles.attrItem} style={{ width: '95%', marginTop: '10px' }}>
+            <div className={`${styles.attrBox} ${styles.markdown}`}>
+              <div className={styles.boxTitle}>
+                <span>颜色配置</span>
+              </div>
+              <div style={{ display: 'inline-block', marginLeft: 5 }}>背景色</div>
+              <Input
+                style={{ display: 'inline-block', width: '30%', marginLeft: 5 }}
+                type="color"
+                value={this.state.color}
+                onChange={(event) => {
+                this.setState({
+                  color: event.target.value,
+                });
+                setInspectedObjectData('color', event.target.value);
+              }}
+              />
+              <div style={{ display: 'inline-block', marginLeft: 30 }}>字体色</div>
+              <Input
+                style={{ display: 'inline-block', width: '30%', marginLeft: 5 }}
+                type="color"
+                value={this.state.stroke}
+                onChange={(event) => {
+                this.setState({
+                  stroke: event.target.value,
+                });
+                setInspectedObjectData('stroke', event.target.value);
+              }}
+              />
+            </div>
 
-
+          </div>
+          ) : null
+        }
       </div>
     );
   }
