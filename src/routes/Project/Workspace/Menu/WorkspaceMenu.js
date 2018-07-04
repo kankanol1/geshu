@@ -8,6 +8,11 @@ import styles from './WorkspaceMenu.less';
 
 const { SubMenu } = Menu;
 
+const OpMenuItem = (props) => {
+  const { op, ...rest } = props;
+  return <Menu.Item {...rest}>{props.children}</Menu.Item>;
+};
+
 @connect(
   ({ project, loading, global }) => ({ project, loading, global })
 )
@@ -213,15 +218,15 @@ export default class WorkspaceMenu extends React.PureComponent {
             </SubMenu>
           </SubMenu>
           <SubMenu title={<span><Icon type="eye-o" />显示</span>}>
-            <Menu.Item key="fullScreen" type="command" op={() => this.toggleFullScreen()} >{fullScreen ? '√ ' : null}全屏</Menu.Item>
+            <OpMenuItem key="fullScreen" type="command" op={() => this.toggleFullScreen()} >{fullScreen ? '√ ' : null}全屏</OpMenuItem>
           </SubMenu>
           <SubMenu title={<span><Icon type="code-o" />调试</span>}>
-            <ScopeMenuItem scope="editor" env={env} key="validate" type="command" op={() => this.validatePipeline()} >验证</ScopeMenuItem>
+            <OpMenuItem scope="editor" env={env} key="validate" type="command" op={() => this.validatePipeline()} >验证</OpMenuItem>
             <Menu.Item key="sampledata" >取样执行</Menu.Item>
             <Menu.Item key="samplepipeline">执行至指定组件</Menu.Item>
           </SubMenu>
           <SubMenu title={<span><Icon type="cloud-upload-o" />部署</span>}>
-            <Menu.Item key="submit" type="command" op={() => this.runPipeline()}>提交运行</Menu.Item>
+            <OpMenuItem key="submit" type="command" op={() => this.runPipeline()}>提交运行</OpMenuItem>
           </SubMenu>
           <Menu.Item key="help">
             <a><Icon type="question-circle-o" />帮助</a>

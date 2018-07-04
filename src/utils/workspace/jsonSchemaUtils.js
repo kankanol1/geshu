@@ -16,6 +16,7 @@ const registeredSpecialUISchemas = {
   Fixed_Double: translateFixedDoubleUISchema,
   Fixed_Int: translateFixedIntUISchema,
   Tunable_Int: translateTunableIntUISchema,
+  Fixed_Column_Array: translateColumnRenameUISchema,
 };
 
 /* fixed any */
@@ -66,6 +67,12 @@ function translateInputColumnUISchema(originJsonSchema, id, code, name, projectI
   return { 'ui:field': 'input_column',
     'ui:options': { getField: () => FuncUtils.getAllColumnsFromUpstream(id),
     } };
+}
+
+function translateColumnRenameUISchema(originJsonSchema, id, code, name, projectId) {
+  return { 'ui:field': 'column_rename_conf',
+    'ui:options': { getField: () => FuncUtils.getAllColumnsFromUpstream(id) },
+  };
 }
 
 function translateFixedDoubleUISchema(originJsonSchema, id, code, name, projectId) {
