@@ -133,51 +133,6 @@ export default class ProjectList extends PureComponent {
     });
   }
 
-  handleAdd = (fieldsValue) => {
-    const { project: { data }, dispatch } = this.props;
-    const labels = fieldsValue.labels
-      && fieldsValue.labels.map((l) => {
-        const intL = parseInt(l, 10);
-        if (!isNaN(intL)) {
-          return data.labels[intL];
-        }
-        return l;
-      });
-
-    dispatch({
-      type: 'project/createProject',
-      payload: {
-        ...fieldsValue,
-        labels: labels && labels.join(),
-        refreshParams: this.refreshParams,
-      },
-    });
-
-    this.handleModalVisible(false);
-  }
-
-  handleUpdate = (fieldsValue, currentRecord) => {
-    const { project: { data }, dispatch } = this.props;
-    const labels = fieldsValue.labels
-      && fieldsValue.labels.map((l) => {
-        const intL = parseInt(l, 10);
-        if (!isNaN(intL)) {
-          return data.labels[intL];
-        }
-        return l;
-      });
-
-    dispatch({
-      type: 'project/updateProject',
-      payload: {
-        ...fieldsValue,
-        labels: labels && labels.join(),
-        id: currentRecord.id,
-      },
-    });
-    this.handleModalVisible(false);
-  }
-
   handleSearch = (e) => {
     e.preventDefault();
 
@@ -360,15 +315,15 @@ export default class ProjectList extends PureComponent {
   }
 
   render() {
-    const { project: { data }, loading } = this.props;
+    const { project: { data }, loading, dispatch } = this.props;
     const { selectedRows, modalVisible, currentRecord } = this.state;
 
     const parentMethods = {
       labels: data.labels,
-      handleAdd: this.handleAdd,
-      handleModalVisible: this.handleModalVisible,
+      onOk: () => { this.handleModalVisible(false); this.performQuery(); },
+      onCancel: () => this.handleModalVisible(false),
       currentRecord,
-      handleUpdate: this.handleUpdate,
+      dispatch,
     };
 
     return (

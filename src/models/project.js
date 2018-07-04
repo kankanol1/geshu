@@ -99,37 +99,25 @@ export default {
       }
     },
 
-    *updateProject({ payload }, { call, put }) {
+    *updateProject({ payload, callback }, { call, put }) {
       const response = yield call(updateProject, { ...payload });
       if (response.success) {
         message.success(response.message);
-        yield put({
-          type: 'fetchProjectList',
-          payload: payload.refreshParams,
-        });
+        if (callback) callback();
       } else {
         // show message.
         message.error(response.message);
       }
     },
 
-    *createProject({ payload, resolve, reject }, { call, put }) {
+    *createProject({ payload, callback }, { call, put }) {
       const response = yield call(createProject, { ...payload });
       if (response.success) {
         message.success(response.message);
-        yield put({
-          type: 'fetchProjectList',
-          payload: payload.refreshParams,
-        });
-        if (resolve !== undefined) {
-          resolve(response);
-        }
+        if (callback) callback();
       } else {
         // show message.
         message.error(response.message);
-        if (reject !== undefined) {
-          reject(response);
-        }
       }
     },
 
