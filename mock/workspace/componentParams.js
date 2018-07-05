@@ -33,6 +33,16 @@ const allComponents = {
     title: 'FileDataSinkConf',
     type: 'object',
     properties: {
+      format: {
+        title: 'Fixed_String',
+        type: 'object',
+        properties: {
+          value: {
+            type: 'string',
+          },
+        },
+        description: '存储格式',
+      },
       relativePath: {
         title: 'Fixed_Remote_Path',
         type: 'object',
@@ -101,9 +111,14 @@ const allComponents = {
             description: '固定值',
           },
         },
-        description: '迭代参数',
+        description: '正则化参数',
       },
     },
+  },
+  NaiveBayesClassifierStage: {
+    title: 'NaiveBayesStageStageConf',
+    type: 'object',
+    properties: {},
   },
   JdbcDataSource: {
     title: 'JdbcDataSourceConf',
@@ -213,22 +228,19 @@ const allComponents = {
       },
     },
   },
-  SelectTransformer: {
-    title: 'SelectTransformerConf',
+  JoinTransformer: {
+    title: 'JoinTransformerConf',
     type: 'object',
     properties: {
-      cols: {
-        title: 'Fixed_String_Array',
+      joinExpr: {
+        title: 'Fixed_String',
         type: 'object',
         properties: {
           value: {
-            type: 'array',
-            items: {
-              type: 'string',
-            },
+            type: 'string',
           },
         },
-        description: '选择列',
+        description: 'Join条件',
       },
     },
   },
@@ -255,6 +267,97 @@ const allComponents = {
           },
         },
         description: '测试集比例',
+      },
+    },
+  },
+  StringIndexerPStage: {
+    title: 'StringIndexerPStageConf',
+    type: 'object',
+    properties: {
+      columnNamePairs: {
+        title: 'Column_Name_Pair_Array',
+        type: 'object',
+        properties: {
+          value: {
+            type: 'array',
+            items: {
+              title: 'Column_Name_Pair',
+              type: 'object',
+              properties: {
+                column: {
+                  type: 'string',
+                },
+                name: {
+                  type: 'string',
+                },
+              },
+            },
+          },
+        },
+        description: '输入输出列',
+      },
+    },
+  },
+  RandomForestClassifierPStage: {
+    title: 'RandomForestClassifierPStageConf',
+    type: 'object',
+    properties: {
+      featuresInputCol: {
+        title: 'Fixed_Column',
+        type: 'object',
+        properties: {
+          value: {
+            type: 'string',
+          },
+        },
+        description: '特征列',
+      },
+      labelInputCol: {
+        title: 'Fixed_Column',
+        type: 'object',
+        properties: {
+          value: {
+            type: 'string',
+          },
+        },
+        description: '标签列',
+      },
+      maxCategories: {
+        title: 'Fixed_Int',
+        type: 'object',
+        properties: {
+          value: {
+            type: 'integer',
+          },
+        },
+        description: '最大类别数',
+      },
+      treeNumber: {
+        title: 'Tunable_Int',
+        type: 'object',
+        properties: {
+          tunableType: {
+            type: 'string',
+            enum: [
+              'FIXED',
+              'GRID',
+              'RANGE',
+            ],
+            description: '调节类型',
+          },
+          tunableValue: {
+            type: 'array',
+            items: {
+              type: 'integer',
+            },
+            description: '可调值',
+          },
+          value: {
+            type: 'integer',
+            description: '固定值',
+          },
+        },
+        description: '树的个数',
       },
     },
   },
@@ -301,6 +404,69 @@ const allComponents = {
     title: 'HiveDataSinkConf',
     type: 'object',
     properties: {},
+  },
+  GradientBoostedTreeClassifierPStage: {
+    title: 'GradientBoostedTreeClassifierPStageConf',
+    type: 'object',
+    properties: {
+      featuresInputCol: {
+        title: 'Fixed_Column',
+        type: 'object',
+        properties: {
+          value: {
+            type: 'string',
+          },
+        },
+        description: '特征列',
+      },
+      labelInputCol: {
+        title: 'Fixed_Column',
+        type: 'object',
+        properties: {
+          value: {
+            type: 'string',
+          },
+        },
+        description: '标签列',
+      },
+      maxCategories: {
+        title: 'Fixed_Int',
+        type: 'object',
+        properties: {
+          value: {
+            type: 'integer',
+          },
+        },
+        description: '最大类别数',
+      },
+      maxIter: {
+        title: 'Tunable_Int',
+        type: 'object',
+        properties: {
+          tunableType: {
+            type: 'string',
+            enum: [
+              'FIXED',
+              'GRID',
+              'RANGE',
+            ],
+            description: '调节类型',
+          },
+          tunableValue: {
+            type: 'array',
+            items: {
+              type: 'integer',
+            },
+            description: '可调值',
+          },
+          value: {
+            type: 'integer',
+            description: '固定值',
+          },
+        },
+        description: '最大迭代次数',
+      },
+    },
   },
   FileDataSource: {
     title: 'FileDataSourceConf',
@@ -372,19 +538,41 @@ const allComponents = {
       },
     },
   },
+  ProjectTransformer: {
+    title: 'ProjectTransformerConf',
+    type: 'object',
+    properties: {
+      cols: {
+        title: 'Fixed_String_Array',
+        type: 'object',
+        properties: {
+          value: {
+            type: 'array',
+            items: {
+              type: 'string',
+            },
+          },
+        },
+        description: '选择列',
+      },
+    },
+  },
   HashingTFStage: {
     title: 'HashingTFStageConf',
     type: 'object',
     properties: {
-      inputCol: {
-        title: 'Fixed_String',
+      columnAndName: {
+        title: 'Column_Name_Pair',
         type: 'object',
         properties: {
-          value: {
+          column: {
+            type: 'string',
+          },
+          name: {
             type: 'string',
           },
         },
-        description: '输入列',
+        description: '输入列和输出列',
       },
       numFeatures: {
         title: 'Tunable_Int',
@@ -412,16 +600,6 @@ const allComponents = {
           },
         },
         description: '特征数目',
-      },
-      outputCol: {
-        title: 'Fixed_String',
-        type: 'object',
-        properties: {
-          value: {
-            type: 'string',
-          },
-        },
-        description: '输出列',
       },
     },
   },
@@ -455,6 +633,69 @@ const allComponents = {
     title: 'ConsoleModelSinkConf',
     type: 'object',
     properties: {},
+  },
+  GradientBoostedTreeRegressorPStage: {
+    title: 'GradientBoostedTreeRegressorPStageConf',
+    type: 'object',
+    properties: {
+      featuresInputCol: {
+        title: 'Fixed_Column',
+        type: 'object',
+        properties: {
+          value: {
+            type: 'string',
+          },
+        },
+        description: '特征列',
+      },
+      labelInputCol: {
+        title: 'Fixed_Column',
+        type: 'object',
+        properties: {
+          value: {
+            type: 'string',
+          },
+        },
+        description: '标签列',
+      },
+      maxCategories: {
+        title: 'Fixed_Int',
+        type: 'object',
+        properties: {
+          value: {
+            type: 'integer',
+          },
+        },
+        description: '类别数阈值',
+      },
+      maxIter: {
+        title: 'Tunable_Int',
+        type: 'object',
+        properties: {
+          tunableType: {
+            type: 'string',
+            enum: [
+              'FIXED',
+              'GRID',
+              'RANGE',
+            ],
+            description: '调节类型',
+          },
+          tunableValue: {
+            type: 'array',
+            items: {
+              type: 'integer',
+            },
+            description: '可调值',
+          },
+          value: {
+            type: 'integer',
+            description: '固定值',
+          },
+        },
+        description: '最大迭代次数',
+      },
+    },
   },
   KMeansStage: {
     title: 'KMeansStageConf',
@@ -572,12 +813,75 @@ const allComponents = {
       },
     },
   },
+  RandomForestRegressorPStage: {
+    title: 'RandomForestRegressorPStageConf',
+    type: 'object',
+    properties: {
+      featuresInputCol: {
+        title: 'Fixed_Column',
+        type: 'object',
+        properties: {
+          value: {
+            type: 'string',
+          },
+        },
+        description: '特征列',
+      },
+      labelInputCol: {
+        title: 'Fixed_Column',
+        type: 'object',
+        properties: {
+          value: {
+            type: 'string',
+          },
+        },
+        description: '标签列',
+      },
+      maxCategories: {
+        title: 'Fixed_Int',
+        type: 'object',
+        properties: {
+          value: {
+            type: 'integer',
+          },
+        },
+        description: '类别数阈值',
+      },
+      numTrees: {
+        title: 'Tunable_Int',
+        type: 'object',
+        properties: {
+          tunableType: {
+            type: 'string',
+            enum: [
+              'FIXED',
+              'GRID',
+              'RANGE',
+            ],
+            description: '调节类型',
+          },
+          tunableValue: {
+            type: 'array',
+            items: {
+              type: 'integer',
+            },
+            description: '可调值',
+          },
+          value: {
+            type: 'integer',
+            description: '固定值',
+          },
+        },
+        description: '树的数量',
+      },
+    },
+  },
   TokenizerStage: {
     title: 'TokenizerStageConf',
     type: 'object',
     properties: {
       inputCol: {
-        title: 'Input_Column',
+        title: 'Fixed_Column',
         type: 'object',
         properties: {
           value: {
@@ -587,22 +891,6 @@ const allComponents = {
         description: '输入列',
       },
       outputCol: {
-        title: 'Output_Column',
-        type: 'object',
-        properties: {
-          value: {
-            type: 'string',
-          },
-        },
-        description: '输出列',
-      },
-    },
-  },
-  ColumnFilterTransformer: {
-    title: 'ColumnFilterTransformerConf',
-    type: 'object',
-    properties: {
-      conditionExpr: {
         title: 'Fixed_String',
         type: 'object',
         properties: {
@@ -610,7 +898,7 @@ const allComponents = {
             type: 'string',
           },
         },
-        description: '条件表达式',
+        description: '输出列',
       },
     },
   },
@@ -684,6 +972,11 @@ const allComponents = {
     type: 'object',
     properties: {},
   },
+  UnionTransformer: {
+    title: 'UnionTransformerConf',
+    type: 'object',
+    properties: {},
+  },
   AddLiteralColumnTransformer: {
     title: 'AllLiteralColumnTransformerConf',
     type: 'object',
@@ -712,6 +1005,66 @@ const allComponents = {
       },
     },
   },
+  SupportVectorMachineClassifierStage: {
+    title: 'SupportVectorMachineClassifierStageConf',
+    type: 'object',
+    properties: {
+      maxIter: {
+        title: 'Tunable_Int',
+        type: 'object',
+        properties: {
+          tunableType: {
+            type: 'string',
+            enum: [
+              'FIXED',
+              'GRID',
+              'RANGE',
+            ],
+            description: '调节类型',
+          },
+          tunableValue: {
+            type: 'array',
+            items: {
+              type: 'integer',
+            },
+            description: '可调值',
+          },
+          value: {
+            type: 'integer',
+            description: '固定值',
+          },
+        },
+        description: '最大迭代次数',
+      },
+      regParam: {
+        title: 'Tunable_Double',
+        type: 'object',
+        properties: {
+          tunableType: {
+            type: 'string',
+            enum: [
+              'FIXED',
+              'GRID',
+              'RANGE',
+            ],
+            description: '调节类型',
+          },
+          tunableValue: {
+            type: 'array',
+            items: {
+              type: 'number',
+            },
+            description: '可调值',
+          },
+          value: {
+            type: 'number',
+            description: '固定值',
+          },
+        },
+        description: '正则化参数',
+      },
+    },
+  },
   RandomSplitTransformer: {
     title: 'RandomSplitTransformerConf',
     type: 'object',
@@ -727,7 +1080,35 @@ const allComponents = {
             },
           },
         },
-        description: '给个double的列表',
+        description: '划分比例',
+      },
+    },
+  },
+  OneHotEncoderStage: {
+    title: 'OneHotEncoderStageConf',
+    type: 'object',
+    properties: {
+      columnNamePairArray: {
+        title: 'Column_Name_Pair_Array',
+        type: 'object',
+        properties: {
+          value: {
+            type: 'array',
+            items: {
+              title: 'Column_Name_Pair',
+              type: 'object',
+              properties: {
+                column: {
+                  type: 'string',
+                },
+                name: {
+                  type: 'string',
+                },
+              },
+            },
+          },
+        },
+        description: '输入列，输出列',
       },
     },
   },
@@ -739,7 +1120,141 @@ const allComponents = {
   DecisionTreeClassifierPStage: {
     title: 'DecisionTreeClassifierPStageConf',
     type: 'object',
-    properties: {},
+    properties: {
+      featuresInputCol: {
+        title: 'Fixed_Column',
+        type: 'object',
+        properties: {
+          value: {
+            type: 'string',
+          },
+        },
+        description: '特征列',
+      },
+      labelInputCol: {
+        title: 'Fixed_Column',
+        type: 'object',
+        properties: {
+          value: {
+            type: 'string',
+          },
+        },
+        description: '标签列',
+      },
+      maxCategories: {
+        title: 'Fixed_Int',
+        type: 'object',
+        properties: {
+          value: {
+            type: 'integer',
+          },
+        },
+        description: '最大类别数',
+      },
+    },
+  },
+  MultilayerPerceptronClassifierStage: {
+    title: 'MultilayerPerceptronClassifierStageConf',
+    type: 'object',
+    properties: {
+      blockSize: {
+        title: 'Tunable_Int',
+        type: 'object',
+        properties: {
+          tunableType: {
+            type: 'string',
+            enum: [
+              'FIXED',
+              'GRID',
+              'RANGE',
+            ],
+            description: '调节类型',
+          },
+          tunableValue: {
+            type: 'array',
+            items: {
+              type: 'integer',
+            },
+            description: '可调值',
+          },
+          value: {
+            type: 'integer',
+            description: '固定值',
+          },
+        },
+        description: '块大小',
+      },
+      classNum: {
+        title: 'Fixed_Int',
+        type: 'object',
+        properties: {
+          value: {
+            type: 'integer',
+          },
+        },
+        description: '类别数量',
+      },
+      featureNum: {
+        title: 'Fixed_Int',
+        type: 'object',
+        properties: {
+          value: {
+            type: 'integer',
+          },
+        },
+        description: '特征数量',
+      },
+      hiddenLayerSizes: {
+        title: 'Fixed_Int_Array',
+        type: 'object',
+        properties: {
+          value: {
+            type: 'array',
+            items: {
+              type: 'integer',
+            },
+          },
+        },
+        description: '隐藏层大小',
+      },
+      maxIter: {
+        title: 'Tunable_Int',
+        type: 'object',
+        properties: {
+          tunableType: {
+            type: 'string',
+            enum: [
+              'FIXED',
+              'GRID',
+              'RANGE',
+            ],
+            description: '调节类型',
+          },
+          tunableValue: {
+            type: 'array',
+            items: {
+              type: 'integer',
+            },
+            description: '可调值',
+          },
+          value: {
+            type: 'integer',
+            description: '固定值',
+          },
+        },
+        description: '最大迭代次数',
+      },
+      seed: {
+        title: 'Fixed_Long',
+        type: 'object',
+        properties: {
+          value: {
+            type: 'integer',
+          },
+        },
+        description: '种子值',
+      },
+    },
   },
   AvroDataSource: {
     title: 'AvroDataSourceConf',
@@ -817,6 +1332,42 @@ const allComponents = {
       },
     },
   },
+  DecisionTreeRegressorPStage: {
+    title: 'DecisionTreeRegressorPStageConf',
+    type: 'object',
+    properties: {
+      featuresInputCol: {
+        title: 'Fixed_Column',
+        type: 'object',
+        properties: {
+          value: {
+            type: 'string',
+          },
+        },
+        description: '特征列',
+      },
+      labelInputCol: {
+        title: 'Fixed_Column',
+        type: 'object',
+        properties: {
+          value: {
+            type: 'string',
+          },
+        },
+        description: '标签列',
+      },
+      maxCategories: {
+        title: 'Fixed_Int',
+        type: 'object',
+        properties: {
+          value: {
+            type: 'integer',
+          },
+        },
+        description: '类别数阈值',
+      },
+    },
+  },
   FileModelSource: {
     title: 'FileModelSourceConf',
     type: 'object',
@@ -843,16 +1394,77 @@ const allComponents = {
     type: 'object',
     properties: {
       existingName: {
-        title: 'Fixed_Column',
+        title: 'Fixed_Column_Array',
         type: 'object',
         properties: {
           value: {
-            type: 'string',
+            type: 'array',
+            items: {
+              type: 'string',
+            },
           },
         },
         description: '重命名列',
       },
       newName: {
+        title: 'Fixed_String_Array',
+        type: 'object',
+        properties: {
+          value: {
+            type: 'array',
+            items: {
+              type: 'string',
+            },
+          },
+        },
+        description: '新列名',
+      },
+    },
+  },
+  TypeConversionTransformer: {
+    title: 'TypeConversionTransformerConf',
+    type: 'object',
+    properties: {
+      columns: {
+        title: 'Fixed_Column_Array',
+        type: 'object',
+        properties: {
+          value: {
+            type: 'array',
+            items: {
+              type: 'string',
+            },
+          },
+        },
+        description: '转换列',
+      },
+      types: {
+        type: 'array',
+        items: {
+          type: 'string',
+          enum: [
+            'date',
+            'long',
+            'int',
+            'float',
+            'string',
+            'decimal',
+            'double',
+            'short',
+            'timestamp',
+            'boolean',
+            'byte',
+          ],
+        },
+        description: '目标类型',
+      },
+    },
+  },
+  FilterTransformer: {
+    title: 'FilterTransformerConf',
+    type: 'object',
+    properties: {
+      conditionExpr: {
         title: 'Fixed_String',
         type: 'object',
         properties: {
@@ -860,7 +1472,36 @@ const allComponents = {
             type: 'string',
           },
         },
-        description: '新列名',
+        description: '条件表达式',
+      },
+    },
+  },
+  VectorAssemblerStage: {
+    title: 'VectorAssemblerStageConf',
+    type: 'object',
+    properties: {
+      inputColumns: {
+        title: 'Fixed_Column_Array',
+        type: 'object',
+        properties: {
+          value: {
+            type: 'array',
+            items: {
+              type: 'string',
+            },
+          },
+        },
+        description: '输入列',
+      },
+      outputColumn: {
+        title: 'Fixed_String',
+        type: 'object',
+        properties: {
+          value: {
+            type: 'string',
+          },
+        },
+        description: '输出列',
       },
     },
   },

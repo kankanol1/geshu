@@ -1,55 +1,21 @@
 import React from 'react';
-import { Modal, Button, Row, Col } from 'antd';
-import SelectWidget from '../SelectWidget';
+import ConfigurationTable from '../../UI/ConfigurationTable';
 
 export default class ColumnRenameWidget extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      // formData: { ...props.formData },
-    };
-  }
-
-  componentWillReceiveProps(props) {
-    this.setState({
-      // formData: { ...props.formData },
-    });
-  }
-
   render() {
-    const { getField } = this.props.uiSchema['ui:options'];
-    let schema;
-    let error;
-    if (getField !== undefined) {
-      try {
-        schema = getField();
-      } catch (err) {
-        error = err;
-      }
-    } else {
-      error = '未定义处理函数,请通过ui:option设置';
-    }
-
-    if (error) {
-      const { required } = this.props;
-      const { description } = this.props.schema;
-      return (
-        <Row>
-          <Col span={8}><legend> {description} {required ? '*' : null}</legend></Col>
-          <Col span={16}>
-            <p style={{ color: 'red' }}>{error.message}</p>
-          </Col>
-        </Row>
-      );
-    } else {
-      return (
-        <SelectWidget
-          {...this.props}
-          value={this.props.formData.value}
-          options={{ enumOptions: schema.map((i) => { return { label: i, value: i }; }) }}
-          onChange={(v) => { this.props.onChange({ value: v }); }}
-        />
-      );
-    }
+    return (
+      <ConfigurationTable
+        canAdd
+        canDelete
+        data={[{ k: 'k', v: 'v' }]}
+        columns={[{
+          name: 'k', title: 'Key', render: (v, item, changeFunc) => <div>{v}</div>, span: 10,
+        }, {
+          name: 'v', title: 'Value', render: (v, item, changeFunc) => <div>{v}</div>, span: 10,
+        },
+      ]}
+        // onChange={v => console.log('v', v)}
+      />
+    );
   }
 }
