@@ -1,14 +1,14 @@
 import { routerRedux } from 'dva/router';
 import { message } from 'antd';
-import { reloadAuthorized } from '../utils/Authorized';
 import { userLogin, userLogout } from '../services/usersAPI';
-import { getUrlParams, replaceUrlWithParams } from '../utils/conversionUtils';
+import { reloadAuthorized } from '../utils/Authorized';
+import { setAuthority } from '../utils/authority';
 
 export default {
   namespace: 'login',
 
   state: {
-    status: undefined,
+
   },
 
   effects: {
@@ -22,8 +22,14 @@ export default {
       if (response.status === 'ok') {
         yield put({
           type: 'global/saveCurrentUser',
-          currentUser: {},
+          payload: {
+            currentUser: {},
+          },
         });
+        // set authority
+        setAuthority(response.currentAuthority);
+        // then reload.
+        reloadAuthorized();
         yield put(routerRedux.push('/'));
       }
     },
@@ -47,14 +53,10 @@ export default {
         }
       } finally {
         yield put({
-          type: 'changeLoginStatus',
+          type: 'global/saveCurrentUser',
           payload: {
-            status: false,
-            currentAuthority: 'guest',
+            currentUser: {},
           },
-        });
-        yield put({
-          type: 'global/fetchUserRole',
         });
         yield put(routerRedux.push('/user/login'));
       }
@@ -62,12 +64,5 @@ export default {
   },
 
   reducers: {
-    changeLoginStatus(state, { payload }) {
-      return {
-        ...state,
-        status: payload.status,
-        type: payload.type,
-      };
-    },
   },
 };
