@@ -74,6 +74,19 @@ export default class TopComponentList extends React.PureComponent {
     });
   }
 
+  handleComponentWheelScroll = (e) => {
+    const { deltaX, deltaY } = e;
+    const maxDelta = Math.abs(deltaX) > Math.abs(deltaY) ? deltaX : deltaY;
+    const left = this.scrollbar.getScrollLeft();
+    // already at the left;
+    if (maxDelta < 0 && left === 0) return;
+    const width = this.scrollbar.getScrollWidth();
+    const displayWidth = this.scrollbar.getClientWidth();
+    // alreay at the right;
+    if (width === displayWidth) return;
+    this.scrollbar.scrollLeft(left + maxDelta);
+  }
+
   render() {
     const { activekeys, groups } = this.props.work_component_list;
     const { loading } = this.props;
@@ -91,22 +104,28 @@ export default class TopComponentList extends React.PureComponent {
                         group.components.length === 0 ? null :
                         (
                           <TabPane tab={group.name} key={group.key}>
-                            {
-                            group.components.map(
-                              (component, i) => {
-                                return (
-                                  <TopSingleComponent
-                                    key={`${group.key}-${i}`}
-                                    kei={`${group.key}-${i}`}
-                                    name={component.name}
-                                    component={component}
-                                    onItemDragged={this.props.onItemDragged}
-                                    handlePreviewChange={this.handlePreviewChange}
-                                  />
-                                );
+                            <Scrollbars
+                              ref={(e) => { this.scrollbar = e; }}
+                              style={{ height: '100px', whiteSpace: 'nowrap' }}
+                              onWheel={e => this.handleComponentWheelScroll(e)}
+                            >
+                              {
+                                group.components.map(
+                                  (component, i) => {
+                                    return (
+                                      <TopSingleComponent
+                                        key={`${group.key}-${i}`}
+                                        kei={`${group.key}-${i}`}
+                                        name={component.name}
+                                        component={component}
+                                        onItemDragged={this.props.onItemDragged}
+                                        handlePreviewChange={this.handlePreviewChange}
+                                      />
+                                    );
+                                  }
+                                )
                               }
-                            )
-                          }
+                            </Scrollbars>
                           </TabPane>
                         )
                       );

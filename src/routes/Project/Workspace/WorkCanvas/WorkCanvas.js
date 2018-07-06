@@ -150,53 +150,46 @@ export default class WorkCanvas extends React.PureComponent {
             className="work-canvas"
           >
             {
-            /* 1. line layer, contains svg. needs to be at bottom */
             components.map(
               (component, i) => {
                 return (
-                  <LineLayer
-                    key={i}
-                    model={component}
-                    dispatch={this.props.dispatch}
-                    positionDict={componentPointPosition}
-                    componentDict={componentDict}
-                  />);
-              }
-            )
-          }
-            {
-              /* 2. node layer */
-              components.map(
-                (component, i) => {
-                  return (
-                    <NodeLayer
-                      key={i}
+                  <React.Fragment key={`f-${i}`}>
+                    {
+                      /* 1. line layer, contains svg. needs to be at bottom */
+                     }
+                    <LineLayer
+                      key={`line-${i}`}
                       model={component}
                       dispatch={this.props.dispatch}
                       positionDict={componentPointPosition}
                       componentDict={componentDict}
                     />
-                  );
-                }
-              )
-            }
-            {
-              /* 3. point layer */
-              components.map(
-                (component, i) => {
-                  return (
+                    {
+                    /* 2. node layer */
+                    }
+                    <NodeLayer
+                      key={`node-${i}`}
+                      model={component}
+                      dispatch={this.props.dispatch}
+                      positionDict={componentPointPosition}
+                      componentDict={componentDict}
+                    />
+                    {
+                      /* 3. point layer */
+                    }
                     <PointLayer
-                      key={i}
+                      key={`point-${i}`}
                       model={component}
                       dispatch={this.props.dispatch}
                       draggingTarget={this.props.work_canvas.lineDraggingState.draggingTarget}
                       positionDict={componentPointPosition}
                       componentDict={componentDict}
                     />
+                  </React.Fragment>
                   );
-                }
-              )
-            }
+              }
+            )
+          }
             {
               /* 4. selection layer */
               <SelectionLayer
