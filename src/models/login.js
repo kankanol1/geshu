@@ -21,7 +21,8 @@ export default {
       // Login successfully
       if (response.status === 'ok') {
         yield put({
-          type: 'global/fetchUserRole',
+          type: 'global/saveCurrentUser',
+          currentUser: {},
         });
         yield put(routerRedux.push('/'));
       }
