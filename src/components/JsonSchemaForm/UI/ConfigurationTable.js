@@ -55,7 +55,7 @@ export default class ConfigurationTable extends React.Component {
 
   handleNewItem() {
     const obj = {};
-    Object.keys(this.props.columns).forEach((v) => { obj[v] = undefined; });
+    this.props.columns.forEach((v) => { obj[v.name] = undefined; });
     this.notifyChange([...this.state.data, obj]);
   }
 
