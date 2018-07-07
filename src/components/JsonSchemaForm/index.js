@@ -19,7 +19,9 @@ import NumberSliderWidget from './Widgets/NumberSliderWidget';
 import NumberInputWidget from './Widgets/NumberInputWidget';
 import TunableNumberWidget from './Widgets/Composite/TunableNumberWidget';
 import CategorizedFileSelectorWidget from './Widgets/CategorizedFileSelectorWidget';
-import ColumnRenameWidget from './Widgets/Composite/ColumnRenameWidget';
+import ColumnMappingWidget from './Widgets/Composite/ColumnMappingWidget';
+import ColumnSelectCheckboxWidget from './Widgets/Composite/ColumnSelectCheckboxWidget';
+import ColumnSelectSelectorWidget from './Widgets/Composite/ColumnSelectSelectorWidget';
 
 const ButtonGroup = Button.Group;
 
@@ -39,7 +41,9 @@ const registeredFields = {
   number_slider: NumberSliderWidget,
   number_input: NumberInputWidget,
   tunable_int: TunableNumberWidget,
-  column_rename_conf: ColumnRenameWidget,
+  column_mapping: ColumnMappingWidget,
+  column_selector_checkbox: ColumnSelectCheckboxWidget,
+  column_selector_selector: ColumnSelectSelectorWidget,
 };
 
 const CustomFieldTemplate = (props) => {

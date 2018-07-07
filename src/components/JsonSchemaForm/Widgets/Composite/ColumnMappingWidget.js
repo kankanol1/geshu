@@ -2,8 +2,9 @@ import React from 'react';
 import { Input, Select } from 'antd';
 import ConfigurationTable from '../../UI/ConfigurationTable';
 import SelectWidget from '../SelectWidget';
+import { callFuncElseError } from '../../utils';
 
-export default class ColumnRenameWidget extends React.Component {
+export default class ColumnMappingWidget extends React.Component {
   constructor(props) {
     super(props);
     const { formData } = this.props;
@@ -19,18 +20,9 @@ export default class ColumnRenameWidget extends React.Component {
   }
 
   render() {
-    const { getField } = this.props.uiSchema['ui:options'];
-    let schema;
-    let error;
-    if (getField !== undefined) {
-      try {
-        schema = getField();
-      } catch (err) {
-        error = err;
-      }
-    } else {
-      error = '未定义处理函数,请通过ui:option设置';
-    }
+    const { inputColumnTitle, outputColumnTitle, getField } = this.props.uiSchema['ui:options'];
+    const { result, error } = callFuncElseError(getField);
+    const schema = result;
     if (error) {
       return <p style={{ color: 'red' }}>{error.message}</p>;
     }
@@ -48,7 +40,7 @@ export default class ColumnRenameWidget extends React.Component {
         data={this.state.data}
         columns={[{
           name: 'input',
-          title: '原列名',
+          title: inputColumnTitle || '输入列',
           render: (v, item, onChange) => (
             <Select
               placeholder="请选择"
@@ -71,7 +63,7 @@ export default class ColumnRenameWidget extends React.Component {
           span: 11,
         }, {
           name: 'output',
-          title: '新列名',
+          title: outputColumnTitle || '输出列',
           render: (v, item, onChange) => (
             <Input
               defaultValue={v}

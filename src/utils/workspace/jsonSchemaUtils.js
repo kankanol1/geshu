@@ -16,7 +16,9 @@ const registeredSpecialUISchemas = {
   Fixed_Double: translateFixedDoubleUISchema,
   Fixed_Int: translateFixedIntUISchema,
   Tunable_Int: translateTunableIntUISchema,
-  Fixed_Column_Array: translateColumnRenameUISchema,
+  Column_Name_Pair_Array: translateColumnMappingUISchema,
+  Fixed_String_Array: translateColumnSelectCheckboxUISchema,
+  Fixed_Column_Array: translateColumnSelectSelectorUISchema,
 };
 
 /* fixed any */
@@ -69,8 +71,23 @@ function translateInputColumnUISchema(originJsonSchema, id, code, name, projectI
     } };
 }
 
-function translateColumnRenameUISchema(originJsonSchema, id, code, name, projectId) {
-  return { 'ui:field': 'column_rename_conf',
+function translateColumnMappingUISchema(originJsonSchema, id, code, name, projectId) {
+  return { 'ui:field': 'column_mapping',
+    'ui:options': {
+      getField: () => FuncUtils.getAllColumnsFromUpstream(id),
+      inputColumnTitle: '输入列',
+      outputColumnTitle: '输出列',
+    },
+  };
+}
+
+function translateColumnSelectCheckboxUISchema(originJsonSchema, id, code, name, projectId) {
+  return { 'ui:field': 'column_selector_checkbox',
+    'ui:options': { getField: () => FuncUtils.getAllColumnsFromUpstream(id) },
+  };
+}
+function translateColumnSelectSelectorUISchema(originJsonSchema, id, code, name, projectId) {
+  return { 'ui:field': 'column_selector_selector',
     'ui:options': { getField: () => FuncUtils.getAllColumnsFromUpstream(id) },
   };
 }
