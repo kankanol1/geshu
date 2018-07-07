@@ -15,7 +15,10 @@ const registeredSpecialUISchemas = {
   Input_Column: translateInputColumnUISchema,
   Fixed_Double: translateFixedDoubleUISchema,
   Fixed_Int: translateFixedIntUISchema,
+  // tunable
   Tunable_Int: translateTunableIntUISchema,
+  Tunable_Double: translateTunableIntUISchema,
+
   Column_Name_Pair_Array: translateColumnMappingUISchema,
   Fixed_String_Array: translateColumnSelectCheckboxUISchema,
   Fixed_Column_Array: translateColumnSelectSelectorUISchema,
@@ -86,6 +89,7 @@ function translateColumnSelectCheckboxUISchema(originJsonSchema, id, code, name,
     'ui:options': { getField: () => FuncUtils.getAllColumnsFromUpstream(id) },
   };
 }
+
 function translateColumnSelectSelectorUISchema(originJsonSchema, id, code, name, projectId) {
   return { 'ui:field': 'column_selector_selector',
     'ui:options': { getField: () => FuncUtils.getAllColumnsFromUpstream(id) },

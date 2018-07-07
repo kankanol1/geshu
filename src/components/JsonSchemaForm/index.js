@@ -1,7 +1,6 @@
 /** generate form using json schema */
 
 import React from 'react';
-import { Row, Col, Input, Button, Icon, Card } from 'antd';
 import JsonPath from 'jsonpath';
 import styles from './index.less';
 import Form from './RefinedForm';
@@ -9,7 +8,6 @@ import SampleWidget from './Widgets/SampleWidget';
 import SwitchSchemaWidget from './Widgets/SwitchSchemaWidget';
 import DefineSchemaWidget from './Widgets/DefineSchemaWidget';
 import SelectWidget from './Widgets/SelectWidget';
-import FileSelectorWidget from './Widgets/FileSelectorWidget';
 import ObjectFieldTemplate from './Templates/ObjectFieldTemplate';
 import AnyValueWidget from './Widgets/AnyValueWidget';
 import DatabaseSelectorWidget from './Widgets/DatabaseSelectorWidget';
@@ -17,13 +15,14 @@ import FileSourceConfWidget from './Widgets/Composite/FileSourceConfWidget';
 import InputColumnWidget from './Widgets/InputColumnWidget';
 import NumberSliderWidget from './Widgets/NumberSliderWidget';
 import NumberInputWidget from './Widgets/NumberInputWidget';
-import TunableNumberWidget from './Widgets/Composite/TunableNumberWidget';
 import CategorizedFileSelectorWidget from './Widgets/CategorizedFileSelectorWidget';
 import ColumnMappingWidget from './Widgets/Composite/ColumnMappingWidget';
 import ColumnSelectCheckboxWidget from './Widgets/Composite/ColumnSelectCheckboxWidget';
 import ColumnSelectSelectorWidget from './Widgets/Composite/ColumnSelectSelectorWidget';
-
-const ButtonGroup = Button.Group;
+import TunnableIntWidget from './Widgets/Tunnable/TunnableIntWidget';
+import CustomFieldTemplate from './Templates/CustomFieldTemplate';
+import ArrayFieldTemplate from './Templates/ArrayFieldTemplate';
+import ErrorListTemplate from './Templates/ErrorListTemplate';
 
 const registeredWidgets = {
   SelectWidget,
@@ -40,92 +39,13 @@ const registeredFields = {
   input_column: InputColumnWidget,
   number_slider: NumberSliderWidget,
   number_input: NumberInputWidget,
-  tunable_int: TunableNumberWidget,
   column_mapping: ColumnMappingWidget,
   column_selector_checkbox: ColumnSelectCheckboxWidget,
   column_selector_selector: ColumnSelectSelectorWidget,
-};
 
-const CustomFieldTemplate = (props) => {
-  const { id, classNames, label, displayLabel, help,
-    required, title, errors, children, schema } = props;
-  const { description } = props;
-  const isInsideArray = description.props.description === undefined;
-  if (displayLabel) {
-    return (
-      <Row className={classNames}>
-        <Col span={isInsideArray ? 0 : 8}><legend> {description} </legend></Col>
-        <Col span={isInsideArray ? 24 : 16}>{children}</Col>
-        {/* uncomment the following line will display errors for each item */}
-        {/* {errors} */}
-        {help}
-      </Row>
-    );
-  }
-  return (
-    <div className={classNames}>
-      {children}
-      {/* uncomment the following line will display errors for each item */}
-      {/* {errors} */}
-      {help}
-    </div>
-  );
-};
-
-
-const ArrayFieldTemplate = (props) => {
-  const { schema, title } = props;
-  const { description } = schema;
-  return (
-    <div className={props.className}>
-      <hr />
-      <Row style={{ height: '36px' }}>
-        <Col span={20}><span style={{ lineHeight: '36px' }}>{description === undefined ? title : description}</span></Col>
-        {props.canAdd && (
-          <Col span={4}>
-            <Button onClick={props.onAddClick} type="primary">
-              <Icon type="plus" />
-            </Button>
-          </Col>
-      )}
-      </Row>
-      {props.items &&
-        props.items.map(element => (
-          <Row key={element.index} className="arr-row">
-            <Col span={18}>{element.children}</Col>
-            <Col span={6}>
-              <ButtonGroup>
-                <Button
-                  onClick={element.onReorderClick(
-                    element.index,
-                    element.index - 1
-                  )}
-                  disabled={!element.hasMoveUp}
-                  className="slim-btn"
-                >
-                  <Icon type="up" />
-                </Button>
-                <Button
-                  onClick={element.onReorderClick(
-                    element.index,
-                    element.index + 1
-                  )}
-                  className="slim-btn"
-                  disabled={!element.hasMoveDown}
-                >
-                  <Icon type="down" />
-                </Button>
-                <Button onClick={element.onDropIndexClick(element.index)} className="slim-btn" type="danger">
-                  <Icon type="close" />
-                </Button>
-              </ButtonGroup>
-            </Col>
-          </Row>
-        ))}
-      <hr />
-
-    </div>
-  );
+  // tunnable widgets
+  // tunable_int: TunableNumberWidget,
+  tunable_int: TunnableIntWidget,
 };
 
 const replaceLastPathTo = (pathSelector, lastPath) => {
@@ -134,22 +54,6 @@ const replaceLastPathTo = (pathSelector, lastPath) => {
   return pathArr.join('..');
 };
 
-const ErrorListTemplate = (props) => {
-  const { errors } = props;
-  return (
-    <Card type="inner" title="配置项错误" style={{ background: 'transparent' }}>
-      <ul className="list-group">
-        {errors.map((error, i) => {
-        return (
-          <li key={i} className="list-group-item text-danger">
-            {error.stack}
-          </li>
-        );
-      })}
-      </ul>
-    </Card>
-  );
-};
 
 export default class JsonSchemaForm extends React.PureComponent {
   constructor(props) {
