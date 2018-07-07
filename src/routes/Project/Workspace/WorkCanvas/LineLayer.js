@@ -25,8 +25,8 @@ class LineLayer extends React.PureComponent {
               return (
                 <React.Fragment key={i}>
                   <svg
-                    style={{ width: '100%', height: '100%', position: 'absolute', top: '0', left: '0' }}
-
+                    style={{ width: '100%', height: '100%', position: 'absolute', top: '0', left: '0', pointerEvents: 'none' }}
+                    onClick={e => true}
                   >
                     <polyline
                       points={lineStr}
@@ -35,7 +35,7 @@ class LineLayer extends React.PureComponent {
                     <DraggableCore onStart={e => e.stopPropagation()}>
                       <polyline
                         points={lineStr}
-                        style={{ fill: 'none', stroke: '#fff', strokeWidth: 20, opacity: 0 }}
+                        style={{ fill: 'none', stroke: '#fff', strokeWidth: 20, opacity: 0, pointerEvents: 'auto' }}
                         onClick={(e) => {
                         this.handleLineClick(e, {
                           source: line.component,
