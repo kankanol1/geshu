@@ -180,7 +180,6 @@ export default class ModelList extends PureComponent {
       type: 'models/fetchModelList',
       payload: params,
     });
-
     this.refreshParams = params;
   }
 
@@ -199,8 +198,8 @@ export default class ModelList extends PureComponent {
       type: 'models/removeModel',
       payload: {
         ids: [record.id],
-        refreshParams: this.refreshParams,
       },
+      callback: () => this.performQuery(),
     });
   }
 
@@ -220,6 +219,9 @@ export default class ModelList extends PureComponent {
         ...fieldsValue,
         id: currentRecord.id,
       },
+      callback: () => {
+        this.performQuery();
+      },
     });
     this.handleModalVisible(false);
   }
@@ -232,6 +234,7 @@ export default class ModelList extends PureComponent {
       payload: {
         ids: [record.id],
       },
+      callback: () => this.performQuery(),
     });
   }
 
@@ -243,6 +246,7 @@ export default class ModelList extends PureComponent {
       payload: {
         ids: [record.id],
       },
+      callback: () => this.performQuery(),
     });
   }
 

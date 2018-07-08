@@ -93,6 +93,7 @@ export default class RenameModal extends PureComponent {
     };
     return (
       <Modal
+        maskClosable={false}
         visible={this.props.visible}
         onCancel={() => this.handleCancel()}
         title={loading ? `${fileOrDir}重命名中...` : `重命名${fileOrDir}`}
