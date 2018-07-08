@@ -144,7 +144,7 @@ export default class WorkspaceDataView extends Component {
                               <Icon type="copy" />
                             </Tooltip>
                             {
-                              item.persist ? null :
+                              item.isPermanent ? null :
                               (
                                 <Tooltip title="持久化于数据库" onClick={() => this.handleModalVisible(true, item)} >
                                   <Icon type="cloud-upload" />

@@ -1,7 +1,7 @@
 import copy from 'copy-to-clipboard';
 import { message } from 'antd';
-import { performDataQuery, performDataQueryTmp, persistDataQuery } from '../../services/dataQueryAPI';
-import { getLatestDatabaseForProject } from '../../services/componentAPI';
+import { performDataQuery, performDataQueryTmp } from '../../services/dataQueryAPI';
+import { getLatestDatabaseForProject, persistDataQuery } from '../../services/databaseAPI';
 
 export default {
   namespace: 'dataquery',
@@ -98,12 +98,22 @@ export default {
       });
     },
 
-    *persistTable({ payload }, { call, put }) {
+    *persistTable({ payload, callback }, { call, put }) {
       const response = yield call(persistDataQuery, payload);
-      yield put({
-        type: 'updateDatabases',
-        payload: response,
-      });
+      if (response) {
+        if (response.success) {
+          message.info('保存成功');
+          yield put({
+            type: 'updateDatabases',
+            payload: { id: payload.projectId },
+          });
+          if (callback) {
+            callback();
+          }
+        } else {
+          message.info(`保存失败:${response.message}`);
+        }
+      }
     },
 
     *getAvailableDatabases({ payload }, { call, put }) {

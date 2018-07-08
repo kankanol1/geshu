@@ -8,17 +8,17 @@ const { TextArea } = Input;
 
 const PersistTableForm = Form.create()((props) => {
   const { handleModalVisible, form } = props;
-  const { selectItem, dispatch, modalVisible } = props;
+  const { selectItem, dispatch, modalVisible, loading } = props;
   const okHandle = (e) => {
     e.preventDefault();
     form.validateFields((err, fieldsValue) => {
       if (err) return;
-      const formData = { ...fieldsValue, projectId: selectItem.projectId, jobId: selectItem.jobId };
+      const formData = { ...fieldsValue, projectId: selectItem.projectId, id: selectItem.id };
       dispatch({
         type: 'dataquery/persistTable',
         payload: formData,
+        callback: () => handleModalVisible(false),
       });
-      handleModalVisible(false);
     });
   };
 
@@ -67,9 +67,8 @@ const PersistTableForm = Form.create()((props) => {
           initialValue: '',
         })(
           <Select>
-            <Option value="">请选择</Option>
-            <Option value="true">已公开</Option>
-            <Option value="false">未公开</Option>
+            <Option value="true">公开</Option>
+            <Option value="false">不公开</Option>
           </Select>
         )}
       </FormItem>

@@ -58,6 +58,17 @@ export async function createDatabase(params) {
 }
 
 
+export async function getLatestDatabaseForProject({ id }) {
+  return request(`/api/database/dataview?projectId=${id}`);
+}
+
+export async function persistDataQuery(params) {
+  return request('/api/database/persist', {
+    method: 'POST',
+    body: params,
+  });
+}
+
 export default {
   queryDatabase,
   createDatabase,
@@ -66,4 +77,5 @@ export default {
   makePrivateDatabase,
   makePublicDatabase,
   queryAllDatabase,
+  getLatestDatabaseForProject,
 };
