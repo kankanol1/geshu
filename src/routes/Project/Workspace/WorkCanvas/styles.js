@@ -8,20 +8,25 @@ const colorMap = {
 
 export const getStylesForType = (str, code) => {
   // exceptions.
+  if (code.indexOf('Classifier') > 0) {
+    return '#ff7a3a';
+  } else if (code.indexOf('Regress') > 0) {
+    return '#ee8f03';
+  }
   switch (code) {
     case 'StringIndexerPStage':
     case 'OneHotEncoderStage':
       return '#3B57FF';
     case 'KMeansStage':
-      return '#48d16b';
+      return '#95C801';
     default: break;
   }
   switch (str) {
     case 'DataSink': return '#6f58c5';
-    case 'Predictor': return '#3B57FF';
+    case 'Predictor': return '#319FF8';
     case 'Tuner': return '#06bad0';
     case 'DataSource': return '#e96664';
-    case 'Stage': return '#ee8f03';
+    case 'Stage': return '#FF7A3A';
     case 'PStage': return '#ee8f03';
     case 'ModelSource': return '#48d16b';
     case 'ModelSink': return '#48d16b';
