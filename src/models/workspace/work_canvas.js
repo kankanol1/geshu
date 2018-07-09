@@ -745,7 +745,7 @@ export default {
     },
 
     *saveComponents({ payload }, { put, call, select }) {
-      const currentState = yield select((state) => { return state.work_canvas; });
+      const currentState = yield select(state => state.work_canvas);
       if (!currentState.state.dirty) {
         message.info('保存成功');
         return;
@@ -775,6 +775,21 @@ export default {
         payload: {
           message: `项目保存${response.success ? '成功' : '失败'}`,
         },
+      });
+    },
+
+    *deleteSelectedAndRemoveSettings({ payload }, { put, select }) {
+      // 1. get selection,
+      const { selection } = yield select(state => state.work_canvas);
+      const components = selection.filter(s => s.type === 'component').map(s => s.id);
+      yield put({
+        type: 'work_component_settings/deleteSettingsById',
+        payload: {
+          ids: components,
+        },
+      });
+      yield put({
+        type: 'deleteCurrentSelection',
       });
     },
 

@@ -38,9 +38,10 @@ export default class WorkCanvas extends React.Component {
       });
     }
     // add key listener.
-    key('del, delete', () => {
+    key('delete', (e) => {
+      e.preventDefault();
       return dispatch({
-        type: 'work_canvas/deleteCurrentSelection',
+        type: 'work_canvas/deleteSelectedAndRemoveSettings',
       });
     });
     key('⌘+a, ctrl+a', (e) => {
@@ -76,8 +77,9 @@ export default class WorkCanvas extends React.Component {
 
 
   componentWillUnmount() {
-    key.unbind('del, delete');
+    key.unbind('delete');
     key.unbind('⌘+a, ctrl+a');
+    key.unbind('⌘+s, ctrl+s');
   }
 
   handleDrag(e, draggableData) {

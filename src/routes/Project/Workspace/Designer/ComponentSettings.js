@@ -53,6 +53,11 @@ class ComponentSettings extends React.PureComponent {
     }
     const { loading } = this.props;
     const displaySettings = componentSettings[currentComponent];
+
+    if (!displaySettings) {
+      // means already being deleted.
+      return null;
+    }
     // build required.
     return (
       <div className={styles.workSettingDiv}>

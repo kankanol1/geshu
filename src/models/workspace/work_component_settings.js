@@ -76,6 +76,18 @@ export default {
       // add to formData.
       return { ...state, formDataDict: settings };
     },
+
+    deleteSettingsById(state, { payload }) {
+      const { ids } = payload;
+      const { componentSettings, uiSchemaDict, jsonSchemaDict, formDataDict } = state;
+      ids.forEach((id) => {
+        delete componentSettings[id];
+        delete uiSchemaDict[id];
+        delete jsonSchemaDict[id];
+        delete formDataDict[id];
+      });
+      return { ...state, uiSchemaDict, jsonSchemaDict, formDataDict, componentSettings };
+    },
   },
 
   effects: {
