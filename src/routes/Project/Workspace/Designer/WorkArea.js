@@ -23,13 +23,27 @@ function gen() {
     work_canvas,
     loading,
   }))
-export default class WorkArea extends React.PureComponent {
+export default class WorkArea extends React.Component {
   constructor(props) {
     super(props);
     this.handleItemDragged = this.handleItemDragged.bind(this);
     // this.exportSvg = this.exportSvg.bind(this);
   }
 
+  componentDidMount() {
+    // use timeout to ensure the div is already calculated correctly.
+    setTimeout(() => {
+      const { x, y } =
+      ReactDOM.findDOMNode(this.canvasContent).getBoundingClientRect();
+      this.props.dispatch({
+        type: 'work_canvas/contextMenuOffsetInit',
+        payload: {
+          offsetX: x,
+          offsetY: y,
+        },
+      });
+    }, 500);
+  }
 
   handleItemDragged(dragTarget, dragClientTarget, component) {
     const { x, y, width, height } = ReactDOM.findDOMNode(this.canvasRef).getBoundingClientRect();
@@ -63,7 +77,7 @@ export default class WorkArea extends React.PureComponent {
       <React.Fragment>
         {/* <Button onClick={this.exportSvg}> export </Button> */}
         {/* <SiderComponentList onItemDragged={this.handleItemDragged} /> */}
-        <Content className={styles.workContent}>
+        <Content className={styles.workContent} ref={(e) => { this.canvasContent = e; }}>
           <TopComponentList onItemDragged={this.handleItemDragged} />
           <WorkCanvas ref={(e) => { this.canvasRef = e; }} match={this.props.match} />
           {

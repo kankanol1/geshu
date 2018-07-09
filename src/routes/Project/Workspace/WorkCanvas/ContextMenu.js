@@ -6,11 +6,6 @@ const style = {
 };
 
 class ContextMenu extends React.PureComponent {
-  constructor(props) {
-    super(props);
-    this.handleClick = this.handleClick.bind(this);
-  }
-
   handleClick({ item, key, keyPath }) {
     const { onSettingsClicked } = this.props;
     switch (key) {
@@ -25,19 +20,22 @@ class ContextMenu extends React.PureComponent {
   }
 
   render() {
+    const { x, y, offsetY, offsetX } = this.props;
+    const left = x - offsetX;
+    const top = y - offsetY;
     return (
       <div style={{
         position: 'absolute',
         border: '1px solid #eee',
-        top: this.props.top,
-        left: this.props.left,
+        top: `${top}px`,
+        left: `${left}px`,
       }}
       >
         <Menu
           style={{ width: 140 }}
           mode="vertical"
           theme="light"
-          onClick={this.handleClick}
+          onClick={v => this.handleClick(v)}
         >
           <Menu.Item key="settings" style={style}>
             查看设置

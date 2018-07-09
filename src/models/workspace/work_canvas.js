@@ -151,6 +151,8 @@ export default {
       component: null,
       x: 0,
       y: 0,
+      offsetX: 0,
+      offsetY: 0,
     },
     schema: undefined,
   },
@@ -185,33 +187,35 @@ export default {
       });
     },
 
+    contextMenuOffsetInit(state, { payload }) {
+      return { ...state, contextmenu: { ...state.contextmenu, ...payload } };
+    },
+
     openContextMenu(state, { component, x, y }) {
-      return Object.assign({}, {
+      return {
         ...state,
-        ...{
-          contextmenu: {
-            show: true,
-            component,
-            x,
-            y,
-          },
+        contextmenu: {
+          ...state.contextmenu,
+          show: true,
+          component,
+          x,
+          y,
         },
-      });
+      };
     },
 
     modeChange(state, { isMoveMode }) {
-      return Object.assign({}, {
+      return {
         ...state,
-        ...{
-          mode: isMoveMode ? 'move' : 'select',
-          contextmenu: {
-            show: false,
-            component: null,
-            x: 0,
-            y: 0,
-          },
+        mode: isMoveMode ? 'move' : 'select',
+        contextmenu: {
+          ...state.contextmenu,
+          show: false,
+          component: null,
+          x: 0,
+          y: 0,
         },
-      });
+      };
     },
 
     dragCanvas(state, { startX, startY, currentX, currentY }) {
@@ -386,33 +390,31 @@ export default {
     },
 
     updateComponentSelection(state, { id }) {
-      return Object.assign({}, {
+      return {
         ...state,
-        ...{
-          selection: [{ type: 'component', id }],
-          contextmenu: {
-            show: false,
-            component: null,
-            x: 0,
-            y: 0,
-          },
+        selection: [{ type: 'component', id }],
+        contextmenu: {
+          ...this.contextmenu,
+          show: false,
+          component: null,
+          x: 0,
+          y: 0,
         },
-      });
+      };
     },
 
     updateLineSelection(state, params) {
-      const after = Object.assign({}, {
+      const after = {
         ...state,
-        ...{
-          selection: [{ ...params, type: 'line' }],
-          contextmenu: {
-            show: false,
-            component: null,
-            x: 0,
-            y: 0,
-          },
+        selection: [{ ...params, type: 'line' }],
+        contextmenu: {
+          ...state.contextmenu,
+          show: false,
+          component: null,
+          x: 0,
+          y: 0,
         },
-      });
+      };
       return after;
     },
 
@@ -477,40 +479,38 @@ export default {
       });
 
       if (selection == null) {
-        return updateCache(Object.assign({}, {
+        return updateCache({
           ...state,
-          ...{
-            state: {
-              ...state.state,
-              dirty: true,
-            },
-            components: nr,
-            contextmenu: {
-              show: false,
-              component: null,
-              x: 0,
-              y: 0,
-            },
+          state: {
+            ...state.state,
+            dirty: true,
           },
-        }));
+          components: nr,
+          contextmenu: {
+            ...state.contextmenu,
+            show: false,
+            component: null,
+            x: 0,
+            y: 0,
+          },
+        });
       } else {
-        return updateCache(Object.assign({}, {
+        return {
           ...state,
-          ...{
-            state: {
-              ...state.state,
-              dirty: true,
-            },
-            components: nr,
-            contextmenu: {
-              show: false,
-              component: null,
-              x: 0,
-              y: 0,
-            },
-            selection,
+          state: {
+            ...state.state,
+            dirty: true,
           },
-        }));
+          components: nr,
+          contextmenu: {
+            ...state.contextmenu,
+            show: false,
+            component: null,
+            x: 0,
+            y: 0,
+          },
+          selection,
+        };
       }
     },
 

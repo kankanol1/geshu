@@ -93,6 +93,7 @@ class NodeLayer extends React.PureComponent {
             background: `${getStylesForType(type)}`,
             transform: `translate(${x}px, ${y}px)`,
            }}
+            onContextMenu={this.handleContextMenu}
             className={styles.nodeDiv}
           >
             <div

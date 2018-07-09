@@ -54,7 +54,7 @@ class ComponentSettings extends React.PureComponent {
     const { loading } = this.props;
     const displaySettings = componentSettings[currentComponent];
 
-    if (!displaySettings) {
+    if (!loading && !displaySettings) {
       // means already being deleted.
       return null;
     }

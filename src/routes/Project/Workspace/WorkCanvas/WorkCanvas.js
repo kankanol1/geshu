@@ -126,11 +126,10 @@ export default class WorkCanvas extends React.Component {
     const { contextmenu } = this.props.work_canvas;
     let contextMenuView = null;
     if (contextmenu.show) {
-      const { x, y, component } = contextmenu;
+      const { component } = contextmenu;
       contextMenuView = (
         <ContextMenu
-          top={y}
-          left={x}
+          {...contextmenu}
           onSettingsClicked={() => this.handleSettingsClicked(component)}
         />
       );
