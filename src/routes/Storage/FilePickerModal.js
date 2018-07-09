@@ -41,6 +41,7 @@ export default class FilePickerModal extends PureComponent {
         title={title}
         destroyOnClose
         footer={hideCancel ? [okBtn] : [cancelBtn, okBtn]}
+        maskClosable={false}
       >
         <StorageFilePicker
           height={pickerHeight}

@@ -82,6 +82,7 @@ export default class DeleteModal extends PureComponent {
         title={loading ? `${fileOrDir}删除中...` : `删除${fileOrDir}`}
         closable={!loading}
         destroyOnClose
+        maskClosable={false}
         footer={
           [
             <Button key="back" onClick={() => this.handleCancel()} disabled={loading}>取消</Button>,

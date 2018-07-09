@@ -102,6 +102,7 @@ export default class MoveModal extends PureComponent {
         title={loading ? `${fileOrDir}移动中...` : `移动${fileOrDir}`}
         closable={!loading}
         destroyOnClose
+        maskClosable={false}
         footer={
           [
             <Button key="back" onClick={() => this.handleCancel()} disabled={loading}>取消</Button>,

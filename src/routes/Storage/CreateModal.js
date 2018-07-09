@@ -94,6 +94,7 @@ export default class CreateModal extends PureComponent {
         title={loading ? '文件夹创建中...' : '创建文件夹'}
         closable={!loading}
         destroyOnClose
+        maskClosable={false}
         footer={
           [
             <Button key="back" onClick={() => this.handleCancel()} disabled={loading}>取消</Button>,

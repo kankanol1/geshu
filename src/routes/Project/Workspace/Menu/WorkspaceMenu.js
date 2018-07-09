@@ -8,11 +8,6 @@ import styles from './WorkspaceMenu.less';
 
 const { SubMenu } = Menu;
 
-const OpMenuItem = (props) => {
-  const { op, ...rest } = props;
-  return <Menu.Item {...rest}>{props.children}</Menu.Item>;
-};
-
 @connect(
   ({ project, loading, global }) => ({ project, loading, global })
 )
@@ -52,7 +47,19 @@ export default class WorkspaceMenu extends React.PureComponent {
         dispatch(routerRedux.push(item.props.address));
         break;
       case 'command':
-        item.props.op();
+        switch (key) {
+          case 'fullScreen':
+            this.toggleFullScreen();
+            break;
+          case 'validate':
+            this.validatePipeline();
+            break;
+          case 'submit':
+            this.runPipeline();
+            break;
+          default:
+            break;
+        }
         break;
       default:
         break;
@@ -130,14 +137,23 @@ export default class WorkspaceMenu extends React.PureComponent {
     const { loading, visible, result } = this.state.runPipelineModal;
     return (
       <Modal
-        title={loading ? '提交中' : '提交完毕'}
+        title={loading ? '提交中' : '提交结果'}
         visible={visible}
         okText="跳转至作业管理"
         cancelText="知道了"
-        footer={loading ? null : undefined}
-        onOk={() => this.handleSubmitPipelineModalOk()}
         onCancel={() => this.handleSubmitPipelineModalCancel()}
         style={{ textAlign: 'center' }}
+        maskClosable={false}
+        footer={
+          loading ? null : [
+            <Button key="back" onClick={() => this.handleSubmitPipelineModalCancel()} disabled={loading}>知道了</Button>,
+            result.success ? (
+              <Button key="submit" type="danger" loading={loading} onClick={() => this.handleSubmitPipelineModalOk()}>
+                跳转至作业管理
+              </Button>)
+            : undefined,
+          ]
+        }
       >
         {
           loading ?
@@ -218,15 +234,15 @@ export default class WorkspaceMenu extends React.PureComponent {
             </SubMenu>
           </SubMenu>
           <SubMenu title={<span><Icon type="eye-o" />显示</span>}>
-            <OpMenuItem key="fullScreen" type="command" op={() => this.toggleFullScreen()} >{fullScreen ? '√ ' : null}全屏</OpMenuItem>
+            <Menu.Item key="fullScreen" type="command">{fullScreen ? '√ ' : null}全屏</Menu.Item>
           </SubMenu>
           <SubMenu title={<span><Icon type="code-o" />调试</span>}>
-            <OpMenuItem scope="editor" env={env} key="validate" type="command" op={() => this.validatePipeline()} >验证</OpMenuItem>
+            <ScopeMenuItem scope="editor" env={env} key="validate" type="command" >验证</ScopeMenuItem>
             <Menu.Item key="sampledata" >取样执行</Menu.Item>
             <Menu.Item key="samplepipeline">执行至指定组件</Menu.Item>
           </SubMenu>
           <SubMenu title={<span><Icon type="cloud-upload-o" />部署</span>}>
-            <OpMenuItem key="submit" type="command" op={() => this.runPipeline()}>提交运行</OpMenuItem>
+            <Menu.Item key="submit" type="command">提交运行</Menu.Item>
           </SubMenu>
           <Menu.Item key="help">
             <a><Icon type="question-circle-o" />帮助</a>

@@ -105,6 +105,7 @@ export default class UploadModal extends PureComponent {
         title={uploading ? '文件上传中...' : '上传文件'}
         closable={!uploading}
         destroyOnClose
+        maskClosable={false}
         footer={
           [
             <Button key="back" onClick={() => this.handleCancel()} disabled={uploading}>取消</Button>,
