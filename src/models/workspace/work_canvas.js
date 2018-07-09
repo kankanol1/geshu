@@ -394,7 +394,7 @@ export default {
         ...state,
         selection: [{ type: 'component', id }],
         contextmenu: {
-          ...this.contextmenu,
+          ...state.contextmenu,
           show: false,
           component: null,
           x: 0,
