@@ -28,10 +28,10 @@ export default class CreateProjectForm extends React.Component {
         ...fieldsValue,
         labels: newLabels && newLabels.join(),
       },
-      callback: () => {
+      callback: (id) => {
         this.setState({ loading: false });
         form.resetFields();
-        if (onOk) onOk();
+        if (onOk) onOk(id);
       },
     });
   };
@@ -86,6 +86,7 @@ export default class CreateProjectForm extends React.Component {
         visible={modalVisible}
         closable={!loading}
         destroyOnClose
+        onCancel={performCancel}
         footer={
           [
             <Button key="back" onClick={performCancel} disabled={loading}>取消</Button>,

@@ -82,7 +82,7 @@ const OpenProjectForm = Form.create()((props) => {
         style={{ marginTop: 20 }}
         onRow={(record) => {
           return {
-            onClick: () => { dispatch(routerRedux.push(`/project/workspace/editor/${record.id}`)); },
+            onDoubleClick: () => { dispatch(routerRedux.push(`/project/workspace/editor/${record.id}`)); },
           };
         }}
       >
@@ -98,7 +98,7 @@ const OpenProjectForm = Form.create()((props) => {
           style={{ textAlign: 'right' }}
           render={(text, record) => (
             record.labels.map((item, index) => {
-            return <span key={item} className={styles.label} >{item}</span>;
+              return <span key={item} className={styles.label} >{item}</span>;
             })
           )}
         />

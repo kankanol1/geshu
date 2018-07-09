@@ -14,7 +14,7 @@ import styles from './WorkCanvas.less';
   work_canvas,
   loading,
 }))
-export default class WorkCanvas extends React.PureComponent {
+export default class WorkCanvas extends React.Component {
   constructor(props) {
     super(props);
     this.handleDrag = this.handleDrag.bind(this);

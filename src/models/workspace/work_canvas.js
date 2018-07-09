@@ -702,7 +702,11 @@ export default {
       const response = yield call(openProject, payload.id);
       yield put({ type: 'saveProjectInfo',
         payload: {
-          response: { name: response.name, components: response.components },
+          response: {
+            name: response.name,
+            components: response.components,
+            schema: response.schema,
+          },
           id: payload.id },
       });
       yield put({ type: 'work_component_settings/initSettings', payload: { settings: response.settings } });

@@ -38,35 +38,6 @@ export default class WorkspaceEditor extends Component {
     });
   }
 
-
-  handleAdd = (fieldsValue) => {
-    const { project: { data }, dispatch } = this.props;
-    const labels = fieldsValue.labels
-      && fieldsValue.labels.map((l) => {
-        const intL = parseInt(l, 10);
-        if (!isNaN(intL)) {
-          return data.labels[intL];
-        }
-        return l;
-      });
-    return new Promise((resolve, reject) => {
-      dispatch({
-        type: 'project/createProject',
-        payload: {
-          ...fieldsValue,
-          labels: labels && labels.join(),
-          refreshParams: this.refreshParams,
-        },
-        resolve,
-        reject,
-      });
-    }).then(() => { this.handleModalVisible(false); })
-      .then(
-        () =>
-          dispatch(routerRedux.push('/project/workspace/editor/0'))
-      );
-  }
-
   handleSearch = (fieldsValue) => {
     const { project: { data }, dispatch } = this.props;
     const labels = fieldsValue.labels
@@ -133,7 +104,6 @@ export default class WorkspaceEditor extends Component {
       recentProjects.loading || recentProjects.data === undefined;
     const parentMethods = {
       labels,
-      handleAdd: this.handleAdd,
       handleSearch: this.handleSearch,
       handleModalVisible: this.handleModalVisible,
       handleOpenModalVisible: this.handleOpenModalVisible,
@@ -168,6 +138,13 @@ export default class WorkspaceEditor extends Component {
 
         <CreateProjectForm
           {...parentMethods}
+          dispatch={this.props.dispatch}
+          labels={labels}
+          onOk={(id) => {
+            this.handleModalVisible(false);
+            this.props.dispatch(routerRedux.push(`/project/workspace/editor/${id}`));
+          }}
+          onCancel={() => this.handleModalVisible(false)}
           modalVisible={modalVisible}
         />
 

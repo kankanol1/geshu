@@ -36,8 +36,7 @@ export default {
       const { componentMetaDict } = state;
       componentMetaDict[code] = component;
       // 3. don't forget to change the selection.
-      return Object.assign({},
-        { ...state, componentMetaDict });
+      return { ...state, componentMetaDict };
     },
 
     initComponentSettingsForId(state, { id, code, name, projectId }) {
@@ -53,31 +52,29 @@ export default {
       jsonSchemaDict[id] = { ...translatedJsonSchema, id, name };
       uiSchemaDict[id] = { ...translatedUISchema, id, name };
       // 3. don't forget to change the selection.
-      return Object.assign({},
-        { ...state, jsonSchemaDict, uiSchemaDict, componentSettings }
-      );
+      return { ...state, jsonSchemaDict, uiSchemaDict, componentSettings };
     },
 
     setCurrentComponent(state, { id }) {
       // we assume that we have all the data already. just change current component.
-      return Object.assign({}, { ...state, currentComponent: id });
+      return { ...state, currentComponent: id };
     },
 
     resetCurrentComponent(state) {
-      return Object.assign({}, { ...state, currentComponent: undefined });
+      return { ...state, currentComponent: undefined };
     },
 
     saveComponentSettingsInMemory(state, { payload }) {
       const { componentId, formData } = payload;
       const { formDataDict } = state;
       formDataDict[componentId] = formData;
-      return Object.assign({}, { ...state, formDataDict });
+      return { ...state, formDataDict };
     },
 
     initSettings(state, { payload }) {
       const { settings } = payload;
       // add to formData.
-      return Object.assign({}, { ...state, formDataDict: settings });
+      return { ...state, formDataDict: settings };
     },
   },
 
