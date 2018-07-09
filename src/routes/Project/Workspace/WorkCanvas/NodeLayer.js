@@ -90,7 +90,7 @@ class NodeLayer extends React.PureComponent {
             style={{
             width: `${width}px`,
             height: `${height}px`,
-            background: `${getStylesForType(type)}`,
+            background: `${getStylesForType(type, code)}`,
             transform: `translate(${x}px, ${y}px)`,
            }}
             onContextMenu={this.handleContextMenu}

@@ -6,10 +6,19 @@ const colorMap = {
   source: '#ff7a3a',
 };
 
-export const getStylesForType = (str) => {
+export const getStylesForType = (str, code) => {
+  // exceptions.
+  switch (code) {
+    case 'StringIndexerPStage':
+    case 'OneHotEncoderStage':
+      return '#3B57FF';
+    case 'KMeansStage':
+      return '#48d16b';
+    default: break;
+  }
   switch (str) {
     case 'DataSink': return '#6f58c5';
-    case 'Predictor': return '#ff7a3a';
+    case 'Predictor': return '#3B57FF';
     case 'Tuner': return '#06bad0';
     case 'DataSource': return '#e96664';
     case 'Stage': return '#ee8f03';
@@ -52,11 +61,9 @@ const componentIconDict = {
   DropDuplicatesTransformer: 'icon-preparation-unique',
   ColumnRenameTransformer: 'icon-preparation-rename',
 
-  MetricsPredictor: 'icon-classifier-model-metrics', //
+  MetricsPredictor: 'icon-prediction-common', //
   HashingTFStage: 'icon-classifier-hashingtf',
   DecisionTreeClassifierPStage: 'icon-classifier-decision-tree',
-  // TODO: fix the following
-  OneHotEncoderStage: 'icon-encoder-one-hot',
   SupportVectorMachineClassifierStage: 'icon-classifier-svm',
   HashingTF: 'icon-classifier-hashingtf',
   NaiveBayesClassifierStage: 'icon-classifier-naive-bayes',
@@ -82,6 +89,12 @@ const componentIconDict = {
 
   FileDataSink: 'icon-datasink-csv',
   ParquetDataSink: 'icon-datasink-parquet',
+
+  // TODO: fix the following
+  VectorAssemblerStage: 'icon-classifier-cv',
+  OneHotEncoderStage: 'icon-preparation-filter',
+  StringIndexerPStage: 'icon-preparation-transform',
+  HiveDataSink: 'icon-datasink-db',
 
 };
 
