@@ -3,22 +3,14 @@
 import React from 'react';
 import { Modal, Button, Row, Col } from 'antd';
 import SelectWidget from '../SelectWidget';
+import { callFuncElseError } from '../../utils';
 
 export default class InputColumnWidget extends React.PureComponent {
   render() {
     const { getField } = this.props.uiSchema['ui:options'];
-    let schema;
-    let error;
-    if (getField !== undefined) {
-      try {
-        schema = getField();
-      } catch (err) {
-        error = err;
-      }
-    } else {
-      error = '未定义处理函数,请通过ui:option设置';
-    }
-    if (schema !== undefined) {
+    const { result, error } = callFuncElseError(getField);
+    const schema = result;
+    if (schema) {
       return (
         <SelectWidget
           {...this.props}

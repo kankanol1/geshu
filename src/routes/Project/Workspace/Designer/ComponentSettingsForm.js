@@ -71,11 +71,13 @@ export default class ComponentSettingsForm extends React.PureComponent {
   }
 
   render() {
-    const { jsonSchemaDict, uiSchemaDict, currentComponent } = this.props.work_component_settings;
+    const { jsonSchemaDict, uiSchemaDict, currentComponent,
+      componentSettings } = this.props.work_component_settings;
     const { displayFormData, dirty } = this.state;
 
     const jsonSchema = jsonSchemaDict[currentComponent];
     const uiSchema = uiSchemaDict[currentComponent];
+    const component = componentSettings[currentComponent];
     return (
       <Fragment>
         <Scrollbars style={{ height: 'calc( 100% - 88px)' }}>
@@ -88,7 +90,7 @@ export default class ComponentSettingsForm extends React.PureComponent {
             onChange={v => this.handleFormChange(v)}
             onSubmit={v => this.handleFormSubmit(v)}
             validate={(formData, errors) =>
-               validate(formData, errors, jsonSchema, uiSchema, currentComponent)}
+               validate(formData, errors, jsonSchema, uiSchema, component)}
           >
             <button ref={(btn) => { this.submitButton = btn; }} className={styles.hidden} />
           </JsonSchemaForm>

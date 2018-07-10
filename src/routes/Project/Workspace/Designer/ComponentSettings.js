@@ -13,7 +13,7 @@ const { Panel } = Collapse;
   work_component_settings,
   loading: loading.models.work_component_settings,
 }))
-class ComponentSettings extends React.PureComponent {
+export default class ComponentSettings extends React.PureComponent {
   constructor(props) {
     super(props);
     this.onCloseClicked = this.onCloseClicked.bind(this);
@@ -94,7 +94,3 @@ class ComponentSettings extends React.PureComponent {
     );
   }
 }
-
-// <BasicParamInput title="csv文件路径" name="path"
-//  validator="(e) => true" type="string" tip="the input file path."/>
-export default connect(({ work_component_settings }) => work_component_settings)(ComponentSettings);
