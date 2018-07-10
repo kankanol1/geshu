@@ -2,6 +2,7 @@ import key from 'keymaster';
 import { message } from 'antd';
 import { calculatePointCenter, updateCache, createCache, addCacheForComponent } from '../../utils/PositionCalculation';
 import { openProject, saveProject } from '../../services/componentAPI';
+import { componentSize } from '../../routes/Project/Workspace/WorkCanvas/styles';
 
 function appendMessage(messages, m) {
   messages.unshift({ message: m, time: Date.now() });
@@ -36,8 +37,6 @@ export default {
       //   code: 'csv-source',
       //   x: 150,
       //   y: 100,
-      //   width: 120,
-      //   height: 60,
       //   /** type means */
       //   type: 'source',
       //   inputs: [
@@ -62,8 +61,6 @@ export default {
       //   code: 'column-transform',
       //   x: 400,
       //   y: 100,
-      //   width: 120,
-      //   height: 60,
       //   type: 'preprocessor',
       //   inputs: [
       //     {
@@ -160,20 +157,20 @@ export default {
   reducers: {
 
     addMessage(state, { payload }) {
-      return Object.assign({}, { ...state,
+      return { ...state,
         tips: {
           ...state.tips, messages: appendMessage(state.tips.messages, payload.message),
-        } });
+        } };
     },
 
     saveState(state, { payload }) {
-      return Object.assign({}, { ...state, state: { ...state.state, ...payload } });
+      return { ...state, state: { ...state.state, ...payload } };
     },
 
     startLoading(state) {
-      return Object.assign({}, { ...state,
+      return { ...state,
         state: { ...state.state, loading: true },
-        tips: { ...state.tips, messages: initMessage() } });
+        tips: { ...state.tips, messages: initMessage() } };
     },
 
     saveProjectInfo(state, { payload }) {
@@ -222,73 +219,64 @@ export default {
       switch (state.mode) {
         case 'move':
           if (!state.runtime.dragging) {
-            return updateCache(Object.assign({}, {
+            return updateCache({
               ...state,
-              ...{
-                state: {
-                  ...state.state,
-                  dirty: true,
-                },
-                runtime: {
-                  dragging: false,
-                  startX,
-                  startY,
-                  stopX: currentX + startX,
-                  stopY: currentY + startY,
-                },
-                offset: {
-                  x: state.offset.x + currentX,
-                  y: state.offset.y + currentY,
-                },
+              state: {
+                ...state.state,
+                dirty: true,
               },
-            }));
+              runtime: {
+                dragging: false,
+                startX,
+                startY,
+                stopX: currentX + startX,
+                stopY: currentY + startY,
+              },
+              offset: {
+                x: state.offset.x + currentX,
+                y: state.offset.y + currentY,
+              },
+            });
           } else {
-            return updateCache(Object.assign({}, {
+            return updateCache({
               ...state,
-              ...{
-                state: {
-                  ...state.state,
-                  dirty: true,
-                },
-                runtime: {
-                  ...state.runtime,
-                  stopX: currentX + state.runtime.stopX,
-                  stopY: currentY + state.runtime.stopY,
-                },
-                offset: {
-                  x: state.offset.x + currentX,
-                  y: state.offset.y + currentY,
-                },
+              state: {
+                ...state.state,
+                dirty: true,
               },
-            }));
+              runtime: {
+                ...state.runtime,
+                stopX: currentX + state.runtime.stopX,
+                stopY: currentY + state.runtime.stopY,
+              },
+              offset: {
+                x: state.offset.x + currentX,
+                y: state.offset.y + currentY,
+              },
+            });
           }
         case 'select':
         default:
           if (!state.runtime.dragging) {
-            return Object.assign({}, {
+            return {
               ...state,
-              ...{
-                runtime: {
-                  dragging: true,
-                  startX,
-                  startY,
-                  stopX: currentX + startX,
-                  stopY: currentY + startY,
-                },
+              runtime: {
+                dragging: true,
+                startX,
+                startY,
+                stopX: currentX + startX,
+                stopY: currentY + startY,
               },
-            });
+            };
           } else {
-            return Object.assign({}, {
+            return {
               ...state,
-              ...{
-                runtime: {
-                  ...state.runtime,
-                  stopX: currentX + state.runtime.stopX,
-                  stopY: currentY + state.runtime.stopY,
-                },
+              runtime: {
+                ...state.runtime,
+                stopX: currentX + state.runtime.stopX,
+                stopY: currentY + state.runtime.stopY,
               },
-            }
-            );
+            };
           }
       }
     },
@@ -305,8 +293,8 @@ export default {
       const selectedComponents = state.components.filter(
         (component) => {
           return component.x + offset.x > xMin && component.y + offset.y > yMin &&
-            component.width + component.x + offset.x < xMax &&
-            component.height + component.y + offset.y < yMax;
+            componentSize.width + component.x + offset.x < xMax &&
+            componentSize.height + component.y + offset.y < yMax;
         }
       );
 
@@ -327,20 +315,18 @@ export default {
           newSelection.push({ type: 'component', id: component.id });
         }
       );
-      return Object.assign({}, {
+      return {
         ...state,
-        ...{
-          runtime: {
-            dragging: false,
-            startX: 0,
-            startY: 0,
-            stopX: 0,
-            stopY: 0,
-          },
-          selection: newSelection,
-          mode: 'select',
+        runtime: {
+          dragging: false,
+          startX: 0,
+          startY: 0,
+          stopX: 0,
+          stopY: 0,
         },
-      });
+        selection: newSelection,
+        mode: 'select',
+      };
     },
 
     deleteCurrentSelection(state) {
@@ -373,19 +359,18 @@ export default {
                 } else return item;
               }
             );
-            return Object.assign({}, { ...component,
-              ...{ connectFrom: newConnectFrom.filter(a => a != null) } });
+            return { ...component,
+              ...{ connectFrom: newConnectFrom.filter(a => a != null) } };
           }
         }
       );
-      const newState = Object.assign({}, { ...state,
-        ...{
-          state: {
-            ...state.state,
-            dirty: true,
-          },
-          components: newComponents.filter(a => a != null),
-          selection: [] } });
+      const newState = { ...state,
+        state: {
+          ...state.state,
+          dirty: true,
+        },
+        components: newComponents.filter(a => a != null),
+        selection: [] };
       return newState;
     },
 
@@ -420,8 +405,9 @@ export default {
 
     newComponent(state, { component }) {
       const { offset } = state;
+      const { width, height, ...c } = component;
       const components = Object.assign([], state.components);
-      const nc = { ...component,
+      const nc = { ...c,
         ...{ x: component.x - offset.x,
           y: component.y - offset.y,
         },
@@ -551,7 +537,8 @@ export default {
         draggingConnects, draggingMetaType } = state.lineDraggingState;
 
       const pointIterationFunc = (input, overlapped, component) => {
-        const { x, y, width, height } = component;
+        const { x, y } = component;
+        const { width, height } = componentSize;
         const { px, py } = calculatePointCenter(x, y, width, height, input.x, input.y);
         if (Math.abs((px + offset.x) - draggingTarget.x) <=
           R && Math.abs((py + offset.y) - draggingTarget.y) <= R) {

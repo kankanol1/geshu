@@ -1,6 +1,7 @@
 import React from 'react';
 import { calculateLineStr } from '../../../../utils/PositionCalculation';
 import styles from './styles.less';
+import { componentSize } from './styles';
 
 
 /**
@@ -30,7 +31,8 @@ class SelectionLayer extends React.PureComponent {
       selectionView = this.props.selection.map(
         (select, i) => {
           if (select.type === 'component') {
-            const { x, y, width, height } = this.props.componentDict[select.id];
+            const { x, y } = this.props.componentDict[select.id];
+            const { width, height } = componentSize;
             // render selection.
             const size = 4;
             return (

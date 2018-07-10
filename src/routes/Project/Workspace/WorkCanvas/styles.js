@@ -107,4 +107,6 @@ export const getIconNameForComponent = (str) => {
   return componentIconDict[str];
 };
 
-export default { getStylesForType, getIconNameForComponent };
+export const componentSize = { height: 100, width: 100 };
+
+export default { getStylesForType, getIconNameForComponent, componentSize };

@@ -28,7 +28,7 @@ export default class TopSingleComponent extends React.PureComponent {
           className={styles.component}
         >
           <i className={`x-icon-small ${icon}`} />
-          {name}
+          <span className={styles.componentName}>{name}</span>
         </div>
       </DraggableWithPreview>
     );

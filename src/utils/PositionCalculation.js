@@ -1,3 +1,5 @@
+import { componentSize } from '../routes/Project/Workspace/WorkCanvas/styles';
+
 const pointMargin = 10;
 
 const calculatePointCenter = (x, y, width, height, xIndex, yIndex) => {
@@ -76,7 +78,8 @@ const calculateLineStr = (srcX, srcY, desX, desY) => {
 
 const calculatePointPositionDict = (component) => {
   const pointDict = {};
-  const { x, y, width, height } = component;
+  const { x, y } = component;
+  const { width, height } = componentSize;
   const calculatePoint = (point) => {
     const { px, py } = calculatePointCenter(x, y, width, height, point.x, point.y);
     pointDict[point.id] = { x: px, y: py };
@@ -153,22 +156,21 @@ const createCache = (state) => {
         calculatePointPositionDict({ ...component, ...calculatedPosition });
     }
   );
-  return Object.assign({}, { ...state,
-    ...{ cache:
+  return { ...state,
+    cache:
       { componentDict,
         pointDict: componentPointPosition,
       },
-    } });
+  };
 };
 
 const fillDefaultSize = (component) => {
-  return Object.assign({}, { ...component,
-    ...{
-      x: 10,
-      y: 0,
-      width: 120,
-      height: 120,
-    } });
+  return { ...component,
+    x: 10,
+    y: 0,
+    width: 100,
+    height: 100,
+  };
 };
 
 export {
