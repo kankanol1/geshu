@@ -96,7 +96,7 @@ class NodeLayer extends React.PureComponent {
             onContextMenu={this.handleContextMenu}
             className={styles.nodeDiv}
           >
-            <div
+            {/* <div
               className={styles.errorTip}
             >!
             </div>
@@ -105,7 +105,7 @@ class NodeLayer extends React.PureComponent {
               className={styles.infoTip}
               onClick={(e) => { e.stopPropagation(); e.preventDefault(); }}
             >i
-            </div>
+            </div> */}
             <i className={`${icon} x-icon`} />
             {name}
           </div>

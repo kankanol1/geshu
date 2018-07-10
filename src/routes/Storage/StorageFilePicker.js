@@ -23,6 +23,7 @@ export default class StorageFilePicker extends React.Component {
     enableUpload: false,
     enableMkdir: false,
     allowSelectFolder: false,
+    folderOnly: false,
     height: undefined,
     mode: 'all',
     view: 'index',
@@ -327,8 +328,11 @@ export default class StorageFilePicker extends React.Component {
   }
 
   handleFileSelect(selectedFile) {
-    this.setState({ selectedFile });
-    this.onChange(this.state.type, selectedFile.rpath, this.state.project, selectedFile.path);
+    const { folderOnly } = this.props;
+    if (selectedFile.isdir || !folderOnly) {
+      this.setState({ selectedFile });
+      this.onChange(this.state.type, selectedFile.rpath, this.state.project, selectedFile.path);
+    }
   }
 
   handleProjectSelect(selectedProject) {
@@ -711,6 +715,8 @@ StorageFilePicker.propTypes = {
   enableMkdir: PropTypes.bool,
 
   allowSelectFolder: PropTypes.bool,
+
+  folderOnly: PropTypes.bool,
 
   height: PropTypes.number,
 };

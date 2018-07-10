@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Modal, Button, Row, Col } from 'antd';
-import SelectWidget from './SelectWidget';
+import SelectWidget from '../SelectWidget';
 
 export default class InputColumnWidget extends React.PureComponent {
   render() {

@@ -32,11 +32,11 @@ export default class FileSourceConfWidget extends React.PureComponent {
   }
 
   showExtra = (formData) => {
-    return formData.format.value !== undefined && formData.path.value !== undefined;
+    return formData.format !== undefined && formData.path.value !== undefined;
   }
 
   needRefreshSchema = (newFormData, oldFormData) => {
-    return newFormData.format.value !== oldFormData.format.value ||
+    return newFormData.format !== oldFormData.format ||
       newFormData.path.value !== oldFormData.path.value ||
       newFormData.header.value !== oldFormData.header.value;
   }
@@ -49,7 +49,7 @@ export default class FileSourceConfWidget extends React.PureComponent {
     });
     const { formData } = this.state;
     const data = JSON.stringify({
-      format: formData.format.value,
+      format: formData.format,
       header: formData.header.value,
       path: formData.path.value,
     });
@@ -102,9 +102,8 @@ export default class FileSourceConfWidget extends React.PureComponent {
   }
 
   render() {
-    const { required, TitleField, properties, title, description, schema, idSchema } = this.props;
     const { formData, loading } = this.state;
-    const renderSchema = formData.format.value !== undefined && formData.path.value !== undefined;
+    const renderSchema = formData.format !== undefined && formData.path.value !== undefined;
     return (
       <div >
         {this.renderSchema('format', { disabled: loading })}

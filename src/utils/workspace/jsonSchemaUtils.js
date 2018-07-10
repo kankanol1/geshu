@@ -8,11 +8,12 @@ const registeredSpecialJsonSchemas = {
 
 const registeredSpecialUISchemas = {
   Switch_Schema: translateSwitchUISchema,
-  Read_File_Path: translateReadFilePathUISchema,
+  Fixed_File_Path: translateReadFilePathUISchema,
+  Fixed_Dir_Path: translateDirFilePathUISchema,
   Database_Path: translateDatabasePathUISchema,
   Fixed_Any: translateFixedAnyUISchema,
   File_Source_Conf: translateFileSourceConfUISchema,
-  Input_Column: translateInputColumnUISchema,
+  Fixed_Column: translateInputColumnUISchema,
   Fixed_Double: translateFixedDoubleUISchema,
   Fixed_Int: translateFixedIntUISchema,
   // tunable
@@ -57,7 +58,11 @@ function translateSwitchUISchema(originJsonSchema, id, code, name, projectId) {
 }
 
 function translateReadFilePathUISchema(originJsonSchema, id, code, name, projectId) {
-  return { 'ui:field': 'file_selector', 'ui:options': { projectId } };
+  return { 'ui:field': 'file_selector', 'ui:options': { projectId, mode: 'file' } };
+}
+
+function translateDirFilePathUISchema(originJsonSchema, id, code, name, projectId) {
+  return { 'ui:field': 'file_selector', 'ui:options': { projectId, mode: 'directory' } };
 }
 
 function translateDatabasePathUISchema(originJsonSchema, id, code, name, projectId) {

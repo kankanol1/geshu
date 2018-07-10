@@ -1,7 +1,6 @@
 import React from 'react';
 import { Input, Select } from 'antd';
 import ConfigurationTable from '../../UI/ConfigurationTable';
-import SelectWidget from '../SelectWidget';
 import { callFuncElseError } from '../../utils';
 
 export default class ColumnMappingWidget extends React.Component {
@@ -9,13 +8,13 @@ export default class ColumnMappingWidget extends React.Component {
     super(props);
     const { formData } = this.props;
     this.state = {
-      data: [],
+      data: formData.value || [],
     };
   }
   componentWillReceiveProps(props) {
     const { formData } = props;
     this.setState({
-      data: [],
+      data: formData.value || [],
     });
   }
 
@@ -34,7 +33,7 @@ export default class ColumnMappingWidget extends React.Component {
             this.setState({
               data: v,
             },
-            // () => this.props.onChange(v)
+            () => this.props.onChange({ value: v })
           )
           }
         data={this.state.data}

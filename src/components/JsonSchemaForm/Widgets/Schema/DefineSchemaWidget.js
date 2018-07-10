@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Input, Checkbox, Select } from 'antd';
-import ConfigurationTable from '../UI/ConfigurationTable';
+import ConfigurationTable from '../../UI/ConfigurationTable';
 
 const { Option } = Select;
 

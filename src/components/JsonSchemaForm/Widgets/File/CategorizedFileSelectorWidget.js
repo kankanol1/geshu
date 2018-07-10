@@ -1,6 +1,6 @@
 import React from 'react';
 import { Modal, Button, Input, Spin, Icon, Row, Col, List } from 'antd';
-import StorageFilePicker from '../../../routes/Storage/StorageFilePicker';
+import StorageFilePicker from '../../../../routes/Storage/StorageFilePicker';
 
 export default class CategorizedFileSelectorWidget extends React.PureComponent {
   constructor(props) {
@@ -45,16 +45,20 @@ export default class CategorizedFileSelectorWidget extends React.PureComponent {
   render() {
     const { schema, required } = this.props;
     const lastSelected = this.state.formData.value;
-    const { projectId } = this.props.uiSchema['ui:options'];
+    const { projectId, mode } = this.props.uiSchema['ui:options'];
     return (
       <Row>
         <Col span={6}><legend>{schema.description} {required ? ' *' : null}</legend></Col>
-        <Col span={6}> <Button type="primary" onClick={() => this.setState({ modalVisible: true })}>选择文件</Button> </Col>
-        <Col span={12}>
+        <Col span={5}>
+          <Button type="primary" onClick={() => this.setState({ modalVisible: true })}>
+            选择
+          </Button>
+        </Col>
+        <Col span={13}>
           <Input value={(lastSelected === undefined) ? '未指定' : lastSelected} disabled />
         </Col>
         <Modal
-          title="选择文件"
+          title={`选择文件${mode === 'directory' ? '夹' : ''}`}
           visible={this.state.modalVisible}
           onOk={() => this.handleOk()}
           onCancel={() => {
@@ -71,6 +75,8 @@ export default class CategorizedFileSelectorWidget extends React.PureComponent {
             mode="project"
             type="pipeline"
             project={{ id: projectId }}
+            allowSelectFolder={mode === 'directory'}
+            folderOnly={mode === 'directory'}
           />
         </Modal>
       </Row>
