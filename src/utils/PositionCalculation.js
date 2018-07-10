@@ -37,6 +37,12 @@ const calculateLineStrDirectly = (srcX, srcY, desX, desY) => {
   return `${srcX}, ${srcY} ${desX}, ${desY}`;
 };
 
+const calculateLineCurly = (srcX, srcY, desX, desY, curvature = 0.4) => {
+  const hx1 = srcX + (Math.abs(srcX - desX) * curvature);
+  const hx2 = desX - (Math.abs(desX - srcX) * curvature);
+  return `M ${srcX} ${srcY} C ${hx1} ${srcY} ${hx2} ${desY} ${desX} ${desY}`;
+};
+
 const calculateLineStrStraightly = (srcX, srcY, desX, desY) => {
   let str = `${srcX}, ${srcY}`;
   // suppose src from the right side of the box[].
@@ -181,4 +187,5 @@ export {
   fillDefaultSize,
   createCache,
   addCacheForComponent,
+  calculateLineCurly,
 };

@@ -1,6 +1,6 @@
 import React from 'react';
 import { DraggableCore } from 'react-draggable';
-import { calculateLineStr } from '../../../../utils/PositionCalculation';
+import { calculateLineStr, calculateLineCurly } from '../../../../utils/PositionCalculation';
 
 class LineLayer extends React.PureComponent {
   handleLineClick(e, params) {
@@ -21,17 +21,18 @@ class LineLayer extends React.PureComponent {
             (line, i) => {
               const from = this.props.positionDict[line.component][line.from];
               const to = this.props.positionDict[this.props.model.id][line.to];
-              const lineStr = calculateLineStr(from.x + r, from.y, to.x - r, to.y);
+              const lineStr = calculateLineCurly(from.x + r, from.y, to.x - r, to.y);
               return (
                 <React.Fragment key={i}>
                   <svg
                     style={{ width: '100%', height: '100%', position: 'absolute', top: '0', left: '0', pointerEvents: 'none' }}
                     onClick={e => true}
                   >
-                    <polyline
+                    {/* <polyline
                       points={lineStr}
                       style={{ fill: 'none', stroke: '#391085', strokeWidth: 1 }}
-                    />
+                    /> */}
+                    <path d={lineStr} style={{ fill: 'none', stroke: '#391085', strokeWidth: 1 }} />
                     <DraggableCore onStart={e => e.stopPropagation()}>
                       <polyline
                         points={lineStr}
