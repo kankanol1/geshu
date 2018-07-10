@@ -19,6 +19,7 @@ import CategorizedFileSelectorWidget from './Widgets/File/CategorizedFileSelecto
 import ColumnMappingWidget from './Widgets/Column/ColumnMappingWidget';
 import ColumnSelectCheckboxWidget from './Widgets/Column/ColumnSelectCheckboxWidget';
 import ColumnSelectSelectorWidget from './Widgets/Column/ColumnSelectSelectorWidget';
+import ColumnMappingItemWidget from './Widgets/Column/ColumnMappingItemWidget';
 import TunnableIntWidget from './Widgets/Tunnable/TunnableIntWidget';
 import CustomFieldTemplate from './Templates/CustomFieldTemplate';
 import ArrayFieldTemplate from './Templates/ArrayFieldTemplate';
@@ -39,7 +40,8 @@ const registeredFields = {
   input_column: InputColumnWidget,
   number_slider: NumberSliderWidget,
   number_input: NumberInputWidget,
-  column_mapping: ColumnMappingWidget,
+  column_mapping_array: ColumnMappingWidget,
+  column_mapping: ColumnMappingItemWidget,
   column_selector_checkbox: ColumnSelectCheckboxWidget,
   column_selector_selector: ColumnSelectSelectorWidget,
 

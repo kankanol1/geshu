@@ -3,7 +3,7 @@ import { Input, Checkbox } from 'antd';
 import ConfigurationTable from '../../UI/ConfigurationTable';
 import { callFuncElseError } from '../../utils';
 
-export default class ColumnSelectWidget extends React.Component {
+export default class ColumnSelectCheckboxWidget extends React.Component {
   constructor(props) {
     super(props);
     const { formData } = this.props;
