@@ -105,23 +105,28 @@ const updateCache = (state) => {
   const { offset } = state;
   state.components.forEach(
     (component) => {
-      const calculatedPosition = {
-        x: component.x + offset.x,
-        y: component.y + offset.y,
-        height: component.height,
-        width: component.width,
-      };
-      componentDict[component.id] = calculatedPosition;
-      componentPointPosition[component.id] =
-        calculatePointPositionDict({ ...component, ...calculatedPosition });
+      const { c, p } = updateCacheForComponent(component, offset);
+      componentDict[component.id] = c;
+      componentPointPosition[component.id] = p;
     }
   );
-  return Object.assign({}, { ...state,
-    ...{ cache:
-      { componentDict,
-        pointDict: componentPointPosition,
-      },
-    } });
+  return { ...state,
+    cache: {
+      componentDict,
+      pointDict: componentPointPosition,
+    },
+  };
+};
+
+const updateCacheForComponent = (component, offset) => {
+  const calculatedPosition = {
+    x: component.x + offset.x,
+    y: component.y + offset.y,
+  };
+  const c = calculatedPosition;
+  const p =
+    calculatePointPositionDict({ ...component, ...calculatedPosition });
+  return { c, p };
 };
 
 const addCacheForComponent = (state, nc) => {
@@ -131,8 +136,6 @@ const addCacheForComponent = (state, nc) => {
   const calculatedPosition = {
     x: nc.x + offset.x,
     y: nc.y + offset.y,
-    height: nc.height,
-    width: nc.width,
   };
   componentDict[nc.id] = calculatedPosition;
   componentPointPosition[nc.id] =
@@ -154,8 +157,6 @@ const createCache = (state) => {
       const calculatedPosition = {
         x: component.x + offset.x,
         y: component.y + offset.y,
-        height: component.height,
-        width: component.width,
       };
       componentDict[component.id] = calculatedPosition;
       componentPointPosition[component.id] =
@@ -174,8 +175,6 @@ const fillDefaultSize = (component) => {
   return { ...component,
     x: 10,
     y: 0,
-    width: 100,
-    height: 100,
   };
 };
 
@@ -188,4 +187,5 @@ export {
   createCache,
   addCacheForComponent,
   calculateLineCurly,
+  updateCacheForComponent,
 };

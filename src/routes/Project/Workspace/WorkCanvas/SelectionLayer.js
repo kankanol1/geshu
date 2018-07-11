@@ -1,5 +1,5 @@
 import React from 'react';
-import { calculateLineStr } from '../../../../utils/PositionCalculation';
+import { calculateLineStr, calculateLineCurly } from '../../../../utils/PositionCalculation';
 import styles from './styles.less';
 import { componentSize } from './styles';
 
@@ -16,8 +16,8 @@ class SelectionLayer extends React.PureComponent {
     if (dragging) {
       draggingView = (
         <svg style={{ height: '100%', width: '100%', position: 'absolute', top: '0', left: '0' }}>
-          <polyline
-            points={calculateLineStr(draggingSource.x, draggingSource.y,
+          <path
+            d={calculateLineCurly(draggingSource.x, draggingSource.y,
             draggingTarget.x, draggingTarget.y)}
             style={{ fill: 'none', stroke: '#391085', strokeWidth: 1 }}
           />

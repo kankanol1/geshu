@@ -1,6 +1,6 @@
 import key from 'keymaster';
 import { message } from 'antd';
-import { calculatePointCenter, updateCache, createCache, addCacheForComponent } from '../../utils/PositionCalculation';
+import { calculatePointCenter, updateCache, createCache, addCacheForComponent, updateCacheForComponent } from '../../utils/PositionCalculation';
 import { openProject, saveProject } from '../../services/componentAPI';
 import { componentSize } from '../../routes/Project/Workspace/WorkCanvas/styles';
 
@@ -121,11 +121,6 @@ export default {
       // { type: 'component', id: 'input' },
     ],
     offset: {
-      x: 0,
-      y: 0,
-    },
-    scale: 1.0,
-    scaleCenter: {
       x: 0,
       y: 0,
     },
@@ -435,37 +430,42 @@ export default {
         }
       );
       let selection = null;
+      const newComponentCache = [];
+      const newPointCache = [];
       const nr = state.components.map((component) => {
         if (selectedComponents.length === 0 && component.id === id) {
           // also update the selection.
           selection = [{ type: 'component', id }];
           return {
             ...component,
-            ...{
-              x: originX + deltaX, y: originY + deltaY,
-            },
+            x: originX + deltaX,
+            y: originY + deltaY,
           };
         } else if (selectedComponents.includes(component.id) && selectedComponents.includes(id)) {
-          return {
+          const newComponent = {
             ...component,
-            ...{
-              x: component.x + deltaX, y: component.y + deltaY,
-            },
+            x: component.x + deltaX,
+            y: component.y + deltaY,
           };
+          // move.
+          const { c, p } = updateCacheForComponent(newComponent, state.offset);
+          newComponentCache[component.id] = c;
+          newPointCache[component.id] = p;
+          return newComponent;
         } else if (component.id === id) {
           // change selection & move.
           selection = [{ type: 'component', id }];
           return {
             ...component,
-            ...{
-              x: originX + deltaX, y: originY + deltaY,
-            },
+            x: originX + deltaX,
+            y: originY + deltaY,
           };
         } else return component;
       });
 
       if (selection == null) {
-        return updateCache({
+        // did not change selection,
+        return {
           ...state,
           state: {
             ...state.state,
@@ -479,14 +479,15 @@ export default {
             x: 0,
             y: 0,
           },
-        });
+          cache: {
+            componentDict: { ...state.cache.componentDict, ...newComponentCache },
+            pointDict: { ...state.cache.pointDict, ...newPointCache },
+          },
+        };
       } else {
+        // change selection first.
         return {
           ...state,
-          state: {
-            ...state.state,
-            dirty: true,
-          },
           components: nr,
           contextmenu: {
             ...state.contextmenu,
@@ -710,17 +711,17 @@ export default {
       { put, select }
     ) {
       yield put({ type: 'moveComponent', id: component.id, deltaX, deltaY, originX, originY });
-      const currentState = yield select((state) => { return state.work_canvas; });
-      // visit the num of selected components.
-      let count = 0;
-      currentState.selection.forEach(
-        (s) => {
-          if (s.type === 'component') {
-            count = 1 + count;
-          }
-        }
-      );
       // we don't want to enable this right now.
+      // const currentState = yield select((state) => { return state.work_canvas; });
+      // // visit the num of selected components.
+      // let count = 0;
+      // currentState.selection.forEach(
+      //   (s) => {
+      //     if (s.type === 'component') {
+      //       count = 1 + count;
+      //     }
+      //   }
+      // );
       // check if only one component is being selected and it's not being dragged somewhere.
       // if (count === 1 && deltaX === 0 && deltaY === 0) {
       //   // means we can update the selection.

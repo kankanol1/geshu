@@ -34,8 +34,8 @@ class LineLayer extends React.PureComponent {
                     /> */}
                     <path d={lineStr} style={{ fill: 'none', stroke: '#391085', strokeWidth: 1 }} />
                     <DraggableCore onStart={e => e.stopPropagation()}>
-                      <polyline
-                        points={lineStr}
+                      <path
+                        d={lineStr}
                         style={{ fill: 'none', stroke: '#fff', strokeWidth: 20, opacity: 0, pointerEvents: 'auto' }}
                         onClick={(e) => {
                         this.handleLineClick(e, {
