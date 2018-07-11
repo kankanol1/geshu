@@ -5,7 +5,7 @@ import styles from './styles.less';
 
 const R = { normal: 8, large: 9 };
 
-class PointLayer extends React.PureComponent {
+class PointLayer extends React.Component {
   constructor(props) {
     super(props);
     this.handleDrag = this.handleDrag.bind(this);
@@ -13,6 +13,12 @@ class PointLayer extends React.PureComponent {
     this.handleMouseEnter = this.handleMouseEnter.bind(this);
     this.handleMouseLeave = this.handleMouseLeave.bind(this);
     this.state = { hovering: [] };
+  }
+
+  shouldComponentUpdate() {
+    // only update when selected.
+    const { selection, model } = this.props;
+    return selection ? selection.filter(s => s.id === model.id).length > 0 : true;
   }
 
   handleDragStop(e) {

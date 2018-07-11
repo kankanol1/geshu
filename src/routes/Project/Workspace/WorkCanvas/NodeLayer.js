@@ -8,7 +8,7 @@ import './icon.less';
  * Node Layer: the bottom/first layer of the work canvas.
  * Only draw the nodes.
  */
-class NodeLayer extends React.PureComponent {
+class NodeLayer extends React.Component {
   constructor(props) {
     super(props);
     this.handleDrag = this.handleDrag.bind(this);
@@ -16,6 +16,17 @@ class NodeLayer extends React.PureComponent {
     this.handleDragStart = this.handleDragStart.bind(this);
     this.handleContextMenu = this.handleContextMenu.bind(this);
     this.hasDrag = true;
+  }
+
+  shouldComponentUpdate() {
+    // only update when selected.
+    const { selection, model } = this.props;
+    if (selection) {
+      return selection.filter(s => s.id === model.id).length > 0;
+    } else {
+      // used by preview.
+      return true;
+    }
   }
 
   handleDragStart(e) {

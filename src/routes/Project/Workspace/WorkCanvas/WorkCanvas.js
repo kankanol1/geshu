@@ -135,7 +135,7 @@ export default class WorkCanvas extends React.Component {
       );
     }
 
-    const { components, mode } = this.props.work_canvas;
+    const { components, mode, selection } = this.props.work_canvas;
 
     const isLoading = this.props.loading.effects['work_canvas/init'];
 
@@ -164,6 +164,7 @@ export default class WorkCanvas extends React.Component {
                       dispatch={this.props.dispatch}
                       positionDict={componentPointPosition}
                       componentDict={componentDict}
+                      selection={selection}
                     />
                     {
                     /* 2. node layer */
@@ -174,6 +175,7 @@ export default class WorkCanvas extends React.Component {
                       dispatch={this.props.dispatch}
                       positionDict={componentPointPosition}
                       componentDict={componentDict}
+                      selection={selection}
                     />
                     {
                       /* 3. point layer */
@@ -185,6 +187,7 @@ export default class WorkCanvas extends React.Component {
                       draggingTarget={this.props.work_canvas.lineDraggingState.draggingTarget}
                       positionDict={componentPointPosition}
                       componentDict={componentDict}
+                      selection={selection}
                     />
                   </React.Fragment>
                   );

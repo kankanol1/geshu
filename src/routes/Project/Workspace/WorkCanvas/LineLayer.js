@@ -2,7 +2,27 @@ import React from 'react';
 import { DraggableCore } from 'react-draggable';
 import { calculateLineStr, calculateLineCurly } from '../../../../utils/PositionCalculation';
 
-class LineLayer extends React.PureComponent {
+const r = 10 + 6;
+
+class LineLayer extends React.Component {
+  shouldComponentUpdate() {
+    // calculate influenced components.
+    const { selection, model } = this.props;
+    let included = false;
+    for (const s of selection) {
+      if (s.type === 'component') {
+        if (s.id === model.id) {
+          included = true;
+          break;
+        } else if (model.connectFrom.filter(l => l.component === s.id).length > 0) {
+          included = true;
+          break;
+        }
+      }
+    }
+    return included;
+  }
+
   handleLineClick(e, params) {
     e.preventDefault();
     this.props.dispatch({
@@ -11,9 +31,7 @@ class LineLayer extends React.PureComponent {
     });
   }
 
-
   render() {
-    const r = 10 + 6;
     return (
       <React.Fragment>
         {
