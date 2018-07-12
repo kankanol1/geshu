@@ -38,7 +38,7 @@ export default class ColumnMappingWidget extends React.Component {
           }
         data={this.state.data}
         columns={[{
-          name: 'input',
+          name: 'column',
           title: inputColumnTitle || '输入列',
           render: (v, item, onChange) => (
             <Select
@@ -51,7 +51,7 @@ export default class ColumnMappingWidget extends React.Component {
                   <Select.Option
                     key={i}
                     value={i}
-                    disabled={this.state.data.filter(s => s.input === i).length > 0}
+                    disabled={this.state.data.filter(s => s.column === i).length > 0}
                   >
                     {i}
                   </Select.Option>
@@ -61,7 +61,7 @@ export default class ColumnMappingWidget extends React.Component {
         ),
           span: 11,
         }, {
-          name: 'output',
+          name: 'name',
           title: outputColumnTitle || '输出列',
           render: (v, item, onChange) => (
             <Input

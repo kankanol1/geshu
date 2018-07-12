@@ -9,7 +9,7 @@ export default class ConfigurationTable extends React.Component {
     // data: [],
     // columns: [],
     // columns: [{name, title, span, render}]
-    maxHeight: 200,
+    maxHeight: 400,
     canAdd: false,
     canDelete: false,
     opSpan: 2,

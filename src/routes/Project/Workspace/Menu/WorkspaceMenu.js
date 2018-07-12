@@ -148,7 +148,7 @@ export default class WorkspaceMenu extends React.PureComponent {
           loading ? null : [
             <Button key="back" onClick={() => this.handleSubmitPipelineModalCancel()} disabled={loading}>知道了</Button>,
             result.success ? (
-              <Button key="submit" type="danger" loading={loading} onClick={() => this.handleSubmitPipelineModalOk()}>
+              <Button key="submit" type="primary" loading={loading} onClick={() => this.handleSubmitPipelineModalOk()}>
                 跳转至作业管理
               </Button>)
             : undefined,

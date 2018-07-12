@@ -16,9 +16,15 @@ class NodeLayer extends React.Component {
     this.handleDragStart = this.handleDragStart.bind(this);
     this.handleContextMenu = this.handleContextMenu.bind(this);
     this.hasDrag = true;
+    this.projectId = undefined;
   }
 
   shouldComponentUpdate() {
+    const newProjectId = this.props.projectId;
+    if (newProjectId !== this.projectId) {
+      this.projectId = newProjectId;
+      return true;
+    }
     // only update when selected.
     const { selection, model } = this.props;
     if (selection) {

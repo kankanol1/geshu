@@ -15,7 +15,14 @@ export default class TunnableWidget extends React.Component {
   }
 
   onPropertyChange(name, value) {
-    const dataCopy = { ...this.state.formData, [name]: value };
+    const newData = { ...this.state.formData, [name]: value };
+    const dataCopy = { ...newData };
+    if (dataCopy.tunableValue === undefined) {
+      dataCopy.tunableValue = [];
+    }
+    if (dataCopy.value === undefined) {
+      dataCopy.value = -1;
+    }
     this.setState({
       formData: dataCopy,
     }, () => {

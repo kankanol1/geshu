@@ -8,7 +8,7 @@ export default class ColumnSelectSelectorWidget extends React.Component {
     super(props);
     const { formData } = this.props;
     this.state = {
-      data: formData.value || [],
+      data: (formData.value || []).map((v) => { return { name: v }; }),
     };
     if (!formData.value) {
       this.props.onChange({ value: [] });
@@ -18,7 +18,7 @@ export default class ColumnSelectSelectorWidget extends React.Component {
   componentWillReceiveProps(props) {
     const { formData } = props;
     this.setState({
-      data: formData.value || [],
+      data: (formData.value || []).map((v) => { return { name: v }; }),
     });
     if (!formData.value) {
       this.props.onChange({ value: [] });
@@ -43,7 +43,7 @@ export default class ColumnSelectSelectorWidget extends React.Component {
               this.setState({
                 data: v,
               },
-              () => this.props.onChange({ value: v })
+              () => this.props.onChange({ value: v.map(i => i.name) })
               );
             }
           }

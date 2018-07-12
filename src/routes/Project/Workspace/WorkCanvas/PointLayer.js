@@ -13,9 +13,15 @@ class PointLayer extends React.Component {
     this.handleMouseEnter = this.handleMouseEnter.bind(this);
     this.handleMouseLeave = this.handleMouseLeave.bind(this);
     this.state = { hovering: [] };
+    this.projectId = undefined;
   }
 
   shouldComponentUpdate() {
+    const newProjectId = this.props.projectId;
+    if (newProjectId !== this.projectId) {
+      this.projectId = newProjectId;
+      return true;
+    }
     // only update when selected.
     const { selection, model } = this.props;
     return selection ? selection.filter(s => s.id === model.id).length > 0 : true;
