@@ -8,7 +8,7 @@ import NoticeIcon from '../NoticeIcon';
 import HeaderSearch from '../HeaderSearch';
 import styles from './index.less';
 
-export default class GlobalHeader extends PureComponent {
+export default class GlobalHeaderAnt extends PureComponent {
   componentWillUnmount() {
     this.triggerResizeEvent.cancel();
   }

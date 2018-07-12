@@ -4,7 +4,7 @@ const nameMapping = {
   DataSink: '数据存储',
   ConsoleDataSink: '数据存储',
   FileDataSink: '文件存储',
-  ConsoleModelSink: '模型存储',
+  ConsoleModelSink: '模型存储(c)',
   Transformer: '数据转换',
   AddLiteralColumnTransformer: '增加列',
   RandomSplitTransformer: '随机分割',

@@ -4,6 +4,24 @@ body,
   height: 100%;
 }
 
+@sider-color: #120338;
+
+:global {
+  .ant-menu-dark, .ant-layout-sider {
+    background: @sider-color !important;
+  }
+  .ant-menu-dark .ant-menu-inline.ant-menu-sub {
+    background: @sider-color !important;
+    box-shadow: 0 2px 8px rgba(255, 255, 255, 0.25) inset;
+    -webkit-box-shadow: 0 2px 8px rgba(255, 255, 255, 0.25) inset;
+  }
+
+  // temp fix for https://github.com/ant-design/ant-design/commit/a1fafb5b727b62cb0be29ce6e9eca8f579d4f8b7
+  .ant-spin-container {
+    overflow: visible !important;
+  }
+}
+
 // :global(.ant-layout) {
 //   min-height: 100%;
 // }
@@ -21,11 +39,4 @@ body {
 .globalSpin {
   width: 100%;
   margin: 40px 0 !important;
-}
-
-// temp fix for https://github.com/ant-design/ant-design/commit/a1fafb5b727b62cb0be29ce6e9eca8f579d4f8b7
-:global {
-  .ant-spin-container {
-    overflow: visible !important;
-  }
 }
