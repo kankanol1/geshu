@@ -9,6 +9,7 @@ class LineLayer extends React.Component {
     super(props);
     this.cache = undefined;
     this.projectId = undefined;
+    this.offsetCache = undefined;
   }
 
   shouldComponentUpdate() {
@@ -18,12 +19,14 @@ class LineLayer extends React.Component {
     if (newProjectId !== this.projectId) {
       this.projectId = newProjectId;
       return true;
-    }
-    if (!this.cache) {
+    } else if (!this.cache) {
       this.cache = newCache;
       return true;
     } else if (this.cache !== newCache) {
       this.cache = newCache;
+      return true;
+    } else if (!this.offsetCache || this.offsetCache !== this.props.offset) {
+      this.offsetCache = this.props.offset;
       return true;
     }
     const { selection, model } = this.props;

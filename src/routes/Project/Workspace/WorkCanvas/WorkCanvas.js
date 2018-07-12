@@ -15,13 +15,6 @@ import styles from './WorkCanvas.less';
   loading,
 }))
 export default class WorkCanvas extends React.Component {
-  constructor(props) {
-    super(props);
-    this.handleDrag = this.handleDrag.bind(this);
-    this.handleDragStop = this.handleDragStop.bind(this);
-    this.handleDragStart = this.handleDragStart.bind(this);
-  }
-
   componentWillMount() {
     const { dispatch, match } = this.props;
     const { state } = this.props.work_canvas;
@@ -116,6 +109,22 @@ export default class WorkCanvas extends React.Component {
     });
   }
 
+  // handleWheel(e) {
+  //   e.preventDefault();
+  //   if (key.isPressed('space')) {
+  //     const { deltaX, deltaY } = e;
+  //     const maxDelta = Math.abs(deltaX) > Math.abs(deltaY) ? deltaX : deltaY;
+  //     const { scale } = this.state;
+  //     let newScale = (maxDelta / 1000) + scale;
+  //     if (newScale < 0.5) {
+  //       newScale = 0.5;
+  //     } else if (newScale > 1.5) {
+  //       newScale = 1.5;
+  //     }
+  //     this.setState({ scale: newScale });
+  //   }
+  // }
+
   render() {
     // 1. generate position reference table for the rest calculation.
     // store: componentid: {x, y}
@@ -123,7 +132,7 @@ export default class WorkCanvas extends React.Component {
     // store: componentid: {pointid: {x, y}}
     const componentPointPosition = this.props.work_canvas.cache.pointDict;
 
-    const { contextmenu } = this.props.work_canvas;
+    const { contextmenu, offset } = this.props.work_canvas;
     let contextMenuView = null;
     if (contextmenu.show) {
       const { component } = contextmenu;
@@ -138,17 +147,19 @@ export default class WorkCanvas extends React.Component {
     const { components, mode, selection, state: { projectId } } = this.props.work_canvas;
 
     const isLoading = this.props.loading.effects['work_canvas/init'];
-
     return (
-      <div className={styles.workCanvasWrapper}>
+      <div
+        className={styles.workCanvasWrapper}
+      >
         <DraggableCore
-          onDrag={this.handleDrag}
-          onStop={this.handleDragStop}
-          onStart={this.handleDragStart}
+          onDrag={(e, data) => this.handleDrag(e, data)}
+          onStop={e => this.handleDragStop(e)}
+          onStart={e => this.handleDragStart(e)}
         >
           <div
             style={{ cursor: mode === 'move' ? 'move' : 'default' }}
             className="work-canvas"
+            // onWheel={e => this.handleWheel(e)}
           >
             {
             components.map(
@@ -166,6 +177,7 @@ export default class WorkCanvas extends React.Component {
                       componentDict={componentDict}
                       selection={selection}
                       projectId={projectId}
+                      offset={offset}
                     />
                     {
                     /* 2. node layer */
@@ -178,6 +190,7 @@ export default class WorkCanvas extends React.Component {
                       componentDict={componentDict}
                       selection={selection}
                       projectId={projectId}
+                      offset={offset}
                     />
                     {
                       /* 3. point layer */
@@ -191,6 +204,7 @@ export default class WorkCanvas extends React.Component {
                       componentDict={componentDict}
                       selection={selection}
                       projectId={projectId}
+                      offset={offset}
                     />
                   </React.Fragment>
                   );

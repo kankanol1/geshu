@@ -1,4 +1,3 @@
-import key from 'keymaster';
 import { message } from 'antd';
 import { calculatePointCenter, updateCache, createCache, addCacheForComponent, updateCacheForComponent } from '../../utils/PositionCalculation';
 import { openProject, saveProject } from '../../services/componentAPI';

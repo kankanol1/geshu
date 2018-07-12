@@ -14,12 +14,16 @@ class PointLayer extends React.Component {
     this.handleMouseLeave = this.handleMouseLeave.bind(this);
     this.state = { hovering: [] };
     this.projectId = undefined;
+    this.offsetCache = undefined;
   }
 
   shouldComponentUpdate() {
     const newProjectId = this.props.projectId;
     if (newProjectId !== this.projectId) {
       this.projectId = newProjectId;
+      return true;
+    } else if (!this.offsetCache || this.offsetCache !== this.props.offset) {
+      this.offsetCache = this.props.offset;
       return true;
     }
     // only update when selected.
