@@ -1,7 +1,8 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
+import { Link } from 'dva/router';
 import moment from 'moment';
-import { Popconfirm, Tag, Row, Col, Card, Form, Input, Button, DatePicker } from 'antd';
+import { Popconfirm, Row, Col, Card, Form, Input, Button, DatePicker } from 'antd';
 import StandardTable from '../../components/StandardTable';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './ModelList.less';
@@ -50,7 +51,7 @@ export default class ServingModelList extends PureComponent {
       {
         title: '发布地址',
         dataIndex: 'url',
-        render: val => <a href={val}>{val}</a>,
+        render: (val, record) => <Link to={`/models/serving/test/${record.id}`}>{val}</Link>,
       },
       {
         title: '上线时间',
@@ -239,7 +240,14 @@ export default class ServingModelList extends PureComponent {
     const { selectedRows } = this.state;
 
     return (
-      <PageHeaderLayout>
+      <PageHeaderLayout
+        breadcrumbList={[{
+          title: '首页',
+          href: '/',
+        }, {
+          title: '模型服务',
+        }]}
+      >
         <Card>
           <div className={styles.tableList}>
             <div className={styles.tableListForm}>

@@ -102,8 +102,11 @@ export const getRouterData = (app) => {
     '/models/candidates': {
       component: dynamicWrapper(app, ['models/candidatemodels'], () => import('../routes/Model/CandidateModelList')),
     },
-    '/models/serving': {
+    '/models/serving/list': {
       component: dynamicWrapper(app, ['models/servingmodels'], () => import('../routes/Model/ServingModelList')),
+    },
+    '/models/serving/test/:id': {
+      component: dynamicWrapper(app, ['models/modeltest'], () => import('../routes/Model/ModelServingTest')),
     },
 
     /* job manage */
@@ -134,7 +137,6 @@ export const getRouterData = (app) => {
     '/database/query': {
       component: dynamicWrapper(app, [], () => import('../routes/Database/DatabaseQuery')),
     },
-
     /* center storage */
     '/storage/list': {
       component: dynamicWrapper(app, [], () => import('../routes/Storage/StorageList')),

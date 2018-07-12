@@ -132,6 +132,10 @@ class AbstractBasicLayout extends LoadedLayout {
               )
             }
             <Redirect exact from="/" to={bashRedirect} />
+            {
+              // redirects.
+            }
+            <Redirect exact from="/models/serving" to="/models/serving/list" />
             {this.getCustomRedirect()}
             <Route render={NotFound} />
           </Switch>

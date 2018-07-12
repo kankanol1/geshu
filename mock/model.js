@@ -179,10 +179,39 @@ export function addModel({ id, name, description }) {
   });
 }
 
+export function getModelInfo(req, res, u, b) {
+  const response = {
+    fileName: '4_app-20180712160433-0095_模型存储1531405753901',
+    addedAt: null,
+    inputSchema: '{"type":"struct","fields":[{"name":"age","type":"integer","nullable":true,"metadata":{}},{"name":"workclass","type":"string","nullable":true,"metadata":{}},{"name":"education-num","type":"integer","nullable":true,"metadata":{}},{"name":"marital-status","type":"string","nullable":true,"metadata":{}},{"name":"occupation","type":"string","nullable":true,"metadata":{}},{"name":"relationship","type":"string","nullable":true,"metadata":{}},{"name":"race","type":"string","nullable":true,"metadata":{}},{"name":"sex","type":"string","nullable":true,"metadata":{}},{"name":"hours-per-week","type":"integer","nullable":true,"metadata":{}},{"name":"native-country","type":"string","nullable":true,"metadata":{}},{"name":"result","type":"string","nullable":true,"metadata":{}}]}',
+    publishedAt: null,
+    addedBy: 0,
+    offlinedBy: 1,
+    offlinedAt: null,
+    onlinedBy: 0,
+    createdAt: '2018-07-12 16:05:41',
+    createdBy: 1,
+    sinkId: '模型存储1531405753901',
+    name: '4',
+    online: true,
+    id: 27,
+    state: false,
+    onlinedAt: '2018-07-12 15:17:04',
+    projectId: 4,
+    updatedAt: '2018-07-12 16:05:41',
+  };
+  if (res && res.json) {
+    res.json(response);
+  } else {
+    return response;
+  }
+}
+
 export default {
   getModels,
   deleteModels,
   updateModel,
   addModel,
+  getModelInfo,
 };
 

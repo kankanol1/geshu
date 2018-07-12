@@ -79,6 +79,10 @@ export async function offlineServingModels(params) {
   });
 }
 
+export async function queryModelDetails(id) {
+  return request(`/api/models/get/${id}`, { method: 'GET' });
+}
+
 export default {
   updateModel,
   removeModels,
@@ -89,4 +93,5 @@ export default {
   publishCandidateModels,
   queryServingModels,
   offlineServingModels,
+  queryModelDetails,
 };
