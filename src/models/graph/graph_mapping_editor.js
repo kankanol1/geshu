@@ -36,7 +36,7 @@ function formBackendMappingData(diagram) {
       const toNodeData = diagram.model.findNodeDataForKey(toNodeKey);
       const dataMap = {
         source: {
-          path: fromNodeData.path,
+          path: fromNodeData.fullPath,
           header: true,
           inferSchema: true,
           schema: '',
@@ -51,20 +51,23 @@ function formBackendMappingData(diagram) {
           ...dataMap,
           edge: toNodeData.text,
           edgeLeft: {
-            edgeField: linkArr[i].start.nodeAttr,
+            edgeField: linkArr[i].start.column,
             vertex: startNodeData.text,
-            vertexField: linkArr[i].start.column,
+            vertexField: linkArr[i].start.nodeAttr,
           },
           edgeRight: {
-            edgeField: linkArr[i].end.nodeAttr,
+            edgeField: linkArr[i].end.column,
             vertex: endNodeData.text,
-            vertexField: linkArr[i].start.column,
+            vertexField: linkArr[i].end.nodeAttr,
           },
         });
       } else {
+        const { attrList } = toNodeData;
+        const pkField = attrList.find((o) => { return o.pk === '1'; });
         mappingData.vertexMaps.push({
           ...dataMap,
           vertex: toNodeData.text,
+          pk: pkField.name,
         });
       }
     }

@@ -40,12 +40,6 @@ export async function getDataSourceColumns(params) {
   });
 }
 
-export async function getGremlinServerAddress() {
-  return request('/api/graph/gremlinserver/address', {
-    method: 'GET',
-  });
-}
-
 export async function getGremlinQueries(params) {
   return request(`/api/graph/query/list?${stringify(params)}`, {
     method: 'GET',
@@ -53,12 +47,8 @@ export async function getGremlinQueries(params) {
 }
 
 export async function queryGremlinServer(params) {
-  return request(`${params.host}`, {
+  return request('/api/graph/extra/gremlin', {
     method: 'POST',
-    credentials: null,
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-    },
     body: {
       gremlin: params.code,
     },
@@ -140,7 +130,6 @@ export default {
   saveGraph,
   getGraph,
   getDataSources,
-  getGremlinServerAddress,
   queryGremlinServer,
   getGremlinQueries,
   createQuery,

@@ -207,6 +207,7 @@ export function getModelInfo(req, res, u, b) {
   }
 }
 
+<<<<<<< HEAD
 export function getModelResult(req, res, u, b) {
   const response = {
     success: true,
@@ -219,12 +220,17 @@ export function getModelResult(req, res, u, b) {
   }
 }
 
+=======
+>>>>>>> use new graph gremlin api.
 export default {
   getModels,
   deleteModels,
   updateModel,
   addModel,
   getModelInfo,
+<<<<<<< HEAD
   getModelResult,
+=======
+>>>>>>> use new graph gremlin api.
 };
 

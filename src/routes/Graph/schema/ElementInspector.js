@@ -79,7 +79,7 @@ class ElementInspector extends Component {
   }
 
   addAttr() {
-    this.state.attrList.push({ name: '', type: 'String', cardinality: 'SINGLE' });
+    this.state.attrList.push({ name: '', type: 'String', cardinality: 'SINGLE', pk: '0' });
     setInspectedObjectData('attrList', this.state.attrList);
     this.setState({});
   }
@@ -95,7 +95,6 @@ class ElementInspector extends Component {
     this.setState({});
     setInspectedObjectData(stateKey, event.target.value);
   }
-
   render() {
     if (!this.state.show) {
       return (<p style={{ textAlign: 'center', fontSize: '16px' }}>暂无选中元素</p>);
@@ -228,6 +227,7 @@ class ElementInspector extends Component {
               onAddAttr={this.addAttr.bind(this)}
               onRemoveAttr={this.removeAttr.bind(this)}
               onUpdateAttr={this.updateAttr.bind(this)}
+              isNode={this.state.isNode}
             />
           </div>
         </div>

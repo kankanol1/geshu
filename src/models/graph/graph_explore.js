@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign,guard-for-in,no-useless-escape */
 
 import { message } from 'antd';
-import { getGremlinServerAddress, queryGremlinServer, getGraph } from '../../services/graphAPI';
+import { queryGremlinServer, getGraph } from '../../services/graphAPI';
 import GojsRelationGraph from '../../utils/GojsRelationGraph';
 
 const GRAPH_NAME = 'graph_explore';
@@ -43,7 +43,6 @@ function graphson3to1(data) {
 export default {
   namespace: 'graph_explore',
   state: {
-    host: '',
     id: '',
     name: '',
     type2Label2Attrs: {
@@ -150,19 +149,16 @@ export default {
   effects: {
     *initialize({ payload }, { call, put }) {
       const graphData = yield call(getGraph, { id: payload.id });
-      let response = yield call(getGremlinServerAddress, { id: payload.id });
-      if (!response) response = { data: 'http://18.217.118.40:8182' };
       yield put({
         type: 'init',
         payload: {
           ...graphData.data,
-          host: response.data,
           ...payload,
         },
       });
     },
     *searchGraph({ payload }, { call, put, select }) {
-      const { host, id, type2Label2Attrs, type2Attrs, tableName } =
+      const { id, type2Label2Attrs, type2Attrs, tableName } =
         yield select(state => state.graph_explore);
       const { searchValue, type, limit } = payload;
       // const searchLink =
@@ -226,7 +222,6 @@ export default {
       const response = yield call(queryGremlinServer, {
         code: !tableName || tableName === 'g' ? code : `g=${tableName}.traversal();${code}`,
         id,
-        host,
       });
       if (response.status.code > 200) { message.error(`错误：${response.status.message}`); }
       yield put({
@@ -235,13 +230,13 @@ export default {
       });
     },
     *exploreGraph({ payload }, { call, put, select }) {
-      const { host, id, tableName } = yield select(state => state.graph_explore);
+      const { id, tableName } = yield select(state => state.graph_explore);
       const { key } = payload.data;
       const code = `nodes =g.V(${key}).as("node").both().as("node")
         .select(all,"node").inject(g.V(${key})).unfold()
         edges = g.V(${key}).bothE()
         [nodes.toList(),edges.toList()]`;
-      const response = yield call(queryGremlinServer, { code: !tableName || tableName === 'g' ? code : `g=${tableName}.traversal();${code}`, id, host });
+      const response = yield call(queryGremlinServer, { code: !tableName || tableName === 'g' ? code : `g=${tableName}.traversal();${code}`, id });
       yield put({
         type: 'mergeGraph',
         payload: response,

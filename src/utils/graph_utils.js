@@ -266,6 +266,7 @@ util.addFileNode = (diagram, fileData) => {
           geo: 'file',
           text: fileData[i].name,
           key: fileData[i].id,
+          fullPath: fileData[i].fullPath,
         });
     }
   }

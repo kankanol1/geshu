@@ -10,11 +10,16 @@ function formPropertyKeys(nodeProps, linkProps) {
   const formDataProps = (dataProps) => {
     for (const propName in dataProps) {
       if (propertyNames.indexOf(propName) < 0) {
-        propertyKeys.push({
-          name: dataProps[propName].name,
-          dataType: dataProps[propName].type,
-          cardinality: dataProps[propName].cardinality,
-        });
+        const { name, type: dataType, cardinality, pk } = dataProps[propName];
+        const prop = {
+          name,
+          dataType,
+          cardinality,
+        };
+        if (pk === '1') {
+          prop.pk = '1';
+        }
+        propertyKeys.push(prop);
         propertyNames.push(propName);
       }
     }

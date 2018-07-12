@@ -203,19 +203,19 @@ export const getRouterData = (app) => {
     // '/graph/mapper': {
     //   component: dynamicWrapper(app, [], () => import('../layouts/GraphLayout')),
     // },
-    '/graph/index/:type': {
+    '/graph/:type': {
       component: dynamicWrapper(app, ['graph/graph'], () => import('../../../routes/Graph/GraphIndex')),
     },
-    '/graph/detail/schema/:id': {
+    '/graph/schema/detail/:id': {
       component: dynamicWrapper(app, ['graph/graph_schema_editor'], () => import('../../../routes/Graph/schema/SchemaDesigner')),
     },
-    '/graph/detail/mapper/:id': {
+    '/graph/mapper/detail/:id': {
       component: dynamicWrapper(app, ['graph/graph_mapping_editor'], () => import('../../../routes/Graph/mapping/MappingDesigner')),
     },
-    '/graph/detail/query/:id': {
+    '/graph/query/detail/:id': {
       component: dynamicWrapper(app, ['graph/graph_query'], () => import('../../../routes/Graph/query/GraphQuery')),
     },
-    '/graph/detail/explore/:id': {
+    '/graph/explore/detail/:id': {
       component: dynamicWrapper(app, ['graph/graph_explore'], () => import('../../../routes/Graph/explore/GraphExplore')),
     },
     // '/user/:id': {
@@ -224,7 +224,6 @@ export const getRouterData = (app) => {
   };
   // Get name from ./menu.js or just set it in the router data.
   const menuData = getFlatMenuData(getMenuData());
-
   // Route configuration data
   // eg. {name,authority ...routerConfig }
   const routerData = {};

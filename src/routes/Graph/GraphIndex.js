@@ -157,7 +157,7 @@ export default class GraphIndex extends Component {
                 (
                   <p key={item.id}>
                     <Link
-                      to={`/graph/detail/${this.props.match.params.type}/${item.id}`}
+                      to={`/graph/${this.props.match.params.type}/detail/${item.id}`}
                       className={styles.clickableItem}
                     >
                       <Icon type="file" /> {item.name} (最后编辑于 {moment(item.updatedAt).format('YYYY-MM-DD HH:mm:ss')})

@@ -294,19 +294,6 @@ export function getDataSources(req, res) {
     return result;
   }
 }
-export function getGremlinServerAddress(req, res) {
-  const result = {
-    success: true,
-    // data: 'http://18.217.118.40:8182',
-    data: 'http://localhost:8182',
-  };
-
-  if (res && res.json) {
-    res.json(result);
-  } else {
-    return result;
-  }
-}
 let i = 3;
 let queries = [
   {

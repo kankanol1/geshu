@@ -14,12 +14,16 @@ import componentParams from './mock/workspace/componentParams'
 import { getProject, createProject, updateProject, deleteProject, getProjectLabels, getRecentProjects } from './mock/project';
 import { getDatabase, createDatabase, updateDatabase, deleteDatabase, getRecentDatabases, makePublicDatabase, makePrivateDatabase, getAllDatabase } from './mock/database';
 import { login, userList, createUser, deleteUser, queryUserName, updateUser } from './mock/user';
+<<<<<<< HEAD
 import { getModels, addModel, updateModel, deleteModels, getModelInfo, getModelResult } from './mock/model';
+=======
+import { getModels, addModel, updateModel, deleteModels, getModelInfo } from './mock/model';
+>>>>>>> use new graph gremlin api.
 import { getCandidateModels, updateCandidateModel, deleteCandidateModels, publishCandidateModels } from './mock/candidatemodel';
 import { getJobs, cancelJobs, deleteJobs } from './mock/job';
 import { open, save, saveSettings, submit, validate, inspectData } from './mock/workspace/workspace';
 import { getUserInfo, updatePassword } from './mock/selfmanage';
-import {recentGraph,saveGraph,getGraph,deleteGraph,getDataSources,getDataSourceColumns,getGraphList,getGremlinServerAddress,getQueryList,saveQuery,saveAsQuery,updateQuery,deleteQuery,executeGraph,createGraph} from './mock/graph';
+import {recentGraph,saveGraph,getGraph,deleteGraph,getDataSources,getDataSourceColumns,getGraphList,getQueryList,saveQuery,saveAsQuery,updateQuery,deleteQuery,executeGraph,createGraph} from './mock/graph';
 import { getFileList, postFileUpload,getPreviewData } from './mock/file';
 import { getServingModels, offlineServingModels, onlineServingModels } from './mock/servingmodel';
 import { getQueryResult, getLastestDatabasesForProject, persistDataQuery } from './mock/dataquery';
@@ -41,7 +45,7 @@ if (serverEnabled) {
 }
 
 // 代码中会兼容本地 service mock 以及部署站点的静态数据
-const proxy = serverEnabled ? 
+const proxy = serverEnabled ?
   {
     "GET /api**": (req, res) => {
       req.pipe(request.get({
@@ -55,14 +59,14 @@ const proxy = serverEnabled ?
         } else {
           req.pipe(request.post(server+req.url, {
             credentials: 'include',
-            json: req.body}), {end: false}).pipe(res);  
+            json: req.body}), {end: false}).pipe(res);
         }
       } catch (e){
         console.log(e);
       }
     },
   }
-  : 
+  :
   {
 
   'GET /api/project/list': getProject,
@@ -81,7 +85,7 @@ const proxy = serverEnabled ?
   'GET /api/database/all': getAllDatabase,
   // login
   'POST /api/login/account': login,
-  
+
   // users manage.
   'GET /api/users/list': userList,
   'POST /api/users/create': createUser,
@@ -93,7 +97,7 @@ const proxy = serverEnabled ?
   'GET /api/models/production/list': getModels,
   'POST /api/models/production/update': updateModel,
   'POST /api/models/production/delete': deleteModels,
-  
+
   // candidate model manage.
   'GET /api/models/candidate/list': getCandidateModels,
   'POST /api/models/candidate/update': updateCandidateModel,
@@ -106,7 +110,10 @@ const proxy = serverEnabled ?
   'POST /api/models/serving/online': onlineServingModels,
 
   'GET /api/models/get/:id': getModelInfo,
+<<<<<<< HEAD
   'POST /api/models/execute/:id': getModelResult,
+=======
+>>>>>>> use new graph gremlin api.
 
   // job manage.
   'GET /api/jobs/list': getJobs,
@@ -131,24 +138,23 @@ const proxy = serverEnabled ?
   // graph
   'GET /api/graph/project/recent': recentGraph,
   'GET /api/graph/project/detail': getGraph,
-  'POST /api/graph/project/save': saveGraph,  
-  'GET /api/graph/project/list': getGraphList,  
+  'POST /api/graph/project/save': saveGraph,
+  'GET /api/graph/project/list': getGraphList,
   'POST /api/graph/project/delete': deleteGraph,
   'POST /api/graph/project/update': saveGraph,
   'POST /api/graph/project/create': createGraph,
-  'GET /api/graph/project/execute': executeGraph, 
+  'GET /api/graph/project/execute': executeGraph,
 
-  'GET /api/graph/gremlinserver/address': getGremlinServerAddress,  
-  'POST /api/graph/query/create': saveAsQuery,  
-  'POST /api/graph/query/update': saveQuery, 
-  'GET /api/graph/query/list': getQueryList,  
+  'POST /api/graph/query/create': saveAsQuery,
+  'POST /api/graph/query/update': saveQuery,
+  'GET /api/graph/query/list': getQueryList,
   'POST /api/graph/query/update': updateQuery,
   'POST /api/graph/query/delete': deleteQuery,
 
   'GET /api/graph/jobs/list': getJobs,
   'POST /api/graph/jobs/cancel': cancelJobs,
   'POST /api/graph/jobs/delete': deleteJobs,
-  
+
   // file list
   'GET /api/fs/ls': getFileList,
   'GET /api/fs/sample': getPreviewData,
@@ -168,7 +174,7 @@ const proxy = serverEnabled ?
 
   // // file list
   // 'GET /api/fs/ls': getFileList,
-  
+
   // self manage.
   'GET /api/self/info': getUserInfo,
   'POST /api/self/password': updatePassword,
