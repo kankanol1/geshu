@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { Table, Select, Row, Col, Spin } from 'antd';
+import { Table, Select, Row, Col } from 'antd';
 import graphUtils from '../../../utils/graph_utils';
 import styles from '../Inspectors.less';
 
@@ -76,10 +76,15 @@ class MappingInspector extends Component {
         const mappingNode = show && currentInspectedObject.toNode.data.originType !== 'link';
         const startMappingConfig = getEdgeMappingConfig('start');
         const endMappingConfig = getEdgeMappingConfig('end');
+        const { path, projectId, fileType } = currentInspectedObject.fromNode.data;
         if (show) {
           this.props.dispatch({
             type: 'graph_mapping_editor/getDataSourceColumns',
-            payload: currentInspectedObject.fromNode.data.id,
+            payload: {
+              path,
+              projectId,
+              fileType,
+            },
           });
         }
         this.setState({

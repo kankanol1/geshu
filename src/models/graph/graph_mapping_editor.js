@@ -13,7 +13,6 @@ function inverseMap(map) {
   }
   return inversedMap;
 }
-
 function getFileName(path) {
   const list = path.split('/');
   return list[list.length - 1];
@@ -106,11 +105,13 @@ export default {
     addDataSourcesOnGraph(state, { payload }) {
       const fileData = [];
       payload.forEach((value) => {
-        if (value.indexOf('.csv') >= 0) {
+        if (value.path.indexOf('.csv') >= 0) {
           fileData.push({
-            name: getFileName(value),
-            id: value,
-            path: value,
+            name: getFileName(value.path),
+            id: value.path,
+            path: value.path,
+            fileType: value.type,
+            projectId: value.projectId,
           });
         }
       });
@@ -129,14 +130,16 @@ export default {
       });
     },
     saveCurrentDataSourceColumn(state, { payload }) {
-      const currentColumns = state.datasourceId2Columns[payload];
+      const allColumns = state.datasourceId2Columns[payload];
+      const firstColumnString = allColumns[0] || '';
+      const currentColumns = firstColumnString.split(',');
       return Object.assign({}, {
         ...state,
         currentColumns,
         loadingColumn: false,
       });
     },
-    startLoadDataSourceColumn(state, { payload }) {
+    startLoadDataSourceColumn(state) {
       return {
         ...state,
         loadingColumn: true,
@@ -201,6 +204,7 @@ export default {
       });
     },
     *getDataSourceColumns({ payload }, { call, put, select }) {
+      const { path, projectId, fileType } = payload;
       yield put({
         type: 'startLoadDataSourceColumn',
       });
@@ -208,19 +212,21 @@ export default {
         yield select(state => state.graph_mapping_editor);
       if (!datasourceId2Columns[payload]) {
         const data = yield call(listFileHead, {
-          file: payload,
+          path,
+          projectId: projectId || '-1',
+          type: fileType,
         });
         yield put({
           type: 'saveDataSourceColumn',
           payload: {
-            id: payload,
+            id: path,
             data,
           },
         });
       }
       yield put({
         type: 'saveCurrentDataSourceColumn',
-        payload,
+        payload: path,
       });
     },
     *saveMapping({ payload }, { call, put, select }) {
@@ -241,11 +247,11 @@ export default {
         message.info(response.message);
       } else {
         const execution = yield call(execute, { type: 'mapping', id });
-        if (execution.success) { yield put(routerRedux.push('/jobs/list')); } else { message.info(execution.message); }
+        if (execution.success) { yield put(routerRedux.push('/graph/jobs')); } else { message.info(execution.message); }
       }
     },
 
-    *loadFile({ payload, resolve, reject }, { call, put, select }) {
+    *loadFile({ payload, resolve, reject }, { call, put }) {
       const response = yield call(listFile, { path: payload });
       if (response) {
         yield put({

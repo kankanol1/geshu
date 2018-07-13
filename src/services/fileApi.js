@@ -5,7 +5,7 @@ export async function listFile(params) {
   return request(`/api/fs/ls?${stringify(params)}`);
 }
 export async function listFileHead(params) {
-  return request(`/api/fs/columns?${stringify(params)}`);
+  return request(`/api/fs/sample4type?${stringify(params)}`);
 }
 
 

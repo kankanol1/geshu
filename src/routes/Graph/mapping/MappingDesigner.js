@@ -1,8 +1,9 @@
 import React from 'react';
 import { connect } from 'dva';
 import { Layout, Row, Col, Menu, Icon, Modal, Spin } from 'antd';
-import FileSelector from './FileSelector';
+// import FileSelector from './FileSelector';
 import MappingInspector from './MappingInspector';
+import StorageFilePicker from '../../../routes/Storage/StorageFilePicker';
 
 const { confirm } = Modal;
 class MappingDesigner extends React.PureComponent {
@@ -25,30 +26,54 @@ class MappingDesigner extends React.PureComponent {
   filterOption = (inputValue, option) => {
     return option.name.indexOf(inputValue) > -1;
   }
-  handleChange = (target) => {
+  handleChange = (v) => {
+    // v如果是复选文件，应该是个文件数组对象，如果是单选，也应该用数组包裹起来，方便以后的扩展
+    let target = [];
+    if (v !== undefined && !Array.isArray(v)) {
+      target = [v];
+    }
+    if (v !== undefined && Array.isArray(v)) {
+      target = v;
+    }
     this.setState({
       target,
     });
   }
+  handleOk = () => {
+    this.setState({ datasourceModal: false });
+    this.props.dispatch({
+      type: 'graph_mapping_editor/addDataSourcesOnGraph',
+      payload: this.state.target,
+    });
+  }
+  handleCancel = () => {
+    this.setState({ datasourceModal: false });
+  }
   render() {
     const { loading } = this.props;
+    const { projectId } = this.props.id;
+
     return (
       <Spin spinning={loading} tip="加载中...">
         <Layout style={{ padding: '0', height: '100%' }} theme="light">
           <Modal
-            visible={this.state.datasourceModal}
             title="添加数据源"
-            onCancel={() => { this.setState({ datasourceModal: false }); }}
-            onOk={() => {
-              this.setState({ datasourceModal: false });
-              this.props.dispatch({
-                type: 'graph_mapping_editor/addDataSourcesOnGraph',
-                payload: this.state.target,
-              });
-            }}
-            width={350}
+            visible={this.state.datasourceModal}
+            onOk={() => this.handleOk()}
+            onCancel={() => this.handleCancel()}
           >
-            <FileSelector checkedKeys={this.state.target} onChange={this.handleChange} />
+            <StorageFilePicker
+              smallSize
+              enableUpload
+              enableMkdir
+              onChange={v => this.handleChange(v)}
+              view="index"
+              mode="project"
+              type="pipeline"
+              project={{ id: projectId }}
+              allowSelectFolder={false}
+              folderOnly={false}
+            />
           </Modal>
           <Menu mode="horizontal">
             <Menu.Item >
