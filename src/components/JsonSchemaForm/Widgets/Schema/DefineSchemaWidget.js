@@ -9,6 +9,7 @@ const schemaTypes = [
   { name: 'String', value: '"string"' },
   { name: 'Double', value: '"double"' },
   { name: 'Integer', value: '"integer"' },
+  { name: 'Boolean', value: '"boolean"' },
 ];
 
 export default class DefineSchemaWidget extends React.PureComponent {

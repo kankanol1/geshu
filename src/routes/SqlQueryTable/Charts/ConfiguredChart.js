@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Row, Col, Card, Tabs, Button, Icon, Tooltip, Tag, Modal, Form } from 'antd';
 import DisplaySettingsForm from './Forms/DisplaySettingsForm';
+import styles from './ConfiguredChart.less';
 
 const ButtonGroup = Button.Group;
 const { TabPane } = Tabs;
@@ -76,8 +77,8 @@ export default class ConfiguredChart extends Component {
     const chart = this.renderChart();
     return (
       <Row>
-        <Col span={8}>
-          <Card>
+        <Col span={10}>
+          <Card className={styles.leftCard}>
             <Tabs
               defaultActiveKey="1"
               tabBarExtraContent={
@@ -104,9 +105,9 @@ export default class ConfiguredChart extends Component {
             </Tabs>
           </Card>
         </Col>
-        <Col span={16}>
+        <Col span={14}>
           <div>
-            {chart !== undefined && chart !== null ?
+            {chart ?
             (
               <React.Fragment>
                 <div style={{ textAlign: 'right' }}>

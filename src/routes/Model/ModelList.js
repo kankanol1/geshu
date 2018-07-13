@@ -133,7 +133,7 @@ export default class ModelList extends PureComponent {
       {
         title: '状态',
         dataIndex: 'isOnline',
-        render: val => (val ? '已上线' : '未上线'),
+        render: val => (val ? <Tag color="#87d068">已上线</Tag> : <Tag color="#bfbfbf">未上线</Tag>),
       },
       {
         title: '操作',
