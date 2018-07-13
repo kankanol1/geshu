@@ -225,9 +225,14 @@ export function inspectData(req, res, u, b) {
       { a1: 'v1', a2: 'v2', a3: 'v3', a4: 'v4' },
     ],
   };
+  const result = {
+    success: true,
+    message: 'ok',
+    data: response,
+  };
   if (res && res.json) {
-    res.json(response);
+    res.json(result);
   } else {
-    return response;
+    return result;
   }
 }

@@ -21,6 +21,9 @@ export default {
         result: { ...payload },
       };
     },
+    resetResult(state) {
+      return { ...state, result: {} };
+    },
   },
 
   effects: {

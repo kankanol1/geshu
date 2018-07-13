@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { Card, Col, Row, Input } from 'antd';
+import { Card, Col, Row, Input, Spin } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import InputSchemaForm from './InputSchemaForm';
 
 const { TextArea } = Input;
 
-@connect(({ modeltest }) => ({
+@connect(({ modeltest, loading }) => ({
   modeltest,
+  loading: loading.models.modeltest,
 }))
 export default class ModelServingTest extends Component {
   componentWillMount() {
@@ -29,7 +30,7 @@ export default class ModelServingTest extends Component {
   submitSchema(fieldsValue) {
     this.props.dispatch({
       type: 'modeltest/execute',
-      payload: { param: { ...fieldsValue }, id: this.props.match.params.id },
+      payload: { params: { ...fieldsValue }, id: this.props.match.params.id },
     });
   }
 
@@ -37,13 +38,20 @@ export default class ModelServingTest extends Component {
     const { inputSchema } = this.props.modeltest.model;
     if (inputSchema) {
       const parsedSchema = JSON.parse(inputSchema);
-      return (<InputSchemaForm schema={parsedSchema} onSubmit={e => this.submitSchema(e)} />);
+      return (
+        <InputSchemaForm
+          dispatch={this.props.dispatch}
+          schema={parsedSchema}
+          onSubmit={e => this.submitSchema(e)}
+        />
+      );
     }
-    return null;
+    return <Spin />;
   }
 
   render() {
     const { result } = this.props.modeltest;
+    const { loading } = this.props;
     return (
       <PageHeaderLayout
         breadcrumbList={[{
@@ -62,7 +70,10 @@ export default class ModelServingTest extends Component {
               {this.renderTestForm()}
             </Col>
             <Col span={12}>
-              <TextArea value={result.result} rows={10} />
+              { loading ? <Spin /> : (
+                <TextArea value={`${result.result === undefined ? '' : result.result}`} rows={10} disabled />
+              )
+            }
             </Col>
           </Row>
         </Card>

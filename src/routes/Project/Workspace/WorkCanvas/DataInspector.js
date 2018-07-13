@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, Button, Col, Row, Select, Table } from 'antd';
+import { Modal, Button, Col, Row, Select, Table, Spin } from 'antd';
 import { connect } from 'dva';
 
 @connect(({ datainspector, loading }) => ({
@@ -16,14 +16,17 @@ export default class DataInspector extends React.Component {
     };
   }
 
+  componentWillMount() {
+    this.performQuery();
+  }
+
   componentWillUnmount() {
     this.props.dispatch({
       type: 'datainspector/clearData',
     });
   }
 
-  handleSubmit(e) {
-    e.preventDefault();
+  performQuery() {
     this.props.dispatch({
       type: 'datainspector/inspectData',
       payload: {
@@ -44,7 +47,23 @@ export default class DataInspector extends React.Component {
     };
     const { outputs, name } = this.props.component;
     const { result } = this.props.datainspector;
-    const { schema, data } = result;
+    const { success, message, data } = result;
+    let table = null;
+    if (success) {
+      const { schema } = data;
+      table = (
+        <Table
+          style={{ marginTop: '10px' }}
+          columns={schema &&
+              schema.map(i => ({ title: i.name, key: i.name, dataIndex: i.name }))}
+          dataSource={data.data || []}
+          scroll={{ x: schema && schema.length * 100, y: 400 }}
+          pagination={false}
+          loading={loading}
+          size="small"
+        />
+      );
+    }
     return (
       <Modal
         title={`数据预览:[${name}]`}
@@ -75,26 +94,22 @@ export default class DataInspector extends React.Component {
             </Col>
             <Col span={2} />
             <Col span={14}>
-              <Button type="primary" onClick={e => this.handleSubmit(e)}> 查看</Button>
+              <Button
+                type="primary"
+                onClick={(e) => {
+                    e.preventDefault();
+                    this.performQuery();
+                }}
+              > 查看
+              </Button>
             </Col>
           </Row>
         )
       }
 
-        { schema || loading ?
-          (
-            <Table
-              style={{ marginTop: '10px' }}
-              columns={schema &&
-              schema.map(i => ({ title: i.name, key: i.name, dataIndex: i.name }))}
-              dataSource={data || []}
-              scroll={{ x: schema && schema.length * 100, y: 400 }}
-              pagination={false}
-              loading={loading}
-              size="small"
-            />
-            )
-        : null}
+        { loading ? <Spin /> : (
+          success ? table : <span style={{ color: 'red' }}>{message}</span>
+        )}
       </Modal>
     );
   }

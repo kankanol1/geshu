@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Input, Button } from 'antd';
+import { Form, Input, Button, Row, Col } from 'antd';
 
 const FormItem = Form.Item;
 
@@ -9,6 +9,10 @@ export default class InputSchemaForm extends React.Component {
     const { form, schema } = this.props;
     const { getFieldDecorator } = form;
     // {parsedSchema.fields.map(i => <p key={i}>{i.name}</p>)}
+    let renderFields = schema.fields || schema;
+    if (renderFields.length === 3) {
+      renderFields = renderFields.filter(i => i.name !== 'label');
+    }
     return (
       <Form onSubmit={(e) => {
         e.preventDefault();
@@ -19,7 +23,7 @@ export default class InputSchemaForm extends React.Component {
       }}
       >
         {
-          schema.fields.map(i => (
+          renderFields.map(i => (
             <FormItem
               key={i}
               labelCol={{ span: 5 }}
@@ -34,7 +38,24 @@ export default class InputSchemaForm extends React.Component {
             </FormItem>
           ))
         }
-        <Button type="primary" htmlType="submit">查询</Button>
+        <Row>
+          <Col span={8} />
+          <Col span={4}>
+            <Button type="primary" htmlType="submit">执行</Button>
+          </Col>
+          <Col span={4}>
+            <Button
+              type="danger"
+              onClick={(e) => {
+                form.resetFields();
+                this.props.dispatch({
+                  type: 'modeltest/resetResult',
+                });
+            }}
+            >清空
+            </Button>
+          </Col>
+        </Row>
       </Form>
     );
   }
