@@ -28,7 +28,7 @@ class UserLayout extends LoadedLayout {
   getPageTitle() {
     const { routerData, location } = this.props;
     const { pathname } = location;
-    let title = 'Project X';
+    let title = 'GAIA';
     if (routerData[pathname] && routerData[pathname].name) {
       title = `${routerData[pathname].name} - ${title}`;
     }
@@ -44,7 +44,7 @@ class UserLayout extends LoadedLayout {
               <div className={styles.header}>
                 <Link to="/">
                   <img alt="logo" className={styles.logo} src={logo} />
-                  <span className={styles.title}>Project X</span>
+                  <span className={styles.title}>GAIA</span>
                 </Link>
               </div>
               <div className={styles.desc}>让数据更智能</div>

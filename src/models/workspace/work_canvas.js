@@ -195,6 +195,16 @@ export default {
       };
     },
 
+    hideContextMenu(state) {
+      return {
+        ...state,
+        contextmenu: {
+          ...state.contextmenu,
+          show: false,
+        },
+      };
+    },
+
     modeChange(state, { isMoveMode }) {
       return {
         ...state,

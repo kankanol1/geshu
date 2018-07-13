@@ -197,3 +197,37 @@ export function saveSettings(req, res, u, b) {
     return result;
   }
 }
+
+export function inspectData(req, res, u, b) {
+  const response = {
+    schema: [
+      { name: 'a1', type: 'String', nullable: false },
+      { name: 'a2', type: 'String', nullable: false },
+      { name: 'a3', type: 'String', nullable: false },
+      { name: 'a4', type: 'String', nullable: false },
+    ],
+    data: [
+      { a1: 'v1', a2: 'v2', a3: 'v3', a4: 'v4' },
+      { a1: 'v1', a2: 'v2', a3: 'v3', a4: 'v4' },
+      { a1: 'v1', a2: 'v2', a3: 'v3', a4: 'v4' },
+      { a1: 'v1', a2: 'v2', a3: 'v3', a4: 'v4' },
+      { a1: 'v1', a2: 'v2', a3: 'v3', a4: 'v4' },
+      { a1: 'v1', a2: 'v2', a3: 'v3', a4: 'v4' },
+      { a1: 'v1', a2: 'v2', a3: 'v3', a4: 'v4' },
+      { a1: 'v1', a2: 'v2', a3: 'v3', a4: 'v4' },
+      { a1: 'v1', a2: 'v2', a3: 'v3', a4: 'v4' },
+      { a1: 'v1', a2: 'v2', a3: 'v3', a4: 'v4' },
+      { a1: 'v1', a2: 'v2', a3: 'v3', a4: 'v4' },
+      { a1: 'v1', a2: 'v2', a3: 'v3', a4: 'v4' },
+      { a1: 'v1', a2: 'v2', a3: 'v3', a4: 'v4' },
+      { a1: 'v1', a2: 'v2', a3: 'v3', a4: 'v4' },
+      { a1: 'v1', a2: 'v2', a3: 'v3', a4: 'v4' },
+      { a1: 'v1', a2: 'v2', a3: 'v3', a4: 'v4' },
+    ],
+  };
+  if (res && res.json) {
+    res.json(response);
+  } else {
+    return response;
+  }
+}

@@ -17,7 +17,7 @@ import { login, userList, createUser, deleteUser, queryUserName, updateUser } fr
 import { getModels, addModel, updateModel, deleteModels, getModelInfo, getModelResult } from './mock/model';
 import { getCandidateModels, updateCandidateModel, deleteCandidateModels, publishCandidateModels } from './mock/candidatemodel';
 import { getJobs, cancelJobs, deleteJobs } from './mock/job';
-import { open, save, saveSettings, submit, validate } from './mock/workspace/workspace';
+import { open, save, saveSettings, submit, validate, inspectData } from './mock/workspace/workspace';
 import { getUserInfo, updatePassword } from './mock/selfmanage';
 import {recentGraph,saveGraph,getGraph,deleteGraph,getDataSources,getDataSourceColumns,getGraphList,getGremlinServerAddress,getQueryList,saveQuery,saveAsQuery,updateQuery,deleteQuery,executeGraph,createGraph} from './mock/graph';
 import { getFileList, postFileUpload,getPreviewData } from './mock/file';
@@ -123,6 +123,7 @@ const proxy = serverEnabled ?
   'POST /api/workspace/saveconf/:projectId/:componentId/': saveSettings,
   'POST /api/workspace/run/': submit,
   'POST /api/workspace/validate/': validate,
+  'POST /api/workspace/inspect': inspectData,
   // 'POST /api/workspace/sample/:projectId':
   // query data releated metadata.
   'GET /api/workspace/dataview/': getLastestDatabasesForProject,

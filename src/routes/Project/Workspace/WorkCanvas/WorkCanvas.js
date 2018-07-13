@@ -9,12 +9,27 @@ import LineLayer from './LineLayer';
 import SelectionLayer from './SelectionLayer';
 import ContextMenu from './ContextMenu';
 import styles from './WorkCanvas.less';
+import DataInspector from './DataInspector';
 
 @connect(({ work_canvas, loading }) => ({
   work_canvas,
   loading,
 }))
 export default class WorkCanvas extends React.Component {
+  state={
+    inspectData: false,
+    component: {
+      name: '组件测试',
+      outputs: [
+        {
+          id: 'o1',
+        },
+        {
+          id: '02',
+        },
+      ],
+    },
+  }
   componentWillMount() {
     const { dispatch, match } = this.props;
     const { state } = this.props.work_canvas;
@@ -68,7 +83,6 @@ export default class WorkCanvas extends React.Component {
     }
   }
 
-
   componentWillUnmount() {
     key.unbind('delete, backspace');
     key.unbind('⌘+a, ctrl+a');
@@ -109,6 +123,16 @@ export default class WorkCanvas extends React.Component {
     });
   }
 
+  handleInspectClicked(component) {
+    this.setState({
+      inspectData: true,
+      component,
+    });
+    this.props.dispatch({
+      type: 'work_canvas/hideContextMenu',
+    });
+  }
+
   // handleWheel(e) {
   //   e.preventDefault();
   //   if (key.isPressed('space')) {
@@ -140,6 +164,7 @@ export default class WorkCanvas extends React.Component {
         <ContextMenu
           {...contextmenu}
           onSettingsClicked={() => this.handleSettingsClicked(component)}
+          onInspectClicked={() => this.handleInspectClicked(component)}
         />
       );
     }
@@ -223,6 +248,16 @@ export default class WorkCanvas extends React.Component {
         </DraggableCore>
         {
           contextMenuView
+        }
+        {
+          this.state.inspectData ? (
+            <DataInspector
+              visible={this.state.inspectData}
+              component={this.state.component}
+              projectId={projectId}
+              onClose={e => this.setState({ inspectData: false, component: undefined })}
+            />
+          ) : null
         }
       </div>
     );

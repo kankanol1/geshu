@@ -48,6 +48,15 @@ export async function validatePipeline({ id }) {
   });
 }
 
+export async function inspectData(params) {
+  return request('/api/workspace/inspect', {
+    method: 'POST',
+    body: {
+      ...params,
+    },
+  });
+}
+
 export default {
   fetchComponentSetting,
   fetchComponentList,
@@ -55,4 +64,5 @@ export default {
   saveProject,
   saveComponentSettings,
   runPipeline,
+  inspectData,
 };

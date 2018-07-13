@@ -93,7 +93,7 @@ class AbstractBasicLayout extends LoadedLayout {
   getPageTitle() {
     const { routerData, location } = this.props;
     const { pathname } = location;
-    let title = 'Project X';
+    let title = 'GAIA';
     if (routerData[pathname] && routerData[pathname].name) {
       title = `${routerData[pathname].name} - ${title}`;
     }
