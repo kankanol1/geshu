@@ -1,5 +1,8 @@
 const nameMapping = {
 
+  Stage: '机器学习B',
+  PStage: '机器学习A',
+
   /** component groups and components */
   DataSink: '数据存储',
   ConsoleDataSink: '数据存储',
@@ -14,7 +17,6 @@ const nameMapping = {
   Predictor: '预测',
   CommonPredictor: '应用模型预测',
   ModelSink: '模型存储',
-  Stage: 'Stage',
   LogisticRegressionStage: '逻辑回归',
   TokenizerStage: '分词',
   HashingTFStage: 'HashingTF',

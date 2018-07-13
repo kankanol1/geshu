@@ -207,11 +207,24 @@ export function getModelInfo(req, res, u, b) {
   }
 }
 
+export function getModelResult(req, res, u, b) {
+  const response = {
+    success: true,
+    result: 'test result whatever',
+  };
+  if (res && res.json) {
+    res.json(response);
+  } else {
+    return response;
+  }
+}
+
 export default {
   getModels,
   deleteModels,
   updateModel,
   addModel,
   getModelInfo,
+  getModelResult,
 };
 

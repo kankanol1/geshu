@@ -1,11 +1,11 @@
-import { message } from 'antd';
-import { queryModelDetails } from '../../services/modelsAPI';
+import { queryModelDetails, executeModel } from '../../services/modelsAPI';
 
 export default {
   namespace: 'modeltest',
 
   state: {
     model: {},
+    result: {},
   },
 
   reducers: {
@@ -13,6 +13,12 @@ export default {
       return {
         ...state,
         model: { ...payload },
+      };
+    },
+    saveResult(state, { payload }) {
+      return {
+        ...state,
+        result: { ...payload },
       };
     },
   },
@@ -23,6 +29,17 @@ export default {
       if (response) {
         yield put({
           type: 'saveModelInfo',
+          payload: response,
+        });
+      }
+    },
+
+    *execute({ payload }, { put, call }) {
+      const { id, params } = payload;
+      const response = yield call(executeModel, id, params);
+      if (response) {
+        yield put({
+          type: 'saveResult',
           payload: response,
         });
       }

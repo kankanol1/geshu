@@ -14,7 +14,7 @@ import componentParams from './mock/workspace/componentParams'
 import { getProject, createProject, updateProject, deleteProject, getProjectLabels, getRecentProjects } from './mock/project';
 import { getDatabase, createDatabase, updateDatabase, deleteDatabase, getRecentDatabases, makePublicDatabase, makePrivateDatabase, getAllDatabase } from './mock/database';
 import { login, userList, createUser, deleteUser, queryUserName, updateUser } from './mock/user';
-import { getModels, addModel, updateModel, deleteModels, getModelInfo } from './mock/model';
+import { getModels, addModel, updateModel, deleteModels, getModelInfo, getModelResult } from './mock/model';
 import { getCandidateModels, updateCandidateModel, deleteCandidateModels, publishCandidateModels } from './mock/candidatemodel';
 import { getJobs, cancelJobs, deleteJobs } from './mock/job';
 import { open, save, saveSettings, submit, validate } from './mock/workspace/workspace';
@@ -106,6 +106,7 @@ const proxy = serverEnabled ?
   'POST /api/models/serving/online': onlineServingModels,
 
   'GET /api/models/get/:id': getModelInfo,
+  'POST /api/models/execute/:id': getModelResult,
 
   // job manage.
   'GET /api/jobs/list': getJobs,

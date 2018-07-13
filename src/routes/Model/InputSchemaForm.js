@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Input } from 'antd';
+import { Form, Input, Button } from 'antd';
 
 const FormItem = Form.Item;
 
@@ -10,7 +10,14 @@ export default class InputSchemaForm extends React.Component {
     const { getFieldDecorator } = form;
     // {parsedSchema.fields.map(i => <p key={i}>{i.name}</p>)}
     return (
-      <Form >
+      <Form onSubmit={(e) => {
+        e.preventDefault();
+        form.validateFields((err, fieldsValue) => {
+          if (err) return;
+          this.props.onSubmit(fieldsValue);
+        });
+      }}
+      >
         {
           schema.fields.map(i => (
             <FormItem
@@ -27,6 +34,7 @@ export default class InputSchemaForm extends React.Component {
             </FormItem>
           ))
         }
+        <Button type="primary" htmlType="submit">查询</Button>
       </Form>
     );
   }

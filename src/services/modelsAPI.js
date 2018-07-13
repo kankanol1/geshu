@@ -83,6 +83,15 @@ export async function queryModelDetails(id) {
   return request(`/api/models/get/${id}`, { method: 'GET' });
 }
 
+export async function executeModel(id, params) {
+  return request(`/api/models/execute/${id}`, {
+    method: 'POST',
+    body: {
+      ...params,
+    },
+  });
+}
+
 export default {
   updateModel,
   removeModels,
@@ -94,4 +103,5 @@ export default {
   queryServingModels,
   offlineServingModels,
   queryModelDetails,
+  executeModel,
 };

@@ -31,7 +31,7 @@ export default class WorkCanvas extends React.Component {
       });
     }
     // add key listener.
-    key('delete', (e) => {
+    key('delete, backspace', (e) => {
       e.preventDefault();
       return dispatch({
         type: 'work_canvas/deleteSelectedAndRemoveSettings',
@@ -70,7 +70,7 @@ export default class WorkCanvas extends React.Component {
 
 
   componentWillUnmount() {
-    key.unbind('delete');
+    key.unbind('delete, backspace');
     key.unbind('⌘+a, ctrl+a');
     key.unbind('⌘+s, ctrl+s');
   }
