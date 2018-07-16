@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { Row, Col, Card, Tabs, Button, Icon, Tooltip, Tag, Modal, Form } from 'antd';
-import DisplaySettingsForm from './Forms/DisplaySettingsForm';
+import BaseDisplaySettingsForm from './Forms/BaseDisplaySettingsForm';
 import styles from './ConfiguredChart.less';
 
 const ButtonGroup = Button.Group;
 const { TabPane } = Tabs;
 
-const ConnectedDisplaySettingsForm = Form.create()(DisplaySettingsForm);
+const ConnectedDisplaySettingsForm = Form.create()(BaseDisplaySettingsForm);
 
 export default class ConfiguredChart extends Component {
   state={

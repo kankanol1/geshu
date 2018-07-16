@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { Form, Input, Button, Icon, Checkbox } from 'antd';
-import DisplaySettingsForm from './DisplaySettingsForm';
+import BaseDisplaySettingsForm from './BaseDisplaySettingsForm';
 
 const FormItem = Form.Item;
 const ButtonGroup = Button.Group;
 
-export default class BarChartDisplaySettingsForm extends DisplaySettingsForm {
+export default class BarChartDisplaySettingsForm extends BaseDisplaySettingsForm {
   renderExtraItems() {
     const { getFieldDecorator } = this.props.form;
     const { initialValue } = this.props;

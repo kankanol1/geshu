@@ -19,10 +19,6 @@ const data = [
   { year: '1962 年', sales: 38 },
 ];
 
-const cols = {
-  sales: { tickInterval: 20 },
-};
-
 const DataSettingForm = Form.create()(BarChartSettingsForm);
 const DisplaySettingForm = Form.create()(BarChartDisplaySettingsForm);
 
@@ -57,17 +53,32 @@ export default class BarChart extends ConfiguredChart {
     if (displaySettings === undefined || dataSettings === undefined) {
       return null;
     }
+    const cols = {};
+    if (dataSettings.xsource) {
+      cols[dataSettings.xsource] = {
+        alias: displaySettings.xalias || dataSettings.xsource,
+      };
+    }
+    if (dataSettings.ysource) {
+      cols[dataSettings.ysource] = {
+        alias: displaySettings.yalias || dataSettings.ysource,
+      };
+    }
     return (
-      <Chart height={displaySettings.height} data={data} scale={cols} forceFit>
+      <Chart
+        height={displaySettings.height}
+        data={data}
+        scale={cols}
+        forceFit
+      >
         <Coord transpose={displaySettings.transpose ? true : undefined} />
-        {displaySettings.enablex ?
-          <Axis name={dataSettings.xsource} title />
-        : null
+        {
+          displaySettings.enablex ?
+            <Axis name={dataSettings.xsource} title /> : null
         }
         {
           displaySettings.enabley ?
-            <Axis name={dataSettings.ysource} />
-          : null
+            <Axis name={dataSettings.ysource} title /> : null
         }
         <Tooltip crosshairs={{ type: 'y' }} />
         <Geom type="interval" position={`${dataSettings.xsource}*${dataSettings.ysource}`} />

@@ -6,7 +6,7 @@ import { Form, Input, Button, Icon, Checkbox } from 'antd';
 const FormItem = Form.Item;
 const ButtonGroup = Button.Group;
 
-export default class DisplaySettingsForm extends Component {
+export default class BaseDisplaySettingsForm extends Component {
   static defaultProps = {
     initialValue: {
       height: 400,
@@ -66,6 +66,6 @@ export default class DisplaySettingsForm extends Component {
 }
 
 
-DisplaySettingsForm.propTypes = {
+BaseDisplaySettingsForm.propTypes = {
   initialValue: PropTypes.object,
 };
