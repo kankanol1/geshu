@@ -4,7 +4,7 @@ import { LocaleProvider, Spin } from 'antd';
 import zhCN from 'antd/lib/locale-provider/zh_CN';
 import dynamic from 'dva/dynamic';
 import { getRouterData } from './common/router';
-import Authorized from './utils/Authorized';
+import Authorized from '../../utils/Authorized';
 import styles from './index.less';
 
 const { ConnectedRouter } = routerRedux;
@@ -19,7 +19,6 @@ function RouterConfig({ history, app }) {
   const BasicLayout = routerData['/'].component;
   const WorkspaceLayout = routerData['/project/workspace'].component;
   const UsersListLayout = routerData['/users/list'].component;
-  const GraphLayout = routerData['/graph'].component;
   // const DatabaseLayout = routerData['/database'].component;
 
   return (
@@ -48,12 +47,6 @@ function RouterConfig({ history, app }) {
           authority={['admin', 'user']}
           redirectPath="/user/login"
           /> */}
-          <AuthorizedRoute
-            path="/graph"
-            render={props => <GraphLayout {...props} />}
-            authority={['admin', 'user']}
-            redirectPath="/user/login"
-          />
           <AuthorizedRoute
             path="/users/list"
             render={props => <UsersListLayout {...props} />}

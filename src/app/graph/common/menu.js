@@ -1,4 +1,5 @@
-import { isUrl } from '../utils/utils';
+import { isUrl } from '../../../utils/utils';
+import { putToRegistry } from '../../../common/registry';
 
 const menuData = [
   // {
@@ -11,53 +12,7 @@ const menuData = [
   //   // hideInMenu: true,
   //   }],
   // },
-
   {
-    name: '项目管理',
-    icon: 'bulb',
-    path: 'project',
-    children: [{
-      name: '项目列表',
-      path: 'list',
-    }, {
-      name: '工作区',
-      path: 'workspace',
-    }],
-  }, {
-    name: '模型管理',
-    icon: 'api',
-    path: 'models',
-    children: [{
-      name: '待选模型库',
-      path: 'candidates',
-    }, {
-      name: '模型库',
-      path: 'list',
-    }, {
-      name: '模型服务',
-      path: 'serving',
-    }],
-  }, {
-    name: '作业管理',
-    icon: 'schedule',
-    path: 'jobs',
-    children: [{
-      name: '作业列表',
-      path: 'list',
-    }],
-  },
-  {
-    name: '中心数据库',
-    icon: 'database',
-    path: 'database',
-    children: [{
-      name: '数据库列表',
-      path: 'list',
-    }, {
-      name: '数据查询',
-      path: 'query',
-    }],
-  }, {
     name: '中心存储',
     icon: 'file',
     path: 'storage',
@@ -137,5 +92,7 @@ function formatter(data, parentPath = '', parentAuthority) {
     return result;
   });
 }
+
+putToRegistry('menuData', () => formatter(menuData));
 
 export const getMenuData = () => formatter(menuData);

@@ -12,13 +12,15 @@ import SiderMenu from '../components/SiderMenu';
 import NotFound from '../routes/Exception/404';
 import { getRoutes } from '../utils/utils';
 import Authorized from '../utils/Authorized';
-import { getMenuData } from '../common/menu';
 import logo from '../assets/logo.png';
 import { getUrlParams, replaceUrlWithParams } from '../utils/conversionUtils';
 import LoadedLayout from './LoadedLayout';
+import { getFromRegistory } from '../common/registry';
 
 const { Content, Header, Footer } = Layout;
 const { AuthorizedRoute } = Authorized;
+
+const getMenuData = getFromRegistory('menuData');
 
 /**
  * 根据菜单取得重定向地址.

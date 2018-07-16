@@ -2,7 +2,9 @@ import { notification } from 'antd';
 import { routerRedux } from 'dva/router';
 import fetch from 'dva/fetch';
 import Cookie from 'js-cookie';
-import store from '../index';
+import { getFromRegistory } from '../common/registry';
+
+const store = getFromRegistory('store');
 
 const codeMessage = {
   200: '服务器成功返回请求的数据。',

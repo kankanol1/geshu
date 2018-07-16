@@ -1,5 +1,5 @@
 {
-  "entry": "src/index.js",
+  "entry": "src/app/graph/graph.js",
   "extraBabelPlugins": [
     ["import", { "libraryName": "antd", "libraryDirectory": "es", "style": true }]
   ],
@@ -11,9 +11,9 @@
     }
   },
   "ignoreMomentLocale": true,
-  "theme": "./src/theme.js",
+  "theme": "./src/app/graph/theme.js",
   "html": {
-    "template": "./src/index.ejs"
+    "template": "./src/app/graph/index.ejs"
   },
   "publicPath": "/",
   "disableDynamicImport": true,

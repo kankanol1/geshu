@@ -1,4 +1,6 @@
-import store from '../../index';
+import { getFromRegistory } from '../../common/registry';
+
+const store = getFromRegistory('store');
 
 export const getAllColumnsFromUpstream = (id) => {
   // select what we needed.

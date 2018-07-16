@@ -11,6 +11,7 @@ import FastClick from 'fastclick';
 import { G2 } from 'bizcharts';
 
 import './index.less';
+import { putToRegistry } from '../../common/registry';
 // 1. Initialize
 const app = dva({
   history: createHistory(),
@@ -20,7 +21,7 @@ const app = dva({
 app.use(createLoading());
 
 // 3. Register global model
-app.model(require('./models/global').default);
+app.model(require('../../models/global').default);
 
 // 4. Router
 app.router(require('./router').default);
@@ -32,5 +33,7 @@ app.start('#root');
 FastClick.attach(document.body);
 
 G2.track(false);
+
+putToRegistry('store', app._store);
 
 export default app._store;  // eslint-disable-line

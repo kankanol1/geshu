@@ -1,5 +1,8 @@
+import { getFromRegistory } from '../common/registry';
+
 // use localStorage to store the authority info, which might be sent from server in actual project.
-import store from '../index';
+
+const store = getFromRegistory('store');
 
 export function getAuthority() {
   if (store && store.getState().global.currentUser.role !== undefined) {

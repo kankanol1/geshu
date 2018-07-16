@@ -6,10 +6,11 @@ import AbstractBasicLayout from './AbstractBasicLayout';
 import { getRoutes } from '../utils/utils';
 import Authorized from '../utils/Authorized';
 import NotFound from '../routes/Exception/404';
-import { getMenuData } from '../common/menu';
+import { getFromRegistory } from '../common/registry';
 
 const { Content } = Layout;
 const { AuthorizedRoute } = Authorized;
+const getMenuData = getFromRegistory('menuData');
 
 /**
  * 根据菜单取得重定向地址.

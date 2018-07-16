@@ -1,4 +1,6 @@
-import store from '../../index';
+import { getFromRegistory } from '../../common/registry';
+
+const store = getFromRegistory('store');
 
 export default function validate(formData, errors, jsonSchema, uiSchema, currentComponent) {
   // select what we needed.

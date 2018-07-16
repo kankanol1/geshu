@@ -20,7 +20,7 @@ const dynamicWrapper = (app, models, component) => {
     models.forEach((model) => {
       if (modelNotExisted(app, model)) {
         // eslint-disable-next-line
-        app.model(require(`../models/${model}`).default);
+        app.model(require(`../../../models/${model}`).default);
       }
     });
     return (props) => {
@@ -37,7 +37,7 @@ const dynamicWrapper = (app, models, component) => {
   return dynamic({
     app,
     models: () => models.filter(
-      model => modelNotExisted(app, model)).map(m => import(`../models/${m}.js`)
+      model => modelNotExisted(app, model)).map(m => import(`../../../models/${m}.js`)
     ),
     // add routerData prop
     component: () => {
@@ -71,97 +71,97 @@ function getFlatMenuData(menus) {
 export const getRouterData = (app) => {
   const routerConfig = {
     '/': {
-      component: dynamicWrapper(app, ['user'], () => import('../layouts/BasicLayout')),
+      component: dynamicWrapper(app, ['user'], () => import('../../../layouts/BasicLayout')),
     },
     // '/dashboard/overview': {
     //   component: dynamicWrapper(app, [], () => import('../routes/Dashboard/Overview')),
     // },
     '/project/list': {
-      component: dynamicWrapper(app, ['project'], () => import('../routes/Project/ProjectList')),
+      component: dynamicWrapper(app, ['project'], () => import('../../../routes/Project/ProjectList')),
     },
     '/project/workspace': {
-      component: dynamicWrapper(app, ['workspace/datainspector', 'workspace/work_canvas', 'workspace/work_component_list', 'workspace/work_component_settings'], () => import('../layouts/WorkspaceLayout')),
+      component: dynamicWrapper(app, ['workspace/datainspector', 'workspace/work_canvas', 'workspace/work_component_list', 'workspace/work_component_settings'], () => import('../../../layouts/WorkspaceLayout')),
     },
     '/project/workspace/index': {
-      component: dynamicWrapper(app, [], () => import('../routes/Project/Workspace/WorkspaceIndex')),
+      component: dynamicWrapper(app, [], () => import('../../../routes/Project/Workspace/WorkspaceIndex')),
     },
     '/project/workspace/editor/:id': {
-      component: dynamicWrapper(app, [], () => import('../routes/Project/Workspace/WorkspaceEditor')),
+      component: dynamicWrapper(app, [], () => import('../../../routes/Project/Workspace/WorkspaceEditor')),
     },
     '/project/workspace/dataview/:id': {
-      component: dynamicWrapper(app, ['dataview/dataquery'], () => import('../routes/Project/Workspace/WorkspaceDataView')),
+      component: dynamicWrapper(app, ['dataview/dataquery'], () => import('../../../routes/Project/Workspace/WorkspaceDataView')),
     },
     '/project/workspace/logview/:id': {
-      component: dynamicWrapper(app, [], () => import('../routes/Project/Workspace/WorkspaceLogView')),
+      component: dynamicWrapper(app, [], () => import('../../../routes/Project/Workspace/WorkspaceLogView')),
     },
 
     /* model manage */
     '/models/list': {
-      component: dynamicWrapper(app, ['models/models'], () => import('../routes/Model/ModelList')),
+      component: dynamicWrapper(app, ['models/models'], () => import('../../../routes/Model/ModelList')),
     },
     '/models/candidates': {
-      component: dynamicWrapper(app, ['models/candidatemodels'], () => import('../routes/Model/CandidateModelList')),
+      component: dynamicWrapper(app, ['models/candidatemodels'], () => import('../../../routes/Model/CandidateModelList')),
     },
     '/models/serving/list': {
-      component: dynamicWrapper(app, ['models/servingmodels'], () => import('../routes/Model/ServingModelList')),
+      component: dynamicWrapper(app, ['models/servingmodels'], () => import('../../../routes/Model/ServingModelList')),
     },
     '/models/serving/test/:id': {
-      component: dynamicWrapper(app, ['models/modeltest'], () => import('../routes/Model/ModelServingTest')),
+      component: dynamicWrapper(app, ['models/modeltest'], () => import('../../../routes/Model/ModelServingTest')),
     },
 
     /* job manage */
     '/jobs/list': {
-      component: dynamicWrapper(app, ['jobs'], () => import('../routes/Job/JobList')),
+      component: dynamicWrapper(app, ['jobs'], () => import('../../../routes/Job/JobList')),
     },
 
     /* user manage. */
     '/users/list': {
-      component: dynamicWrapper(app, ['users'], () => import('../layouts/UsersListLayout')),
+      component: dynamicWrapper(app, ['users'], () => import('../../../layouts/UsersListLayout')),
     },
     '/users/list/index': {
-      component: dynamicWrapper(app, [], () => import('../routes/Users/UserList')),
+      component: dynamicWrapper(app, [], () => import('../../../routes/Users/UserList')),
     },
     '/users/create': {
-      component: dynamicWrapper(app, ['users'], () => import('../routes/Users/UserCreate')),
+      component: dynamicWrapper(app, ['users'], () => import('../../../routes/Users/UserCreate')),
     },
     '/users/list/edit/:userName': {
-      component: dynamicWrapper(app, ['users'], () => import('../routes/Users/UserEdit')),
+      component: dynamicWrapper(app, ['users'], () => import('../../../routes/Users/UserEdit')),
     },
 
     /* self manage */
     '/self/:tab?': {
-      component: dynamicWrapper(app, [], () => import('../routes/Self/SelfManage')),
+      component: dynamicWrapper(app, [], () => import('../../../routes/Self/SelfManage')),
     },
 
     /* database */
     '/database/query': {
-      component: dynamicWrapper(app, [], () => import('../routes/Database/DatabaseQuery')),
+      component: dynamicWrapper(app, [], () => import('../../../routes/Database/DatabaseQuery')),
     },
     /* center storage */
     '/storage/list': {
-      component: dynamicWrapper(app, [], () => import('../routes/Storage/StorageList')),
+      component: dynamicWrapper(app, [], () => import('../../../routes/Storage/StorageList')),
     },
 
     /**
      * The followings are used by our project. Adapted from ant-design-pro.
      */
     '/exception/403': {
-      component: dynamicWrapper(app, [], () => import('../routes/Exception/403')),
+      component: dynamicWrapper(app, [], () => import('../../../routes/Exception/403')),
     },
     '/exception/404': {
-      component: dynamicWrapper(app, [], () => import('../routes/Exception/404')),
+      component: dynamicWrapper(app, [], () => import('../../../routes/Exception/404')),
     },
     '/exception/500': {
-      component: dynamicWrapper(app, [], () => import('../routes/Exception/500')),
+      component: dynamicWrapper(app, [], () => import('../../../routes/Exception/500')),
     },
     '/exception/trigger': {
-      component: dynamicWrapper(app, ['error'], () => import('../routes/Exception/triggerException')),
+      component: dynamicWrapper(app, ['error'], () => import('../../../routes/Exception/triggerException')),
     },
     '/user': {
-      component: dynamicWrapper(app, [], () => import('../layouts/UserLayout')),
+      component: dynamicWrapper(app, [], () => import('../../../layouts/UserLayout')),
     },
     '/user/login': {
-      component: dynamicWrapper(app, ['login'], () => import('../routes/User/Login')),
+      component: dynamicWrapper(app, ['login'], () => import('../../../routes/User/Login')),
     },
 
     /**
@@ -170,20 +170,20 @@ export const getRouterData = (app) => {
 
 
     '/result/success': {
-      component: dynamicWrapper(app, [], () => import('../routes/Result/Success')),
+      component: dynamicWrapper(app, [], () => import('../../../routes/Result/Success')),
     },
     '/result/fail': {
-      component: dynamicWrapper(app, [], () => import('../routes/Result/Error')),
+      component: dynamicWrapper(app, [], () => import('../../../routes/Result/Error')),
     },
 
     '/graph': {
-      component: dynamicWrapper(app, [], () => import('../layouts/GraphLayout')),
+      component: dynamicWrapper(app, [], () => import('../../../layouts/GraphLayout')),
     },
     '/graph/list': {
-      component: dynamicWrapper(app, [], () => import('../routes/Graph/GraphList')),
+      component: dynamicWrapper(app, [], () => import('../../../routes/Graph/GraphList')),
     },
     '/graph/jobs': {
-      component: dynamicWrapper(app, ['graph/graph_job'], () => import('../routes/Graph/GraphJobList')),
+      component: dynamicWrapper(app, ['graph/graph_job'], () => import('../../../routes/Graph/GraphJobList')),
     },
     // '/graph/schema': {
     //   component: dynamicWrapper(app, [], () => import('../layouts/GraphLayout')),
@@ -198,23 +198,23 @@ export const getRouterData = (app) => {
     //   component: dynamicWrapper(app, [], () => import('../layouts/GraphLayout')),
     // },
     '/graph/index/:type': {
-      component: dynamicWrapper(app, ['graph/graph'], () => import('../routes/Graph/GraphIndex')),
+      component: dynamicWrapper(app, ['graph/graph'], () => import('../../../routes/Graph/GraphIndex')),
     },
     '/graph/detail/schema/:id': {
-      component: dynamicWrapper(app, ['graph/graph_schema_editor'], () => import('../routes/Graph/schema/SchemaDesigner')),
+      component: dynamicWrapper(app, ['graph/graph_schema_editor'], () => import('../../../routes/Graph/schema/SchemaDesigner')),
     },
     '/graph/detail/mapper/:id': {
-      component: dynamicWrapper(app, ['graph/graph_mapping_editor'], () => import('../routes/Graph/mapping/MappingDesigner')),
+      component: dynamicWrapper(app, ['graph/graph_mapping_editor'], () => import('../../../routes/Graph/mapping/MappingDesigner')),
     },
     '/graph/detail/query/:id': {
-      component: dynamicWrapper(app, ['graph/graph_query'], () => import('../routes/Graph/query/GraphQuery')),
+      component: dynamicWrapper(app, ['graph/graph_query'], () => import('../../../routes/Graph/query/GraphQuery')),
     },
     '/graph/detail/explore/:id': {
-      component: dynamicWrapper(app, ['graph/graph_explore'], () => import('../routes/Graph/explore/GraphExplore')),
+      component: dynamicWrapper(app, ['graph/graph_explore'], () => import('../../../routes/Graph/explore/GraphExplore')),
     },
     // database
     '/database/list': {
-      component: dynamicWrapper(app, ['database'], () => import('../routes/Database/DatabaseList')),
+      component: dynamicWrapper(app, ['database'], () => import('../../../routes/Database/DatabaseList')),
     },
     // '/user/:id': {
     //   component: dynamicWrapper(app, [], () => import('../routes/User/SomeComponent')),
