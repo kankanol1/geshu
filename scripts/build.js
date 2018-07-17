@@ -16,25 +16,28 @@ shell.mkdir(tmpDir);
 if (buildOpt === '*' || buildOpt === 'all') {
   // build all.
   shell.exec('npm run setup');
-  const buildProcess = shell.exec('cross-env ESLINT=none roadhog build');
+  shell.exec('cross-env ESLINT=none roadhog build');
   // copy dist to tmp.
-  shell.cp('-R', 'dist', 'dist-tmp/all');
+  shell.mkdir('dist-tmp/all');
+  shell.cp('-R', 'dist/*', 'dist-tmp/all/');
 }
 
 if (buildOpt === '*' || buildOpt === 'ml') {
-  // build all.
+  // build ml part.
   shell.exec('npm run setup:ml');
-  const buildProcess = shell.exec('cross-env ESLINT=none roadhog build');
+  shell.exec('cross-env ESLINT=none roadhog build');
   // copy dist to tmp.
-  shell.cp('-R', 'dist', 'dist-tmp/ml');
+  shell.mkdir('dist-tmp/ml');
+  shell.cp('-R', 'dist/*', 'dist-tmp/ml/');
 }
 
 if (buildOpt === '*' || buildOpt === 'graph') {
-  // build all.
+  // build graph part.
   shell.exec('npm run setup:graph');
-  const buildProcess = shell.exec('cross-env ESLINT=none roadhog build');
+  shell.exec('cross-env ESLINT=none roadhog build');
   // copy dist to tmp.
-  shell.cp('-R', 'dist', 'dist-tmp/graph');
+  shell.mkdir('dist-tmp/graph');
+  shell.cp('-R', 'dist/*', 'dist-tmp/graph/');
 }
 
 // write to dist;
