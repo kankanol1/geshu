@@ -3,8 +3,8 @@ import { connect } from 'dva';
 import moment from 'moment';
 
 @connect(
-  ({ work_canvas, loading }) => ({
-    work_canvas, loading,
+  ({ workcanvas, loading }) => ({
+    tips: workcanvas.tips, loading,
   })
 )
 export default class WorkAreaBottomBar extends React.PureComponent {
@@ -24,7 +24,7 @@ export default class WorkAreaBottomBar extends React.PureComponent {
   }
 
   render() {
-    const { tips: { show, messages } } = this.props.work_canvas;
+    const { show, messages } = this.props.tips;
     if (!show) return null;
     return (
       <div

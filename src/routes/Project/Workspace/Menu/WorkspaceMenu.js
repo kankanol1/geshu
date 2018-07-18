@@ -9,9 +9,13 @@ import styles from './WorkspaceMenu.less';
 const { SubMenu } = Menu;
 
 @connect(
-  ({ project, loading, global }) => ({ project, loading, global })
+  ({ project, loading, global, workcanvas }) => ({ project, loading, global, workcanvas })
 )
 export default class WorkspaceMenu extends React.PureComponent {
+  constructor(props) {
+    super(props);
+    this.isMac = (navigator.appVersion.indexOf('Mac') !== -1);
+  }
   state = {
     runPipelineModal: {
       visible: false,
@@ -56,6 +60,26 @@ export default class WorkspaceMenu extends React.PureComponent {
             break;
           case 'submit':
             this.runPipeline();
+            break;
+          case 'undo':
+            dispatch({
+              type: 'workcanvas/canvasUndo',
+            });
+            break;
+          case 'redo':
+            dispatch({
+              type: 'workcanvas/canvasRedo',
+            });
+            break;
+          case 'selectAll':
+            dispatch({
+              type: 'workcanvas/canvasSelectAll',
+            });
+            break;
+          case 'deleteSelection':
+            dispatch({
+              type: 'workcanvas/canvasDeleteSelected',
+            });
             break;
           default:
             break;
@@ -206,6 +230,11 @@ export default class WorkspaceMenu extends React.PureComponent {
     );
   }
 
+  renderShortcut(windows, mac) {
+    if (!mac) return windows;
+    return this.isMac ? mac : windows;
+  }
+
   renderModals() {
     return (
       <React.Fragment>
@@ -216,8 +245,11 @@ export default class WorkspaceMenu extends React.PureComponent {
   }
 
   render() {
-    const { env, global } = this.props;
+    const { env, global, workcanvas: { canvas } } = this.props;
     const { fullScreen } = global;
+    if (!canvas) {
+      return null;
+    }
     return (
       <React.Fragment>
         <Menu
@@ -232,6 +264,12 @@ export default class WorkspaceMenu extends React.PureComponent {
             <SubMenu title={<span>最近打开的项目</span>}>
               {this.renderRecentProjects()}
             </SubMenu>
+          </SubMenu>
+          <SubMenu title={<span> <Icon type="edit" />编辑</span>}>
+            <Menu.Item key="undo" disabled={!canvas.canUndo()} type="command">撤销 ({this.renderShortcut('Ctrl+z', '⌘+z')})</Menu.Item>
+            <Menu.Item key="redo" disabled={!canvas.canRedo()} type="command" >重做 ({this.renderShortcut('Ctrl+y', '⌘+y')})</Menu.Item>
+            <Menu.Item key="selectAll" type="command">全选 ({this.renderShortcut('Ctrl+a', '⌘+a')})</Menu.Item>
+            <Menu.Item key="deleteSelection" type="command">删除所选项 ({this.renderShortcut('Delete')})</Menu.Item>
           </SubMenu>
           <SubMenu title={<span><Icon type="eye-o" />显示</span>}>
             <Menu.Item key="fullScreen" type="command">{fullScreen ? '√ ' : null}全屏</Menu.Item>

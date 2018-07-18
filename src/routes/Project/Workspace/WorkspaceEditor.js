@@ -6,14 +6,24 @@ import WorkspaceViewMenu from './WorkspaceViewMenu';
 import WorkspaceMenu from './Menu/WorkspaceMenu';
 
 const { Header } = Layout;
-@connect(({ work_canvas, loading }, { history }) => ({
-  work_canvas,
+@connect(({ workcanvas, loading }, { history }) => ({
+  workcanvas,
   loading: loading.models.work_canvas,
   history,
 }))
 export default class WorkspaceEditor extends Component {
+  componentWillMount() {
+    const { match } = this.props;
+    this.props.dispatch({
+      type: 'workcanvas/initProject',
+      payload: {
+        id: match.params.id,
+      },
+    });
+  }
+
   render() {
-    const { name, state: { dirty } } = this.props.work_canvas;
+    const { name, state: { dirty } } = this.props.workcanvas;
     const { loading } = this.props;
     return (
       <Layout style={{ padding: '0', height: '100%', position: 'relative' }} theme="light" >

@@ -10,9 +10,18 @@ import SelectionLayer from './SelectionLayer';
 import ContextMenu from './ContextMenu';
 import styles from './WorkCanvas.less';
 import DataInspector from './DataInspector';
+import DraggingLineView from './DraggingLineView';
+import DraggingSelectionView from './DraggingSelectionView';
+import CanvasDraggingMove from '../../../../obj/workspace/op/CanvasDraggingMove';
+import { addEvent } from '../../../../utils/utils';
+import SelectionChange from '../../../../obj/workspace/op/SelectionChange';
+import ComponentDelete from '../../../../obj/workspace/op/ComponentDelete';
+import ConnectionDelete from '../../../../obj/workspace/op/ConnectionDelete';
+import BatchOperation from '../../../../obj/workspace/op/BatchOperation';
 
-@connect(({ work_canvas, loading }) => ({
-  work_canvas,
+const a = 0;
+@connect(({ workcanvas, loading }) => ({
+  workcanvas,
   loading,
 }))
 export default class WorkCanvas extends React.Component {
@@ -29,43 +38,66 @@ export default class WorkCanvas extends React.Component {
         },
       ],
     },
+    draggingSelection: {
+      dragging: false,
+      startX: 0,
+      startY: 0,
+      stopX: 0,
+      stopY: 0,
+    },
+    mode: 'select',
   }
+
   componentWillMount() {
     const { dispatch, match } = this.props;
-    const { state } = this.props.work_canvas;
-    const maxRefreshTime = 1000 * 60 * 60;
-    if (state.projectId === undefined
-        || state.projectId !== match.params.id
-        || Date.now() - state.lastSync > maxRefreshTime) {
-      // only call init if project id not match or last sync is too long.
-      dispatch({
-        type: 'work_canvas/init',
-        payload: {
-          id: match.params.id,
-        },
-      });
-    }
-    // add key listener.
+    // delete selection.
     key('delete, backspace', (e) => {
       e.preventDefault();
-      return dispatch({
-        type: 'work_canvas/deleteSelectedAndRemoveSettings',
+      dispatch({
+        type: 'workcanvas/canvasDeleteSelected',
       });
     });
+    // select all.
     key('⌘+a, ctrl+a', (e) => {
       e.preventDefault();
       return dispatch({
-        type: 'work_canvas/selectAll',
+        type: 'workcanvas/canvasSelectAll',
       });
     });
+    // save project.
     key('⌘+s, ctrl+s', (e) => {
       e.preventDefault();
       return dispatch({
-        type: 'work_canvas/saveComponents',
+        type: 'workcanvas/saveProject',
         payload: {
           id: match.params.id,
         },
       });
+    });
+    // undo
+    key('⌘+z, ctrl+z', (e) => {
+      e.preventDefault();
+      dispatch({
+        type: 'workcanvas/canvasUndo',
+      });
+    });
+
+    // redo
+    key('⌘+y, ctrl+y', (e) => {
+      e.preventDefault();
+      dispatch({
+        type: 'workcanvas/canvasRedo',
+      });
+    });
+    key('space', (e) => {
+      // prevent default space press.
+      e.preventDefault();
+    });
+    addEvent(document, 'keyup', (event) => {
+      // space
+      if (event.keyCode === 32) {
+        this.setState({ mode: 'select' });
+      }
     });
   }
 
@@ -75,7 +107,7 @@ export default class WorkCanvas extends React.Component {
     if (match.params.id !== newMatch.params.id) {
       // load new canvas.
       this.props.dispatch({
-        type: 'work_canvas/init',
+        type: 'workcanvas/initProject',
         payload: {
           id: newMatch.params.id,
         },
@@ -87,39 +119,117 @@ export default class WorkCanvas extends React.Component {
     key.unbind('delete, backspace');
     key.unbind('⌘+a, ctrl+a');
     key.unbind('⌘+s, ctrl+s');
+    key.unbind('⌘+y, ctrl+y');
+    key.unbind('⌘+z, ctrl+z');
+    key.unbind('space');
   }
 
   handleDrag(e, draggableData) {
     e.preventDefault();
+    const { deltaX, deltaY } = draggableData;
+    const { canvas } = this.props.workcanvas;
     // update selection rect.
-    this.props.dispatch({
-      type: 'work_canvas/dragCanvas',
-      startX: e.offsetX,
-      startY: e.offsetY,
-      currentX: draggableData.deltaX,
-      currentY: draggableData.deltaY,
-    });
+    switch (this.state.mode) {
+      case 'select': {
+        const { draggingSelection } = this.state;
+        const { dragging, startX, startY, stopX, stopY } = draggingSelection;
+        if (!dragging) {
+          this.setState({ draggingSelection: {
+            dragging: true,
+            startX: e.offsetX,
+            startY: e.offsetY,
+            stopX: deltaX + e.offsetX,
+            stopY: deltaY + e.offsetY,
+          } });
+        } else {
+          this.setState({ draggingSelection: {
+            dragging: true,
+            startX,
+            startY,
+            stopX: deltaX + stopX,
+            stopY: deltaY + stopY,
+          } });
+        }
+        break;
+      }
+      case 'move': {
+        const { offset } = canvas;
+        canvas.apply(new CanvasDraggingMove(offset.x + deltaX, offset.y + deltaY));
+        this.triggerUpdate(canvas);
+        break;
+      }
+      default:
+        // eslint-disable-next-line
+        console.log('error for mode:', this.state.mode);
+        break;
+    }
   }
 
   handleDragStop(e) {
     e.preventDefault();
-    this.props.dispatch({
-      type: 'work_canvas/canvasDragStop',
-    });
+    // only deals with under select mode.
+    if (this.state.mode === 'select') {
+      // get rect size.
+      const { startX, startY, stopX, stopY } = this.state.draggingSelection;
+
+      const { canvas } = this.props.workcanvas;
+      // calculate selected components.
+      const { xMin, xMax } = startX > stopX ?
+        { xMin: stopX, xMax: startX } : { xMin: startX, xMax: stopX };
+      const { yMin, yMax } = startY > stopY ?
+        { yMin: stopY, yMax: startY } : { yMin: startY, yMax: stopY };
+      const selections = canvas.getSelectionInRange(xMin, yMin, xMax, yMax);
+      if (!canvas.isCurrentSelection(selections)) {
+        canvas.apply(new SelectionChange(selections));
+        this.triggerUpdate(canvas);
+      }
+      // reset && trigger update.
+      this.setState({ draggingSelection: {
+        ...this.state.draggingSelection,
+        dragging: false,
+        startX: 0,
+        startY: 0,
+        stopX: 0,
+        stopY: 0,
+      } });
+    }
   }
 
   handleDragStart(e) {
     e.preventDefault();
-    this.props.dispatch({
-      type: 'work_canvas/modeChange',
-      isMoveMode: key.isPressed('space'),
-    });
+    // set mode.
+    if (key.isPressed('space')) {
+      this.setState({
+        mode: 'move',
+      });
+    } else {
+      this.setState({
+        mode: 'select',
+      });
+    }
   }
 
   handleSettingsClicked(component) {
+    const { state: { projectId } } = this.props.workcanvas;
+    const newSelection = [{
+      type: 'component',
+      id: component.id,
+    }];
     this.props.dispatch({
-      type: 'work_canvas/updateComponentSelectionAndDisplaySettings',
-      component,
+      type: 'workcanvas/canvasSelectionChange',
+      payload: {
+        newSelection,
+      },
+    });
+    this.props.dispatch({
+      type: 'work_component_settings/displayComponentSetting',
+      payload: {
+        component,
+        projectId,
+      },
+    });
+    this.props.dispatch({
+      type: 'workcanvas/hideContextMenu',
     });
   }
 
@@ -129,34 +239,22 @@ export default class WorkCanvas extends React.Component {
       component,
     });
     this.props.dispatch({
-      type: 'work_canvas/hideContextMenu',
+      type: 'workcanvas/hideContextMenu',
     });
   }
 
-  // handleWheel(e) {
-  //   e.preventDefault();
-  //   if (key.isPressed('space')) {
-  //     const { deltaX, deltaY } = e;
-  //     const maxDelta = Math.abs(deltaX) > Math.abs(deltaY) ? deltaX : deltaY;
-  //     const { scale } = this.state;
-  //     let newScale = (maxDelta / 1000) + scale;
-  //     if (newScale < 0.5) {
-  //       newScale = 0.5;
-  //     } else if (newScale > 1.5) {
-  //       newScale = 1.5;
-  //     }
-  //     this.setState({ scale: newScale });
-  //   }
-  // }
+  triggerUpdate(canvas) {
+    this.props.dispatch({
+      type: 'workcanvas/triggerCanvasUpdate',
+      payload: { canvas },
+    });
+  }
 
   render() {
-    // 1. generate position reference table for the rest calculation.
-    // store: componentid: {x, y}
-    const { componentDict } = this.props.work_canvas.cache;
-    // store: componentid: {pointid: {x, y}}
-    const componentPointPosition = this.props.work_canvas.cache.pointDict;
-
-    const { contextmenu, offset } = this.props.work_canvas;
+    const { state: { projectId }, canvas, validation, contextmenu } = this.props.workcanvas;
+    const { mode } = this.state;
+    if (canvas === undefined) return null;
+    const { componentPositionCache, componentSocketPositionCache } = canvas;
     let contextMenuView = null;
     if (contextmenu.show) {
       const { component } = contextmenu;
@@ -169,10 +267,6 @@ export default class WorkCanvas extends React.Component {
       );
     }
 
-    const { components, mode, selection, state: { projectId },
-      validation } = this.props.work_canvas;
-
-    const isLoading = this.props.loading.effects['work_canvas/init'];
     return (
       <div
         className={styles.workCanvasWrapper}
@@ -185,65 +279,82 @@ export default class WorkCanvas extends React.Component {
           <div
             style={{ cursor: mode === 'move' ? 'move' : 'default' }}
             className="work-canvas"
-            // onWheel={e => this.handleWheel(e)}
           >
             {
-            components.map(
-              (component, i) => {
-                return (
-                  <React.Fragment key={`f-${i}`}>
-                    {
-                      /* 1. line layer, contains svg. needs to be at bottom */
-                     }
-                    <LineLayer
-                      key={`line-${i}`}
-                      model={component}
-                      dispatch={this.props.dispatch}
-                      positionDict={componentPointPosition}
-                      componentDict={componentDict}
-                      selection={selection}
-                      projectId={projectId}
-                      offset={offset}
-                    />
-                    {
-                    /* 2. node layer */
-                    }
-                    <NodeLayer
-                      key={`node-${i}`}
-                      model={component}
-                      dispatch={this.props.dispatch}
-                      positionDict={componentPointPosition}
-                      componentDict={componentDict}
-                      selection={selection}
-                      projectId={projectId}
-                      offset={offset}
-                      validation={validation[component.id]}
-                    />
-                    {
-                      /* 3. point layer */
-                    }
-                    <PointLayer
-                      key={`point-${i}`}
-                      model={component}
-                      dispatch={this.props.dispatch}
-                      draggingTarget={this.props.work_canvas.lineDraggingState.draggingTarget}
-                      positionDict={componentPointPosition}
-                      componentDict={componentDict}
-                      selection={selection}
-                      projectId={projectId}
-                      offset={offset}
-                    />
-                  </React.Fragment>
-                  );
-              }
-            )
+          canvas.components.map(
+            (component, i) => {
+              return (
+                <React.Fragment key={`f-${i}`}>
+                  {
+                    /* 1. line layer, contains svg. needs to be at bottom */
+                   }
+                  <LineLayer
+                    key={`line-${i}`}
+                    model={component}
+                    dispatch={this.props.dispatch}
+                    positionDict={componentSocketPositionCache}
+                    componentDict={componentPositionCache}
+                    onCanvasUpdated={c => this.triggerUpdate(c)}
+                    // selection={selection}
+                    projectId={projectId}
+                    // offset={offset}
+                    canvas={canvas}
+                  />
+                  {
+                  /* 2. node layer */
+                  }
+                  <NodeLayer
+                    key={`node-${i}`}
+                    model={component}
+                    dispatch={this.props.dispatch}
+                    positionDict={componentSocketPositionCache}
+                    componentDict={componentPositionCache}
+                    onCanvasUpdated={c => this.triggerUpdate(c)}
+                    // selection={selection}
+                    projectId={projectId}
+                    // offset={offset}
+                    validation={validation[component.id]}
+                    canvas={canvas}
+                  />
+                  {
+                    /* 3. point layer */
+                  }
+                  <PointLayer
+                    key={`point-${i}`}
+                    model={component}
+                    dispatch={this.props.dispatch}
+                    positionDict={componentSocketPositionCache}
+                    componentDict={componentPositionCache}
+                    // selection={selection}
+                    projectId={projectId}
+                    lineDraggingState={this.props.workcanvas.runtime.lineDraggingState}
+                    canvas={canvas}
+                    // offset={offset}
+                  />
+                </React.Fragment>
+                );
+            }
+          )
+        }
+            {
+            /* 4. selection layer */
+              <SelectionLayer
+                selection={canvas.selection}
+                positionDict={componentSocketPositionCache}
+                componentDict={componentPositionCache}
+              />
           }
             {
-              /* 4. selection layer */
-              <SelectionLayer
-                {...this.props.work_canvas}
-                positionDict={componentPointPosition}
-                componentDict={componentDict}
+
+              /* 5. dragging line view */
+              <DraggingLineView
+                lineDraggingState={this.props.workcanvas.runtime.lineDraggingState}
+              />
+            }
+            {
+              /* 6. dragging selection view */
+              <DraggingSelectionView
+                draggingSelection={this.state.draggingSelection}
               />
             }
           </div>
@@ -252,15 +363,15 @@ export default class WorkCanvas extends React.Component {
           contextMenuView
         }
         {
-          this.state.inspectData ? (
-            <DataInspector
-              visible={this.state.inspectData}
-              component={this.state.component}
-              projectId={projectId}
-              onClose={e => this.setState({ inspectData: false, component: undefined })}
-            />
-          ) : null
-        }
+        this.state.inspectData ? (
+          <DataInspector
+            visible={this.state.inspectData}
+            component={this.state.component}
+            projectId={projectId}
+            onClose={e => this.setState({ inspectData: false, component: undefined })}
+          />
+        ) : null
+      }
       </div>
     );
   }

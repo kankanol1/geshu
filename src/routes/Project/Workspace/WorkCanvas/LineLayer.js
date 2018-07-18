@@ -1,57 +1,24 @@
 import React from 'react';
 import { DraggableCore } from 'react-draggable';
-import { calculateLineStr, calculateLineCurly } from '../../../../utils/PositionCalculation';
+import { calculateLineCurly } from '../../../../utils/PositionCalculation';
+import SelectionChange from '../../../../obj/workspace/op/SelectionChange';
 
 const r = 10 + 6;
 
 class LineLayer extends React.Component {
-  constructor(props) {
-    super(props);
-    this.cache = undefined;
-    this.projectId = undefined;
-    this.offsetCache = undefined;
-  }
-
   shouldComponentUpdate() {
-    // calculate influenced components.
-    const newCache = this.props.model.connectFrom.length;
-    const newProjectId = this.props.projectId;
-    if (newProjectId !== this.projectId) {
-      this.projectId = newProjectId;
-      return true;
-    } else if (!this.cache) {
-      this.cache = newCache;
-      return true;
-    } else if (this.cache !== newCache) {
-      this.cache = newCache;
-      return true;
-    } else if (!this.offsetCache || this.offsetCache !== this.props.offset) {
-      this.offsetCache = this.props.offset;
-      return true;
-    }
-    const { selection, model } = this.props;
-    let included = false;
-    for (const s of selection) {
-      if (s.type === 'component') {
-        if (s.id === model.id) {
-          included = true;
-          break;
-        } else if (model.connectFrom.filter(l => l.component === s.id).length > 0) {
-          included = true;
-          break;
-        }
-      }
-    }
-    this.cache = newCache;
-    return included;
+    return true;
   }
 
   handleLineClick(e, params) {
     e.preventDefault();
-    this.props.dispatch({
-      type: 'work_canvas/updateLineSelection',
-      ...params,
-    });
+    const { canvas } = this.props;
+    const newSelection = [{ type: 'line', ...params }];
+    if (!canvas.isCurrentSelection(newSelection)) {
+      canvas.apply(new SelectionChange(newSelection));
+      // trigger update.
+      this.props.onCanvasUpdated(canvas);
+    }
   }
 
   render() {
@@ -61,7 +28,7 @@ class LineLayer extends React.Component {
         onClick={e => true}
       >
         {
-          this.props.model.connectFrom.map(
+          this.props.model.connections.map(
             (line, i) => {
               const from = this.props.positionDict[line.component][line.from];
               const to = this.props.positionDict[this.props.model.id][line.to];

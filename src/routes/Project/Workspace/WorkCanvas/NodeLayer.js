@@ -4,6 +4,11 @@ import { Icon, Modal } from 'antd';
 import styles from './styles.less';
 import { getIconNameForComponent, getStylesForType, componentSize } from './styles';
 import './icon.less';
+import ComponentDraggingMove from '../../../../obj/workspace/op/ComponentDraggingMove';
+import ComponentMove from '../../../../obj/workspace/op/ComponentMove';
+import SelectionChange from '../../../../obj/workspace/op/SelectionChange';
+import BatchUntrackedOperation from '../../../../obj/workspace/op/BatchUntrackedOperation';
+import BatchOperation from '../../../../obj/workspace/op/BatchOperation';
 
 /**
  * Node Layer: the bottom/first layer of the work canvas.
@@ -12,40 +17,21 @@ import './icon.less';
 class NodeLayer extends React.Component {
   constructor(props) {
     super(props);
-    this.handleDrag = this.handleDrag.bind(this);
-    this.handleDragStop = this.handleDragStop.bind(this);
-    this.handleDragStart = this.handleDragStart.bind(this);
-    this.handleContextMenu = this.handleContextMenu.bind(this);
     this.hasDrag = true;
-    this.projectId = undefined;
-    this.offsetCache = undefined;
-    this.validationCache = undefined;
+
+    this.state = {
+      draggingState: {
+        startX: 0,
+        startY: 0,
+        stopX: 0,
+        stopY: 0,
+      },
+      componentCache: [],
+    };
   }
 
   shouldComponentUpdate() {
-    const newProjectId = this.props.projectId;
-    if (newProjectId !== this.projectId) {
-      this.projectId = newProjectId;
-      return true;
-    } else if (!this.offsetCache || this.offsetCache !== this.props.offset) {
-      this.offsetCache = this.props.offset;
-      return true;
-    }
-    // only update when selected.
-    const { selection, model, validation } = this.props;
-    if (selection) {
-      const selected = selection.filter(s => s.id === model.id).length > 0;
-      if (selected) {
-        return selected;
-      } else {
-        const result = validation === this.validationCache;
-        this.validationCache = validation;
-        return result;
-      }
-    } else {
-      // used by preview.
-      return true;
-    }
+    return true;
   }
 
   handleDragStart(e) {
@@ -53,41 +39,88 @@ class NodeLayer extends React.Component {
     // stop propagation to parent.
     e.stopPropagation();
     this.hasDrag = false;
+    const { canvas } = this.props;
+    const selection = canvas.getSelectedComponents();
+    const component = this.props.model;
+    // if not included,
+    let componentCache = [];
+    if (selection.filter(i => i.id === component.id).length === 0) {
+      componentCache = [{ component, x: component.x, y: component.y }];
+    } else {
+      // move selected component.
+      componentCache = selection.map(i => ({ component: i, x: i.x, y: i.y }));
+    }
+    this.setState({
+      draggingState: {
+        ...this.state.draggingState,
+        startX: this.props.model.x,
+        startY: this.props.model.y,
+        stopX: this.props.model.x,
+        stopY: this.props.model.y,
+      },
+      componentCache,
+    });
   }
 
   handleDragStop(e) {
     e.preventDefault();
-    if (!this.hasDrag && this.props.dispatch) {
+    // if not dragged, perform selection change.
+    if (!this.hasDrag) {
+      // change selection.
+      const { projectId } = this.props;
+      const component = this.props.model;
+      const newSelection = [{
+        type: 'component',
+        id: component.id,
+      }];
       this.props.dispatch({
-        type: 'work_canvas/updateComponentSelectionAndDisplaySettings',
-        component: this.props.model,
+        type: 'workcanvas/canvasSelectionChange',
+        payload: {
+          newSelection,
+        },
       });
+      this.props.dispatch({
+        type: 'work_component_settings/displayComponentSetting',
+        payload: {
+          component,
+          projectId,
+        },
+      });
+    } else {
+      const { canvas } = this.props;
+      const { startX, startY, stopX, stopY } = this.state.draggingState;
+      const batchMove = this.state.componentCache.map(i => (
+        new ComponentMove(i.component, i.x, i.y, (i.x + stopX) - startX, (i.y + stopY) - startY)
+      ));
+      const move = new BatchOperation(batchMove);
+      canvas.apply(move);
+      this.setState({ componentCache: [] });
+      this.props.onCanvasUpdated(canvas);
     }
-    // we don't want to enable this right now.
-    // else {
-    //   // only display settings
-    //   this.props.dispatch({
-    //     type: 'work_component_settings/displayComponentSetting',
-    //     component: this.props.model,
-    //   });
-    // }
   }
 
   handleDrag(e, draggableData) {
     e.preventDefault();
-    if (draggableData.deltaX !== 0 || draggableData.deltaY !== 0) {
+    const { deltaX, deltaY } = draggableData;
+    if (deltaX !== 0 || deltaY !== 0) {
       this.hasDrag = true;
-    }
-    if (this.props.dispatch) {
-      this.props.dispatch({
-        type: 'work_canvas/moveComponentAndDisplaySettingsIfNeeded',
-        component: this.props.model,
-        deltaX: draggableData.deltaX,
-        deltaY: draggableData.deltaY,
-        originX: this.props.model.x,
-        originY: this.props.model.y,
-
+      const { canvas } = this.props;
+      const { startX, startY, stopX: lastStopX, stopY: lastStopY } = this.state.draggingState;
+      const stopX = lastStopX + deltaX;
+      const stopY = lastStopY + deltaY;
+      const batchMove = this.state.componentCache.map(i => (
+        new ComponentDraggingMove(i.component, (i.x + stopX) - startX, (i.y + stopY) - startY)
+      ));
+      const move = new BatchUntrackedOperation(batchMove);
+      canvas.apply(move);
+      this.setState({
+        draggingState: {
+          ...this.state.draggingState,
+          stopX,
+          stopY,
+        },
       });
+      this.props.onCanvasUpdated(canvas);
     }
   }
 
@@ -95,7 +128,7 @@ class NodeLayer extends React.Component {
     e.preventDefault();
     if (this.props.dispatch) {
       this.props.dispatch({
-        type: 'work_canvas/openContextMenu',
+        type: 'workcanvas/openContextMenu',
         component: this.props.model,
         x: e.clientX,
         y: e.clientY,
@@ -151,9 +184,9 @@ class NodeLayer extends React.Component {
           ) : null
         }
         <DraggableCore
-          onStop={this.handleDragStop}
-          onDrag={this.handleDrag}
-          onStart={this.handleDragStart}
+          onStop={e => this.handleDragStop(e)}
+          onDrag={(e, draggableData) => this.handleDrag(e, draggableData)}
+          onStart={e => this.handleDragStart(e)}
         >
           <div
             style={{
@@ -162,19 +195,9 @@ class NodeLayer extends React.Component {
             background: `${getStylesForType(type, code)}`,
             transform: `translate(${x}px, ${y}px)`,
            }}
-            onContextMenu={this.handleContextMenu}
+            onContextMenu={e => this.handleContextMenu(e)}
             className={nodeClassName}
           >
-            {/* <div
-              className={styles.errorTip}
-            >!
-            </div>
-
-            <div
-              className={styles.infoTip}
-              onClick={(e) => { e.stopPropagation(); e.preventDefault(); }}
-            >i
-            </div> */}
             <i className={`${icon} x-icon`} />
             {name}
           </div>

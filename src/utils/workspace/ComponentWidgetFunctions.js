@@ -1,16 +1,16 @@
 import { getFromRegistory } from '../../common/registry';
 
-const store = getFromRegistory('store');
+const getStore = () => getFromRegistory('store');
 
 export const getAllColumnsFromUpstream = (id) => {
   // select what we needed.
-  const { schema, components } = store.getState().work_canvas;
+  const { schema, canvas } = getStore().getState().workcanvas;
   let upstreamId;
   let upstreamPoint;
-  components.forEach(
+  canvas.components.forEach(
     (c) => {
       if (c.id === id) {
-        const { connectFrom } = c;
+        const { connections: connectFrom } = c;
         if (connectFrom.length === 0) {
           throw new Error('请先连接');
         }

@@ -92,7 +92,7 @@ export default {
 
   effects: {
     *fetchComponentSettings({ code, id, name, projectId }, { call, put }) {
-      yield put({ type: 'work_canvas/addMessage', payload: { message: `加载配置[${code}](${name})...` } });
+      yield put({ type: 'workcanvas/addMessage', payload: { message: `加载配置[${code}](${name})...` } });
       const data = yield call(fetchComponentSetting, code);
       yield put({ type: 'registerComponentMetaDict', component: data, code, id, name });
       yield put({
@@ -102,7 +102,7 @@ export default {
         name,
         projectId,
       });
-      yield put({ type: 'work_canvas/addMessage', payload: { message: `配置[${code}](${name})加载完毕` } });
+      yield put({ type: 'workcanvas/addMessage', payload: { message: `配置[${code}](${name})加载完毕` } });
     },
 
     /**
@@ -116,7 +116,8 @@ export default {
      * @param {*} component
      * @param {*} param2
      */
-    *displayComponentSetting({ component, projectId }, { put, select }) {
+    *displayComponentSetting({ payload }, { put, select }) {
+      const { component, projectId } = payload;
       const { componentMetaDict, componentSettings } =
         yield select(state => state.work_component_settings);
       const alreadyHaveTheSettings = componentSettings[component.id] !== undefined;
@@ -147,7 +148,7 @@ export default {
       if (response.success) {
         // message.info(response.message);
         yield put({
-          type: 'work_canvas/saveComponents',
+          type: 'workcanvas/saveProject',
           payload: {
             id: projectId,
           },

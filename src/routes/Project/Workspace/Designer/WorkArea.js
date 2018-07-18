@@ -2,7 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { connect } from 'dva';
 import { Layout, Button, Spin } from 'antd';
-import SiderComponentList from './SiderComponentList';
 import WorkCanvas from '../WorkCanvas/WorkCanvas';
 import ComponentSettings from './ComponentSettings';
 import WorkAreaBottomBar from './WorkAreaBottomBar';
@@ -18,9 +17,9 @@ function gen() {
 }
 
 
-@connect(({ work_canvas, loading }) => (
+@connect(({ workcanvas, loading }) => (
   {
-    work_canvas,
+    workcanvas,
     loading,
   }))
 export default class WorkArea extends React.Component {
@@ -38,7 +37,7 @@ export default class WorkArea extends React.Component {
       if (!canvasDOM) return;
       const { x, y } = canvasDOM.getBoundingClientRect();
       this.props.dispatch({
-        type: 'work_canvas/contextMenuOffsetInit',
+        type: 'workcanvas/contextMenuOffsetInit',
         payload: {
           offsetX: x,
           offsetY: y,
@@ -53,7 +52,7 @@ export default class WorkArea extends React.Component {
       dragClientTarget.x < width + x && dragClientTarget.y < height + y) {
       // add new component.
       this.props.dispatch({
-        type: 'work_canvas/newComponent',
+        type: 'workcanvas/canvasNewComponent',
         component: {
           id: `${component.name}${gen()}`,
           ...component,
@@ -74,7 +73,7 @@ export default class WorkArea extends React.Component {
   // }
 
   render() {
-    const isLoading = this.props.loading.effects['work_canvas/init'];
+    const isLoading = this.props.loading.effects['workcanvas/initProject'];
     return (
       <React.Fragment>
         {/* <Button onClick={this.exportSvg}> export </Button> */}

@@ -177,3 +177,12 @@ export function humanFileSize(inputBytes, si = true) {
   } while (Math.abs(bytes) >= thresh && u < units.length - 1);
   return `${bytes.toFixed(1)} ${units[u]}`;
 }
+
+// cross-browser events
+export function addEvent(object, event, method) {
+  if (object.addEventListener) {
+    object.addEventListener(event, method, false);
+  } else if (object.attachEvent) {
+    object.attachEvent(`on${event}`, () => { method(window.event); });
+  }
+}

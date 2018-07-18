@@ -264,6 +264,7 @@ export function save(req, res, u, b) {
     success: true,
     message: '保存成功',
     schema,
+    validation: {},
   };
 
   if (res && res.json) {

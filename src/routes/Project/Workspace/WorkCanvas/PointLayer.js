@@ -1,40 +1,114 @@
 import React from 'react';
 import { DraggableCore } from 'react-draggable';
+import { message } from 'antd';
 import { calculatePointPositionDict } from '../../../../utils/PositionCalculation';
 import styles from './styles.less';
+import ConnectionAdd from '../../../../obj/workspace/op/ConnectionAdd';
+import Connection from '../../../../obj/workspace/Connection';
 
 const R = { normal: 8, large: 9 };
+
+const overlapRange = 20;
 
 class PointLayer extends React.Component {
   constructor(props) {
     super(props);
-    this.handleDrag = this.handleDrag.bind(this);
-    this.handleDragStop = this.handleDragStop.bind(this);
-    this.handleMouseEnter = this.handleMouseEnter.bind(this);
-    this.handleMouseLeave = this.handleMouseLeave.bind(this);
     this.state = { hovering: [] };
-    this.projectId = undefined;
-    this.offsetCache = undefined;
   }
 
   shouldComponentUpdate() {
-    const newProjectId = this.props.projectId;
-    if (newProjectId !== this.projectId) {
-      this.projectId = newProjectId;
-      return true;
-    } else if (!this.offsetCache || this.offsetCache !== this.props.offset) {
-      this.offsetCache = this.props.offset;
-      return true;
-    }
-    // only update when selected.
-    const { selection, model } = this.props;
-    return selection ? selection.filter(s => s.id === model.id).length > 0 : true;
+    return true;
   }
 
   handleDragStop(e) {
     e.preventDefault();
+    // calculate overlapped points.
+    const { model, canvas, lineDraggingState } = this.props;
+    const { draggingComponent, draggingPoint, draggingSource,
+      draggingTarget, draggingType,
+      draggingConnects, draggingMetaType } = lineDraggingState;
+
+    const overlapped = [];
+    Object.entries(canvas.componentSocketPositionCache).forEach(([id, positionDict]) => {
+      Object.entries(positionDict).forEach(([pid, { x, y }]) => {
+        if (Math.abs(x - draggingTarget.x) <= overlapRange &&
+            Math.abs(y - draggingTarget.y) <= overlapRange) {
+          overlapped.push(`${id}-${pid}`);
+        }
+      });
+    });
+
+    // get the overlapped types
+    const overlappedInputs = [];
+    const overlappedOutputs = [];
+    canvas.components.forEach((c) => {
+      c.inputs.forEach((i) => {
+        if (overlapped.includes(`${c.id}-${i.id}`)) {
+          overlappedInputs.push({
+            component: c,
+            pointId: i.id,
+            type: i.type,
+            connects: i.connects,
+            metatype: i.metatype,
+          });
+        }
+      });
+      c.outputs.forEach((i) => {
+        if (overlapped.includes(`${c.id}-${i.id}`)) {
+          overlappedOutputs.push({
+            component: c,
+            pointId: i.id,
+            type: i.type,
+            connects: i.connects,
+            metatype: i.metatype,
+          });
+        }
+      });
+    });
+
+    if (overlappedOutputs.length !== 0) {
+      if (draggingMetaType === 'input') {
+        const candidate = overlappedOutputs[0];
+        if (candidate.component.id === draggingComponent) {
+          message.info('暂不能将同一组件首位相连');
+        } else if (draggingConnects.includes(candidate.type)) {
+          // candidate is output, meaning dragging source should be an output.
+          // add connectFrom to the candidate point.
+          // add new line.
+          const newOp = new ConnectionAdd(model, new Connection(
+            candidate.component.id,
+            candidate.pointId,
+            draggingPoint,
+          ));
+          canvas.apply(newOp);
+        } else {
+          message.info('not compatiable');
+        }
+      } else {
+        message.info('needs to be connected with an output point');
+      }
+    }
+    if (overlappedInputs.length !== 0) {
+      if (draggingMetaType === 'output') {
+        const candidate = overlappedInputs[0];
+        // candidate is output, meansing dragging source should be an input.
+        // the other way round.
+        if (candidate.component.id === draggingComponent) {
+          message.info('暂不能将同一组件首位相连');
+        } else if (candidate.connects.includes(draggingType)) {
+          const newOp = new ConnectionAdd(candidate.component, new Connection(
+            draggingComponent, draggingPoint, candidate.pointId,
+          ));
+          canvas.apply(newOp);
+        } else {
+          message.info('not compatiable');
+        }
+      } else {
+        message.info('needs to be connected with an input point');
+      }
+    }
     this.props.dispatch({
-      type: 'work_canvas/endDrag',
+      type: 'workcanvas/canvasDraggingLineReset',
     });
   }
 
@@ -62,7 +136,7 @@ class PointLayer extends React.Component {
       varObj = { draggingType: point.type, draggingConnects: [] };
     }
     this.props.dispatch({
-      type: 'work_canvas/draggingLine',
+      type: 'workcanvas/canvasDraggingLineUpdate',
       componentId: this.props.model.id,
       pointId: point.id,
       draggingSource: {
@@ -70,10 +144,10 @@ class PointLayer extends React.Component {
         y: originy,
       },
       draggingTarget: {
-        x: (this.props.draggingTarget.x == null ? originx :
-          this.props.draggingTarget.x) + draggableData.deltaX,
-        y: (this.props.draggingTarget.y == null ? originy :
-          this.props.draggingTarget.y) + draggableData.deltaY,
+        x: (this.props.lineDraggingState.draggingTarget.x == null ? originx :
+          this.props.lineDraggingState.draggingTarget.x) + draggableData.deltaX,
+        y: (this.props.lineDraggingState.draggingTarget.y == null ? originy :
+          this.props.lineDraggingState.draggingTarget.y) + draggableData.deltaY,
       },
       draggingMetaType: point.metatype,
       ...varObj,
@@ -95,8 +169,8 @@ class PointLayer extends React.Component {
         <React.Fragment key={i}>
           <DraggableCore
             onDrag={(e, draggableData) => this.handleDrag(e, draggableData, point)}
-            onStop={this.handleDragStop}
-            onStart={this.handleDragStart}
+            onStop={e => this.handleDragStop(e)}
+            onStart={e => this.handleDragStart(e)}
           >
             <div
               style={{

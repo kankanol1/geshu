@@ -82,6 +82,10 @@ const calculateLineStr = (srcX, srcY, desX, desY) => {
   // return calculateLineStrStraightly(srcX, srcY, desX, desY);
 };
 
+const getComponentSize = () => {
+  return componentSize;
+};
+
 const calculatePointPositionDict = (component) => {
   const pointDict = {};
   const { x, y } = component;
@@ -99,22 +103,19 @@ const calculatePointPositionDict = (component) => {
   return pointDict;
 };
 
-const updateCache = (state) => {
+const updateCache = (components, offset) => {
   const componentDict = {}; // store: componentid: {x, y}
   const componentPointPosition = {}; // store: componentid: {pointid: {x, y}}
-  const { offset } = state;
-  state.components.forEach(
+  components.forEach(
     (component) => {
       const { c, p } = updateCacheForComponent(component, offset);
       componentDict[component.id] = c;
       componentPointPosition[component.id] = p;
     }
   );
-  return { ...state,
-    cache: {
-      componentDict,
-      pointDict: componentPointPosition,
-    },
+  return {
+    componentDict,
+    pointDict: componentPointPosition,
   };
 };
 
@@ -188,4 +189,5 @@ export {
   addCacheForComponent,
   calculateLineCurly,
   updateCacheForComponent,
+  getComponentSize,
 };
