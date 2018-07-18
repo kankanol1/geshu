@@ -146,6 +146,7 @@ export default {
       offsetY: 0,
     },
     schema: undefined,
+    validation: {},
   },
 
   reducers: {
@@ -703,6 +704,7 @@ export default {
             name: response.name,
             components: response.components,
             schema: response.schema,
+            validation: response.validation,
           },
           id: payload.id },
       });

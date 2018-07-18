@@ -1,5 +1,6 @@
 import React from 'react';
 import { DraggableCore } from 'react-draggable';
+import { Icon, Modal } from 'antd';
 import styles from './styles.less';
 import { getIconNameForComponent, getStylesForType, componentSize } from './styles';
 import './icon.less';
@@ -18,6 +19,7 @@ class NodeLayer extends React.Component {
     this.hasDrag = true;
     this.projectId = undefined;
     this.offsetCache = undefined;
+    this.validationCache = undefined;
   }
 
   shouldComponentUpdate() {
@@ -30,9 +32,16 @@ class NodeLayer extends React.Component {
       return true;
     }
     // only update when selected.
-    const { selection, model } = this.props;
+    const { selection, model, validation } = this.props;
     if (selection) {
-      return selection.filter(s => s.id === model.id).length > 0;
+      const selected = selection.filter(s => s.id === model.id).length > 0;
+      if (selected) {
+        return selected;
+      } else {
+        const result = validation === this.validationCache;
+        this.validationCache = validation;
+        return result;
+      }
     } else {
       // used by preview.
       return true;
@@ -94,14 +103,53 @@ class NodeLayer extends React.Component {
     }
   }
 
+  displayValidation = (validation) => {
+    if (validation.errors) {
+      Modal.error({
+        title: '错误提示',
+        content: [
+          validation.errors.map((e, i) => <span key={`e-${i}`}>{e}</span>),
+          validation.warns && validation.warns.map((e, i) => <span key={`w-${i}`}>{e}</span>),
+        ],
+      });
+    } else {
+      Modal.warning({
+        title: '警告',
+        content: [
+          validation.warns.map((e, i) => <span key={`w-${i}`}>{e}</span>),
+        ],
+      });
+    }
+  }
+
   render() {
     const { name, id, code, type } = this.props.model;
     const { x, y } =
       this.props.componentDict === undefined ?
         this.props.model : this.props.componentDict[id];
     const icon = getIconNameForComponent(code);
+    const { validation } = this.props;
+    let errorDisplay;
+    if (validation) {
+      errorDisplay = validation.errors ? 'error' : 'warn';
+    }
+    let nodeClassName = styles.nodeDiv;
+    if (errorDisplay) {
+      nodeClassName = errorDisplay === 'error' ? styles.nodeDivError : styles.nodeDivWarn;
+    }
     return (
       <React.Fragment>
+        {
+          errorDisplay ? (
+            <div style={{ width: '0px', height: '0px', transform: `translate(${x + componentSize.width + 4}px, ${y}px)` }}>
+              <Icon
+                type="warning"
+                className={errorDisplay === 'error' ? styles.errorTip : styles.warnTip}
+                onClick={() => this.displayValidation(validation)}
+              />
+            </div>
+          ) : null
+        }
         <DraggableCore
           onStop={this.handleDragStop}
           onDrag={this.handleDrag}
@@ -115,7 +163,7 @@ class NodeLayer extends React.Component {
             transform: `translate(${x}px, ${y}px)`,
            }}
             onContextMenu={this.handleContextMenu}
-            className={styles.nodeDiv}
+            className={nodeClassName}
           >
             {/* <div
               className={styles.errorTip}

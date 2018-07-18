@@ -169,7 +169,8 @@ export default class WorkCanvas extends React.Component {
       );
     }
 
-    const { components, mode, selection, state: { projectId } } = this.props.work_canvas;
+    const { components, mode, selection, state: { projectId },
+      validation } = this.props.work_canvas;
 
     const isLoading = this.props.loading.effects['work_canvas/init'];
     return (
@@ -216,6 +217,7 @@ export default class WorkCanvas extends React.Component {
                       selection={selection}
                       projectId={projectId}
                       offset={offset}
+                      validation={validation[component.id]}
                     />
                     {
                       /* 3. point layer */

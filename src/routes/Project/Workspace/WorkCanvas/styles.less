@@ -1,4 +1,4 @@
-@breath-start: 0.7;
+@breath-start: 0.5;
 @breath-end: 1;
 
 /* stylelint-disable */
@@ -60,27 +60,35 @@
   font-size: 12px;
 }
 
-.nodeTip {
-  width: 20px;
-  height: 20px;
-  position: absolute;
-  cursor: pointer;
+.nodeDivError {
+  .nodeDiv;
+  border-width: 2px;
+  border-style: solid;
+  border-color: #fb2626;
 }
 
-.errorTip {
-  .nodeTip;
-  border-radius: 10px 0 0 0;
-  background-color: #fb2626;
-  -webkit-animation: breath 3s;
-  animation: breath 3s;
+.nodeDivWarn {
+  .nodeDiv;
+  border-width: 2px;
+  border-style: solid;
+  border-color: #faad14;
+}
+
+.iconTip {
+  font-size: 20px;
+  cursor: pointer;
+  -webkit-animation: breath 2s;
+  animation: breath 2s;
   -webkit-animation-iteration-count: infinite;
   animation-iteration-count: infinite;
 }
 
-.infoTip {
-  .nodeTip;
-  border-radius: 0 10px 0 0;
-  background: #999;
-  right: 0;
-  top: 0;
+.errorTip {
+  .iconTip;
+  color: #fb2626;
+}
+
+.warnTip {
+  .iconTip;
+  color: #faad14;
 }

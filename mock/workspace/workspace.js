@@ -2,79 +2,180 @@
 import { getUrlParams } from '../utils';
 
 const projectInfo = {
-  name: 'Project-name',
-  components: [{
-    id: 'input',
-    name: 'txt输入',
-    code: 'csv-source',
-    x: 150,
-    y: 100,
-    width: 120,
-    height: 120,
-    /** type means */
-    type: 'source',
-    inputs: [
-    ],
-    outputs: [
-    /* input circles */
-      {
-        id: 'o-1',
-        label: 'o',
-        hint: 'data output', // occurs when hover
-        x: 1,
-        y: 0.5,
-        connects: ['datasource-input'],
-      },
-    ],
-    connectFrom: [
-    ],
+  validation: {
+    分词15315274966: {
+      errors: [
+        '反正哪里不对，出错示例',
+      ],
+    },
+    分词1531527496608: {
+      warns: [
+        '哪里不太好，警告',
+      ],
+    },
   },
-  {
-    id: 'preprocess-1',
-    name: '转换',
-    code: 'column-transform',
-    x: 400,
-    y: 100,
-    width: 120,
-    height: 120,
-    type: 'preprocessor',
-    inputs: [
-      {
-        id: 'i-1',
-        label: 'i',
-        hint: 'b', // occurs when hover
-        x: 3,
-        y: 0.5,
-        connects: ['datasource-output'],
-      },
-    ],
-    outputs: [
-      {
-        id: 'o-1',
-        label: 'o',
-        hint: 'b', // occurs when hover
-        x: 1,
-        y: 0.5,
-        type: 'datasource-output',
-      },
-    ],
-    connectFrom: [
-      {
-      /* connects to */
-        component: 'input',
-        to: 'i-1',
-        from: 'o-1',
-      },
-    ],
-  }],
-  // settings info.
+  schema: {
+    文件读取1531527496607: {
+      o1: [
+        {
+          nullable: true,
+          name: 'id',
+          type: '"string"',
+        },
+        {
+          nullable: true,
+          name: 'text',
+          type: '"string"',
+        },
+        {
+          nullable: true,
+          name: 'label',
+          type: '"integer"',
+        },
+      ],
+    },
+  },
   settings: {
-    input: {
-      diy: {
-        value: '预设值',
+    分词1531527496608: {
+      columnAndName: {
+        column: 'text',
+        name: 'words',
+      },
+    },
+    文件读取1531527496607: {
+      sourceConf: {
+        path: {
+          value: 'hdfs://52.83.147.191:9000/projectx/store-public/yo/food-test.csv',
+        },
+        format: 'csv',
+        header: {
+          value: true,
+        },
+        definedSchema: {
+          schema: [
+            {
+              metadata: {},
+              nullable: true,
+              name: 'id',
+              type: '"string"',
+            },
+            {
+              metadata: {},
+              nullable: true,
+              name: 'text',
+              type: '"string"',
+            },
+            {
+              metadata: {},
+              nullable: true,
+              name: 'label',
+              type: '"integer"',
+            },
+          ],
+          on: true,
+        },
       },
     },
   },
+  createdAt: '2018-07-13 20:17:16',
+  components: [
+    {
+      outputs: [
+        {
+          hint: 'Model',
+          x: 1,
+          y: 0.5,
+          id: 'o1',
+          label: 'model',
+          type: 'Model',
+        },
+      ],
+      code: 'TokenizerStage',
+      inputs: [
+        {
+          connects: [
+            'Model',
+            'Dataset',
+          ],
+          hint: 'all',
+          x: 3,
+          y: 0.5,
+          id: 'i1',
+          label: 'all',
+        },
+      ],
+      name: '分词',
+      x: 455,
+      y: 414,
+      id: '分词15315274966',
+      type: 'Stage',
+      connectFrom: [
+      ],
+    },
+    {
+      outputs: [
+        {
+          hint: 'Model',
+          x: 1,
+          y: 0.5,
+          id: 'o1',
+          label: 'model',
+          type: 'Model',
+        },
+      ],
+      code: 'TokenizerStage',
+      inputs: [
+        {
+          connects: [
+            'Model',
+            'Dataset',
+          ],
+          hint: 'all',
+          x: 3,
+          y: 0.5,
+          id: 'i1',
+          label: 'all',
+        },
+      ],
+      name: '分词',
+      x: 555,
+      y: 214,
+      id: '分词1531527496608',
+      type: 'Stage',
+      connectFrom: [
+        {
+          component: '文件读取1531527496607',
+          from: 'o1',
+          to: 'i1',
+        },
+      ],
+    },
+    {
+      outputs: [
+        {
+          hint: 'Dataset',
+          x: 1,
+          y: 0.5,
+          id: 'o1',
+          label: 'data',
+          type: 'Dataset',
+        },
+      ],
+      code: 'FileDataSource',
+      inputs: [],
+      name: '文件读取',
+      x: 129,
+      y: 196,
+      id: '文件读取1531527496607',
+      type: 'DataSource',
+      connectFrom: [],
+    },
+  ],
+  name: '项目名称',
+  description: 'ww',
+  id: 14,
+  labels: [],
+  updatedAt: '2018-07-13 20:19:20',
 };
 
 export function open(req, res, u, q) {
