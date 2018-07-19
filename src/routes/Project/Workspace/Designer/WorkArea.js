@@ -33,8 +33,10 @@ export default class WorkArea extends React.Component {
   componentDidMount() {
     // use timeout to ensure the div is already calculated correctly.
     setTimeout(() => {
-      const { x, y } =
-      ReactDOM.findDOMNode(this.canvasContent).getBoundingClientRect();
+      const canvasDOM = ReactDOM.findDOMNode(this.canvasContent);
+      // if the user already switched pages.
+      if (!canvasDOM) return;
+      const { x, y } = canvasDOM.getBoundingClientRect();
       this.props.dispatch({
         type: 'work_canvas/contextMenuOffsetInit',
         payload: {
