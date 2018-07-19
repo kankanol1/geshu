@@ -40,6 +40,21 @@ export default class GraphIndex extends Component {
     });
   }
 
+  getJumpUrl = (item) => {
+    if (this.props.match.params.type === 'mapper' && (item.status === 'NEW' || item.status === 'SCHEMA_CREATED')) {
+      return `/graph/${this.props.match.params.type}/not_create/${item.id}`;
+    }
+    if (this.props.match.params.type === 'explore' || this.props.match.params.type === 'query') {
+      if (item.status === 'NEW' || item.status === 'SCHEMA_CREATED') {
+        return `/graph/${this.props.match.params.type}/not_create/${item.id}`;
+      }
+      if (item.status === 'SCHEMA_EXECUTED') {
+        return `/graph/${this.props.match.params.type}/not_data/${item.id}`;
+      }
+    }
+    return `/graph/${this.props.match.params.type}/detail/${item.id}`;
+  }
+
   handleModalVisible = (visible) => {
     this.setState({ ...this.state,
       modalVisible: !!visible,
@@ -119,6 +134,7 @@ export default class GraphIndex extends Component {
       openList: [],
     });
   }
+
   render() {
     const { recentGraph, data: { labels, list } } = this.props.graph;
     const loading = this.props.loading || recentGraph.loading;
@@ -157,7 +173,7 @@ export default class GraphIndex extends Component {
                 (
                   <p key={item.id}>
                     <Link
-                      to={`/graph/${this.props.match.params.type}/detail/${item.id}`}
+                      to={this.getJumpUrl(item)}
                       className={styles.clickableItem}
                     >
                       <Icon type="file" /> {item.name} (最后编辑于 {moment(item.updatedAt).format('YYYY-MM-DD HH:mm:ss')})

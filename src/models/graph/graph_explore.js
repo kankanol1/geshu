@@ -166,14 +166,14 @@ export default {
 
       let code;
       let basicSearch;
-      if (searchValue.length <= 1) {
-        basicSearch = type === 'link' ? 'g.E()' : 'g.V()';
+      if (searchValue.length <= 1 && type === 'node') {
+        basicSearch = 'g.V()';
         searchValue.map((item) => {
-          if (item.type) {
-            basicSearch += `.hasLabel('${item.type}')`;
-          }
           if (item.attr && item.attrData) {
             basicSearch += `.has('${item.attr}',${Number(item.attrData) ? item.attrData : `'${item.attrData}'`})`;
+          }
+          if (item.type) {
+            basicSearch += `.hasLabel('${item.type}')`;
           }
           if (item.attr && item.attrDataMax && item.attrDataMin) {
             basicSearch += `.has('${item.attr}',inside(${item.attrDataMin},${item.attrDataMax}))`;
@@ -184,8 +184,8 @@ export default {
           return basicSearch;
         });
         basicSearch += `.limit(${limit})`;
-      } else {
-        basicSearch = type === 'link' ? 'g.E().or(' : 'g.V().or(';
+      } else if (searchValue.length > 1 && type === 'node') {
+        basicSearch = 'g.V().or(';
         searchValue.map((item) => {
           let query = '';
           if (item.type) {
@@ -200,14 +200,31 @@ export default {
           if (query) {
             basicSearch += `__ ${query},`;
           }
+          return basicSearch;
+        });
+        basicSearch += `).limit(${limit})`;
+      }
+      if (type === 'link') {
+        basicSearch = 'g.E().or(';
+        searchValue.map((item) => {
+          let query = '';
+          if (item.type) {
+            query += `hasLabel('${item.type}').bothV()`;
+          }
+          if (item.attr && item.attrData) {
+            query += `.has('${item.attr}',${Number(item.attrData) ? item.attrData : `'${item.attrData}'`})`;
+          }
+          if (item.attr && item.attrDataMax && item.attrDataMin) {
+            query += `.has('${item.attr}',inside(${item.attrDataMin},${item.attrDataMax}))`;
+          }
+          if (query) {
+            basicSearch += `${query},`;
+          }
           // console.log(basicSearch, 'basicSearch');
           return basicSearch;
         });
         basicSearch += `).limit(${limit})`;
       }
-      // console.log(searchValue, 'searchValue')
-      // if (label) { basicSearch += `.hasLabel('${label}')`; }
-      // if (name) { basicSearch += `.has('${name}',${Number(value) ? value : `'${value}'`})`; }
       code = type === 'link' ?
         `edges=${basicSearch}\nnodes=${basicSearch}.bothV()\n` :
         `nodes=${basicSearch}
@@ -220,7 +237,29 @@ export default {
       code += '[nodes.toList(),edges.toList()]';
 
       const response = yield call(queryGremlinServer, {
-        code: !tableName || tableName === 'g' ? code : `g=${tableName}.traversal();${code}`,
+        code: !tableName || tableName === 'g' ? code : `g=ConfiguredGraphFactory.open('${tableName}').traversal();${code}`,
+        id,
+      });
+      if (response.status.code > 200) { message.error(`错误：${response.status.message}`); }
+      yield put({
+        type: 'setGraph',
+        payload: response,
+      });
+    },
+    *searchRouteGraph({ payload }, { call, put, select }) {
+      const { id, type2Label2Attrs, type2Attrs, tableName } =
+        yield select(state => state.graph_explore);
+      const { searchValue } = payload;
+      let basicSearch;
+      if (searchValue.routeRange === 1) {
+        basicSearch = `es=g.V().has('${Number(searchValue.beginRoute) ? 'account_id' : 'name'}', '${searchValue.beginRoute}').repeat(bothE().otherV().simplePath()).until(has('${Number(searchValue.endRoute) ? 'account_id' : 'name'}', '${searchValue.endRoute}').or().loops().is(${searchValue.routeNum})).has('${Number(searchValue.endRoute) ? 'account_id' : 'name'}', '${searchValue.endRoute}').path().by(id).limit(1).collectMany{it.grep(org.janusgraph.graphdb.relations.RelationIdentifier)};sg=g.E(es).subgraph(\'sg\').cap(\'sg\').next();sgt=sg.traversal();[sg.traversal().V().toList(),sg.traversal().E().toList()]`;
+      // } else if (searchValue.routeRange === 2) {
+      } else if (searchValue.routeRange === 3) {
+        basicSearch = `es=g.V().has('${Number(searchValue.beginRoute) ? 'account_id' : 'name'}', '${searchValue.beginRoute}').repeat(bothE().otherV().simplePath()).until(has('${Number(searchValue.endRoute) ? 'account_id' : 'name'}', '${searchValue.endRoute}').or().loops().is(${searchValue.routeNum})).has('${Number(searchValue.endRoute) ? 'account_id' : 'name'}', '${searchValue.endRoute}').path().by(id).collectMany{it.grep(org.janusgraph.graphdb.relations.RelationIdentifier)};sg=g.E(es).subgraph(\'sg\').cap(\'sg\').next();sgt=sg.traversal();[sg.traversal().V().toList(),sg.traversal().E().toList()]`;
+      }
+      const code = basicSearch;
+      const response = yield call(queryGremlinServer, {
+        code: !tableName || tableName === 'g' ? code : `g=ConfiguredGraphFactory.open('${tableName}').traversal();${code}`,
         id,
       });
       if (response.status.code > 200) { message.error(`错误：${response.status.message}`); }

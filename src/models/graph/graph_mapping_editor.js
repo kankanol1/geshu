@@ -9,7 +9,7 @@ const DIAGRAM_NAME = 'graph_mapping';
 function inverseMap(map) {
   const inversedMap = {};
   for (const key in map) {
-    if (key && map[key]) { inversedMap[map[key]] = key; }
+    if (key && map[key] && key !== '__check' && key !== 'check') { inversedMap[map[key]] = key; }
   }
   return inversedMap;
 }
@@ -51,23 +51,23 @@ function formBackendMappingData(diagram) {
           ...dataMap,
           edge: toNodeData.text,
           edgeLeft: {
-            edgeField: linkArr[i].start.column,
+            edgeField: linkArr[i].start ? linkArr[i].start.column : '',
             vertex: startNodeData.text,
-            vertexField: linkArr[i].start.nodeAttr,
+            vertexField: linkArr[i].start ? linkArr[i].start.nodeAttr : '',
           },
           edgeRight: {
-            edgeField: linkArr[i].end.column,
+            edgeField: linkArr[i].end ? linkArr[i].end.column : '',
             vertex: endNodeData.text,
-            vertexField: linkArr[i].end.nodeAttr,
+            vertexField: linkArr[i].end ? linkArr[i].end.nodeAttr : '',
           },
         });
       } else {
         const { attrList } = toNodeData;
-        const pkField = attrList.find((o) => { return o.pk === '1'; });
+        const pkField = attrList.filter(o => o.pk === '1').map(o => o.name).join(',');
         mappingData.vertexMaps.push({
           ...dataMap,
           vertex: toNodeData.text,
-          pk: pkField.name,
+          pk: pkField,
         });
       }
     }

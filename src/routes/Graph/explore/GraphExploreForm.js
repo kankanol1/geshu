@@ -100,7 +100,7 @@ export default class GraphExploreForm extends Component {
         searchListLinkNow[index].renderAttrs.linkType = this.props.type2Label2Attrs.linkType[value] || [];// eslint-disable-line
         searchListLinkNow[index].renderAttrs.link = this.props.type2Label2Attrs.link[value] || [];// eslint-disable-line
       } else if (key === 'attr') {
-        searchListLinkNow[index].renderAttrs.node.map((item, indexs) => {
+        searchListLinkNow[index].renderAttrs.link.map((item, indexs) => {
           if (item === value) {
             searchListLinkNow[index].selectIndex = indexs;
           }
@@ -144,6 +144,15 @@ export default class GraphExploreForm extends Component {
         searchValue,
         limit: this.state.limit,
         type,
+      },
+    });
+  }
+  searchRouteData = () => {
+    const searchValue = this.state.searchRouteList;
+    this.props.dispatch({
+      type: 'graph_explore/searchRouteGraph',
+      payload: {
+        searchValue,
       },
     });
   }
@@ -424,7 +433,7 @@ export default class GraphExploreForm extends Component {
                 <Radio className={styles.radioStyle} value={2}>所有最短路径</Radio>
                 <Radio className={styles.radioStyle} value={3}>所有路径</Radio>
               </RadioGroup>
-              <Button type="primary" icon="search" style={{ width: '100%', marginTop: 10, marginBottom: 20, float: 'left' }} onClick={this.searchData.bind({}, 'link')}>搜索</Button>
+              <Button type="primary" icon="search" style={{ width: '100%', marginTop: 10, marginBottom: 20, float: 'left' }} onClick={this.searchRouteData.bind({}, 'link')}>搜索</Button>
               <div className={styles.change} onClick={this.changeRoute}>
                 <Icon type="swap" style={{ fontSize: 30, transform: 'rotate(90deg)' }} />
               </div>

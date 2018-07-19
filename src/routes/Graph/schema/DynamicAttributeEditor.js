@@ -1,38 +1,58 @@
 import React, { Component } from 'react';
-import { Input, Button, Select, Radio, Row, Col, Tooltip, Icon } from 'antd';
+import { Input, Button, Select, Checkbox, Row, Col, Tooltip, Icon } from 'antd';
 import styles from '../Inspectors.less';
 
-const RadioGroup = Radio.Group;
+const CheckboxGroup = Checkbox.Group;
 const dataTypes = ['String', 'Character', 'Boolean', 'Byte', 'Short', 'Integer', 'Long', 'Float', 'Double', 'Date', 'Geoshape', 'UUID'];
 const cardinalityTypes = ['SINGLE', 'LIST', 'SET'];
 export default class DynamicAttributeEditor extends Component {
   state = {
-    pkIndex: -1,
+    pkArr: [],
   }
   componentWillMount() {
-    const pkIndex = this.props.attrList.findIndex((o) => { return o.pk === '1'; });
+    const pkArr = [];
+    this.props.attrList.forEach((o, ind) => {
+      if (o.pk === '1') {
+        pkArr.push(ind);
+      }
+    });
     this.setState({
-      pkIndex,
+      pkArr,
     });
   }
   componentWillReceiveProps(nextProps) {
-    const pkIndex = nextProps.attrList.findIndex((o) => { return o.pk === '1'; });
+    const pkArr = [];
+    nextProps.attrList.forEach((o, ind) => {
+      if (o.pk === '1') {
+        pkArr.push(ind);
+      }
+    });
     this.setState({
-      pkIndex,
+      pkArr,
     });
   }
-  onChangePK = (e) => {
-    this.setState({
-      pkIndex: e.target.value,
-    });
-    const pkIndex = this.props.attrList.findIndex((o) => { return o.pk === '1'; });
-    this.props.attrList[pkIndex].pk = '0';
-    this.props.attrList[e.target.value].pk = '1';
+  onChangePK = (values) => {
+    const oldValues = [...this.state.pkArr];
+    if (values.length > 0) {
+      oldValues.forEach((o) => {
+        this.props.attrList[o].pk = '0';
+      });
+      values.forEach((o) => {
+        this.props.attrList[o].pk = '1';
+      });
+      this.setState({
+        pkArr: [...values],
+      });
+    } else {
+      this.setState({
+        pkArr: [...oldValues],
+      });
+    }
   }
   render() {
     return (
       <div>
-        <RadioGroup onChange={this.onChangePK} value={this.state.pkIndex} style={{ width: '100%' }} >
+        <CheckboxGroup onChange={this.onChangePK} value={this.state.pkArr} style={{ width: '100%' }} >
           <div style={{ marginBottom: `${this.props.attrList.length > 0 ? 2 : 10}px`, textAlign: 'center' }}>
             <Row gutter={2}>
               {this.props.isNode ? (<Col span={2}><strong>必填</strong></Col>) : null}
@@ -55,7 +75,7 @@ export default class DynamicAttributeEditor extends Component {
                     {
                       this.props.isNode ? (
                         <Col span={2} style={{ textAlign: 'center' }}>
-                          <Radio value={index} />
+                          <Checkbox value={index} />
                         </Col>
                       ) : null
                     }
@@ -122,7 +142,7 @@ export default class DynamicAttributeEditor extends Component {
               );
             })
           }
-        </RadioGroup>
+        </CheckboxGroup>
         <div className={styles.attrItem}>
           <Button type="dashed" style={{ width: '100%' }} onClick={this.props.onAddAttr} icon="plus">
             添加

@@ -4,6 +4,7 @@ import { Layout, Row, Col, Menu, Icon, Modal, Spin } from 'antd';
 // import FileSelector from './FileSelector';
 import MappingInspector from './MappingInspector';
 import StorageFilePicker from '../../../routes/Storage/StorageFilePicker';
+import graphUtils from '../../../utils/graph_utils';
 
 const { confirm } = Modal;
 class MappingDesigner extends React.PureComponent {
@@ -23,6 +24,93 @@ class MappingDesigner extends React.PureComponent {
       },
     });
   }
+  getAllMappingCheckResult = () => {
+    const checkResult = {
+      msgs: [],
+      check: '0',
+    };
+    const myDiagram = graphUtils.getDiagram(this.props.diagramName);
+    const linkArr = myDiagram.model.linkDataArray;
+    for (const i in linkArr) {
+      if (linkArr[i].category === undefined) {
+        const linkObj = myDiagram.findLinkForData(linkArr[i]);
+        const itemResult = this.checkMappingValue(myDiagram, linkObj);
+        if (itemResult.check === '1') {
+          checkResult.check = '1';
+          checkResult.msgs.push(itemResult.msg);
+        }
+      }
+    }
+    return checkResult;
+  }
+  checkMappingValue = (diagram, inspectedObject) => {
+    let checkData = {};
+    if (inspectedObject &&
+      inspectedObject.data &&
+      inspectedObject.data.check) {
+      checkData = { ...inspectedObject.data.check };
+    }
+    let mappingData = {};
+    if (inspectedObject &&
+      inspectedObject.data &&
+      inspectedObject.data.mapping) {
+      mappingData = { ...inspectedObject.data.mapping };
+    }
+    const { originType } = inspectedObject.toNode.data;
+    const keyNames = [];
+    if (originType !== 'link') {
+      const { attrList } = inspectedObject.toNode.data;
+      attrList.filter(o => o.pk === '1').map(o => o.name).forEach((field) => {
+        let check = '1';
+        Object.keys(mappingData).forEach((key) => {
+          if (mappingData[key] === field) {
+            check = '0';
+          }
+        });
+        if (check === '1') {
+          checkData.check = '1';
+          keyNames.push(field);
+        }
+      });
+      if (checkData.check === '1') {
+        checkData.msg = `${inspectedObject.toNode.data.text}节点未配置${keyNames.join(',')}属性`;
+      } else {
+        checkData.msg = '';
+      }
+    } else if (inspectedObject.data.start
+      && inspectedObject.data.end
+      && inspectedObject.data.start.column
+      && inspectedObject.data.end.column
+      && inspectedObject.data.start.column.split(',').filter(o => o === '').length === 0
+      && inspectedObject.data.end.column.split(',').filter(o => o === '').length === 0
+    ) {
+      checkData.check = '0';
+      checkData.msg = '';
+    } else {
+      let errorMsg = '';
+      if (inspectedObject.data.start.column.split(',').filter(o => o === '').length > 0) {
+        errorMsg = '起点：';
+        inspectedObject.data.start.column.split(',').forEach((o, index) => {
+          if (o === '') {
+            errorMsg = `${errorMsg}${inspectedObject.data.start.nodeAttr.split(',')[index]}，`;
+          }
+        });
+      }
+      if (inspectedObject.data.end.column.split(',').filter(o => o === '').length > 0) {
+        errorMsg = `${errorMsg}终点：`;
+        inspectedObject.data.end.column.split(',').forEach((o, index) => {
+          if (o === '') {
+            errorMsg = `${errorMsg}${inspectedObject.data.end.nodeAttr.split(',')[index]}，`;
+          }
+        });
+      }
+      checkData.check = '1';
+      checkData.msg = `${inspectedObject.toNode.data.text}未配置${errorMsg}`;
+    }
+    diagram.model.setDataProperty(inspectedObject.data, 'check', checkData);
+    return checkData;
+  }
+
   filterOption = (inputValue, option) => {
     return option.name.indexOf(inputValue) > -1;
   }
@@ -51,8 +139,7 @@ class MappingDesigner extends React.PureComponent {
   }
   render() {
     const { loading } = this.props;
-    const { projectId } = this.props.id;
-
+    const { id: projectId } = this.props.match.params;
     return (
       <Spin spinning={loading} tip="加载中...">
         <Layout style={{ padding: '0', height: '100%' }} theme="light">
@@ -108,6 +195,11 @@ class MappingDesigner extends React.PureComponent {
             </Menu.Item>
             <Menu.Item>
               <a onClick={() => {
+                  const checkResult = this.getAllMappingCheckResult();
+                  if (checkResult.check === '1') {
+                    alert(`运行失败,错误信息如下：${checkResult.msgs.join('，')}`);
+                    return;
+                  }
                   const self = this;
                   confirm({
                     title: '确定开始导入数据？',
@@ -154,7 +246,10 @@ class MappingDesigner extends React.PureComponent {
                 }
               }
               >
-                <MappingInspector />
+                <MappingInspector
+                  projectId={projectId}
+                  checkMappingValue={this.checkMappingValue}
+                />
               </div>
             </Col>
           </Row>

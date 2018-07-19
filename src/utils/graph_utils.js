@@ -147,6 +147,15 @@ const geoFunc = (geoname) => {
   geo = go.Geometry.parse(geo, true); // fill each geometry
   return geo;
 };
+const checkLinkColorFunc = (v) => {
+  return v.check === '1' ? 'red' : 'grey';
+};
+const checkLinkTextFunc = (v) => {
+  if (v.check === '1' && v.msg) {
+    return v.msg;
+  }
+  return '';
+};
 
 util.initMappingDiagram = (graphContainer, graphJson, needTransfer) => {
   const layout = $(go.ForceDirectedLayout, { randomNumberGenerator: null });
@@ -227,14 +236,27 @@ util.initMappingDiagram = (graphContainer, graphJson, needTransfer) => {
         curve: go.Link.Bezier,
       },
       $(go.Shape,
-        { stroke: 'grey', strokeWidth: 2 }),
+        { stroke: 'red', strokeWidth: 2 },
+        new go.Binding('stroke', 'check', checkLinkColorFunc)),
       $(go.Shape,
         {
-          fill: 'grey',
+          fill: 'red',
           stroke: null,
           toArrow: 'Standard',
           scale: 2.5,
-        })
+        },
+        new go.Binding('fill', 'check', checkLinkColorFunc)),
+      $(go.TextBlock,
+        {
+          font: '10pt Verdana, sans-serif',
+          editable: false,
+          stroke: 'red',
+          text: '未配置属性',
+          alignment: go.Spot.TopCenter,
+          alignmentFocus: go.Spot.BottomCenter,
+        },
+        new go.Binding('text', 'check', checkLinkTextFunc),
+        new go.Binding('stroke', 'check', checkLinkColorFunc))
     );
   myDiagram.linkTemplateMap.add('readOnly',
     $(go.Link,
@@ -311,6 +333,42 @@ util.getNodeProps = (diagram, key) => {
     }
   }
   return propsArr;
+};
+util.getNodePKProps = (diagram, key) => {
+  const propsArr = [];
+  const pkResult = {
+    vertext: '',
+    props: [],
+  };
+  if (!key) {
+    for (const i in diagram.model.nodeDataArray) {
+      if (diagram.model.nodeDataArray[i].attrList) {
+        if (diagram.model.nodeDataArray[i].text) {
+          pkResult.vertex = diagram.model.nodeDataArray[i].text;
+        }
+        for (const j in diagram.model.nodeDataArray[i].attrList) {
+          if (diagram.model.nodeDataArray[i].attrList[j].name
+            && propsArr.indexOf(diagram.model.nodeDataArray[i].attrList[j].name) < 0) {
+            propsArr.push(diagram.model.nodeDataArray[i].attrList[j]);
+          }
+        }
+      }
+    }
+  } else {
+    const node = diagram.findNodeForKey(key);
+    if (node.data && node.data.attrList) {
+      if (node.data.text) {
+        pkResult.vertex = node.data.text;
+      }
+      for (const i in node.data.attrList) {
+        if (propsArr.indexOf(node.data.attrList[i].name) < 0) {
+          propsArr.push(node.data.attrList[i]);
+        }
+      }
+    }
+  }
+  pkResult.props = [...propsArr];
+  return pkResult;
 };
 util.getLinkProps = (diagram) => {
   const propsArr = [];

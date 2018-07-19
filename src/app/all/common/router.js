@@ -218,6 +218,21 @@ export const getRouterData = (app) => {
     '/graph/explore/detail/:id': {
       component: dynamicWrapper(app, ['graph/graph_explore'], () => import('../../../routes/Graph/explore/GraphExplore')),
     },
+    '/graph/mapper/not_create/:id': {
+      component: dynamicWrapper(app, ['graph/graph_mapping_editor'], () => import('../../../routes/Graph/schema/NotExecute')),
+    },
+    '/graph/query/not_create/:id': {
+      component: dynamicWrapper(app, ['graph/graph_mapping_editor'], () => import('../../../routes/Graph/schema/NotExecute')),
+    },
+    '/graph/explore/not_create/:id': {
+      component: dynamicWrapper(app, ['graph/graph_mapping_editor'], () => import('../../../routes/Graph/schema/NotExecute')),
+    },
+    '/graph/query/not_data/:id': {
+      component: dynamicWrapper(app, ['graph/graph_mapping_editor'], () => import('../../../routes/Graph/schema/NotImportData')),
+    },
+    '/graph/explore/not_data/:id': {
+      component: dynamicWrapper(app, ['graph/graph_mapping_editor'], () => import('../../../routes/Graph/schema/NotImportData')),
+    },
     // '/user/:id': {
     //   component: dynamicWrapper(app, [], () => import('../routes/User/SomeComponent')),
     // },

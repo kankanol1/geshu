@@ -26,7 +26,7 @@ class GraphDesigner extends React.PureComponent {
       <Spin spinning={loading} tip="加载中...">
         <Layout theme="light">
           <Menu mode="horizontal">
-            <Menu.Item>
+            <Menu.Item style={{ display: `${(this.props.status === 'SCHEMA_EXECUTED' || this.props.status === 'DATA_UPLOADED') ? 'none' : 'inline-block'}` }}>
               <a onClick={() => {
                 this.props.dispatch({
                   type: 'graph_schema_editor/saveSchema',
@@ -55,6 +55,7 @@ class GraphDesigner extends React.PureComponent {
                     okText: '确定',
                     cancelText: '取消',
                     onOk() {
+                      self.props.status = 'SCHEMA_EXECUTED';
                       self.props.dispatch({
                         type: 'graph_schema_editor/saveSchema',
                         payload: 'execute',

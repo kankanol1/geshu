@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { Input, Row, Col, Checkbox, Tooltip, Icon, Select, Switch } from 'antd';
+import { Input, Row, Col, Checkbox, Tooltip, Icon, Select, Switch, Tag } from 'antd';
 import styles from '../Inspectors.less';
 import DynamicAttributeEditor from './DynamicAttributeEditor';
 import graphUtils from '../../../utils/graph_utils';
@@ -42,6 +42,7 @@ class ElementInspector extends Component {
       show: false,
     };
   }
+
   componentWillReceiveProps(newProp) {
     const diagram = graphUtils.getDiagram(this.props.diagramName);
     if (diagram) {
@@ -59,6 +60,12 @@ class ElementInspector extends Component {
         const data = getInspectedObjectData();
         data.show = true;
         data.isNode = graphUtils.isNode(currentInspectedObject);
+        if (!data.isNode) {
+          data.fromNodePK = currentInspectedObject.fromNode.data.attrList.filter(obj => obj.pk === '1');
+          data.fromNodeText = currentInspectedObject.fromNode.data.text;
+          data.toNodePK = currentInspectedObject.toNode.data.attrList.filter(obj => obj.pk === '1');
+          data.toNodeText = currentInspectedObject.toNode.data.text;
+        }
         this.setState(data);
       });
 
@@ -72,6 +79,17 @@ class ElementInspector extends Component {
       });
     }
   }
+  getInspectedObjectData = (inspectedObject) => {
+    let data;
+    if (inspectedObject && inspectedObject.data) {
+      data = { ...inspectedObject.data };
+    }
+    for (const key in defaultData) {
+      if (!data[key]) data[key] = defaultData[key];
+    }
+    if (!data.attrList) data.attrList = [];
+    return data;
+  }
   removeAttr(index) {
     this.state.attrList.splice(index, 1);
     setInspectedObjectData('attrList', this.state.attrList);
@@ -79,7 +97,11 @@ class ElementInspector extends Component {
   }
 
   addAttr() {
-    this.state.attrList.push({ name: '', type: 'String', cardinality: 'SINGLE', pk: '0' });
+    const defaultProp = { name: '', type: 'String', cardinality: 'SINGLE', pk: '0' };
+    if (this.state.attrList.length < 1) {
+      defaultProp.pk = '1';
+    }
+    this.state.attrList.push(defaultProp);
     setInspectedObjectData('attrList', this.state.attrList);
     this.setState({});
   }
@@ -99,7 +121,47 @@ class ElementInspector extends Component {
     if (!this.state.show) {
       return (<p style={{ textAlign: 'center', fontSize: '16px' }}>暂无选中元素</p>);
     }
-
+    let vertexConfig = (<div />);
+    if (!this.state.isNode) {
+      vertexConfig = (
+        <div style={{ marginBottom: '2px', textAlign: 'center', paddingLeft: '20px', paddingRight: '20px' }}>
+          <Row gutter={2} style={{ borderBottom: '1px dashed #ebedf0', paddingBottom: '10px' }} type="flex" justify="space-around" align="middle">
+            <Col span={6}><strong>起点</strong></Col>
+            <Col span={6}>
+              <strong>{this.state.fromNodeText}</strong>
+            </Col>
+            <Col span={12} style={{ textAlign: 'left' }}>
+              {
+                this.state.fromNodePK.map((attr) => {
+                  return (
+                    <Tag style={{ lineHeight: '28px', height: '30px', padding: '0 10px', marginBottom: '4px', marginTop: '2px' }}>
+                      {attr.name}
+                    </Tag>
+                  );
+                })
+              }
+            </Col>
+          </Row>
+          <Row gutter={2} style={{ paddingTop: '10px' }} type="flex" justify="space-around" align="middle">
+            <Col span={6}><strong>终点</strong></Col>
+            <Col span={6}>
+              <strong>{this.state.toNodeText}</strong>
+            </Col>
+            <Col span={12} style={{ textAlign: 'left' }}>
+              {
+                this.state.toNodePK.map((attr) => {
+                  return (
+                    <Tag style={{ lineHeight: '28px', height: '30px', padding: '0 10px', marginBottom: '2px', marginTop: '2px' }}>
+                      {attr.name}
+                    </Tag>
+                  );
+                })
+              }
+            </Col>
+          </Row>
+        </div>
+      );
+    }
     let attrConfig = (<div />);
     if (this.state.isNode) {
       attrConfig = (
@@ -216,7 +278,18 @@ class ElementInspector extends Component {
             {attrConfig}
           </div>
         </div>
-
+        {
+          !this.state.isNode ? (
+            <div className={styles.attrItem} style={{ width: '95%', marginTop: '10px' }}>
+              <div className={`${styles.attrBox} ${styles.markdown}`}>
+                <div className={styles.boxTitle}>
+                  <span>端点属性</span>
+                </div>
+                {vertexConfig}
+              </div>
+            </div>
+            ) : null
+        }
         <div className={styles.attrItem} style={{ width: '95%', marginTop: '10px' }}>
           <div className={`${styles.attrBox} ${styles.markdown}`}>
             <div className={styles.boxTitle}>
