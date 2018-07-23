@@ -8,8 +8,6 @@ import { updateCache, updateCacheForComponent, getComponentSize } from '../../ut
 const maxHistoryNum = 2;
 
 export default class Canvas {
-  dirty = false;
-
   /* ===== related with history management ==== */
   opHistory = [];
   currentOp = 0;
@@ -26,7 +24,7 @@ export default class Canvas {
    */
   offset={ x: 0, y: 0 };
 
-  updated = false;
+  updated = 0;
 
   apply(op) {
     if (!(op instanceof Operation)) {
@@ -38,10 +36,13 @@ export default class Canvas {
       this.currentOp = Math.min(this.currentOp, this.opHistory.length);
       this.opHistory.push(op);
       this.currentOp++;
-      this.dirty = true;
     }
-    this.updated = true;
     op.do(this);
+    this.notifyUpdate();
+  }
+
+  notifyUpdate() {
+    this.updated = (new Date()).getTime();
   }
 
   undo() {
@@ -50,6 +51,7 @@ export default class Canvas {
     this.currentOp--;
     const op = this.opHistory[this.currentOp];
     op.undo(this);
+    this.notifyUpdate();
   }
 
   redo() {
@@ -58,6 +60,7 @@ export default class Canvas {
     const op = this.opHistory[this.currentOp];
     this.currentOp++;
     op.do(this);
+    this.notifyUpdate();
   }
 
   canUndo() {
@@ -75,6 +78,7 @@ export default class Canvas {
     const { c, p } = updateCacheForComponent(component, this.offset);
     this.componentPositionCache[component.id] = c;
     this.componentSocketPositionCache[component.id] = p;
+    this.notifyUpdate();
   }
 
   moveComponent(component, x, y) {
@@ -83,11 +87,13 @@ export default class Canvas {
     const { c, p } = updateCacheForComponent(component, this.offset);
     this.componentPositionCache[component.id] = c;
     this.componentSocketPositionCache[component.id] = p;
+    this.notifyUpdate();
   }
 
   removeComponent(c) {
     this.updated = true;
     this.components = this.components.filter(i => i.id !== c.id);
+    this.notifyUpdate();
   }
 
   setOffset(x, y) {
@@ -97,6 +103,9 @@ export default class Canvas {
     const { componentDict, pointDict } = updateCache(this.components, this.offset);
     this.componentPositionCache = componentDict;
     this.componentSocketPositionCache = pointDict;
+    // component update.
+    this.components.forEach(c => c.notifyUpdate());
+    this.notifyUpdate();
   }
 
   getSelectionInRange(xMin, yMin, xMax, yMax) {
@@ -130,6 +139,7 @@ export default class Canvas {
   setSelection(selection) {
     this.updated = true;
     this.selection = selection;
+    this.notifyUpdate();
   }
 
   getAllSelection() {
@@ -168,10 +178,6 @@ export default class Canvas {
   getSelectedComponents() {
     const selectedCIds = this.selection.filter(i => i.type === 'component').map(i => i.id);
     return this.components.filter(c => selectedCIds.includes(c.id));
-  }
-
-  update() {
-    this.updated = false;
   }
 
   // getSelection(x, y, width, height) {

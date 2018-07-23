@@ -12,7 +12,7 @@ export default class Component {
   outputs = [];
   connections = [];
   // update means whether the position/display of this component is changed.
-  updated = false;
+  updated = 0;
 
   constructor(id, name, code, x, y, type, inputs, outputs, connections) {
     this.id = id;
@@ -26,24 +26,24 @@ export default class Component {
     this.connections = connections;
   }
 
+  notifyUpdate() {
+    this.updated = (new Date()).getTime();
+  }
+
   move(x, y) {
     this.x = x;
     this.y = y;
-    this.updated = true;
+    this.notifyUpdate();
   }
 
   addConnection(connection) {
-    this.updated = true;
     this.connections.push(connection);
+    this.notifyUpdate();
   }
 
   deleteConnection(connection) {
-    this.updated = true;
     this.connections = this.connections.filter(i => !i.equals(connection));
-  }
-
-  update() {
-    this.updated = false;
+    this.notifyUpdate();
   }
 
   static fromJson(json) {

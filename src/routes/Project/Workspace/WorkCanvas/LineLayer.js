@@ -7,7 +7,12 @@ const r = 10 + 6;
 
 class LineLayer extends React.Component {
   shouldComponentUpdate() {
+    // need to know the connected components.
     return true;
+    // if (!this.props.model) return true;
+    // const result = !this.lastUpdated || this.lastUpdated < this.props.model.updated;
+    // if (result) this.lastUpdated = this.props.model.updated;
+    // return result;
   }
 
   handleLineClick(e, params) {
