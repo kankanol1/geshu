@@ -8,7 +8,7 @@ import WorkspaceMenu from './Menu/WorkspaceMenu';
 const { Header } = Layout;
 @connect(({ workcanvas, loading }, { history }) => ({
   workcanvas,
-  loading: loading.models.work_canvas,
+  loading: loading.models.workcanvas,
   history,
 }))
 export default class WorkspaceEditor extends Component {

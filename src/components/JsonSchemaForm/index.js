@@ -93,6 +93,8 @@ export default class JsonSchemaForm extends React.PureComponent {
         noHtml5Validate
         // disable error list display.
         showErrorList
+        // no validation
+        // noValidate
         ErrorList={ErrorListTemplate}
         safeRenderCompletion
       >
