@@ -182,11 +182,11 @@ export default class SqlQueryTable extends Component {
                       queryResult.success ? (
                         <React.Fragment>
                           <ButtonGroup className={styles.buttonForTable}>
-                            <Button
+                            {/* <Button
                               onClick={() =>
                                 this.setState({ showVisualizationModal: true })}
                             ><Icon type="area-chart" />可视化
-                            </Button>
+                            </Button> */}
                             <Button><Icon type="download" />.csv</Button>
                           </ButtonGroup>
                           {displayTable}
@@ -208,7 +208,7 @@ export default class SqlQueryTable extends Component {
           </Tabs>
         </Card>
         {
-          this.renderVisualizationModal()
+          // this.renderVisualizationModal()
           }
       </React.Fragment>
     );

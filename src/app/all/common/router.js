@@ -133,12 +133,16 @@ export const getRouterData = (app) => {
       component: dynamicWrapper(app, [], () => import('../../../routes/Self/SelfManage')),
     },
 
+    // database
+    '/storage/dblist': {
+      component: dynamicWrapper(app, ['database'], () => import('../../../routes/Database/DatabaseList')),
+    },
     /* database */
-    '/database/query': {
+    '/storage/dbquery': {
       component: dynamicWrapper(app, [], () => import('../../../routes/Database/DatabaseQuery')),
     },
     /* center storage */
-    '/storage/list': {
+    '/storage/filelist': {
       component: dynamicWrapper(app, [], () => import('../../../routes/Storage/StorageList')),
     },
 
@@ -211,10 +215,6 @@ export const getRouterData = (app) => {
     },
     '/graph/detail/explore/:id': {
       component: dynamicWrapper(app, ['graph/graph_explore'], () => import('../../../routes/Graph/explore/GraphExplore')),
-    },
-    // database
-    '/database/list': {
-      component: dynamicWrapper(app, ['database'], () => import('../../../routes/Database/DatabaseList')),
     },
     // '/user/:id': {
     //   component: dynamicWrapper(app, [], () => import('../routes/User/SomeComponent')),
