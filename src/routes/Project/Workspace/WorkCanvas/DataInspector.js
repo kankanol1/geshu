@@ -1,6 +1,7 @@
 import React from 'react';
 import { Modal, Button, Col, Row, Select, Table, Spin } from 'antd';
 import { connect } from 'dva';
+import styles from './DataInspector.less';
 
 @connect(({ datainspector, loading }) => ({
   datainspector,
@@ -53,13 +54,15 @@ export default class DataInspector extends React.Component {
       const { schema } = data;
       table = (
         <Table
+          className={styles.table}
           style={{ marginTop: '10px' }}
           columns={schema &&
-              schema.map(i => ({ title: i.name, key: i.name, dataIndex: i.name }))}
+              schema.map(i => ({ width: 100, title: i.name, key: i.name, dataIndex: i.name }))}
           dataSource={data.data || []}
           scroll={{ x: schema && schema.length * 100, y: 400 }}
           pagination={false}
           loading={loading}
+          bordered
           size="small"
         />
       );
@@ -107,9 +110,17 @@ export default class DataInspector extends React.Component {
         )
       }
 
-        { loading ? <Spin /> : (
-          success ? table : <span style={{ color: 'red' }}>{message}</span>
+        <div className={styles.tableWrapper}>
+          { loading ? <Spin className={styles.notTable} /> : (
+          success ? table : (
+            <span
+              className={styles.notTable}
+              style={{ display: 'inline-block', color: 'red' }}
+            >{message}
+            </span>
+          )
         )}
+        </div>
       </Modal>
     );
   }
