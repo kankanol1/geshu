@@ -88,12 +88,14 @@ export const getRouterData = (app) => {
     '/project/workspace/editor/:id': {
       component: dynamicWrapper(app, [], () => import('../../../routes/Project/Workspace/WorkspaceEditor')),
     },
-    '/project/workspace/dataview/:id': {
-      component: dynamicWrapper(app, ['dataview/dataquery'], () => import('../../../routes/Project/Workspace/WorkspaceDataView')),
-    },
-    '/project/workspace/logview/:id': {
-      component: dynamicWrapper(app, [], () => import('../../../routes/Project/Workspace/WorkspaceLogView')),
-    },
+    // '/project/workspace/dataview/:id': {
+    //   component: dynamicWrapper(app, ['dataview/dataquery'],
+    // () => import('../../../routes/Project/Workspace/WorkspaceDataView')),
+    // },
+    // '/project/workspace/logview/:id': {
+    //   component: dynamicWrapper(app, [],
+    // () => import('../../../routes/Project/Workspace/WorkspaceLogView')),
+    // },
 
     /* model manage */
     '/models/list': {

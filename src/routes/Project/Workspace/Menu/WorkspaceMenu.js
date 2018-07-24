@@ -276,8 +276,8 @@ export default class WorkspaceMenu extends React.PureComponent {
           </SubMenu>
           <SubMenu title={<span><Icon type="code-o" />调试</span>}>
             <ScopeMenuItem scope="editor" env={env} key="validate" type="command" >验证</ScopeMenuItem>
-            <Menu.Item key="sampledata" >取样执行</Menu.Item>
-            <Menu.Item key="samplepipeline">执行至指定组件</Menu.Item>
+            {/* <Menu.Item key="sampledata" >取样执行</Menu.Item>
+            <Menu.Item key="samplepipeline">执行至指定组件</Menu.Item> */}
           </SubMenu>
           <SubMenu title={<span><Icon type="cloud-upload-o" />部署</span>}>
             <Menu.Item key="submit" type="command">提交运行</Menu.Item>

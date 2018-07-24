@@ -120,6 +120,11 @@ class PointLayer extends React.Component {
     e.preventDefault();
     // stop propagation to parent.
     e.stopPropagation();
+
+    // hide context menu if possible.
+    this.props.dispatch({
+      type: 'workcanvas/hideContextMenu',
+    });
   }
 
   handleMouseEnter(e, id) {

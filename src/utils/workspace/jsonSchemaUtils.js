@@ -24,6 +24,9 @@ const registeredSpecialUISchemas = {
   Column_Name_Pair: translateColumnMappingItemUISchema,
   Fixed_String_Array: translateColumnSelectCheckboxUISchema,
   Fixed_Column_Array: translateColumnSelectSelectorUISchema,
+
+  // expression.
+  Fixed_Boolean_Expr: translateBooleanExpressionUISchema,
 };
 
 /* fixed any */
@@ -119,6 +122,10 @@ function translateFixedIntUISchema(originJsonSchema, id, code, name, projectId) 
 
 function translateTunableIntUISchema(originJsonSchema, id, code, name, projectId) {
   return { 'ui:field': 'tunable_int' };
+}
+
+function translateBooleanExpressionUISchema(originJsonSchema, id, code, name, projectId) {
+  return { 'ui:field': 'boolean_expression_editor' };
 }
 
 /** ======== end translate switch schema ========== */

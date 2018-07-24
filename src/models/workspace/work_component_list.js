@@ -1,6 +1,8 @@
 import { fetchComponentList } from '../../services/componentAPI';
 import translateName from '../../config/ComponentNameMapping';
 
+const groupOrder = ['DataSource', 'ModelSource', 'Transformer', 'PStage', 'Stage', 'Predictor', 'Tuner', 'ModelSink', 'DataSink'];
+
 export default {
   namespace: 'work_component_list',
 
@@ -78,8 +80,19 @@ export default {
       const activekeys = data.map(
         (group) => { return group.key; }
       );
-      return Object.assign({}, { ...state,
-        ...{ state: { lastSync: Date.now() }, groups: data, allGroups: data, activekeys } });
+      const keyedGroup = {};
+      data.forEach((g) => { keyedGroup[g.key] = g; });
+      const orderedGroup = [];
+      // change order.
+      groupOrder.forEach(v => orderedGroup.push(keyedGroup[v]));
+      // end.
+      return Object.assign({},
+        { ...state,
+          state: { lastSync: Date.now() },
+          groups: orderedGroup,
+          allGroups: orderedGroup,
+          activekeys,
+        });
     },
 
     filterComponent(state, { payload }) {

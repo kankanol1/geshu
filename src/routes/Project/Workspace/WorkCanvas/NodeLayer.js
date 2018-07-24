@@ -100,6 +100,10 @@ class NodeLayer extends React.Component {
       this.setState({ componentCache: [] });
       this.props.onCanvasUpdated(canvas);
     }
+    // hide context menu if possible.
+    this.props.dispatch({
+      type: 'workcanvas/hideContextMenu',
+    });
   }
 
   handleDrag(e, draggableData) {

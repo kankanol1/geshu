@@ -233,7 +233,7 @@ const allComponents = {
     type: 'object',
     properties: {
       joinExpr: {
-        title: 'Fixed_String',
+        title: 'Fixed_Boolean_Expr',
         type: 'object',
         properties: {
           value: {

@@ -190,6 +190,10 @@ export default class WorkCanvas extends React.Component {
         stopY: 0,
       } });
     }
+    // cancel context menu if event caught.
+    this.props.dispatch({
+      type: 'workcanvas/hideContextMenu',
+    });
   }
 
   handleDragStart(e) {

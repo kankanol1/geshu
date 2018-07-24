@@ -24,6 +24,10 @@ class LineLayer extends React.Component {
       // trigger update.
       this.props.onCanvasUpdated(canvas);
     }
+    // hide context menu if possible.
+    this.props.dispatch({
+      type: 'workcanvas/hideContextMenu',
+    });
   }
 
   render() {

@@ -45,12 +45,12 @@ class ContextMenu extends React.PureComponent {
           <Menu.Item key="settings" style={style}>
             查看设置
           </Menu.Item>
-          <Menu.Item key="1" style={style}>
+          {/* <Menu.Item key="1" style={style}>
             执行到此处
           </Menu.Item>
           <Menu.Item key="2" style={style}>
             从此处开始执行
-          </Menu.Item>
+          </Menu.Item> */}
           <Menu.Item key="inspect" style={style}>
             数据预览
           </Menu.Item>

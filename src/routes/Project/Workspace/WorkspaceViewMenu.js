@@ -18,9 +18,9 @@ export default class WorkspaceViewMenu extends Component {
         <Menu.Item key="editor">
           <Link to={`../editor/${projectId}`}><Icon type="codepen" />设计器</Link>
         </Menu.Item>
-        <Menu.Item key="dataview">
+        {/* <Menu.Item key="dataview">
           <Link to={`../dataview/${projectId}`}><Icon type="table" />数据视图</Link>
-        </Menu.Item>
+        </Menu.Item> */}
         {/* <Menu.Item key="logview">
           <Link to={`../logview/${projectId}`}><Icon type="profile" />日志查看</Link>
         </Menu.Item> */}
