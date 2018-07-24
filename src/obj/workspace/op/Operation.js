@@ -1,7 +1,6 @@
 export default class Operation {
   constructor() {
-    if (Object.getPrototypeOf(this.constructor) === Operation
-        || this.constructor === Operation) {
+    if (this.constructor === Operation) {
       throw new TypeError('cannot construct operation directly');
     }
     if (this.do === undefined || this.undo === undefined) {

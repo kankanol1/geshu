@@ -34,7 +34,7 @@ class NodeLayer extends React.Component {
     if (!this.props.model) return true;
     const result = !this.lastUpdated || this.lastUpdated < this.props.model.updated;
     if (result) this.lastUpdated = this.props.model.updated;
-    return result;
+    return true;
   }
 
   handleDragStart(e) {
