@@ -244,14 +244,14 @@ export default {
       });
     },
 
-    *saveProject({ payload }, { put, call, select }) {
+    *saveProject({ _ }, { put, call, select }) {
       const currentState = yield select(state => state.workcanvas);
       if (!currentState.state.dirty) {
         message.info('保存成功');
         return;
       }
       const response = yield call(saveProject,
-        { id: payload.id, payload: { components: currentState.canvas.toJson() } }
+        { id: currentState.state.projectId, payload: { components: currentState.canvas.toJson() } }
       );
       if (response.success) {
         message.info('保存成功');

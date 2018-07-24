@@ -49,7 +49,7 @@ export default class WorkCanvas extends React.Component {
   }
 
   componentWillMount() {
-    const { dispatch, match } = this.props;
+    const { dispatch } = this.props;
     // delete selection.
     key('delete, backspace', (e) => {
       e.preventDefault();
@@ -69,9 +69,6 @@ export default class WorkCanvas extends React.Component {
       e.preventDefault();
       return dispatch({
         type: 'workcanvas/saveProject',
-        payload: {
-          id: match.params.id,
-        },
       });
     });
     // undo
