@@ -14,10 +14,10 @@ export default class ExpressionEditor extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      formData: { ...props.formData },
+      formData: props.formData,
       modalVisible: false,
       mode: 'advance',
-      sql: undefined,
+      sql: props.formData.value,
       editorError: undefined,
     };
   }
@@ -25,6 +25,7 @@ export default class ExpressionEditor extends React.Component {
   componentWillReceiveProps(props) {
     this.setState({
       formData: props.formData,
+      sql: props.formData.value,
     });
   }
 

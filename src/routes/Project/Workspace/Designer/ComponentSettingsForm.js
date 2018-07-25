@@ -13,76 +13,55 @@ import styles from './ComponentSettingsForm.less';
 
 @connect(({ work_component_settings }) => ({
   work_component_settings,
-}), null, null, { withRef: true })
+}))
 export default class ComponentSettingsForm extends React.PureComponent {
-  constructor(props) {
-    super(props);
-    const { currentComponent, formDataDict } = props.work_component_settings;
-    this.state = {
-      dirty: false,
-      displayFormData: formDataDict[currentComponent],
-    };
-  }
-
-  isDirty() {
-    return this.state.dirty;
-  }
-
-  submitForm(callback) {
-    if (callback) {
-      this.lastCallback = callback;
-    }
+  submitForm() {
     this.submitButton.click();
   }
 
   handleFormSubmit(value) {
-    const { formData } = value;
-    const { work_component_settings, dispatch, match } = this.props;
-    const { currentComponent } = work_component_settings;
-
-    this.setState({
-      dirty: false,
-      displayFormData: formData,
-    });
-
+    const { dispatch } = this.props;
     dispatch({
-      type: 'work_component_settings/saveComponentSettings',
+      type: 'work_component_settings/saveCurrentComponentSettings',
       payload: {
-        projectId: match.params.id,
-        componentId: currentComponent,
-        formData,
+        id: this.props.match.params.id,
       },
-      callback: this.lastCallback,
     });
-    // reset last callback.
-    this.lastCallback = undefined;
   }
 
   handleFormChange(value) {
-    this.setState({ dirty: true, displayFormData: value.formData });
+    this.props.dispatch({
+      type: 'work_component_settings/setDisplayFormValue',
+      payload: {
+        dirty: true,
+        displayFormData: value.formData,
+      },
+    });
   }
 
   resetForm() {
-    const { currentComponent, formDataDict } = this.props.work_component_settings;
-    this.setState({
-      dirty: false,
-      displayFormData: formDataDict[currentComponent],
+    const { currentComponent } = this.props.work_component_settings;
+    this.props.dispatch({
+      type: 'work_component_settings/setFormDataForId',
+      id: currentComponent,
     });
   }
 
   clearForm() {
     const { currentComponent, formDataDict } = this.props.work_component_settings;
-    const dirty = formDataDict[currentComponent] !== undefined;
-    this.setState({
-      dirty,
-      displayFormData: undefined,
+    this.props.dispatch({
+      type: 'work_component_settings/setDisplayFormValue',
+      payload: {
+        dirty: formDataDict[currentComponent] !== undefined,
+        displayFormData: undefined,
+      },
     });
   }
 
   render() {
     const { jsonSchemaDict, uiSchemaDict, currentComponent,
-      componentSettings } = this.props.work_component_settings;
-    const { displayFormData, dirty } = this.state;
+      componentSettings, display } = this.props.work_component_settings;
+    const { displayFormData, dirty } = display;
 
     const jsonSchema = jsonSchemaDict[currentComponent];
     const uiSchema = uiSchemaDict[currentComponent];

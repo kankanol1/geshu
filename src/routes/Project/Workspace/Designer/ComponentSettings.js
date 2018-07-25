@@ -6,9 +6,6 @@ import ComponentSettingsForm from './ComponentSettingsForm';
 import translateName from '../../../../config/ComponentNameMapping';
 import styles from './WorkArea.less';
 
-const { Sider } = Layout;
-const { Panel } = Collapse;
-
 @connect(({ work_component_settings, loading }) => ({
   work_component_settings,
   loading: loading.models.work_component_settings,
@@ -19,13 +16,20 @@ export default class ComponentSettings extends React.PureComponent {
       this.props.dispatch({
         type: 'work_component_settings/resetCurrentComponent',
       });
-    const form = this.settingsForm.getWrappedInstance();
-    if (form && form.isDirty()) {
+    const { dirty } = this.props.work_component_settings.display;
+    const { dispatch, match: { params: { id: projectId } } } = this.props;
+    if (dirty) {
       Modal.confirm({
         title: '关闭确认',
         content: '有未保存更改，是否保存？',
         onOk() {
-          form.submitForm(closeSettingsPane);
+          dispatch({
+            type: 'work_component_settings/saveCurrentComponentSettings',
+            payload: {
+              id: projectId,
+            },
+            callback: () => closeSettingsPane(),
+          });
         },
         onCancel() {
           closeSettingsPane();
@@ -97,7 +101,6 @@ export default class ComponentSettings extends React.PureComponent {
               <ComponentSettingsForm
                 match={this.props.match}
                 style={{ paddingTop: '20px', background: '#f5f5f5', height: '100%', zIndex: 200 }}
-                ref={(ref) => { this.settingsForm = ref; }}
               />
             )
           )

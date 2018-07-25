@@ -1,5 +1,5 @@
 import React from 'react';
-import { Spin } from 'antd';
+import { Spin, Modal } from 'antd';
 import { connect } from 'dva';
 import { DraggableCore } from 'react-draggable';
 import key from 'keymaster';
@@ -15,13 +15,11 @@ import DraggingSelectionView from './DraggingSelectionView';
 import CanvasDraggingMove from '../../../../obj/workspace/op/CanvasDraggingMove';
 import { addEvent } from '../../../../utils/utils';
 import SelectionChange from '../../../../obj/workspace/op/SelectionChange';
-import ComponentDelete from '../../../../obj/workspace/op/ComponentDelete';
-import ConnectionDelete from '../../../../obj/workspace/op/ConnectionDelete';
-import BatchOperation from '../../../../obj/workspace/op/BatchOperation';
 
 const a = 0;
-@connect(({ workcanvas, loading }) => ({
+@connect(({ workcanvas, work_component_settings, loading }) => ({
   workcanvas,
+  work_component_settings,
   loading,
 }))
 export default class WorkCanvas extends React.Component {
@@ -211,24 +209,46 @@ export default class WorkCanvas extends React.Component {
   }
 
   handleSettingsClicked(component) {
-    const { state: { projectId } } = this.props.workcanvas;
-    const newSelection = [{
-      type: 'component',
-      id: component.id,
-    }];
-    this.props.dispatch({
-      type: 'workcanvas/canvasSelectionChange',
-      payload: {
-        newSelection,
-      },
-    });
-    this.props.dispatch({
-      type: 'work_component_settings/displayComponentSetting',
-      payload: {
-        component,
-        projectId,
-      },
-    });
+    const { dispatch, workcanvas, work_component_settings } = this.props;
+    const { state: { projectId } } = workcanvas;
+    const { currentComponent, display: { dirty } } = work_component_settings;
+    if (component.id !== currentComponent) {
+      // only process when it's not the same.
+      const performChange = () => {
+        const newSelection = [{
+          type: 'component',
+          id: component.id,
+        }];
+
+        this.props.dispatch({
+          type: 'workcanvas/canvasSelectionChange',
+          payload: {
+            newSelection,
+          },
+        });
+        this.props.dispatch({
+          type: 'work_component_settings/displayComponentSetting',
+          payload: {
+            component,
+            projectId,
+          },
+        });
+      };
+      if (dirty) {
+        Modal.confirm({
+          title: '修改确认',
+          content: '有未保存更改，是否确认切换设置组件？ 切换后未保存改动将无法恢复',
+          onOk() {
+            performChange();
+          },
+          onCancel() {
+            // do nothing.
+          },
+        });
+      } else {
+        performChange();
+      }
+    }
     this.props.dispatch({
       type: 'workcanvas/hideContextMenu',
     });
@@ -311,6 +331,7 @@ export default class WorkCanvas extends React.Component {
                     positionDict={componentSocketPositionCache}
                     componentDict={componentPositionCache}
                     onCanvasUpdated={c => this.triggerUpdate(c)}
+                    onNodeClicked={c => this.handleSettingsClicked(c)}
                     // selection={selection}
                     projectId={projectId}
                     // offset={offset}

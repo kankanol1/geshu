@@ -70,25 +70,9 @@ class NodeLayer extends React.Component {
     // if not dragged, perform selection change.
     if (!this.hasDrag) {
       // change selection.
-      const { projectId } = this.props;
-      const component = this.props.model;
-      const newSelection = [{
-        type: 'component',
-        id: component.id,
-      }];
-      this.props.dispatch({
-        type: 'workcanvas/canvasSelectionChange',
-        payload: {
-          newSelection,
-        },
-      });
-      this.props.dispatch({
-        type: 'work_component_settings/displayComponentSetting',
-        payload: {
-          component,
-          projectId,
-        },
-      });
+      if (this.props.onNodeClicked) {
+        this.props.onNodeClicked(this.props.model);
+      }
     } else {
       const { canvas } = this.props;
       const { startX, startY, stopX, stopY } = this.state.draggingState;

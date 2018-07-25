@@ -28,7 +28,15 @@ export default {
     formDataDict: {
 
     },
+
+    /* for change selection */
     currentComponent: undefined,
+
+    /* for managing display */
+    display: {
+      dirty: false,
+      displayFormData: undefined,
+    },
   },
 
   reducers: {
@@ -68,7 +76,7 @@ export default {
       const { componentId, formData } = payload;
       const { formDataDict } = state;
       formDataDict[componentId] = formData;
-      return { ...state, formDataDict };
+      return { ...state, formDataDict, display: { dirty: false, displayFormData: formData } };
     },
 
     initSettings(state, { payload }) {
@@ -87,6 +95,23 @@ export default {
         delete formDataDict[id];
       });
       return { ...state, uiSchemaDict, jsonSchemaDict, formDataDict, componentSettings };
+    },
+
+    setFormDataForId(state, { id }) {
+      return { ...state,
+        display: {
+          dirty: false, displayFormData: state.formDataDict[id],
+        } };
+    },
+
+    setDisplayFormValue(state, { payload }) {
+      return {
+        ...state,
+        display: {
+          dirty: true,
+          displayFormData: payload.displayFormData,
+        },
+      };
     },
   },
 
@@ -134,17 +159,24 @@ export default {
           projectId,
         });
       }
+      // extract form data.
+      yield put({
+        type: 'setFormDataForId',
+        id: component.id,
+      });
     },
 
-    *saveComponentSettings({ payload, callback }, { put, call }) {
-      const { projectId, componentId, formData } = payload;
+    *saveCurrentComponentSettings({ payload, callback }, { select, put, call }) {
+      const projectId = payload.id;
+      const { currentComponent, display: { displayFormData } } =
+        yield select(state => state.work_component_settings);
       // save it locally first.
       yield put({
         type: 'saveComponentSettingsInMemory',
         payload,
       });
       const response = yield call(saveComponentSettings,
-        { id: projectId, component: componentId, payload: formData });
+        { id: projectId, component: currentComponent, payload: displayFormData });
       if (response.success) {
         // message.info(response.message);
         yield put({
