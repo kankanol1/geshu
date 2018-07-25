@@ -1,0 +1,26 @@
+.expressionModal {
+  padding: 0;
+}
+
+// .modeWrapper {
+//   // height: 600px;
+// }
+
+.tableTitle {
+  & :global(.ant-card-head-title) {
+    padding: 4px;
+    font-size: 14px;
+    line-height: 36px;
+  }
+
+  & :global(.ant-card-head) {
+    line-height: 36px;
+  }
+}
+
+:global {
+  .CodeMirror-hints {
+    // set z-index to the max to display the hints.
+    z-index: 10000;
+  }
+}

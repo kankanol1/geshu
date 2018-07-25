@@ -80,39 +80,25 @@ const projectInfo = {
   createdAt: '2018-07-13 20:17:16',
   components: [
     {
-      outputs: [
-        {
-          hint: 'Model',
-          x: 1,
-          y: 0.5,
-          id: 'o1',
-          label: 'model',
-          type: 'Model',
-        },
-      ],
-      code: 'TokenizerStage',
-      inputs: [
-        {
-          connects: [
-            'Model',
-            'Dataset',
-          ],
-          hint: 'all',
-          x: 3,
-          y: 0.5,
-          id: 'i1',
-          label: 'all',
-        },
-      ],
-      name: '分词',
       x: 455,
       y: 414,
       id: '分词15315274966',
+      name: '分词',
+      code: 'TokenizerStage',
       type: 'Stage',
-      connectFrom: [
+      inputs: [
+        {
+          hint: 'all',
+          x: 3,
+          y: 0.5,
+          id: 'i1',
+          label: 'all',
+          connects: [
+            'Model',
+            'Dataset',
+          ],
+        },
       ],
-    },
-    {
       outputs: [
         {
           hint: 'Model',
@@ -123,25 +109,38 @@ const projectInfo = {
           type: 'Model',
         },
       ],
+      connectFrom: [],
+    },
+    {
+      x: 584,
+      y: 232,
+      id: '分词1531527496608',
+      name: '分词',
       code: 'TokenizerStage',
+      type: 'Stage',
       inputs: [
         {
-          connects: [
-            'Model',
-            'Dataset',
-          ],
           hint: 'all',
           x: 3,
           y: 0.5,
           id: 'i1',
           label: 'all',
+          connects: [
+            'Model',
+            'Dataset',
+          ],
         },
       ],
-      name: '分词',
-      x: 555,
-      y: 214,
-      id: '分词1531527496608',
-      type: 'Stage',
+      outputs: [
+        {
+          hint: 'Model',
+          x: 1,
+          y: 0.5,
+          id: 'o1',
+          label: 'model',
+          type: 'Model',
+        },
+      ],
       connectFrom: [
         {
           component: '文件读取1531527496607',
@@ -151,6 +150,13 @@ const projectInfo = {
       ],
     },
     {
+      x: 129,
+      y: 196,
+      id: '文件读取1531527496607',
+      name: '文件读取',
+      code: 'FileDataSource',
+      type: 'DataSource',
+      inputs: [],
       outputs: [
         {
           hint: 'Dataset',
@@ -161,14 +167,59 @@ const projectInfo = {
           type: 'Dataset',
         },
       ],
-      code: 'FileDataSource',
-      inputs: [],
-      name: '文件读取',
-      x: 129,
-      y: 196,
-      id: '文件读取1531527496607',
-      type: 'DataSource',
       connectFrom: [],
+    },
+    {
+      x: 374,
+      y: 303,
+      id: 'Join1532467809093',
+      name: 'Join',
+      code: 'JoinTransformer',
+      type: 'Transformer',
+      inputs: [
+        {
+          hint: 'left',
+          x: 3,
+          y: 0.3333333333333333,
+          id: 'i1',
+          label: 'left',
+          connects: [
+            'Dataset',
+          ],
+        },
+        {
+          hint: 'right',
+          x: 3,
+          y: 0.6666666666666666,
+          id: 'i2',
+          label: 'right',
+          connects: [
+            'Dataset',
+          ],
+        },
+      ],
+      outputs: [
+        {
+          hint: 'Dataset',
+          x: 1,
+          y: 0.5,
+          id: 'o1',
+          label: 'data',
+          type: 'Dataset',
+        },
+      ],
+      connectFrom: [
+        {
+          component: '文件读取1531527496607',
+          from: 'o1',
+          to: 'i1',
+        },
+        {
+          component: '文件读取1531527496607',
+          from: 'o1',
+          to: 'i2',
+        },
+      ],
     },
   ],
   name: '项目名称',

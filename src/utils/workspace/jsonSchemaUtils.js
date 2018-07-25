@@ -1,5 +1,5 @@
 /** utils to translate json schema. */
-import FuncUtils from './ComponentWidgetFunctions';
+import FuncUtils, { getAllInputSchemaForComponent } from './ComponentWidgetFunctions';
 
 // stores schema titls => translate function.
 const registeredSpecialJsonSchemas = {
@@ -125,7 +125,11 @@ function translateTunableIntUISchema(originJsonSchema, id, code, name, projectId
 }
 
 function translateBooleanExpressionUISchema(originJsonSchema, id, code, name, projectId) {
-  return { 'ui:field': 'boolean_expression_editor' };
+  return { 'ui:field': 'boolean_expression_editor',
+    'ui:options': {
+      getTableSchema: () => getAllInputSchemaForComponent(id),
+    },
+  };
 }
 
 /** ======== end translate switch schema ========== */
