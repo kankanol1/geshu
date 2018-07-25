@@ -136,7 +136,7 @@ export default {
       }
     },
 
-    *saveComponentSettings({ payload }, { put, call }) {
+    *saveComponentSettings({ payload, callback }, { put, call }) {
       const { projectId, componentId, formData } = payload;
       // save it locally first.
       yield put({
@@ -153,6 +153,9 @@ export default {
             id: projectId,
           },
         });
+        if (callback) {
+          callback();
+        }
       } else {
         message.error(response.message);
       }

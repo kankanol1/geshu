@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'dva';
-import { Layout, Collapse, Button, Icon, Spin } from 'antd';
+import { Layout, Collapse, Button, Icon, Spin, Modal } from 'antd';
 import BasicParamInput from '../../../../components/Inputs/BasicParamInput';
 import ComponentSettingsForm from './ComponentSettingsForm';
 import translateName from '../../../../config/ComponentNameMapping';
@@ -14,15 +14,26 @@ const { Panel } = Collapse;
   loading: loading.models.work_component_settings,
 }))
 export default class ComponentSettings extends React.PureComponent {
-  constructor(props) {
-    super(props);
-    this.onCloseClicked = this.onCloseClicked.bind(this);
-  }
-
   onCloseClicked(e) {
-    this.props.dispatch({
-      type: 'work_component_settings/resetCurrentComponent',
-    });
+    const closeSettingsPane = () =>
+      this.props.dispatch({
+        type: 'work_component_settings/resetCurrentComponent',
+      });
+    const form = this.settingsForm.getWrappedInstance();
+    if (form && form.isDirty()) {
+      Modal.confirm({
+        title: '关闭确认',
+        content: '有未保存更改，是否保存？',
+        onOk() {
+          form.submitForm(closeSettingsPane);
+        },
+        onCancel() {
+          closeSettingsPane();
+        },
+      });
+    } else {
+      closeSettingsPane();
+    }
   }
 
   renderSettings = (displaySettings) => {
@@ -62,7 +73,7 @@ export default class ComponentSettings extends React.PureComponent {
     return (
       <div className={styles.workSettingDiv}>
         <div style={{ padding: '5px', background: '#fafafa', borderLeft: '1px solid #e8e8e8' }}>
-          <Button type="danger" size="default" onClick={this.onCloseClicked} disabled={loading} >
+          <Button type="danger" size="default" onClick={e => this.onCloseClicked(e)} disabled={loading} >
             <Icon type={loading ? 'loading' : 'close'} />
           </Button>
           <div style={{ display: 'inline-block', textAlign: 'center', width: '80%' }}>
@@ -86,6 +97,7 @@ export default class ComponentSettings extends React.PureComponent {
               <ComponentSettingsForm
                 match={this.props.match}
                 style={{ paddingTop: '20px', background: '#f5f5f5', height: '100%', zIndex: 200 }}
+                ref={(ref) => { this.settingsForm = ref; }}
               />
             )
           )

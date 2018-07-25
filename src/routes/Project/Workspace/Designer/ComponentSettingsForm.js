@@ -13,7 +13,7 @@ import styles from './ComponentSettingsForm.less';
 
 @connect(({ work_component_settings }) => ({
   work_component_settings,
-}))
+}), null, null, { withRef: true })
 export default class ComponentSettingsForm extends React.PureComponent {
   constructor(props) {
     super(props);
@@ -22,10 +22,16 @@ export default class ComponentSettingsForm extends React.PureComponent {
       dirty: false,
       displayFormData: formDataDict[currentComponent],
     };
-    this.submitForm = this.submitForm.bind(this);
   }
 
-  submitForm() {
+  isDirty() {
+    return this.state.dirty;
+  }
+
+  submitForm(callback) {
+    if (callback) {
+      this.lastCallback = callback;
+    }
     this.submitButton.click();
   }
 
@@ -46,7 +52,10 @@ export default class ComponentSettingsForm extends React.PureComponent {
         componentId: currentComponent,
         formData,
       },
+      callback: this.lastCallback,
     });
+    // reset last callback.
+    this.lastCallback = undefined;
   }
 
   handleFormChange(value) {
@@ -96,7 +105,7 @@ export default class ComponentSettingsForm extends React.PureComponent {
           </JsonSchemaForm>
         </Scrollbars>
         <Affix offsetBottom={10} style={{ height: '46px', textAlign: 'center', background: '#fafafa' }}>
-          <Button style={{ margin: '5px 10px' }} type="primary" onClick={this.submitForm}> <Icon type="save" />保存 </Button>
+          <Button style={{ margin: '5px 10px' }} type="primary" onClick={e => this.submitForm(e)}> <Icon type="save" />保存 </Button>
           <Button style={{ margin: '5px 10px' }} disabled={!dirty} onClick={() => this.resetForm()} > <Icon type="sync" />重置 </Button>
           <Button style={{ margin: '5px 10px' }} type="danger" disabled={jsonSchema === undefined} onClick={() => this.clearForm()} > <Icon type="delete" />清空 </Button>
         </Affix >
