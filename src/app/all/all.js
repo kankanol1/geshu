@@ -12,6 +12,7 @@ import { G2 } from 'bizcharts';
 
 import './index.less';
 import { putToRegistry } from '../../common/registry';
+import { ENV_ALL } from '../../common/env';
 // 1. Initialize
 const app = dva({
   history: createHistory(),
@@ -35,5 +36,6 @@ FastClick.attach(document.body);
 G2.track(false);
 
 putToRegistry('store', app._store);
+putToRegistry('env', ENV_ALL);
 
 export default app._store;  // eslint-disable-line

@@ -37,7 +37,7 @@ function RouterConfig({ history, app }) {
             redirectPath="/user/login"
           />
           <AuthorizedRoute
-            path="/database/query"
+            path="/storage/dbquery"
             render={props => <WorkspaceLayout {...props} />}
             authority={['admin', 'user']}
             redirectPath="/user/login"

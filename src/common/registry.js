@@ -3,6 +3,8 @@
 const registry = {
   menuData: undefined,
   store: undefined,
+  // the executing environment. see env.js
+  env: undefined,
 };
 
 export function putToRegistry(key, value) {

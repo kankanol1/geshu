@@ -8,10 +8,10 @@ import createHistory from 'history/createHashHistory';
 import createLoading from 'dva-loading';
 import 'moment/locale/zh-cn';
 import FastClick from 'fastclick';
-import { G2 } from 'bizcharts';
 
 import './index.less';
 import { putToRegistry } from '../../common/registry';
+import { ENV_GRAPH } from '../../common/env';
 // 1. Initialize
 const app = dva({
   history: createHistory(),
@@ -32,8 +32,7 @@ app.start('#root');
 
 FastClick.attach(document.body);
 
-G2.track(false);
-
 putToRegistry('store', app._store);
+putToRegistry('env', ENV_GRAPH);
 
 export default app._store;  // eslint-disable-line

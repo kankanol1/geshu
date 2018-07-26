@@ -141,7 +141,7 @@ export const getRouterData = (app) => {
     },
     /* database */
     '/storage/dbquery': {
-      component: dynamicWrapper(app, [], () => import('../../../routes/Database/DatabaseQuery')),
+      component: dynamicWrapper(app, ['dataview/dataquery'], () => import('../../../routes/Database/DatabaseQuery')),
     },
     /* center storage */
     '/storage/filelist': {

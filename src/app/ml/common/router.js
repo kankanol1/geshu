@@ -80,7 +80,7 @@ export const getRouterData = (app) => {
       component: dynamicWrapper(app, ['project'], () => import('../../../routes/Project/ProjectList')),
     },
     '/project/workspace': {
-      component: dynamicWrapper(app, ['workspace/datainspector', 'workspace/work_canvas', 'workspace/work_component_list', 'workspace/work_component_settings'], () => import('../../../layouts/WorkspaceLayout')),
+      component: dynamicWrapper(app, ['workspace/datainspector', 'workspace/workcanvas', 'workspace/work_component_list', 'workspace/work_component_settings'], () => import('../../../layouts/WorkspaceLayout')),
     },
     '/project/workspace/index': {
       component: dynamicWrapper(app, [], () => import('../../../routes/Project/Workspace/WorkspaceIndex')),
@@ -135,12 +135,16 @@ export const getRouterData = (app) => {
       component: dynamicWrapper(app, [], () => import('../../../routes/Self/SelfManage')),
     },
 
+    // database
+    '/storage/dblist': {
+      component: dynamicWrapper(app, ['database'], () => import('../../../routes/Database/DatabaseList')),
+    },
     /* database */
-    '/database/query': {
-      component: dynamicWrapper(app, [], () => import('../../../routes/Database/DatabaseQuery')),
+    '/storage/dbquery': {
+      component: dynamicWrapper(app, ['dataview/dataquery'], () => import('../../../routes/Database/DatabaseQuery')),
     },
     /* center storage */
-    '/storage/list': {
+    '/storage/filelist': {
       component: dynamicWrapper(app, [], () => import('../../../routes/Storage/StorageList')),
     },
 
@@ -170,7 +174,6 @@ export const getRouterData = (app) => {
      *  The followings are not used by our project. Should be deleted latter.
      */
 
-
     '/result/success': {
       component: dynamicWrapper(app, [], () => import('../../../routes/Result/Success')),
     },
@@ -178,10 +181,6 @@ export const getRouterData = (app) => {
       component: dynamicWrapper(app, [], () => import('../../../routes/Result/Error')),
     },
 
-    // database
-    '/database/list': {
-      component: dynamicWrapper(app, ['database'], () => import('../../../routes/Database/DatabaseList')),
-    },
     // '/user/:id': {
     //   component: dynamicWrapper(app, [], () => import('../routes/User/SomeComponent')),
     // },

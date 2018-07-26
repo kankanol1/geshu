@@ -48,23 +48,18 @@ const menuData = [
     }],
   },
   {
-    name: '中心数据库',
-    icon: 'database',
-    path: 'database',
-    children: [{
-      name: '数据库列表',
-      path: 'list',
-    }, {
-      name: '数据查询',
-      path: 'query',
-    }],
-  }, {
     name: '中心存储',
-    icon: 'file',
+    icon: 'database',
     path: 'storage',
     children: [{
       name: '文件列表',
-      path: 'list',
+      path: 'filelist',
+    }, {
+      name: '数据库列表',
+      path: 'dblist',
+    }, {
+      name: '数据库查询',
+      path: 'dbquery',
     }],
   }, {
     name: '用户管理',
