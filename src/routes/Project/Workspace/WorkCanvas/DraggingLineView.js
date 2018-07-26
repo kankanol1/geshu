@@ -3,7 +3,8 @@ import { calculateLineCurly } from '../../../../utils/PositionCalculation';
 
 export default class DraggingLineView extends Component {
   render() {
-    const { dragging, draggingSource, draggingTarget } = this.props.lineDraggingState;
+    const { dragging, draggingSource,
+      draggingTarget, draggingMetaType } = this.props.lineDraggingState;
 
     let draggingView = null;
 
@@ -11,8 +12,11 @@ export default class DraggingLineView extends Component {
       draggingView = (
         <svg style={{ height: '100%', width: '100%', position: 'absolute', top: '0', left: '0' }}>
           <path
-            d={calculateLineCurly(draggingSource.x, draggingSource.y,
-            draggingTarget.x, draggingTarget.y)}
+            d={draggingMetaType === 'input' ?
+              calculateLineCurly(draggingTarget.x, draggingTarget.y,
+                draggingSource.x, draggingSource.y)
+              : calculateLineCurly(draggingSource.x, draggingSource.y,
+              draggingTarget.x, draggingTarget.y)}
             style={{ fill: 'none', stroke: '#391085', strokeWidth: 1 }}
           />
         </svg>

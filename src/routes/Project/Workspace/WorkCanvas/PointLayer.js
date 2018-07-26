@@ -134,16 +134,17 @@ class PointLayer extends React.Component {
     this.setState({ hovering: [] });
   }
 
-  handleDrag(e, draggableData, point) {
+  handleDrag(e, draggableData, point, originPos) {
     e.preventDefault();
-    const originx = draggableData.x;
-    const originy = draggableData.y;
+    const originx = originPos.x;
+    const originy = originPos.y;
     let varObj = null;
     if (point.metatype === 'input') {
       varObj = { draggingType: null, draggingConnects: point.connects };
     } else if (point.metatype === 'output') {
       varObj = { draggingType: point.type, draggingConnects: [] };
     }
+    const { draggingTarget } = this.props.lineDraggingState;
     this.props.dispatch({
       type: 'workcanvas/canvasDraggingLineUpdate',
       componentId: this.props.model.id,
@@ -153,10 +154,10 @@ class PointLayer extends React.Component {
         y: originy,
       },
       draggingTarget: {
-        x: (this.props.lineDraggingState.draggingTarget.x == null ? originx :
-          this.props.lineDraggingState.draggingTarget.x) + draggableData.deltaX,
-        y: (this.props.lineDraggingState.draggingTarget.y == null ? originy :
-          this.props.lineDraggingState.draggingTarget.y) + draggableData.deltaY,
+        x: (draggingTarget.x == null ? originx :
+          draggingTarget.x) + draggableData.deltaX,
+        y: (draggingTarget.y == null ? originy :
+          draggingTarget.y) + draggableData.deltaY,
       },
       draggingMetaType: point.metatype,
       ...varObj,
@@ -177,7 +178,8 @@ class PointLayer extends React.Component {
       return (
         <React.Fragment key={i}>
           <DraggableCore
-            onDrag={(e, draggableData) => this.handleDrag(e, draggableData, point)}
+            onDrag={(e, draggableData) =>
+              this.handleDrag(e, draggableData, point, { x: offsetX + r, y })}
             onStop={e => this.handleDragStop(e)}
             onStart={e => this.handleDragStart(e)}
           >
