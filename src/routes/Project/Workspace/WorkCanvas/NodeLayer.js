@@ -96,9 +96,10 @@ class NodeLayer extends React.Component {
     if (deltaX !== 0 || deltaY !== 0) {
       this.hasDrag = true;
       const { canvas } = this.props;
+      const scaleParam = 1 / canvas.scale;
       const { startX, startY, stopX: lastStopX, stopY: lastStopY } = this.state.draggingState;
-      const stopX = lastStopX + deltaX;
-      const stopY = lastStopY + deltaY;
+      const stopX = lastStopX + (deltaX * scaleParam);
+      const stopY = lastStopY + (deltaY * scaleParam);
       const batchMove = this.state.componentCache.map(i => (
         new ComponentDraggingMove(i.component, (i.x + stopX) - startX, (i.y + stopY) - startY)
       ));

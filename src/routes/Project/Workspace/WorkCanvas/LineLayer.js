@@ -34,7 +34,7 @@ class LineLayer extends React.Component {
     return (
       <svg
         style={{ width: '100%', height: '100%', position: 'absolute', top: '0', left: '0', pointerEvents: 'none' }}
-        onClick={e => true}
+        onClick={() => true}
       >
         {
           this.props.model.connections.map(

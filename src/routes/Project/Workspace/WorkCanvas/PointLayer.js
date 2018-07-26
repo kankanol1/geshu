@@ -136,8 +136,10 @@ class PointLayer extends React.Component {
 
   handleDrag(e, draggableData, point, originPos) {
     e.preventDefault();
-    const originx = originPos.x;
-    const originy = originPos.y;
+    const { x: originx, y: originy } = originPos;
+    const { deltaX, deltaY } = draggableData;
+    const { canvas } = this.props;
+    const scaleParam = 1 / canvas.scale;
     let varObj = null;
     if (point.metatype === 'input') {
       varObj = { draggingType: null, draggingConnects: point.connects };
@@ -155,9 +157,9 @@ class PointLayer extends React.Component {
       },
       draggingTarget: {
         x: (draggingTarget.x == null ? originx :
-          draggingTarget.x) + draggableData.deltaX,
+          draggingTarget.x) + (deltaX * scaleParam),
         y: (draggingTarget.y == null ? originy :
-          draggingTarget.y) + draggableData.deltaY,
+          draggingTarget.y) + (deltaY * scaleParam),
       },
       draggingMetaType: point.metatype,
       ...varObj,

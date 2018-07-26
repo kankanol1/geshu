@@ -15,8 +15,23 @@ import DraggingSelectionView from './DraggingSelectionView';
 import CanvasDraggingMove from '../../../../obj/workspace/op/CanvasDraggingMove';
 import { addEvent } from '../../../../utils/utils';
 import SelectionChange from '../../../../obj/workspace/op/SelectionChange';
+import ScaleChange from '../../../../obj/workspace/op/ScaleChange';
 
-const a = 0;
+const keyUpListener = [];
+const keyDownLisener = [];
+addEvent(document, 'keyup', (event) => {
+  // space
+  if (keyUpListener.length > 0) {
+    keyUpListener.forEach(f => f(event));
+  }
+});
+addEvent(document, 'keydown', (event) => {
+  // space
+  if (keyDownLisener.length > 0) {
+    keyDownLisener.forEach(f => f(event));
+  }
+});
+
 @connect(({ workcanvas, work_component_settings, loading }) => ({
   workcanvas,
   work_component_settings,
@@ -88,10 +103,14 @@ export default class WorkCanvas extends React.Component {
       // prevent default space press.
       e.preventDefault();
     });
-    addEvent(document, 'keyup', (event) => {
-      // space
+    keyUpListener.push((event) => {
       if (event.keyCode === 32) {
         this.setState({ mode: 'select' });
+      }
+    });
+    keyDownLisener.push((event) => {
+      if (event.keyCode === 32) {
+        this.setState({ mode: 'move' });
       }
     });
   }
@@ -117,12 +136,16 @@ export default class WorkCanvas extends React.Component {
     key.unbind('⌘+y, ctrl+y');
     key.unbind('⌘+z, ctrl+z');
     key.unbind('space');
+    // clear listener.
+    keyUpListener.length = 0;
+    keyDownLisener.length = 0;
   }
 
   handleDrag(e, draggableData) {
     e.preventDefault();
     const { deltaX, deltaY } = draggableData;
     const { canvas } = this.props.workcanvas;
+    const scaleParam = 1 / canvas.scale;
     // update selection rect.
     switch (this.state.mode) {
       case 'select': {
@@ -133,23 +156,24 @@ export default class WorkCanvas extends React.Component {
             dragging: true,
             startX: e.offsetX,
             startY: e.offsetY,
-            stopX: deltaX + e.offsetX,
-            stopY: deltaY + e.offsetY,
+            stopX: (deltaX * scaleParam) + e.offsetX,
+            stopY: (deltaY * scaleParam) + e.offsetY,
           } });
         } else {
           this.setState({ draggingSelection: {
             dragging: true,
             startX,
             startY,
-            stopX: deltaX + stopX,
-            stopY: deltaY + stopY,
+            stopX: (deltaX * scaleParam) + stopX,
+            stopY: (deltaY * scaleParam) + stopY,
           } });
         }
         break;
       }
       case 'move': {
         const { offset } = canvas;
-        canvas.apply(new CanvasDraggingMove(offset.x + deltaX, offset.y + deltaY));
+        canvas.apply(new CanvasDraggingMove(offset.x + (deltaX * scaleParam),
+          offset.y + (deltaY * scaleParam)));
         this.triggerUpdate(canvas);
         break;
       }
@@ -220,13 +244,13 @@ export default class WorkCanvas extends React.Component {
           id: component.id,
         }];
 
-        this.props.dispatch({
+        dispatch({
           type: 'workcanvas/canvasSelectionChange',
           payload: {
             newSelection,
           },
         });
-        this.props.dispatch({
+        dispatch({
           type: 'work_component_settings/displayComponentSetting',
           payload: {
             component,
@@ -249,7 +273,7 @@ export default class WorkCanvas extends React.Component {
         performChange();
       }
     }
-    this.props.dispatch({
+    dispatch({
       type: 'workcanvas/hideContextMenu',
     });
   }
@@ -262,6 +286,20 @@ export default class WorkCanvas extends React.Component {
     this.props.dispatch({
       type: 'workcanvas/hideContextMenu',
     });
+  }
+
+  handleCanvasMouseWheel(e) {
+    if (key.isPressed('space')) {
+      const { deltaX, deltaY } = e;
+      const maxDelta = Math.abs(deltaX) > Math.abs(deltaY) ? deltaX : deltaY;
+      const delta = maxDelta > 0 ? 0.1 : -0.1;
+      const { canvas } = this.props.workcanvas;
+      let newScale = delta + canvas.scale;
+      if (newScale > 1.1) newScale = 1.1;
+      if (newScale < 0.5) newScale = 0.5;
+      canvas.apply(new ScaleChange(newScale));
+      this.triggerUpdate(canvas);
+    }
   }
 
   triggerUpdate(canvas) {
@@ -288,6 +326,15 @@ export default class WorkCanvas extends React.Component {
       );
     }
 
+    // calculate viewpoint.
+    const displaySize = (1 / canvas.scale) * 100;
+    const displayOffset = (100 - displaySize) / 2;
+    const viewPort = {
+      width: `${displaySize}%`,
+      height: `${displaySize}%`,
+      top: `${displayOffset}%`,
+      left: `${displayOffset}%`,
+    };
     return (
       <div
         className={styles.workCanvasWrapper}
@@ -298,8 +345,14 @@ export default class WorkCanvas extends React.Component {
           onStart={e => this.handleDragStart(e)}
         >
           <div
-            style={{ cursor: mode === 'move' ? 'move' : 'default' }}
+            style={{
+              cursor: mode === 'move' ? 'move' : 'default',
+              transform: `scale(${canvas.scale})`,
+              overflow: 'hidden',
+              ...viewPort,
+             }}
             className="work-canvas"
+            onWheel={e => this.handleCanvasMouseWheel(e)}
           >
             {
           canvas.components.map(

@@ -112,8 +112,8 @@ export default {
       const { offset } = canvas;
       const { width, height, ...c } = component;
       const nc = { ...c,
-        ...{ x: component.x - offset.x,
-          y: component.y - offset.y,
+        ...{ x: (component.x - offset.x) * (1 / canvas.scale),
+          y: (component.y - offset.y) * (1 / canvas.scale),
         },
       };
       const newC = Component.fromJson(nc);

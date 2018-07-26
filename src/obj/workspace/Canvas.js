@@ -5,7 +5,7 @@ import { updateCache, updateCacheForComponent, getComponentSize } from '../../ut
 
 /* representing a pipline canvas. */
 
-const maxHistoryNum = 2;
+const maxHistoryNum = 100;
 
 export default class Canvas {
   /* ===== related with history management ==== */
@@ -23,6 +23,8 @@ export default class Canvas {
    * for display.
    */
   offset={ x: 0, y: 0 };
+
+  scale = 0.8;
 
   updated = 0;
 
@@ -178,6 +180,11 @@ export default class Canvas {
   getSelectedComponents() {
     const selectedCIds = this.selection.filter(i => i.type === 'component').map(i => i.id);
     return this.components.filter(c => selectedCIds.includes(c.id));
+  }
+
+  setScale(newScale) {
+    this.scale = newScale;
+    this.notifyUpdate();
   }
 
   // getSelection(x, y, width, height) {
