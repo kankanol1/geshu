@@ -18,6 +18,12 @@ export default {
       publicList: [],
       privateList: [],
     },
+    displayData: {
+      publicSearchValue: '',
+      privateSearchValue: '',
+      publicList: [],
+      privateList: [],
+    },
   },
 
   reducers: {
@@ -37,6 +43,24 @@ export default {
         allData: {
           ...state.allData,
           ...payload,
+        },
+        displayData: {
+          publicSearchValue: '',
+          privateSearchValue: '',
+          ...payload,
+        },
+      };
+    },
+
+    filterAllDatabaseList(state) {
+      const { publicSearchValue, privateSearchValue } = state.displayData;
+      const { publicList, privateList } = state.allData;
+      return {
+        ...state,
+        displayData: {
+          ...state.displayData,
+          publicList: publicList.filter(v => v.name.includes(publicSearchValue)),
+          privateList: privateList.filter(v => v.name.includes(privateSearchValue)),
         },
       };
     },
@@ -59,6 +83,15 @@ export default {
           loading: true,
         },
       };
+    },
+
+    updateSearchValue(state, { payload }) {
+      const { type, value } = payload;
+      if (type === 'public') {
+        return { ...state, displayData: { ...state.displayData, publicSearchValue: value } };
+      } else {
+        return { ...state, displayData: { ...state.displayData, privateSearchValue: value } };
+      }
     },
 
   },

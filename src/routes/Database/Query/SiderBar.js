@@ -52,10 +52,26 @@ export default class SiderBar extends Component {
     });
   }
 
-  renderDatabaseTab = (list) => {
+  renderDatabaseTab = (tab, list) => {
     return (
       <React.Fragment>
-        <Input placeholder="filter data tables" />
+        <Input
+          placeholder="输入名称，回车过滤"
+          onChange={(e) => {
+            this.props.dispatch({
+              type: 'database/updateSearchValue',
+              payload: {
+                type: tab,
+                value: e.target.value,
+              },
+            });
+          }}
+          onPressEnter={() => {
+            this.props.dispatch({
+              type: 'database/filterAllDatabaseList',
+            });
+        }}
+        />
         <List
           bordered
           size="small"
@@ -76,14 +92,14 @@ export default class SiderBar extends Component {
   }
 
   renderSideBarTop() {
-    const { publicList, privateList } = this.props.database.allData;
+    const { publicList, privateList } = this.props.database.displayData;
     return (
       <Tabs defaultActiveKey="public" className={styles.siderTop}>
         <TabPane tab="公开数据库" key="public">
-          {this.renderDatabaseTab(publicList)}
+          {this.renderDatabaseTab('public', publicList)}
         </TabPane>
         <TabPane tab="私有数据库" key="private">
-          {this.renderDatabaseTab(privateList)}
+          {this.renderDatabaseTab('private', privateList)}
         </TabPane>
       </Tabs>
     );
