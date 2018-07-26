@@ -32,8 +32,14 @@ export default class GraphExploreForm extends Component {
         attrDataMax: '',
       }],
       searchRouteList: {
-        beginRoute: '',
-        endRoute: '',
+        beginRouteType: '',
+        beginRouteAttr: '',
+        beginRouteData: '',
+        beginAttrs: [],
+        endRouteType: '',
+        endRouteAttr: '',
+        endRouteData: '',
+        endAttrs: [],
         routeNum: 3,
         routeRange: 1,
       },
@@ -113,9 +119,15 @@ export default class GraphExploreForm extends Component {
       });
     }
   }
-  updateRoute(key, value) {
+  updateRoute(key, value, type) {
     const routeList = this.state.searchRouteList;
     routeList[key] = value;
+    if (type === 'type-start') {
+      routeList.beginAttrs = this.props.type2Label2Attrs.node[value] || [];
+    } else if (type === 'type-end') {
+      routeList.endAttrs = this.props.type2Label2Attrs.node[value] || [];
+    }
+
     this.setState({
       searchRouteList: { ...routeList },
     });
@@ -387,34 +399,108 @@ export default class GraphExploreForm extends Component {
           </TabPane>
           <TabPane tab="路径搜索" key="2" >
             <div style={{ width: '100%', height: '100%', background: '#fff', overflow: 'hidden', padding: 10, position: 'relative' }}>
-              <Row style={{ width: '100%', float: 'left', marginLeft: 10 }} >
-                <Col span={3} style={{ marginRight: 10 }}>起点</Col>
-                <Col span={15}>
-                  <Input
-                    value={this.state.searchRouteList.beginRoute}
-                    onChange={(event) => {
-                      this.updateRoute('beginRoute', event.target.value);
-                    }}
-                  />
-                </Col>
-              </Row>
-              <Row style={{ width: '100%', float: 'left', marginTop: 10, marginLeft: 10 }} >
-                <Col span={3} style={{ marginRight: 10 }}>终点</Col>
-                <Col span={15}>
-                  <Input
-                    value={this.state.searchRouteList.endRoute}
-                    onChange={(event) => {
-                      this.updateRoute('endRoute', event.target.value);
-                    }}
-                  />
-                </Col>
-              </Row>
+              <div className={styles.typeBox}>
+                <Row style={{ width: '100%', float: 'left', marginLeft: 10, marginTop: 10 }} >
+                  <Col span={6} style={{ marginRight: 10 }}>起点类型：</Col>
+                  <Col span={16}>
+                    <Select
+                      style={{ width: '80%' }}
+                      onChange={(value) => {
+                        this.updateRoute('beginRouteType', value, 'type-start');
+                      }}
+                    >
+                      {
+                        this.props.type2Labels.node.map(value =>
+                          <Select.Option value={value} key={`label-${value}`}>{value}</Select.Option>
+                        )
+                      }
+                    </Select>
+                  </Col>
+                </Row>
+                <Row style={{ width: '100%', float: 'left', marginLeft: 10, marginTop: 10 }} >
+                  <Col span={6} style={{ marginRight: 10 }}>起点属性：</Col>
+                  <Col span={16}>
+                    <Select
+                      style={{ width: '80%' }}
+                      onChange={(value) => {
+                        this.updateRoute('beginRouteAttr', value, 'node');
+                      }}
+                    >
+                      {
+                        this.state.searchRouteList.beginAttrs.map(value =>
+                          <Select.Option value={value} key={`name-${value}`}>{value}</Select.Option>
+                        )
+                      }
+                    </Select>
+                  </Col>
+                </Row>
+                <Row style={{ width: '100%', float: 'left', marginLeft: 10, marginTop: 10 }} >
+                  <Col span={6} style={{ marginRight: 10 }}>起点值：</Col>
+                  <Col span={16}>
+                    <Input
+                      style={{ width: '80%' }}
+                      value={this.state.searchRouteList.beginRouteData}
+                      onChange={(event) => {
+                        this.updateRoute('beginRouteData', event.target.value, 'data');
+                      }}
+                    />
+                  </Col>
+                </Row>
+              </div>
+              <div className={styles.typeBox}>
+                <Row style={{ width: '100%', float: 'left', marginLeft: 10, marginTop: 10 }} >
+                  <Col span={6} style={{ marginRight: 10 }}>终点类型：</Col>
+                  <Col span={16}>
+                    <Select
+                      style={{ width: '80%' }}
+                      onChange={(value) => {
+                        this.updateRoute('endRouteType', value, 'type-end');
+                      }}
+                    >
+                      {
+                        this.props.type2Labels.node.map(value =>
+                          <Select.Option value={value} key={`label-${value}`}>{value}</Select.Option>
+                        )
+                      }
+                    </Select>
+                  </Col>
+                </Row>
+                <Row style={{ width: '100%', float: 'left', marginLeft: 10, marginTop: 10 }} >
+                  <Col span={6} style={{ marginRight: 10 }}>终点属性：</Col>
+                  <Col span={16}>
+                    <Select
+                      style={{ width: '80%' }}
+                      onChange={(value) => {
+                        this.updateRoute('endRouteAttr', value, 'node');
+                      }}
+                    >
+                      {
+                        this.state.searchRouteList.endAttrs.map(value =>
+                          <Select.Option value={value} key={`name-${value}`}>{value}</Select.Option>
+                        )
+                      }
+                    </Select>
+                  </Col>
+                </Row>
+                <Row style={{ width: '100%', float: 'left', marginLeft: 10, marginTop: 10 }} >
+                  <Col span={6} style={{ marginRight: 10 }}>终点值：</Col>
+                  <Col span={16}>
+                    <Input
+                      style={{ width: '80%' }}
+                      value={this.state.searchRouteList.endRouteData}
+                      onChange={(event) => {
+                        this.updateRoute('endRouteData', event.target.value, 'data');
+                      }}
+                    />
+                  </Col>
+                </Row>
+              </div>
               <Row style={{ width: '100%', float: 'left', marginTop: 10, marginLeft: 10 }} >
                 <Col span={3} style={{ marginRight: 10 }}>跳数</Col>
                 <Col span={15}>
                   <InputNumber
                     min={2}
-                    max={10}
+                    max={5}
                     value={this.state.searchRouteList.routeNum}
                     onChange={(value) => {
                       this.updateRoute('routeNum', value);
@@ -434,9 +520,6 @@ export default class GraphExploreForm extends Component {
                 <Radio className={styles.radioStyle} value={3}>所有路径</Radio>
               </RadioGroup>
               <Button type="primary" icon="search" style={{ width: '100%', marginTop: 10, marginBottom: 20, float: 'left' }} onClick={this.searchRouteData.bind({}, 'link')}>搜索</Button>
-              <div className={styles.change} onClick={this.changeRoute}>
-                <Icon type="swap" style={{ fontSize: 30, transform: 'rotate(90deg)' }} />
-              </div>
             </div>
           </TabPane>
         </Tabs>

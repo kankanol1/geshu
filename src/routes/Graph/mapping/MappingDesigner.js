@@ -57,8 +57,9 @@ class MappingDesigner extends React.PureComponent {
       mappingData = { ...inspectedObject.data.mapping };
     }
     const { originType } = inspectedObject.toNode.data;
-    const keyNames = [];
+
     if (originType !== 'link') {
+      const keyNames = [];
       const { attrList } = inspectedObject.toNode.data;
       attrList.filter(o => o.pk === '1').map(o => o.name).forEach((field) => {
         let check = '1';
@@ -72,6 +73,9 @@ class MappingDesigner extends React.PureComponent {
           keyNames.push(field);
         }
       });
+      if (keyNames.length === 0) {
+        checkData.check = '0';
+      }
       if (checkData.check === '1') {
         checkData.msg = `${inspectedObject.toNode.data.text}节点未配置${keyNames.join(',')}属性`;
       } else {
