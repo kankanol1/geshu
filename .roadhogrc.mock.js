@@ -2,23 +2,14 @@ import mockjs from 'mockjs';
 import request from 'request';
 import { getRule, postRule } from './mock/rule';
 import { getActivities, getNotice, getFakeList } from './mock/api';
-import { getFakeChartData } from './mock/chart';
-import { imgMap } from './mock/utils';
-import { getProfileBasicData } from './mock/profile';
-import { getProfileAdvancedData } from './mock/profile';
 import { getNotices } from './mock/notices';
 import { format, delay } from 'roadhog-api-doc';
 import componentList from './mock/workspace/componentList'
-import { wrapResponse } from './mock/response_wrapper'
 import componentParams from './mock/workspace/componentParams'
 import { getProject, createProject, updateProject, deleteProject, getProjectLabels, getRecentProjects } from './mock/project';
 import { getDatabase, createDatabase, updateDatabase, deleteDatabase, getRecentDatabases, makePublicDatabase, makePrivateDatabase, getAllDatabase } from './mock/database';
 import { login, userList, createUser, deleteUser, queryUserName, updateUser } from './mock/user';
-<<<<<<< HEAD
 import { getModels, addModel, updateModel, deleteModels, getModelInfo, getModelResult } from './mock/model';
-=======
-import { getModels, addModel, updateModel, deleteModels, getModelInfo } from './mock/model';
->>>>>>> use new graph gremlin api.
 import { getCandidateModels, updateCandidateModel, deleteCandidateModels, publishCandidateModels } from './mock/candidatemodel';
 import { getJobs, cancelJobs, deleteJobs } from './mock/job';
 import { open, save, saveSettings, submit, validate, inspectData } from './mock/workspace/workspace';
@@ -110,10 +101,7 @@ const proxy = serverEnabled ?
   'POST /api/models/serving/online': onlineServingModels,
 
   'GET /api/models/get/:id': getModelInfo,
-<<<<<<< HEAD
   'POST /api/models/execute/:id': getModelResult,
-=======
->>>>>>> use new graph gremlin api.
 
   // job manage.
   'GET /api/jobs/list': getJobs,
