@@ -69,7 +69,10 @@ export default {
     },
 
     resetCurrentComponent(state) {
-      return { ...state, currentComponent: undefined };
+      return { ...state,
+        currentComponent: undefined,
+        display: { dirty: false, displayFormData: undefined },
+      };
     },
 
     saveComponentSettingsInMemory(state, { payload }) {
