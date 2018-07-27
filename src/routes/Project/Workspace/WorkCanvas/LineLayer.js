@@ -16,6 +16,8 @@ class LineLayer extends React.Component {
   }
 
   handleLineClick(e, params) {
+    // trigger canvas drag.
+    if (this.props.isMoveMode) return false;
     e.preventDefault();
     const { canvas } = this.props;
     const newSelection = [{ type: 'line', ...params }];
@@ -28,6 +30,12 @@ class LineLayer extends React.Component {
     this.props.dispatch({
       type: 'workcanvas/hideContextMenu',
     });
+  }
+
+  handleDragStart = (e) => {
+    // trigger canvas drag.
+    if (this.props.isMoveMode) return false;
+    e.stopPropagation();
   }
 
   render() {
@@ -49,7 +57,7 @@ class LineLayer extends React.Component {
                       style={{ fill: 'none', stroke: '#391085', strokeWidth: 1 }}
                     /> */}
                   <path d={lineStr} style={{ fill: 'none', stroke: '#391085', strokeWidth: 1 }} />
-                  <DraggableCore onStart={e => e.stopPropagation()}>
+                  <DraggableCore onStart={e => this.handleDragStart(e)}>
                     <path
                       d={lineStr}
                       style={{ fill: 'none', stroke: '#fff', strokeWidth: 20, opacity: 0, pointerEvents: 'auto' }}

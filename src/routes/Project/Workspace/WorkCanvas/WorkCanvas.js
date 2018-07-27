@@ -373,6 +373,7 @@ export default class WorkCanvas extends React.Component {
                     projectId={projectId}
                     // offset={offset}
                     canvas={canvas}
+                    isMoveMode={this.state.mode === 'move'}
                   />
                   {
                   /* 2. node layer */
@@ -390,6 +391,7 @@ export default class WorkCanvas extends React.Component {
                     // offset={offset}
                     validation={validation[component.id]}
                     canvas={canvas}
+                    isMoveMode={this.state.mode === 'move'}
                   />
                   {
                     /* 3. point layer */
@@ -404,6 +406,7 @@ export default class WorkCanvas extends React.Component {
                     projectId={projectId}
                     lineDraggingState={this.props.workcanvas.runtime.lineDraggingState}
                     canvas={canvas}
+                    isMoveMode={this.state.mode === 'move'}
                     // offset={offset}
                   />
                 </React.Fragment>

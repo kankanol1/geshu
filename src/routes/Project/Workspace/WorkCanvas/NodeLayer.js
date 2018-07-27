@@ -38,6 +38,8 @@ class NodeLayer extends React.Component {
   }
 
   handleDragStart(e) {
+    // trigger canvas drag.
+    if (this.props.isMoveMode) return false;
     e.preventDefault();
     // stop propagation to parent.
     e.stopPropagation();
