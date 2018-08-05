@@ -26,7 +26,7 @@ const registeredSpecialUISchemas = {
   Fixed_Column_Array: translateColumnSelectSelectorUISchema,
 
   // expression.
-  Fixed_Boolean_Expr: translateBooleanExpressionUISchema,
+  Fixed_Expression: translateBooleanExpressionUISchema,
 };
 
 /* fixed any */
