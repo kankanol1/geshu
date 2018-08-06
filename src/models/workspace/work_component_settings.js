@@ -76,10 +76,10 @@ export default {
     },
 
     saveComponentSettingsInMemory(state, { payload }) {
-      const { componentId, formData } = payload;
+      const { componentId } = payload;
       const { formDataDict } = state;
-      formDataDict[componentId] = formData;
-      return { ...state, formDataDict, display: { dirty: false, displayFormData: formData } };
+      formDataDict[componentId] = state.display.displayFormData;
+      return { ...state, formDataDict, display: { ...state.display, dirty: false } };
     },
 
     initSettings(state, { payload }) {
