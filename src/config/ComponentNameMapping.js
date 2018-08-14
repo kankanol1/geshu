@@ -57,9 +57,9 @@ const nameMapping = {
   GradientBoostedTreeRegressorPStage: '梯度提升树回归',
   DecisionTreeRegressorPStage: '决策树回归',
   RandomForestRegressorPStage: '随机森林回归',
-  OneHotEncoderStage: '独热编码',
+  OneHotEncoderPStage: '独热编码',
   StringIndexerPStage: '字符串-索引变换',
-  VectorAssemblerStage: '向量组装',
+  VectorAssemblerPStage: '向量组装',
 
 
   /* config name mapping */

@@ -4,46 +4,8 @@ const componentList = [
     key: 'DataSink',
     components: [
       {
-        name: 'CollectDataSink',
-        code: 'CollectDataSink',
-        type: 'DataSink',
-        inputs: [
-          {
-            id: 'i1',
-            label: 'data',
-            hint: 'data',
-            x: 3,
-            y: 0.5,
-            connects: [
-              'Dataset',
-              'DatasetRef',
-            ],
-          },
-        ],
-        outputs: [],
-      },
-      {
-        name: 'FileDataSink',
-        code: 'FileDataSink',
-        type: 'DataSink',
-        inputs: [
-          {
-            id: 'i1',
-            label: 'data',
-            hint: 'data',
-            x: 3,
-            y: 0.5,
-            connects: [
-              'Dataset',
-              'DatasetRef',
-            ],
-          },
-        ],
-        outputs: [],
-      },
-      {
-        name: 'ParquetDataSink',
-        code: 'ParquetDataSink',
+        name: 'HiveDataSink',
+        code: 'HiveDataSink',
         type: 'DataSink',
         inputs: [
           {
@@ -80,8 +42,27 @@ const componentList = [
         outputs: [],
       },
       {
-        name: 'HiveDataSink',
-        code: 'HiveDataSink',
+        name: 'CollectDataSink',
+        code: 'CollectDataSink',
+        type: 'DataSink',
+        inputs: [
+          {
+            id: 'i1',
+            label: 'data',
+            hint: 'data',
+            x: 3,
+            y: 0.5,
+            connects: [
+              'Dataset',
+              'DatasetRef',
+            ],
+          },
+        ],
+        outputs: [],
+      },
+      {
+        name: 'FileDataSink',
+        code: 'FileDataSink',
         type: 'DataSink',
         inputs: [
           {
@@ -524,60 +505,12 @@ const componentList = [
         inputs: [
           {
             id: 'i1',
-            label: 'trainSet',
-            hint: 'trainSet',
+            label: 'dataset',
+            hint: 'dataset',
             x: 3,
-            y: 0.3333333333333333,
-            connects: [
-              'Model',
-              'Dataset',
-            ],
-          },
-          {
-            id: 'i2',
-            label: 'fullSet',
-            hint: 'fullSet',
-            x: 3,
-            y: 0.6666666666666666,
-            connects: [
-              'Dataset',
-            ],
-          },
-        ],
-        outputs: [
-          {
-            id: 'o1',
-            label: 'model',
-            hint: 'Model',
-            x: 1,
             y: 0.5,
-            type: 'Model',
-          },
-        ],
-      },
-      {
-        name: 'OneHotEncoderStage',
-        code: 'OneHotEncoderStage',
-        type: 'PStage',
-        inputs: [
-          {
-            id: 'i1',
-            label: 'trainSet',
-            hint: 'trainSet',
-            x: 3,
-            y: 0.3333333333333333,
             connects: [
               'Model',
-              'Dataset',
-            ],
-          },
-          {
-            id: 'i2',
-            label: 'fullSet',
-            hint: 'fullSet',
-            x: 3,
-            y: 0.6666666666666666,
-            connects: [
               'Dataset',
             ],
           },
@@ -600,22 +533,12 @@ const componentList = [
         inputs: [
           {
             id: 'i1',
-            label: 'trainSet',
-            hint: 'trainSet',
+            label: 'dataset',
+            hint: 'dataset',
             x: 3,
-            y: 0.3333333333333333,
+            y: 0.5,
             connects: [
               'Model',
-              'Dataset',
-            ],
-          },
-          {
-            id: 'i2',
-            label: 'fullSet',
-            hint: 'fullSet',
-            x: 3,
-            y: 0.6666666666666666,
-            connects: [
               'Dataset',
             ],
           },
@@ -638,22 +561,40 @@ const componentList = [
         inputs: [
           {
             id: 'i1',
-            label: 'trainSet',
-            hint: 'trainSet',
+            label: 'dataset',
+            hint: 'dataset',
             x: 3,
-            y: 0.3333333333333333,
+            y: 0.5,
             connects: [
               'Model',
               'Dataset',
             ],
           },
+        ],
+        outputs: [
           {
-            id: 'i2',
-            label: 'fullSet',
-            hint: 'fullSet',
+            id: 'o1',
+            label: 'model',
+            hint: 'Model',
+            x: 1,
+            y: 0.5,
+            type: 'Model',
+          },
+        ],
+      },
+      {
+        name: 'BucketizerPStage',
+        code: 'BucketizerPStage',
+        type: 'PStage',
+        inputs: [
+          {
+            id: 'i1',
+            label: 'dataset',
+            hint: 'dataset',
             x: 3,
-            y: 0.6666666666666666,
+            y: 0.5,
             connects: [
+              'Model',
               'Dataset',
             ],
           },
@@ -676,22 +617,40 @@ const componentList = [
         inputs: [
           {
             id: 'i1',
-            label: 'trainSet',
-            hint: 'trainSet',
+            label: 'dataset',
+            hint: 'dataset',
             x: 3,
-            y: 0.3333333333333333,
+            y: 0.5,
             connects: [
               'Model',
               'Dataset',
             ],
           },
+        ],
+        outputs: [
           {
-            id: 'i2',
-            label: 'fullSet',
-            hint: 'fullSet',
+            id: 'o1',
+            label: 'model',
+            hint: 'Model',
+            x: 1,
+            y: 0.5,
+            type: 'Model',
+          },
+        ],
+      },
+      {
+        name: 'OneHotEncoderPStage',
+        code: 'OneHotEncoderPStage',
+        type: 'PStage',
+        inputs: [
+          {
+            id: 'i1',
+            label: 'dataset',
+            hint: 'dataset',
             x: 3,
-            y: 0.6666666666666666,
+            y: 0.5,
             connects: [
+              'Model',
               'Dataset',
             ],
           },
@@ -714,22 +673,12 @@ const componentList = [
         inputs: [
           {
             id: 'i1',
-            label: 'trainSet',
-            hint: 'trainSet',
+            label: 'dataset',
+            hint: 'dataset',
             x: 3,
-            y: 0.3333333333333333,
+            y: 0.5,
             connects: [
               'Model',
-              'Dataset',
-            ],
-          },
-          {
-            id: 'i2',
-            label: 'fullSet',
-            hint: 'fullSet',
-            x: 3,
-            y: 0.6666666666666666,
-            connects: [
               'Dataset',
             ],
           },
@@ -752,22 +701,12 @@ const componentList = [
         inputs: [
           {
             id: 'i1',
-            label: 'trainSet',
-            hint: 'trainSet',
+            label: 'dataset',
+            hint: 'dataset',
             x: 3,
-            y: 0.3333333333333333,
+            y: 0.5,
             connects: [
               'Model',
-              'Dataset',
-            ],
-          },
-          {
-            id: 'i2',
-            label: 'fullSet',
-            hint: 'fullSet',
-            x: 3,
-            y: 0.6666666666666666,
-            connects: [
               'Dataset',
             ],
           },
@@ -790,22 +729,68 @@ const componentList = [
         inputs: [
           {
             id: 'i1',
-            label: 'trainSet',
-            hint: 'trainSet',
+            label: 'dataset',
+            hint: 'dataset',
             x: 3,
-            y: 0.3333333333333333,
+            y: 0.5,
             connects: [
               'Model',
               'Dataset',
             ],
           },
+        ],
+        outputs: [
           {
-            id: 'i2',
-            label: 'fullSet',
-            hint: 'fullSet',
+            id: 'o1',
+            label: 'model',
+            hint: 'Model',
+            x: 1,
+            y: 0.5,
+            type: 'Model',
+          },
+        ],
+      },
+      {
+        name: 'ImputerPStage',
+        code: 'ImputerPStage',
+        type: 'PStage',
+        inputs: [
+          {
+            id: 'i1',
+            label: 'dataset',
+            hint: 'dataset',
             x: 3,
-            y: 0.6666666666666666,
+            y: 0.5,
             connects: [
+              'Model',
+              'Dataset',
+            ],
+          },
+        ],
+        outputs: [
+          {
+            id: 'o1',
+            label: 'model',
+            hint: 'Model',
+            x: 1,
+            y: 0.5,
+            type: 'Model',
+          },
+        ],
+      },
+      {
+        name: 'VectorAssemblerPStage',
+        code: 'VectorAssemblerPStage',
+        type: 'PStage',
+        inputs: [
+          {
+            id: 'i1',
+            label: 'dataset',
+            hint: 'dataset',
+            x: 3,
+            y: 0.5,
+            connects: [
+              'Model',
               'Dataset',
             ],
           },
@@ -1068,34 +1053,6 @@ const componentList = [
         ],
       },
       {
-        name: 'VectorAssemblerStage',
-        code: 'VectorAssemblerStage',
-        type: 'Stage',
-        inputs: [
-          {
-            id: 'i1',
-            label: 'all',
-            hint: 'all',
-            x: 3,
-            y: 0.5,
-            connects: [
-              'Model',
-              'Dataset',
-            ],
-          },
-        ],
-        outputs: [
-          {
-            id: 'o1',
-            label: 'model',
-            hint: 'Model',
-            x: 1,
-            y: 0.5,
-            type: 'Model',
-          },
-        ],
-      },
-      {
         name: 'LogisticRegressionStage',
         code: 'LogisticRegressionStage',
         type: 'Stage',
@@ -1214,38 +1171,6 @@ const componentList = [
       {
         name: 'FileDataSource',
         code: 'FileDataSource',
-        type: 'DataSource',
-        inputs: [],
-        outputs: [
-          {
-            id: 'o1',
-            label: 'data',
-            hint: 'Dataset',
-            x: 1,
-            y: 0.5,
-            type: 'Dataset',
-          },
-        ],
-      },
-      {
-        name: 'ParquetDataSource',
-        code: 'ParquetDataSource',
-        type: 'DataSource',
-        inputs: [],
-        outputs: [
-          {
-            id: 'o1',
-            label: 'data',
-            hint: 'Dataset',
-            x: 1,
-            y: 0.5,
-            type: 'Dataset',
-          },
-        ],
-      },
-      {
-        name: 'JsonDataSource',
-        code: 'JsonDataSource',
         type: 'DataSource',
         inputs: [],
         outputs: [

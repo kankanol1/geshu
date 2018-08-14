@@ -29,11 +29,49 @@ const allComponents = {
       },
     },
   },
+  OneHotEncoderPStage: {
+    title: 'OneHotEncoderPStageConf',
+    type: 'object',
+    properties: {
+      columnNamePairArray: {
+        title: 'Column_Name_Pair_Array',
+        type: 'object',
+        properties: {
+          value: {
+            type: 'array',
+            items: {
+              title: 'Column_Name_Pair',
+              type: 'object',
+              properties: {
+                column: {
+                  type: 'string',
+                },
+                name: {
+                  type: 'string',
+                },
+              },
+            },
+          },
+        },
+        description: '输入列和输出列',
+      },
+    },
+  },
   FileDataSink: {
     title: 'FileDataSinkConf',
     type: 'object',
     properties: {
-      format: {
+      dirPath: {
+        title: 'Fixed_Dir_Path',
+        type: 'object',
+        properties: {
+          value: {
+            type: 'string',
+          },
+        },
+        description: '文件路径',
+      },
+      fileName: {
         title: 'Fixed_String',
         type: 'object',
         properties: {
@@ -41,17 +79,17 @@ const allComponents = {
             type: 'string',
           },
         },
-        description: '存储格式',
+        description: '文件名',
       },
-      relativePath: {
-        title: 'Fixed_Remote_Path',
-        type: 'object',
-        properties: {
-          value: {
-            type: 'string',
-          },
-        },
-        description: '相对路径',
+      format: {
+        type: 'string',
+        enum: [
+          'json',
+          'csv',
+          'parquet',
+          'libsvm',
+        ],
+        description: '文件格式',
       },
     },
   },
@@ -68,11 +106,11 @@ const allComponents = {
             enum: [
               'FIXED',
               'GRID',
-              'RANGE',
             ],
-            description: '调节类型',
+            description: '类型',
           },
           tunableValue: {
+            required: false,
             type: 'array',
             items: {
               type: 'integer',
@@ -80,6 +118,7 @@ const allComponents = {
             description: '可调值',
           },
           value: {
+            required: false,
             type: 'integer',
             description: '固定值',
           },
@@ -95,11 +134,11 @@ const allComponents = {
             enum: [
               'FIXED',
               'GRID',
-              'RANGE',
             ],
-            description: '调节类型',
+            description: '类型',
           },
           tunableValue: {
+            required: false,
             type: 'array',
             items: {
               type: 'number',
@@ -107,6 +146,7 @@ const allComponents = {
             description: '可调值',
           },
           value: {
+            required: false,
             type: 'number',
             description: '固定值',
           },
@@ -193,22 +233,6 @@ const allComponents = {
       },
     },
   },
-  ParquetDataSink: {
-    title: 'ParquetDataSinkConf',
-    type: 'object',
-    properties: {
-      relativePath: {
-        title: 'Fixed_Remote_Path',
-        type: 'object',
-        properties: {
-          value: {
-            type: 'string',
-          },
-        },
-        description: '相对路径',
-      },
-    },
-  },
   DropDuplicatesTransformer: {
     title: 'DropDuplicatesTransformerConf',
     type: 'object',
@@ -224,7 +248,7 @@ const allComponents = {
             },
           },
         },
-        description: '去重列',
+        description: '目标列',
       },
     },
   },
@@ -233,7 +257,7 @@ const allComponents = {
     type: 'object',
     properties: {
       joinExpr: {
-        title: 'Fixed_Boolean_Expr',
+        title: 'Fixed_Expression',
         type: 'object',
         properties: {
           value: {
@@ -270,6 +294,42 @@ const allComponents = {
       },
     },
   },
+  ImputerPStage: {
+    title: 'ImputerPStageConf',
+    type: 'object',
+    properties: {
+      columnNamePairArray: {
+        title: 'Column_Name_Pair_Array',
+        type: 'object',
+        properties: {
+          value: {
+            type: 'array',
+            items: {
+              title: 'Column_Name_Pair',
+              type: 'object',
+              properties: {
+                column: {
+                  type: 'string',
+                },
+                name: {
+                  type: 'string',
+                },
+              },
+            },
+          },
+        },
+        description: '输入列和输出列',
+      },
+      strategy: {
+        type: 'string',
+        enum: [
+          'mean',
+          'median',
+        ],
+        description: '补值策略',
+      },
+    },
+  },
   StringIndexerPStage: {
     title: 'StringIndexerPStageConf',
     type: 'object',
@@ -294,7 +354,7 @@ const allComponents = {
             },
           },
         },
-        description: '输入输出列',
+        description: '输入列和输出列',
       },
     },
   },
@@ -330,7 +390,7 @@ const allComponents = {
             type: 'integer',
           },
         },
-        description: '最大类别数',
+        description: '类别数阈值',
       },
       treeNumber: {
         title: 'Tunable_Int',
@@ -341,11 +401,11 @@ const allComponents = {
             enum: [
               'FIXED',
               'GRID',
-              'RANGE',
             ],
-            description: '调节类型',
+            description: '类型',
           },
           tunableValue: {
+            required: false,
             type: 'array',
             items: {
               type: 'integer',
@@ -353,6 +413,7 @@ const allComponents = {
             description: '可调值',
           },
           value: {
+            required: false,
             type: 'integer',
             description: '固定值',
           },
@@ -437,7 +498,7 @@ const allComponents = {
             type: 'integer',
           },
         },
-        description: '最大类别数',
+        description: '类别数阈值',
       },
       maxIter: {
         title: 'Tunable_Int',
@@ -448,11 +509,11 @@ const allComponents = {
             enum: [
               'FIXED',
               'GRID',
-              'RANGE',
             ],
-            description: '调节类型',
+            description: '类型',
           },
           tunableValue: {
+            required: false,
             type: 'array',
             items: {
               type: 'integer',
@@ -460,6 +521,7 @@ const allComponents = {
             description: '可调值',
           },
           value: {
+            required: false,
             type: 'integer',
             description: '固定值',
           },
@@ -484,6 +546,7 @@ const allComponents = {
                 type: 'boolean',
               },
               schema: {
+                required: false,
                 type: 'array',
                 items: {
                   title: 'StructFieldMapping',
@@ -502,16 +565,16 @@ const allComponents = {
                 },
               },
             },
-            description: '是否指定表格Schema',
+            description: '数据表模式',
           },
           format: {
-            title: 'Fixed_String',
-            type: 'object',
-            properties: {
-              value: {
-                type: 'string',
-              },
-            },
+            type: 'string',
+            enum: [
+              'json',
+              'csv',
+              'parquet',
+              'libsvm',
+            ],
             description: '文件格式',
           },
           header: {
@@ -522,10 +585,10 @@ const allComponents = {
                 type: 'boolean',
               },
             },
-            description: '文件是否包含Header',
+            description: '是否包含文件头',
           },
           path: {
-            title: 'Read_File_Path',
+            title: 'Fixed_File_Path',
             type: 'object',
             properties: {
               value: {
@@ -553,7 +616,7 @@ const allComponents = {
             },
           },
         },
-        description: '选择列',
+        description: '保留列',
       },
     },
   },
@@ -583,11 +646,11 @@ const allComponents = {
             enum: [
               'FIXED',
               'GRID',
-              'RANGE',
             ],
-            description: '调节类型',
+            description: '类型',
           },
           tunableValue: {
+            required: false,
             type: 'array',
             items: {
               type: 'integer',
@@ -595,6 +658,7 @@ const allComponents = {
             description: '可调值',
           },
           value: {
+            required: false,
             type: 'integer',
             description: '固定值',
           },
@@ -677,11 +741,11 @@ const allComponents = {
             enum: [
               'FIXED',
               'GRID',
-              'RANGE',
             ],
-            description: '调节类型',
+            description: '类型',
           },
           tunableValue: {
+            required: false,
             type: 'array',
             items: {
               type: 'integer',
@@ -689,6 +753,7 @@ const allComponents = {
             description: '可调值',
           },
           value: {
+            required: false,
             type: 'integer',
             description: '固定值',
           },
@@ -702,7 +767,6 @@ const allComponents = {
     type: 'object',
     properties: {
       featuresCol: {
-        required: false,
         title: 'Fixed_Column',
         type: 'object',
         properties: {
@@ -721,11 +785,11 @@ const allComponents = {
             enum: [
               'FIXED',
               'GRID',
-              'RANGE',
             ],
-            description: '调节类型',
+            description: '类型',
           },
           tunableValue: {
+            required: false,
             type: 'array',
             items: {
               type: 'integer',
@@ -733,14 +797,14 @@ const allComponents = {
             description: '可调值',
           },
           value: {
+            required: false,
             type: 'integer',
             description: '固定值',
           },
         },
-        description: 'K取值',
+        description: 'K值',
       },
       predictionCol: {
-        required: false,
         title: 'Fixed_Column',
         type: 'object',
         properties: {
@@ -749,38 +813,6 @@ const allComponents = {
           },
         },
         description: '预测列',
-      },
-    },
-  },
-  ParquetDataSource: {
-    title: 'ParquetDataSourceConf',
-    type: 'object',
-    properties: {
-      path: {
-        title: 'Read_File_Path',
-        type: 'object',
-        properties: {
-          value: {
-            type: 'string',
-          },
-        },
-        description: '文件路径',
-      },
-    },
-  },
-  JsonDataSource: {
-    title: 'JsonDataSourceConf',
-    type: 'object',
-    properties: {
-      path: {
-        title: 'Read_File_Path',
-        type: 'object',
-        properties: {
-          value: {
-            type: 'string',
-          },
-        },
-        description: '文件路径',
       },
     },
   },
@@ -796,12 +828,28 @@ const allComponents = {
             type: 'string',
           },
         },
-        description: '列名',
+        description: '目标列',
       },
       valueList: {
-        title: 'Fixed_String_Array',
+        title: 'Type_Value_Array',
         type: 'object',
         properties: {
+          fieldType: {
+            type: 'string',
+            enum: [
+              'date',
+              'long',
+              'int',
+              'float',
+              'string',
+              'decimal',
+              'double',
+              'short',
+              'timestamp',
+              'boolean',
+              'byte',
+            ],
+          },
           value: {
             type: 'array',
             items: {
@@ -856,11 +904,11 @@ const allComponents = {
             enum: [
               'FIXED',
               'GRID',
-              'RANGE',
             ],
-            description: '调节类型',
+            description: '类型',
           },
           tunableValue: {
+            required: false,
             type: 'array',
             items: {
               type: 'integer',
@@ -868,6 +916,7 @@ const allComponents = {
             description: '可调值',
           },
           value: {
+            required: false,
             type: 'integer',
             description: '固定值',
           },
@@ -880,25 +929,18 @@ const allComponents = {
     title: 'TokenizerStageConf',
     type: 'object',
     properties: {
-      inputCol: {
-        title: 'Fixed_Column',
+      columnAndName: {
+        title: 'Column_Name_Pair',
         type: 'object',
         properties: {
-          value: {
+          column: {
+            type: 'string',
+          },
+          name: {
             type: 'string',
           },
         },
-        description: '输入列',
-      },
-      outputCol: {
-        title: 'Fixed_String',
-        type: 'object',
-        properties: {
-          value: {
-            type: 'string',
-          },
-        },
-        description: '输出列',
+        description: '输入列和输出列',
       },
     },
   },
@@ -920,11 +962,11 @@ const allComponents = {
             enum: [
               'FIXED',
               'GRID',
-              'RANGE',
             ],
-            description: '调节类型',
+            description: '类型',
           },
           tunableValue: {
+            required: false,
             type: 'array',
             items: {
               type: 'integer',
@@ -932,6 +974,7 @@ const allComponents = {
             description: '可调值',
           },
           value: {
+            required: false,
             type: 'integer',
             description: '固定值',
           },
@@ -947,11 +990,11 @@ const allComponents = {
             enum: [
               'FIXED',
               'GRID',
-              'RANGE',
             ],
-            description: '调节类型',
+            description: '类型',
           },
           tunableValue: {
+            required: false,
             type: 'array',
             items: {
               type: 'number',
@@ -959,6 +1002,7 @@ const allComponents = {
             description: '可调值',
           },
           value: {
+            required: false,
             type: 'number',
             description: '固定值',
           },
@@ -992,13 +1036,27 @@ const allComponents = {
         description: '列名',
       },
       literal: {
-        title: 'Fixed_Any',
+        title: 'Value_Type_Pair',
         type: 'object',
         properties: {
+          fieldType: {
+            type: 'string',
+            enum: [
+              'date',
+              'long',
+              'int',
+              'float',
+              'string',
+              'decimal',
+              'double',
+              'short',
+              'timestamp',
+              'boolean',
+              'byte',
+            ],
+          },
           value: {
-            title: 'Any',
-            type: 'object',
-            properties: {},
+            type: 'string',
           },
         },
         description: '值',
@@ -1018,11 +1076,11 @@ const allComponents = {
             enum: [
               'FIXED',
               'GRID',
-              'RANGE',
             ],
-            description: '调节类型',
+            description: '类型',
           },
           tunableValue: {
+            required: false,
             type: 'array',
             items: {
               type: 'integer',
@@ -1030,6 +1088,7 @@ const allComponents = {
             description: '可调值',
           },
           value: {
+            required: false,
             type: 'integer',
             description: '固定值',
           },
@@ -1045,11 +1104,11 @@ const allComponents = {
             enum: [
               'FIXED',
               'GRID',
-              'RANGE',
             ],
-            description: '调节类型',
+            description: '类型',
           },
           tunableValue: {
+            required: false,
             type: 'array',
             items: {
               type: 'number',
@@ -1057,6 +1116,7 @@ const allComponents = {
             description: '可调值',
           },
           value: {
+            required: false,
             type: 'number',
             description: '固定值',
           },
@@ -1069,46 +1129,25 @@ const allComponents = {
     title: 'RandomSplitTransformerConf',
     type: 'object',
     properties: {
-      weights: {
-        title: 'Fixed_Double_Array',
+      firstWeight: {
+        title: 'Fixed_Double',
         type: 'object',
         properties: {
           value: {
-            type: 'array',
-            items: {
-              type: 'number',
-            },
+            type: 'number',
           },
         },
-        description: '划分比例',
+        description: '第1部分权重',
       },
-    },
-  },
-  OneHotEncoderStage: {
-    title: 'OneHotEncoderStageConf',
-    type: 'object',
-    properties: {
-      columnNamePairArray: {
-        title: 'Column_Name_Pair_Array',
+      secondWeight: {
+        title: 'Fixed_Double',
         type: 'object',
         properties: {
           value: {
-            type: 'array',
-            items: {
-              title: 'Column_Name_Pair',
-              type: 'object',
-              properties: {
-                column: {
-                  type: 'string',
-                },
-                name: {
-                  type: 'string',
-                },
-              },
-            },
+            type: 'number',
           },
         },
-        description: '输入列，输出列',
+        description: '第2部分权重',
       },
     },
   },
@@ -1149,7 +1188,46 @@ const allComponents = {
             type: 'integer',
           },
         },
-        description: '最大类别数',
+        description: '类别数阈值',
+      },
+    },
+  },
+  VectorAssemblerPStage: {
+    title: 'VectorAssemblerPStageConf',
+    type: 'object',
+    properties: {
+      assemblerConf: {
+        title: 'Column_Assembler_Conf',
+        type: 'object',
+        properties: {
+          inputs: {
+            type: 'array',
+            items: {
+              title: 'Column_Scaling_Strategy',
+              type: 'object',
+              properties: {
+                column: {
+                  type: 'string',
+                },
+                strategy: {
+                  type: 'string',
+                  enum: [
+                    'none',
+                    'standard',
+                    'minMax',
+                    'maxAbs',
+                  ],
+                  description: '归一化规则',
+                },
+              },
+            },
+            description: '输入列',
+          },
+          output: {
+            type: 'string',
+            description: '输出列',
+          },
+        },
       },
     },
   },
@@ -1158,28 +1236,11 @@ const allComponents = {
     type: 'object',
     properties: {
       blockSize: {
-        title: 'Tunable_Int',
+        title: 'Fixed_Int',
         type: 'object',
         properties: {
-          tunableType: {
-            type: 'string',
-            enum: [
-              'FIXED',
-              'GRID',
-              'RANGE',
-            ],
-            description: '调节类型',
-          },
-          tunableValue: {
-            type: 'array',
-            items: {
-              type: 'integer',
-            },
-            description: '可调值',
-          },
           value: {
             type: 'integer',
-            description: '固定值',
           },
         },
         description: '块大小',
@@ -1226,11 +1287,11 @@ const allComponents = {
             enum: [
               'FIXED',
               'GRID',
-              'RANGE',
             ],
-            description: '调节类型',
+            description: '类型',
           },
           tunableValue: {
+            required: false,
             type: 'array',
             items: {
               type: 'integer',
@@ -1238,6 +1299,7 @@ const allComponents = {
             description: '可调值',
           },
           value: {
+            required: false,
             type: 'integer',
             description: '固定值',
           },
@@ -1256,12 +1318,44 @@ const allComponents = {
       },
     },
   },
+  BucketizerPStage: {
+    title: 'BucketizerPStageConf',
+    type: 'object',
+    properties: {
+      columnAndName: {
+        title: 'Column_Name_Pair',
+        type: 'object',
+        properties: {
+          column: {
+            type: 'string',
+          },
+          name: {
+            type: 'string',
+          },
+        },
+        description: '输入列和输出列',
+      },
+      splits: {
+        title: 'Inc_Double_Array',
+        type: 'object',
+        properties: {
+          value: {
+            type: 'array',
+            items: {
+              type: 'number',
+            },
+          },
+        },
+        description: '分隔数组',
+      },
+    },
+  },
   AvroDataSource: {
     title: 'AvroDataSourceConf',
     type: 'object',
     properties: {
       path: {
-        title: 'Read_File_Path',
+        title: 'Fixed_File_Path',
         type: 'object',
         properties: {
           value: {
@@ -1272,7 +1366,7 @@ const allComponents = {
       },
       schemaPath: {
         required: false,
-        title: 'Read_File_Path',
+        title: 'Fixed_File_Path',
         type: 'object',
         properties: {
           value: {
@@ -1372,15 +1466,21 @@ const allComponents = {
     title: 'FileModelSourceConf',
     type: 'object',
     properties: {
-      relativePath: {
-        title: 'Fixed_Model_Path',
+      modelInfo: {
+        title: 'Fixed_Model_Info',
         type: 'object',
         properties: {
-          value: {
+          jobId: {
+            type: 'string',
+          },
+          operatorId: {
+            type: 'string',
+          },
+          pipelineId: {
             type: 'string',
           },
         },
-        description: '模型位置',
+        description: '模型构建信息',
       },
     },
   },
@@ -1393,31 +1493,27 @@ const allComponents = {
     title: 'ColumnRenameTransformerConf',
     type: 'object',
     properties: {
-      existingName: {
-        title: 'Fixed_Column_Array',
+      columnNameArray: {
+        title: 'Column_Name_Pair_Array',
         type: 'object',
         properties: {
           value: {
             type: 'array',
             items: {
-              type: 'string',
+              title: 'Column_Name_Pair',
+              type: 'object',
+              properties: {
+                column: {
+                  type: 'string',
+                },
+                name: {
+                  type: 'string',
+                },
+              },
             },
           },
         },
         description: '重命名列',
-      },
-      newName: {
-        title: 'Fixed_String_Array',
-        type: 'object',
-        properties: {
-          value: {
-            type: 'array',
-            items: {
-              type: 'string',
-            },
-          },
-        },
-        description: '新列名',
       },
     },
   },
@@ -1425,38 +1521,40 @@ const allComponents = {
     title: 'TypeConversionTransformerConf',
     type: 'object',
     properties: {
-      columns: {
-        title: 'Fixed_Column_Array',
+      columnTypeArray: {
+        title: 'Column_Type_Pair_Array',
         type: 'object',
         properties: {
           value: {
             type: 'array',
             items: {
-              type: 'string',
+              title: 'Column_Type_Pair',
+              type: 'object',
+              properties: {
+                column: {
+                  type: 'string',
+                },
+                fieldType: {
+                  type: 'string',
+                  enum: [
+                    'date',
+                    'long',
+                    'int',
+                    'float',
+                    'string',
+                    'decimal',
+                    'double',
+                    'short',
+                    'timestamp',
+                    'boolean',
+                    'byte',
+                  ],
+                },
+              },
             },
           },
         },
-        description: '转换列',
-      },
-      types: {
-        type: 'array',
-        items: {
-          type: 'string',
-          enum: [
-            'date',
-            'long',
-            'int',
-            'float',
-            'string',
-            'decimal',
-            'double',
-            'short',
-            'timestamp',
-            'boolean',
-            'byte',
-          ],
-        },
-        description: '目标类型',
+        description: '目标列和类型',
       },
     },
   },
@@ -1465,7 +1563,7 @@ const allComponents = {
     type: 'object',
     properties: {
       conditionExpr: {
-        title: 'Fixed_String',
+        title: 'Fixed_Expression',
         type: 'object',
         properties: {
           value: {
@@ -1473,35 +1571,6 @@ const allComponents = {
           },
         },
         description: '条件表达式',
-      },
-    },
-  },
-  VectorAssemblerStage: {
-    title: 'VectorAssemblerStageConf',
-    type: 'object',
-    properties: {
-      inputColumns: {
-        title: 'Fixed_Column_Array',
-        type: 'object',
-        properties: {
-          value: {
-            type: 'array',
-            items: {
-              type: 'string',
-            },
-          },
-        },
-        description: '输入列',
-      },
-      outputColumn: {
-        title: 'Fixed_String',
-        type: 'object',
-        properties: {
-          value: {
-            type: 'string',
-          },
-        },
-        description: '输出列',
       },
     },
   },

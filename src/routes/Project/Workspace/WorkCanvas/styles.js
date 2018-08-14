@@ -15,7 +15,7 @@ export const getStylesForType = (str, code) => {
   }
   switch (code) {
     case 'StringIndexerPStage':
-    case 'OneHotEncoderStage':
+    case 'OneHotEncoderPStage':
       return '#3B57FF';
     case 'KMeansStage':
       return '#95C801';
@@ -96,8 +96,8 @@ const componentIconDict = {
   ParquetDataSink: 'icon-datasink-parquet',
 
   // TODO: fix the following
-  VectorAssemblerStage: 'icon-classifier-cv',
-  OneHotEncoderStage: 'icon-preparation-filter',
+  VectorAssemblerPStage: 'icon-classifier-cv',
+  OneHotEncoderPStage: 'icon-preparation-filter',
   StringIndexerPStage: 'icon-preparation-transform',
   HiveDataSink: 'icon-datasink-db',
 
