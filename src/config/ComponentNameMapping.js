@@ -60,6 +60,8 @@ const nameMapping = {
   OneHotEncoderPStage: '独热编码',
   StringIndexerPStage: '字符串-索引变换',
   VectorAssemblerPStage: '向量组装',
+  BucketizerPStage: '离散化',
+  ImputerPStage: '补空值',
 
 
   /* config name mapping */
@@ -92,7 +94,7 @@ const nameMapping = {
   DropDuplicatesTransformerConf: '去重配置',
   MetricsPredictorConf: '应用模型配置(带预测)',
   DecisionTreeClassifierPStageConf: '决策树分类配置',
-  OneHotEncoderStageConf: '独热编码配置',
+  OneHotEncoderPStageConf: '独热编码配置',
   StringIndexerPStageConf: '字符串-索引转换配置',
   GradientBoostedTreeRegressorPStageConf: '梯度提升树回归配置',
   RandomForestClassifierPStageConf: '随机森林分类配置',
@@ -104,13 +106,16 @@ const nameMapping = {
   NaiveBayesStageStageConf: '朴素贝叶斯分类配置',
   MultilayerPerceptronClassifierStageConf: '多层感知机分类配置',
   KMeansStageConf: 'K-Means配置',
-  VectorAssemblerStageConf: '向量组装配置',
+  VectorAssemblerPStageConf: '向量组装配置',
   TrainValidationSplitTunerConf: '交叉验证训练调优配置',
   FileModelSourceConf: '模型存储配置',
   ParquetDataSourceConf: 'Parquet文件读取',
   JsonDataSourceConf: 'JSON文件读取',
   JdbcDataSourceConf: 'JDBC文件读取',
   AvroDataSourceConf: 'Avor文件读取',
+  BucketizerPStageConf: '离散化配置',
+  ImputerPStageConf: '补空值配置',
+
 };
 
 export default function translateName(name) {

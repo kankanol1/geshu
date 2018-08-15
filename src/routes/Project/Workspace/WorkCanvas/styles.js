@@ -16,6 +16,8 @@ export const getStylesForType = (str, code) => {
   switch (code) {
     case 'StringIndexerPStage':
     case 'OneHotEncoderPStage':
+    case 'ImputerPStage':
+    case 'BucketizerPStage':
       return '#3B57FF';
     case 'KMeansStage':
       return '#95C801';
@@ -101,6 +103,8 @@ const componentIconDict = {
   StringIndexerPStage: 'icon-preparation-transform',
   HiveDataSink: 'icon-datasink-db',
 
+  ImputerPStage: 'icon-preparation-add-null',
+  BucketizerPStage: 'icon-preparation-split-column',
 };
 
 export const getIconNameForComponent = (str) => {
