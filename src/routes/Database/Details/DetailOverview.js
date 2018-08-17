@@ -63,7 +63,7 @@ export default class DetailOverview extends PureComponent {
               lineWidth: 1,
             }}
         >
-          <Label
+          {/* <Label
             content="value"
             offset={-2}
             textStyle={{
@@ -72,7 +72,7 @@ export default class DetailOverview extends PureComponent {
                 shadowBlur: 2,
                 shadowColor: 'rgba(0, 0, 0, .45)',
               }}
-          />
+          /> */}
         </Geom>
       </Chart>
     );
