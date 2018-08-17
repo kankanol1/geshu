@@ -4,7 +4,7 @@ import { connect } from 'dva';
 import { Spin } from 'antd';
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
-import { Chart, Geom } from 'bizcharts';
+import { Chart, Geom, Axis, Tooltip } from 'bizcharts';
 
 @connect(({ databasedetail, loading }) => ({
   databasedetail,
@@ -25,9 +25,9 @@ export default class DetailTable extends React.Component {
     return (
       <div>
         <Chart height={100} padding={0} data={histogram[col]} forceFit>
-          {/* <Axis name="year" />
-          <Axis name="sales" /> */}
-          {/* <Tooltip
+          {/* <Axis name="range" />
+          <Axis name="count" />
+          <Tooltip
             crosshairs={{
               type: 'y',
             }}
@@ -48,7 +48,7 @@ export default class DetailTable extends React.Component {
     const cols = [];
     for (const key of Object.keys(data[0])) {
       cols.push({
-        Header: () => <div><span>{key}</span>{this.renderChartTest(key)}</div>,
+        Header: () => <div><span>{key}</span>{this.renderChartTest(key.trim())}</div>,
         accessor: key,
         width: 400,
       });
