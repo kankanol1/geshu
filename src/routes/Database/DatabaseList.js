@@ -83,6 +83,8 @@ export default class DatabaseList extends PureComponent {
       align: 'center',
       render: (text, record) => (
         <Fragment>
+          <Link to={`/storage/dblist/show/${record.id}`}>查看</Link>
+          <Divider type="vertical" />
           <a onClick={() => this.handleEdit(record)} >编辑</a>
           <Divider type="vertical" />
           <Popconfirm
@@ -366,7 +368,15 @@ export default class DatabaseList extends PureComponent {
     };
 
     return (
-      <PageHeaderLayout>
+      <PageHeaderLayout
+        breadcrumbList={[{
+            title: '首页',
+            href: '/',
+          }, {
+            title: '数据库列表',
+          }]
+        }
+      >
         <Card>
           <div className={styles.tableList}>
             <div className={styles.tableListForm}>

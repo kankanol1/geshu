@@ -57,10 +57,12 @@ const menuData = [
     }, {
       name: '数据库列表',
       path: 'dblist',
-    }, {
-      name: '数据库查询',
-      path: 'dbquery',
-    }],
+    },
+    //  {
+    //   name: '数据库查询',
+    //   path: 'dbquery',
+    // }
+    ],
   }, {
     name: '图数据管理',
     icon: 'share-alt',

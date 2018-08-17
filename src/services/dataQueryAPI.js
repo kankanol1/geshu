@@ -13,3 +13,24 @@ export async function performDataQuery(params) {
     body: params,
   });
 }
+
+export async function queryTableHeatmap(params) {
+  return request('/api/data/base/heatmap', {
+    method: 'POST',
+    body: params,
+  });
+}
+
+export async function queryTableData(params) {
+  return request('/api/data/base/data', {
+    method: 'POST',
+    body: params,
+  });
+}
+
+export async function queryTableHistogram(params) {
+  return request('/api/data/base/histogram', {
+    method: 'POST',
+    body: params,
+  });
+}

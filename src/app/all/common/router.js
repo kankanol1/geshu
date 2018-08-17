@@ -136,8 +136,11 @@ export const getRouterData = (app) => {
     },
 
     // database
-    '/storage/dblist': {
+    '/storage/dblist/index': {
       component: dynamicWrapper(app, ['database'], () => import('../../../routes/Database/DatabaseList')),
+    },
+    '/storage/dblist/show/:table': {
+      component: dynamicWrapper(app, ['databasedetail'], () => import('../../../routes/Database/DatabaseDetail')),
     },
     /* database */
     '/storage/dbquery': {

@@ -20,6 +20,7 @@ import { getServingModels, offlineServingModels, onlineServingModels } from './m
 import { getQueryResult, getLastestDatabasesForProject, persistDataQuery } from './mock/dataquery';
 import { fetchSchema } from './mock/workspace/components';
 import { allProjectListForStorage, listFileForType, mkdirForType, renameForType, moveForType, deleteForType, registeredStoreTypes } from './mock/storage';
+import { getTableData, getTableHeatmap, getTableHistogram } from './mock/dataquerybase';
 // import { createDatabase, updateDatabase } from './src/services/databaseAPI';
 // import { deleteDatabase } from './mock/database';
 
@@ -172,6 +173,10 @@ const proxy = serverEnabled ?
   'POST /api/data/hive/querytmp': getQueryResult,
   'POST /api/data/hive/query': getQueryResult,
   'POST /api/data/hive/persist': persistDataQuery,
+
+  'POST /api/data/base/data': getTableData,
+  'POST /api/data/base/heatmap': getTableHeatmap,
+  'POST /api/data/base/histogram': getTableHistogram,
 
   /** component: component utils */
   'POST /api/component/schema/prefetch': fetchSchema,
