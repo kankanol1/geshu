@@ -2,7 +2,7 @@ import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
 import { Link } from 'dva/router';
 import moment from 'moment';
-import { Popconfirm, Row, Col, Card, Form, Input, Button, DatePicker } from 'antd';
+import { Popconfirm, Row, Col, Card, Form, Input, Button, DatePicker, Divider } from 'antd';
 import StandardTable from '../../components/StandardTable';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './ModelList.less';
@@ -69,9 +69,13 @@ export default class ServingModelList extends PureComponent {
           (currentUser.userName === record.onlinedBy || currentUser.role === 'admin')
             ?
             (
-              <Popconfirm title="确认下线吗?" onConfirm={() => this.handleRecordDelete(record)}>
-                <a>下线</a>
-              </Popconfirm>
+              <React.Fragment>
+                <Link to={`/models/serving/test/${record.id}`}>模型测试</Link>
+                <Divider type="vertical" />
+                <Popconfirm title="确认下线吗?" onConfirm={() => this.handleRecordDelete(record)}>
+                  <a>下线</a>
+                </Popconfirm>
+              </React.Fragment>
             )
             : null
         ),

@@ -13,23 +13,15 @@ const menuData = [
   //   }],
   // },
   {
-    name: '中心存储',
-    icon: 'file',
-    path: 'storage',
-    children: [{
-      name: '文件列表',
-      path: 'list',
-    }],
-  }, {
-    name: '图数据管理',
+    name: '数据管理',
     icon: 'share-alt',
     path: 'graph',
     children: [{
-      name: '图项目列表',
+      name: '项目列表',
       path: 'list',
     },
     {
-      name: '图作业管理',
+      name: '作业管理',
       path: 'jobs',
     }, {
       name: '设计器',
@@ -43,6 +35,14 @@ const menuData = [
     }, {
       name: '数据探索',
       path: 'explore',
+    }],
+  }, {
+    name: '中心存储',
+    icon: 'file',
+    path: 'storage',
+    children: [{
+      name: '文件列表',
+      path: 'list',
     }],
   }, {
     name: '用户管理',

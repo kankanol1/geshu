@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'dva';
 import { Card, Col, Row, Input, Spin } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
-import InputSchemaForm from './InputSchemaSimpleForm';
+import InputSchemaForm from './InputSchemaForm';
 
 const { TextArea } = Input;
 
@@ -10,7 +10,7 @@ const { TextArea } = Input;
   modeltest,
   loading: loading.models.modeltest,
 }))
-export default class ModelServingTest extends Component {
+export default class ModelServingTestForm extends Component {
   componentWillMount() {
     // fetch model details.
     this.fetchModelInfo(this.props);

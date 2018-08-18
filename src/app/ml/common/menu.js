@@ -12,7 +12,6 @@ const menuData = [
   //   // hideInMenu: true,
   //   }],
   // },
-
   {
     name: '项目管理',
     icon: 'bulb',
@@ -23,28 +22,6 @@ const menuData = [
     }, {
       name: '工作区',
       path: 'workspace',
-    }],
-  }, {
-    name: '模型管理',
-    icon: 'api',
-    path: 'models',
-    children: [{
-      name: '待选模型库',
-      path: 'candidates',
-    }, {
-      name: '模型库',
-      path: 'list',
-    }, {
-      name: '模型服务',
-      path: 'serving',
-    }],
-  }, {
-    name: '作业管理',
-    icon: 'schedule',
-    path: 'jobs',
-    children: [{
-      name: '作业列表',
-      path: 'list',
     }],
   },
   {
@@ -63,6 +40,28 @@ const menuData = [
     //   path: 'dbquery',
     // }
     ],
+  }, {
+    name: '作业管理',
+    icon: 'schedule',
+    path: 'jobs',
+    children: [{
+      name: '作业列表',
+      path: 'list',
+    }],
+  }, {
+    name: '模型管理',
+    icon: 'api',
+    path: 'models',
+    children: [{
+      name: '待选模型库',
+      path: 'candidates',
+    }, {
+      name: '模型库',
+      path: 'list',
+    }, {
+      name: '模型服务',
+      path: 'serving',
+    }],
   }, {
     name: '用户管理',
     icon: 'contacts',

@@ -169,6 +169,9 @@ class AbstractBasicLayout extends LoadedLayout {
       const redirectPath = replaceUrlWithParams(url, urlParams);
       window.history.replaceState(null, 'redirect', redirectPath);
     } else {
+      if (getFromRegistory('env') === ENV_GRAPH) {
+        return '/graph/list';
+      }
       return '/project/list';
     }
     return redirect;
