@@ -221,7 +221,7 @@ export default class SiderMenu extends PureComponent {
         <div className={styles.logo} key="logo">
           <Link to="/">
             <img src={logo} alt="logo" />
-            <h1>GAIA</h1>
+            <h1>{this.props.title}</h1>
           </Link>
         </div>
         <Menu
