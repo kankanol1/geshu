@@ -24,8 +24,13 @@ export default class InputSchemaSimpleForm extends React.Component {
         form.validateFields((err, fieldsValue) => {
           if (err) return;
           const jsonStr = fieldsValue.value;
-          const jsonObj = JSON.parse(jsonStr);
-          this.props.onSubmit(jsonObj);
+          try {
+            const jsonObj = JSON.parse(jsonStr);
+            this.props.onSubmit(jsonObj);
+          } catch (error) {
+            // eslint-ignore-next-line
+            alert('请求参数不符合规范');
+          }
         });
       }}
       >
