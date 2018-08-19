@@ -28,7 +28,7 @@ export default class InputSchemaSimpleForm extends React.Component {
             const jsonObj = JSON.parse(jsonStr);
             this.props.onSubmit(jsonObj);
           } catch (error) {
-            // eslint-ignore-next-line
+            // eslint-disable-next-line
             alert('请求参数不符合规范');
           }
         });

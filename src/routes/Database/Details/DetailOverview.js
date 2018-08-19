@@ -26,12 +26,20 @@ export default class DetailOverview extends PureComponent {
         height={600}
         data={data}
         scale={cols}
-        padding={[20, 80, 120, 85]}
-        width={800}
+        style={{ overflow: 'auto' }}
+        padding={[20, 80, 40, 85]}
+        width={1800}
         // forceFit
       >
         <Axis
           name="c1"
+          label={{
+            textStyle: {
+              fontSize: '11',
+              rotate: '0',
+            },
+            autoRotate: false,
+          }}
           grid={{
               align: 'center',
               lineStyle: {
@@ -44,6 +52,11 @@ export default class DetailOverview extends PureComponent {
         />
         <Axis
           name="c2"
+          label={{
+            textStyle: {
+              fontSize: '11',
+            },
+          }}
           grid={{
               align: 'center',
               lineStyle: {
@@ -57,6 +70,14 @@ export default class DetailOverview extends PureComponent {
         <Geom
           type="polygon"
           position="c1*c2"
+          tooltip={['c1*c2', (c1, c2, value) => {
+            return {
+              // 自定义 tooltip 上显示的 title 显示内容等。
+              title: cols.c1.values[c1],
+              name: cols.c2.values[c2],
+              value: data.filter(i => i.c1 === c1 && i.c2 === c2)[0].value,
+            };
+          }]}
           color={['value', '#BAE7FF-#1890FF-#0050B3']}
           style={{
               stroke: '#fff',

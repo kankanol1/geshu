@@ -71,8 +71,14 @@ export default class ModelServingTest extends Component {
             </Col>
             <Col span={12}>
               { loading ? <Spin /> : (
-                <TextArea value={`${result.result === undefined ? '' : result.result}`} rows={10} disabled />
-              )
+                <Row>
+                  <Col span={4}>
+                    <label htmlFor="label">Label</label>
+                  </Col>
+                  <Col span={20}>
+                    <TextArea id="label" value={`${result.result === undefined ? '' : result.result}`} rows={10} disabled />
+                  </Col>
+                </Row>)
             }
             </Col>
           </Row>
