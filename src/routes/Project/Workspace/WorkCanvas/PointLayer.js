@@ -15,10 +15,12 @@ class PointLayer extends React.Component {
     super(props);
     this.state = { hovering: [] };
     this.lastUpdated = -1;
+    this.modelCache = undefined;
   }
 
   shouldComponentUpdate() {
-    if (!this.props.model) return true;
+    if (!this.props.model || this.modelCache !== this.props.model) return true;
+    this.modelCache = this.props.model;
     const result = !this.lastUpdated || this.lastUpdated < this.props.model.updated;
     if (result) this.lastUpdated = this.props.model.updated;
     return result;
