@@ -89,10 +89,12 @@ export default {
 
     saveProjectInfoToState(state, { payload }) {
       const canvas = Canvas.fromJson(payload.components);
-      const { name } = payload;
+      const { name, schema, validation } = payload;
       return { ...state,
         canvas,
         name,
+        schema,
+        validation,
         tips: { ...state.tips, messages: appendMessage(state.tips.messages, '加载完毕') },
         state: { projectId: payload.id, lastSync: Date.now(), dirty: false } };
     },
@@ -231,7 +233,7 @@ export default {
       yield put({
         type: 'saveProjectInfoToState',
         payload: {
-          response: rest,
+          ...rest,
           components,
           id: payload.id,
         },
