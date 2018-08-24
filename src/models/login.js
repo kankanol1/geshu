@@ -8,7 +8,6 @@ export default {
   namespace: 'login',
 
   state: {
-
   },
 
   effects: {
@@ -64,5 +63,12 @@ export default {
   },
 
   reducers: {
+    changeLoginStatus(state, { payload }) {
+      return {
+        ...state,
+        status: payload.status,
+      };
+    },
+
   },
 };
