@@ -89,9 +89,10 @@ export default {
 
     saveProjectInfoToState(state, { payload }) {
       const canvas = Canvas.fromJson(payload.components);
+      const { name } = payload;
       return { ...state,
-        ...payload.response,
         canvas,
+        name,
         tips: { ...state.tips, messages: appendMessage(state.tips.messages, '加载完毕') },
         state: { projectId: payload.id, lastSync: Date.now(), dirty: false } };
     },

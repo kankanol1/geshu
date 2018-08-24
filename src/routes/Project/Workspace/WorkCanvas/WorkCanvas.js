@@ -234,9 +234,11 @@ export default class WorkCanvas extends React.Component {
 
   handleSettingsClicked(component) {
     const { dispatch, workcanvas, work_component_settings } = this.props;
-    const { state: { projectId } } = workcanvas;
+    const { state: { projectId }, canvas } = workcanvas;
     const { currentComponent, display: { dirty } } = work_component_settings;
-    if (component.id !== currentComponent) {
+    // get current selection.
+    const lastSelected = canvas.getSelectedComponents();
+    if (component.id !== currentComponent || lastSelected.length > 1) {
       // only process when it's not the same.
       const performChange = () => {
         const newSelection = [{
