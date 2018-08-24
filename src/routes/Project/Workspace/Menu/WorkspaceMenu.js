@@ -81,6 +81,11 @@ export default class WorkspaceMenu extends React.PureComponent {
               type: 'workcanvas/canvasDeleteSelected',
             });
             break;
+          case 'save':
+            dispatch({
+              type: 'workcanvas/saveProject',
+            });
+            break;
           default:
             break;
         }
@@ -245,8 +250,9 @@ export default class WorkspaceMenu extends React.PureComponent {
   }
 
   render() {
-    const { env, global, workcanvas: { canvas } } = this.props;
+    const { env, global, workcanvas: { canvas, state } } = this.props;
     const { fullScreen } = global;
+    const isProjectDirty = state.dirty;
     if (!canvas) {
       return null;
     }
@@ -266,6 +272,7 @@ export default class WorkspaceMenu extends React.PureComponent {
             </SubMenu>
           </SubMenu>
           <SubMenu title={<span> <Icon type="edit" />编辑</span>}>
+            <Menu.Item key="save" disabled={!isProjectDirty} type="command">保存 ({this.renderShortcut('Ctrl+s', '⌘+s')})</Menu.Item>
             <Menu.Item key="undo" disabled={!canvas.canUndo()} type="command">撤销 ({this.renderShortcut('Ctrl+z', '⌘+z')})</Menu.Item>
             <Menu.Item key="redo" disabled={!canvas.canRedo()} type="command" >重做 ({this.renderShortcut('Ctrl+y', '⌘+y')})</Menu.Item>
             <Menu.Item key="selectAll" type="command">全选 ({this.renderShortcut('Ctrl+a', '⌘+a')})</Menu.Item>
