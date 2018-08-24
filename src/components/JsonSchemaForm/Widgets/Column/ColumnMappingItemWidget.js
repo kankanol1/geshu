@@ -1,5 +1,5 @@
 import React from 'react';
-import { Input, Select, Row, Col } from 'antd';
+import { Input, Select, Row, Col, Icon, Tag } from 'antd';
 import { callFuncElseError } from '../../utils';
 
 export default class ColumnMappingItemWidget extends React.Component {
@@ -35,7 +35,7 @@ export default class ColumnMappingItemWidget extends React.Component {
           <Col span={16}>
             {
             error ?
-              <p style={{ color: 'red' }}>{error.message}</p>
+              <p style={{ color: 'red' }}>{error.message} <Tag onClick={() => this.forceUpdate()} > <Icon type="sync" /> 刷新 </Tag></p>
             :
               (
                 <Select

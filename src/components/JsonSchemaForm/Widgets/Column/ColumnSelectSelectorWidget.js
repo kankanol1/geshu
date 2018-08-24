@@ -1,5 +1,5 @@
 import React from 'react';
-import { Select } from 'antd';
+import { Select, Tag, Icon } from 'antd';
 import ConfigurationTable from '../../UI/ConfigurationTable';
 import { callFuncElseError } from '../../utils';
 
@@ -30,7 +30,7 @@ export default class ColumnSelectSelectorWidget extends React.Component {
     const { result, error } = callFuncElseError(getField);
     const schema = result;
     if (error) {
-      return <p style={{ color: 'red' }}>{error.message}</p>;
+      return <p style={{ color: 'red' }}>{error.message} <Tag onClick={() => this.forceUpdate()} > <Icon type="sync" /> 刷新 </Tag></p>;
     }
     const renderData = this.state.data;
     const { required } = this.props;
