@@ -121,7 +121,7 @@ export default {
       };
       const newC = Component.fromJson(nc);
       canvas.apply(new ComponentAdd(newC));
-      return { ...state, canvas };
+      return { ...state, canvas, state: { ...state.state, dirty: true } };
     },
 
     canvasSelectionChange(state, { payload }) {

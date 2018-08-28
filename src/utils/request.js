@@ -4,8 +4,6 @@ import fetch from 'dva/fetch';
 import Cookie from 'js-cookie';
 import { getFromRegistory } from '../common/registry';
 
-const store = getFromRegistory('store');
-
 const codeMessage = {
   200: '服务器成功返回请求的数据。',
   201: '新建或修改数据成功。',
@@ -82,6 +80,7 @@ export default function request(url, options) {
       return response.json();
     })
     .catch((e) => {
+      const store = getFromRegistory('store');
       const { dispatch } = store;
       const status = e.name;
       if (status === 401) {
