@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, Button, Input, Modal, Radio, Card, Tag } from 'antd';
+import { Row, Col, Button, Input, Modal, Icon, Card, Tag } from 'antd';
 import { Controlled as CodeMirror } from 'react-codemirror2';
 import codemirror from 'codemirror';
 import 'codemirror/mode/sql/sql';
@@ -102,8 +102,8 @@ export default class ExpressionEditor extends React.Component {
 
   renderAdvanceInput() {
     const { uiSchema: { 'ui:options': { getTableSchema } } } = this.props;
-    const tableInfo = getTableSchema && getTableSchema();
     const table = {};
+    const tableInfo = getTableSchema && getTableSchema();
     tableInfo.forEach((i) => {
       table[i.table] = i.schema.map(v => v.name);
     });
@@ -195,9 +195,14 @@ export default class ExpressionEditor extends React.Component {
   render() {
     const { schema, required, uiSchema } = this.props;
     const { getTableSchema } = uiSchema['ui:options'];
-    if (!getTableSchema) {
-      return <div style={{ color: 'red' }}> 未定义获取Schema函数 </div>;
+    let error;
+    try {
+      const _ = getTableSchema && getTableSchema();
+    } catch (e) {
+      // error.
+      error = e;
     }
+    if (error) return <p style={{ color: 'red' }}>{error.message} <Tag onClick={() => this.forceUpdate()} > <Icon type="sync" /> 刷新 </Tag></p>;
     return (
       <Row>
         <Col span={6}><legend>{schema.description} {required ? ' *' : null}</legend></Col>

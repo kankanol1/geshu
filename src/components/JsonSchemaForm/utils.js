@@ -8,7 +8,7 @@ export function callFuncElseError(func) {
       error = err;
     }
   } else {
-    error = '未定义处理函数,请通过ui:option设置';
+    error = { message: '未定义处理函数,请通过ui:option设置' };
   }
   return { result, error };
 }
