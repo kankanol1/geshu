@@ -27,6 +27,8 @@ const registeredSpecialUISchemas = {
 
   // expression.
   Fixed_Expression: translateBooleanExpressionUISchema,
+
+  Column_Assembler_Conf: translateColumnAssemblerConfUISchema,
 };
 
 /* fixed any */
@@ -129,6 +131,12 @@ function translateBooleanExpressionUISchema(originJsonSchema, id, code, name, pr
     'ui:options': {
       getTableSchema: () => getAllInputSchemaForComponent(id),
     },
+  };
+}
+
+function translateColumnAssemblerConfUISchema(originJsonSchema, id, code, name, projectId) {
+  return { 'ui:field': 'column_assembler_conf',
+    'ui:options': { getField: () => FuncUtils.getAllColumnsFromUpstream(id) },
   };
 }
 

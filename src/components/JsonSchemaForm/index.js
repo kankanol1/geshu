@@ -25,6 +25,7 @@ import CustomFieldTemplate from './Templates/CustomFieldTemplate';
 import ArrayFieldTemplate from './Templates/ArrayFieldTemplate';
 import ErrorListTemplate from './Templates/ErrorListTemplate';
 import ExpressionEditor from './Widgets/ExprEditor/ExpressionEditor';
+import ColumnAssemblerConfWidget from './Widgets/Composite/ColumnAssemblerConfWidget';
 
 const registeredWidgets = {
   SelectWidget,
@@ -46,6 +47,7 @@ const registeredFields = {
   column_selector_checkbox: ColumnSelectCheckboxWidget,
   column_selector_selector: ColumnSelectSelectorWidget,
   boolean_expression_editor: ExpressionEditor,
+  column_assembler_conf: ColumnAssemblerConfWidget,
 
   // tunnable widgets
   // tunable_int: TunableNumberWidget,
