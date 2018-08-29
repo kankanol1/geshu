@@ -256,9 +256,9 @@ export default {
     },
 
     *saveProject({ payload }, { put, call, select }) {
-      const { showMessage, callback } = payload;
+      const { showMessage, yieldCallback, force, callback } = payload;
       const currentState = yield select(state => state.workcanvas);
-      if (!currentState.state.dirty) {
+      if (!currentState.state.dirty && !force) {
         if (showMessage) {
           message.info('保存成功');
         }
@@ -294,8 +294,11 @@ export default {
           },
         });
       }
+      if (yieldCallback) {
+        yield yieldCallback();
+      }
       if (callback) {
-        yield callback();
+        callback();
       }
     },
 

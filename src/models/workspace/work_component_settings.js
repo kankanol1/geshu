@@ -107,7 +107,6 @@ export default {
         display: {
           dirty: false, displayFormData: state.formDataDict[id],
         },
-        loading: false,
       };
     },
 
@@ -180,18 +179,20 @@ export default {
         type: 'workcanvas/saveProject',
         payload: {
           showMessage: false,
-          *callback() {
+          *yieldCallback() {
             // extract form data.
             yield put({
               type: 'setFormDataForId',
               id: component.id,
             });
+            yield put({ type: 'setLoading', payload: false });
           },
         },
       });
     },
 
     *saveCurrentComponentSettings({ payload, callback }, { select, put, call }) {
+      yield put({ type: 'setLoading', payload: true });
       const projectId = payload.id;
       const { currentComponent, display: { displayFormData } } =
         yield select(state => state.work_component_settings);
@@ -203,11 +204,12 @@ export default {
       const response = yield call(saveComponentSettings,
         { id: projectId, component: currentComponent, payload: displayFormData });
       if (response.success) {
-        // message.info(response.message);
+        message.info(response.message);
         yield put({
           type: 'workcanvas/saveProject',
+          // force save to remote.
           payload: {
-            id: projectId,
+            force: true,
           },
         });
         if (callback) {
@@ -216,6 +218,7 @@ export default {
       } else {
         message.error(response.message);
       }
+      yield put({ type: 'setLoading', payload: false });
     },
   },
 };
