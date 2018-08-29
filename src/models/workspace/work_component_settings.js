@@ -37,6 +37,8 @@ export default {
       dirty: false,
       displayFormData: undefined,
     },
+
+    loading: true,
   },
 
   reducers: {
@@ -60,7 +62,7 @@ export default {
       jsonSchemaDict[id] = { ...translatedJsonSchema, id, name };
       uiSchemaDict[id] = { ...translatedUISchema, id, name };
       // 3. don't forget to change the selection.
-      return { ...state, jsonSchemaDict, uiSchemaDict, componentSettings };
+      return { ...state, jsonSchemaDict, uiSchemaDict, componentSettings, loading: false };
     },
 
     setCurrentComponent(state, { id }) {
@@ -104,7 +106,9 @@ export default {
       return { ...state,
         display: {
           dirty: false, displayFormData: state.formDataDict[id],
-        } };
+        },
+        loading: false,
+      };
     },
 
     setDisplayFormValue(state, { payload }) {
@@ -114,6 +118,13 @@ export default {
           dirty: true,
           displayFormData: payload.displayFormData,
         },
+      };
+    },
+
+    setLoading(state, { payload }) {
+      return {
+        ...state,
+        loading: payload,
       };
     },
   },
@@ -145,6 +156,8 @@ export default {
      * @param {*} param2
      */
     *displayComponentSetting({ payload }, { put, select }) {
+      // set loading to true.
+      yield put({ type: 'setLoading', payload: true });
       const { component, projectId } = payload;
       const { componentMetaDict, componentSettings } =
         yield select(state => state.work_component_settings);
@@ -162,10 +175,19 @@ export default {
           projectId,
         });
       }
-      // extract form data.
+      // save canvas if not saved.
       yield put({
-        type: 'setFormDataForId',
-        id: component.id,
+        type: 'workcanvas/saveProject',
+        payload: {
+          showMessage: false,
+          *callback() {
+            // extract form data.
+            yield put({
+              type: 'setFormDataForId',
+              id: component.id,
+            });
+          },
+        },
       });
     },
 

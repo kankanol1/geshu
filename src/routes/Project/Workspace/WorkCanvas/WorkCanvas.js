@@ -82,6 +82,9 @@ export default class WorkCanvas extends React.Component {
       e.preventDefault();
       return dispatch({
         type: 'workcanvas/saveProject',
+        payload: {
+          showMessage: true,
+        },
       });
     });
     // undo

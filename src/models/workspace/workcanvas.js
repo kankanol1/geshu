@@ -256,39 +256,48 @@ export default {
       });
     },
 
-    *saveProject({ _ }, { put, call, select }) {
+    *saveProject({ payload }, { put, call, select }) {
+      const { showMessage, callback } = payload;
       const currentState = yield select(state => state.workcanvas);
       if (!currentState.state.dirty) {
-        message.info('保存成功');
-        return;
-      }
-      const response = yield call(saveProject,
-        { id: currentState.state.projectId, payload: { components: currentState.canvas.toJson() } }
-      );
-      if (response.success) {
-        message.info('保存成功');
+        if (showMessage) {
+          message.info('保存成功');
+        }
+      } else {
+        const response = yield call(saveProject,
+          { id: currentState.state.projectId,
+            payload: { components: currentState.canvas.toJson() } }
+        );
+        if (response.success) {
+          if (showMessage) {
+            message.info('保存成功');
+          }
+          yield put({
+            type: 'updateProjectSchema',
+            payload: {
+              schema: response.schema,
+              validation: response.validation,
+            },
+          });
+          // yield put({
+          //   type: 'saveState',
+          //   payload: {
+          //     dirty: false,
+          //   },
+          // });
+        } else if (showMessage) {
+          message.error('保存出错！请检查重试');
+        }
         yield put({
-          type: 'updateProjectSchema',
+          type: 'addMessage',
           payload: {
-            schema: response.schema,
-            validation: response.validation,
+            message: `项目保存${response.success ? '成功' : '失败'}`,
           },
         });
-        // yield put({
-        //   type: 'saveState',
-        //   payload: {
-        //     dirty: false,
-        //   },
-        // });
-      } else {
-        message.error('保存出错！请检查重试');
       }
-      yield put({
-        type: 'addMessage',
-        payload: {
-          message: `项目保存${response.success ? '成功' : '失败'}`,
-        },
-      });
+      if (callback) {
+        yield callback();
+      }
     },
 
     *canvasDeleteSelected({ payload }, { put, call, select }) {

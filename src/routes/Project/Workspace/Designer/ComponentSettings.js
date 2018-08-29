@@ -4,11 +4,9 @@ import { Collapse, Button, Icon, Spin, Modal } from 'antd';
 import BasicParamInput from '../../../../components/Inputs/BasicParamInput';
 import ComponentSettingsForm from './ComponentSettingsForm';
 import translateName from '../../../../config/ComponentNameMapping';
-import styles from './WorkArea.less';
 
-@connect(({ work_component_settings, loading }) => ({
+@connect(({ work_component_settings }) => ({
   work_component_settings,
-  loading: loading.models.work_component_settings,
 }))
 export default class ComponentSettings extends React.PureComponent {
   onCloseClicked(e) {
@@ -71,9 +69,8 @@ export default class ComponentSettings extends React.PureComponent {
     if (currentComponent === undefined) {
       return null;
     }
-    const { loading } = this.props;
+    const { loading } = this.props.work_component_settings;
     const displaySettings = componentSettings[currentComponent];
-
     if (!loading && !displaySettings) {
       // means already being deleted.
       return null;
