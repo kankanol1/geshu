@@ -27,6 +27,7 @@ import ErrorListTemplate from './Templates/ErrorListTemplate';
 import ExpressionEditor from './Widgets/ExprEditor/ExpressionEditor';
 import ColumnAssemblerConfWidget from './Widgets/Composite/ColumnAssemblerConfWidget';
 import ColumnTypePairTable from './Widgets/Column/ColumnTypePairTable';
+import RandomSplitWidget from './Widgets/Composite/RandomSplitWidget';
 
 const registeredWidgets = {
   SelectWidget,
@@ -50,6 +51,7 @@ const registeredFields = {
   boolean_expression_editor: ExpressionEditor,
   column_assembler_conf: ColumnAssemblerConfWidget,
   column_type_pair_array: ColumnTypePairTable,
+  random_split_widget: RandomSplitWidget,
   // tunnable widgets
   // tunable_int: TunableNumberWidget,
   tunable_int: TunnableIntWidget,

@@ -31,6 +31,7 @@ const registeredSpecialUISchemas = {
   Column_Assembler_Conf: translateColumnAssemblerConfUISchema,
 
   Column_Type_Pair_Array: translateColumnTypePairArrayUISchema,
+  RandomSplitTransformerConf: translateRandomSplitTransformerConfUISchema,
 };
 
 /* fixed any */
@@ -148,6 +149,12 @@ function translateColumnTypePairArrayUISchema(originJsonSchema, id, code, name, 
   };
 }
 
+function translateRandomSplitTransformerConfUISchema(originJsonSchema, id, code, name, projectId) {
+  return { 'ui:field': 'random_split_widget',
+    'ui:options': { getField: () => FuncUtils.getAllColumnsFromUpstream(id) },
+  };
+}
+
 /** ======== end translate switch schema ========== */
 
 /** general translation */
@@ -230,7 +237,15 @@ export function extractUISchema(originJsonSchema, id, code, name, projectId) {
       }
     }
   }
-  return uiSchema;
+
+  const translateFunc = registeredSpecialUISchemas[originJsonSchema.title];
+  let newUISchema = uiSchema;
+  if (translateFunc !== undefined) {
+    // translate.
+    const obj = translateFunc(originJsonSchema, id, code, name, projectId);
+    newUISchema = { ...uiSchema, ...obj };
+  }
+  return newUISchema;
 }
 
 
