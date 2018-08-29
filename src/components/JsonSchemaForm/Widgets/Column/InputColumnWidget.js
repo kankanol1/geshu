@@ -1,7 +1,7 @@
 
 
 import React from 'react';
-import { Modal, Button, Row, Col } from 'antd';
+import { Tag, Icon, Row, Col } from 'antd';
 import SelectWidget from '../SelectWidget';
 import { callFuncElseError } from '../../utils';
 
@@ -26,7 +26,10 @@ export default class InputColumnWidget extends React.PureComponent {
         <Row>
           <Col span={8}><legend> {description} {required ? '*' : null}</legend></Col>
           <Col span={16}>
-            <p style={{ color: 'red' }}>{error.message}</p>
+            <React.Fragment>
+              <p style={{ color: 'red', display: 'inline-block', paddingRight: '20px' }}>{error.message}</p>
+              <Tag onClick={() => this.forceUpdate()} > <Icon type="sync" /> 刷新 </Tag>
+            </React.Fragment>
           </Col>
         </Row>
       );

@@ -29,6 +29,8 @@ const registeredSpecialUISchemas = {
   Fixed_Expression: translateBooleanExpressionUISchema,
 
   Column_Assembler_Conf: translateColumnAssemblerConfUISchema,
+
+  Column_Type_Pair_Array: translateColumnTypePairArrayUISchema,
 };
 
 /* fixed any */
@@ -136,6 +138,12 @@ function translateBooleanExpressionUISchema(originJsonSchema, id, code, name, pr
 
 function translateColumnAssemblerConfUISchema(originJsonSchema, id, code, name, projectId) {
   return { 'ui:field': 'column_assembler_conf',
+    'ui:options': { getField: () => FuncUtils.getAllColumnsFromUpstream(id) },
+  };
+}
+
+function translateColumnTypePairArrayUISchema(originJsonSchema, id, code, name, projectId) {
+  return { 'ui:field': 'column_type_pair_array',
     'ui:options': { getField: () => FuncUtils.getAllColumnsFromUpstream(id) },
   };
 }

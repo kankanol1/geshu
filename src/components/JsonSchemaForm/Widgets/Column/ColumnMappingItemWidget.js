@@ -35,7 +35,12 @@ export default class ColumnMappingItemWidget extends React.Component {
           <Col span={16}>
             {
             error ?
-              <p style={{ color: 'red' }}>{error.message} <Tag onClick={() => this.forceUpdate()} > <Icon type="sync" /> 刷新 </Tag></p>
+             (
+               <React.Fragment>
+                 <p style={{ color: 'red', display: 'inline-block', paddingRight: '20px' }}>{error.message}</p>
+                 <Tag onClick={() => this.forceUpdate()} > <Icon type="sync" /> 刷新 </Tag>
+               </React.Fragment>
+            )
             :
               (
                 <Select

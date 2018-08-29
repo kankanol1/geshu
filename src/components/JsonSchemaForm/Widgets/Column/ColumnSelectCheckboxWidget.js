@@ -1,8 +1,9 @@
 import React from 'react';
-import { Input, Checkbox } from 'antd';
+import { Input, Checkbox, Tag, Icon } from 'antd';
 import ConfigurationTable from '../../UI/ConfigurationTable';
 import { callFuncElseError } from '../../utils';
 
+// render object. {value: []}
 export default class ColumnSelectCheckboxWidget extends React.Component {
   constructor(props) {
     super(props);
@@ -30,7 +31,12 @@ export default class ColumnSelectCheckboxWidget extends React.Component {
     const { result, error } = callFuncElseError(getField);
     const schema = result;
     if (error) {
-      return <p style={{ color: 'red' }}>{error.message}</p>;
+      return (
+        <React.Fragment>
+          <p style={{ color: 'red', display: 'inline-block', paddingRight: '20px' }}>{error.message}</p>
+          <Tag onClick={() => this.forceUpdate()} > <Icon type="sync" /> 刷新 </Tag>
+        </React.Fragment>
+      );
     }
     const { data } = this.state;
     // translate data to checkbox.

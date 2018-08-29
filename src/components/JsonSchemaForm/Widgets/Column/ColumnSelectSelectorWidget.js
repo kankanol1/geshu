@@ -3,6 +3,7 @@ import { Select, Tag, Icon } from 'antd';
 import ConfigurationTable from '../../UI/ConfigurationTable';
 import { callFuncElseError } from '../../utils';
 
+// render array. []
 export default class ColumnSelectSelectorWidget extends React.Component {
   constructor(props) {
     super(props);
@@ -30,7 +31,12 @@ export default class ColumnSelectSelectorWidget extends React.Component {
     const { result, error } = callFuncElseError(getField);
     const schema = result;
     if (error) {
-      return <p style={{ color: 'red' }}>{error.message} <Tag onClick={() => this.forceUpdate()} > <Icon type="sync" /> 刷新 </Tag></p>;
+      return (
+        <React.Fragment>
+          <p style={{ color: 'red', display: 'inline-block', paddingRight: '20px' }}>{error.message}</p>
+          <Tag onClick={() => this.forceUpdate()} > <Icon type="sync" /> 刷新 </Tag>
+        </React.Fragment>
+      );
     }
     const renderData = this.state.data;
     const { required } = this.props;

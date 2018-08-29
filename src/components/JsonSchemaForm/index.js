@@ -26,6 +26,7 @@ import ArrayFieldTemplate from './Templates/ArrayFieldTemplate';
 import ErrorListTemplate from './Templates/ErrorListTemplate';
 import ExpressionEditor from './Widgets/ExprEditor/ExpressionEditor';
 import ColumnAssemblerConfWidget from './Widgets/Composite/ColumnAssemblerConfWidget';
+import ColumnTypePairTable from './Widgets/Column/ColumnTypePairTable';
 
 const registeredWidgets = {
   SelectWidget,
@@ -48,7 +49,7 @@ const registeredFields = {
   column_selector_selector: ColumnSelectSelectorWidget,
   boolean_expression_editor: ExpressionEditor,
   column_assembler_conf: ColumnAssemblerConfWidget,
-
+  column_type_pair_array: ColumnTypePairTable,
   // tunnable widgets
   // tunable_int: TunableNumberWidget,
   tunable_int: TunnableIntWidget,

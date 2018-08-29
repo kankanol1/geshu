@@ -1,25 +1,33 @@
 import React from 'react';
-import { Input, Select, Tag, Icon } from 'antd';
+import { Select, Tag, Icon } from 'antd';
 import ConfigurationTable from '../../UI/ConfigurationTable';
 import { callFuncElseError } from '../../utils';
 
-export default class ColumnMappingWidget extends React.Component {
+// render object. {value: []}
+export default class ColumnTypePairTable extends React.Component {
   constructor(props) {
     super(props);
     const { formData } = this.props;
     this.state = {
-      data: formData.value || [],
+      data: (formData.value || []),
     };
+    if (!formData) {
+      this.props.onChange({ value: [] });
+    }
   }
+
   componentWillReceiveProps(props) {
     const { formData } = props;
     this.setState({
-      data: formData.value || [],
+      data: (formData.value || []),
     });
+    if (!formData) {
+      this.props.onChange({ value: [] });
+    }
   }
 
   render() {
-    const { inputColumnTitle, outputColumnTitle, getField } = this.props.uiSchema['ui:options'];
+    const { getField } = this.props.uiSchema['ui:options'];
     const { result, error } = callFuncElseError(getField);
     const schema = result;
     if (error) {
@@ -30,21 +38,25 @@ export default class ColumnMappingWidget extends React.Component {
         </React.Fragment>
       );
     }
+    const renderData = this.state.data;
+    const { required } = this.props;
+    // const { description } = this.props.schema;
     return (
       <ConfigurationTable
         canAdd={schema && this.state.data.length < schema.length}
         canDelete
-        onChange={v =>
-            this.setState({
-              data: v,
-            },
-            () => this.props.onChange({ value: v })
-          )
+        onChange={(v) => {
+              this.setState({
+                data: v,
+              },
+              () => this.props.onChange({ value: v })
+              );
+            }
           }
-        data={this.state.data}
+        data={renderData}
         columns={[{
           name: 'column',
-          title: inputColumnTitle || '输入列',
+          title: `输入列${required ? '*' : ''}`,
           render: (v, item, onChange) => (
             <Select
               placeholder="请选择"
@@ -64,18 +76,31 @@ export default class ColumnMappingWidget extends React.Component {
               )}
             </Select>
         ),
-          span: 11,
+          span: 14,
         }, {
-          name: 'name',
-          title: outputColumnTitle || '输出列',
+          name: 'fieldType',
+          // title: this.props.schema.properties.value.items.properties.fieldType.description
+          // + (required ? '*' : ''),
+          title: `类型${required ? '*' : ''}`,
           render: (v, item, onChange) => (
-            <Input
-              defaultValue={v}
+            <Select
+              placeholder="请选择"
+              onChange={e => onChange(e)}
               value={v}
-              onChange={e => onChange(e.target.value)}
-            />
+            >
+              {this.props.schema.properties.value.items.properties.fieldType.enum.map(i =>
+                (
+                  <Select.Option
+                    key={i}
+                    value={i}
+                  >
+                    {i}
+                  </Select.Option>
+                )
+              )}
+            </Select>
         ),
-          span: 11,
+          span: 8,
         },
       ]}
       />
