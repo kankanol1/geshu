@@ -36,7 +36,6 @@ export default {
     },
     name: undefined,
     canvas: undefined,
-    mode: 'select',
     contextmenu: {
       show: false,
       component: null,

@@ -59,6 +59,7 @@ export default class WorkCanvas extends React.Component {
       stopY: 0,
     },
     mode: 'select',
+    opMode: 'select',
   }
 
   componentWillMount() {
@@ -189,7 +190,7 @@ export default class WorkCanvas extends React.Component {
 
   handleDragStop(e) {
     e.preventDefault();
-    // only deals with under select mode.
+    // only proceed under select mode.
     if (this.state.mode === 'select') {
       // get rect size.
       const { startX, startY, stopX, stopY } = this.state.draggingSelection;
@@ -224,7 +225,7 @@ export default class WorkCanvas extends React.Component {
   handleDragStart(e) {
     e.preventDefault();
     // set mode.
-    if (key.isPressed('space')) {
+    if (key.isPressed('space') || this.state.opMode === 'move') {
       this.setState({
         mode: 'move',
       });
@@ -299,14 +300,18 @@ export default class WorkCanvas extends React.Component {
     if (key.isPressed('space')) {
       const { deltaX, deltaY } = e;
       const maxDelta = Math.abs(deltaX) > Math.abs(deltaY) ? deltaX : deltaY;
-      const delta = maxDelta > 0 ? 0.1 : -0.1;
-      const { canvas } = this.props.workcanvas;
-      let newScale = delta + canvas.scale;
-      if (newScale > 1.1) newScale = 1.1;
-      if (newScale < 0.5) newScale = 0.5;
-      canvas.apply(new ScaleChange(newScale));
-      this.triggerUpdate(canvas);
+      const delta = maxDelta > 0 ? -0.1 : 0.1;
+      this.handleCanvasScaleUpdate(delta);
     }
+  }
+
+  handleCanvasScaleUpdate(updateValue) {
+    const { canvas } = this.props.workcanvas;
+    let newScale = updateValue + canvas.scale;
+    if (newScale > 1.1) newScale = 1.1;
+    if (newScale < 0.5) newScale = 0.5;
+    canvas.apply(new ScaleChange(newScale));
+    this.triggerUpdate(canvas);
   }
 
   triggerUpdate(canvas) {
@@ -316,9 +321,59 @@ export default class WorkCanvas extends React.Component {
     });
   }
 
+  renderToolbarView() {
+    const { canvas } = this.props.workcanvas;
+    const { opMode } = this.state;
+    if (!canvas) return null;
+    const props = {
+      className: 'iconfont',
+      onDoubleClick: (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+      },
+    };
+
+    return (
+      <div className={styles.toolbarContainer} >
+        <div className={styles.toolbar}>
+          {
+            opMode === 'select' ?
+              <div><i {...props} onClick={() => this.setState({ opMode: 'move', mode: 'move' })}>&#xe615;</i></div>
+            :
+              <div><i {...props} onClick={() => this.setState({ opMode: 'select', mode: 'select' })}>&#xe68d;</i></div>
+          }
+          <div>
+            <i
+              {...props}
+              onClick={(e) => {
+                // zoom in.
+                e.preventDefault();
+                e.stopPropagation();
+                this.handleCanvasScaleUpdate(0.1);
+              }}
+            >&#xe713;
+            </i>
+          </div>
+          <div>
+            <i
+              {...props}
+              onClick={(e) => {
+                // zoom out.
+                e.preventDefault();
+                e.stopPropagation();
+                this.handleCanvasScaleUpdate(-0.1);
+              }}
+            >&#xe714;
+            </i>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   render() {
     const { state: { projectId }, canvas, validation, contextmenu } = this.props.workcanvas;
-    const { mode } = this.state;
+    const { mode, opMode } = this.state;
     if (canvas === undefined) return null;
     const { componentPositionCache, componentSocketPositionCache } = canvas;
     let contextMenuView = null;
@@ -353,7 +408,7 @@ export default class WorkCanvas extends React.Component {
         >
           <div
             style={{
-              cursor: mode === 'move' ? 'move' : 'default',
+              cursor: opMode === 'move' || mode === 'move' ? 'move' : 'default',
               transform: `scale(${canvas.scale})`,
               overflow: 'hidden',
               ...viewPort,
@@ -446,6 +501,9 @@ export default class WorkCanvas extends React.Component {
         </DraggableCore>
         {
           contextMenuView
+        }
+        {
+          this.renderToolbarView()
         }
         {
         this.state.inspectData ? (
