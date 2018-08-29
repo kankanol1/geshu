@@ -37,7 +37,7 @@ export default class DefineSchemaWidget extends React.PureComponent {
         canDelete={showExtraOp}
         data={this.state.data}
         maxHeight={this.props.height}
-        opSpan={2}
+        opSpan={0}
         onChange={v =>
             this.setState({
               data: Object.assign([], v),
@@ -55,7 +55,7 @@ export default class DefineSchemaWidget extends React.PureComponent {
         }, {
           name: 'name',
           title: '列名',
-          span: 8,
+          span: 10,
           render: (v, item, onChange) => (
             <Input defaultValue={v} value={v} onChange={e => onChange(e.target.value)} />
           ),
@@ -64,7 +64,7 @@ export default class DefineSchemaWidget extends React.PureComponent {
           title: '类型',
           span: 8,
           render: (v, item, onChange) => (
-            <Select style={{ width: 120 }} onChange={e => onChange(e)} defaultValue={v} value={v} >
+            <Select style={{ width: '100%' }} onChange={e => onChange(e)} defaultValue={v} value={v} >
               {schemaTypes.map(
               type => <Option value={type.value} key={type.name}>{type.name}</Option>
             )}

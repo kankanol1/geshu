@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'dva';
-import { Layout, Collapse, Button, Icon, Spin, Modal } from 'antd';
+import { Collapse, Button, Icon, Spin, Modal } from 'antd';
 import BasicParamInput from '../../../../components/Inputs/BasicParamInput';
 import ComponentSettingsForm from './ComponentSettingsForm';
 import translateName from '../../../../config/ComponentNameMapping';
@@ -12,10 +12,15 @@ import styles from './WorkArea.less';
 }))
 export default class ComponentSettings extends React.PureComponent {
   onCloseClicked(e) {
-    const closeSettingsPane = () =>
+    const closeSettingsPane = () => {
       this.props.dispatch({
         type: 'work_component_settings/resetCurrentComponent',
       });
+      // clear selection.
+      this.props.dispatch({
+        type: 'workcanvas/canvasClearSelection',
+      });
+    };
     const { dirty } = this.props.work_component_settings.display;
     const { dispatch, match: { params: { id: projectId } } } = this.props;
     if (dirty) {
@@ -75,19 +80,21 @@ export default class ComponentSettings extends React.PureComponent {
     }
     // build required.
     return (
-      <div className={styles.workSettingDiv}>
-        <div style={{ padding: '5px', background: '#fafafa', borderLeft: '1px solid #e8e8e8' }}>
-          <Button type="danger" size="default" onClick={e => this.onCloseClicked(e)} disabled={loading} >
-            <Icon type={loading ? 'loading' : 'close'} />
-          </Button>
-          <div style={{ display: 'inline-block', textAlign: 'center', width: '80%' }}>
-            { loading ? '加载中...' : displaySettings === undefined ? '未获取到配置' : translateName(displaySettings.title)}
-          </div>
-        </div>
-        { loading ? (
-          <div style={{ paddingTop: '20%', textAlign: 'center' }}>
-            <Spin />
-          </div>)
+      <Modal
+        title={loading ? '加载中...' : displaySettings === undefined ? '未获取到配置' : translateName(displaySettings.title)}
+        visible
+        footer={null}
+        // onOk={() => this.handleOk()}
+        onCancel={() => this.onCloseClicked()}
+        destroyOnClose
+        width={800}
+      >
+        {/* <div className={styles.workSettingDiv}> */}
+        <div style={{ height: '500px' }}>
+          { loading ? (
+            <div style={{ paddingTop: '20%', textAlign: 'center' }}>
+              <Spin />
+            </div>)
           :
           (displaySettings.properties === undefined ||
             Object.entries(displaySettings.properties).length === 0 ?
@@ -105,7 +112,8 @@ export default class ComponentSettings extends React.PureComponent {
             )
           )
         }
-      </div>
+        </div>
+      </Modal>
     );
   }
 }

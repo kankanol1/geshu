@@ -71,9 +71,8 @@ class NodeLayer extends React.Component {
     e.preventDefault();
     // if not dragged, perform selection change.
     if (!this.hasDrag) {
-      // change selection.
       if (this.props.onNodeClicked) {
-        this.props.onNodeClicked(this.props.model);
+        this.props.onNodeClicked(this.props.model, false);
       }
     } else {
       const { canvas } = this.props;
@@ -191,6 +190,11 @@ class NodeLayer extends React.Component {
            }}
             onContextMenu={e => this.handleContextMenu(e)}
             className={nodeClassName}
+            onDoubleClick={() => {
+              if (this.props.onNodeClicked) {
+                this.props.onNodeClicked(this.props.model, true);
+              }
+            }}
           >
             <i className={`${icon} x-icon`} />
             {name}

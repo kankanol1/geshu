@@ -197,11 +197,20 @@ export default {
       return { ...state };
     },
 
+    canvasClearSelection(state) {
+      state.canvas.apply(new SelectionChange([]));
+      return { ...state };
+    },
+
     contextMenuOffsetInit(state, { payload }) {
       return { ...state, contextmenu: { ...state.contextmenu, ...payload } };
     },
 
     openContextMenu(state, { component, x, y }) {
+      // change selection to this component.
+      state.canvas.apply(new SelectionChange([
+        { type: 'component', id: component.id },
+      ]));
       return {
         ...state,
         contextmenu: {

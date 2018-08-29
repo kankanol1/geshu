@@ -68,7 +68,7 @@ export default class ComponentSettingsForm extends React.PureComponent {
     const component = componentSettings[currentComponent];
     return (
       <Fragment>
-        <Scrollbars style={{ height: 'calc( 100% - 88px)' }}>
+        <Scrollbars style={{ height: 'calc( 100% - 30px)' }}>
           <JsonSchemaForm
             formData={displayFormData}
             className={styles.settingForm}
@@ -84,9 +84,9 @@ export default class ComponentSettingsForm extends React.PureComponent {
           </JsonSchemaForm>
         </Scrollbars>
         <Affix offsetBottom={10} style={{ height: '46px', textAlign: 'center', background: '#fafafa' }}>
-          <Button style={{ margin: '5px 10px' }} type="primary" onClick={e => this.submitForm(e)}> <Icon type="save" />保存 </Button>
-          <Button style={{ margin: '5px 10px' }} disabled={!dirty} onClick={() => this.resetForm()} > <Icon type="sync" />重置 </Button>
-          <Button style={{ margin: '5px 10px' }} type="danger" disabled={jsonSchema === undefined} onClick={() => this.clearForm()} > <Icon type="delete" />清空 </Button>
+          <Button style={{ margin: '10px 50px' }} type="primary" onClick={e => this.submitForm(e)}> <Icon type="save" />保存 </Button>
+          <Button style={{ margin: '10px 50px' }} disabled={!dirty} onClick={() => this.resetForm()} > <Icon type="sync" />重置 </Button>
+          <Button style={{ margin: '10px 50px' }} type="danger" disabled={jsonSchema === undefined} onClick={() => this.clearForm()} > <Icon type="delete" />清空 </Button>
         </Affix >
       </Fragment>
     );

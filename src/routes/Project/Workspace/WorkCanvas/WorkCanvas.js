@@ -232,7 +232,7 @@ export default class WorkCanvas extends React.Component {
     }
   }
 
-  handleSettingsClicked(component) {
+  handleSettingsClicked(component, showSettings = false) {
     const { dispatch, workcanvas, work_component_settings } = this.props;
     const { state: { projectId }, canvas } = workcanvas;
     const { currentComponent, display: { dirty } } = work_component_settings;
@@ -252,13 +252,15 @@ export default class WorkCanvas extends React.Component {
             newSelection,
           },
         });
-        dispatch({
-          type: 'work_component_settings/displayComponentSetting',
-          payload: {
-            component,
-            projectId,
-          },
-        });
+        if (showSettings) {
+          dispatch({
+            type: 'work_component_settings/displayComponentSetting',
+            payload: {
+              component,
+              projectId,
+            },
+          });
+        }
       };
       if (dirty) {
         Modal.confirm({
@@ -322,7 +324,7 @@ export default class WorkCanvas extends React.Component {
       contextMenuView = (
         <ContextMenu
           {...contextmenu}
-          onSettingsClicked={() => this.handleSettingsClicked(component)}
+          onSettingsClicked={() => this.handleSettingsClicked(component, true)}
           onInspectClicked={() => this.handleInspectClicked(component)}
         />
       );
@@ -387,7 +389,7 @@ export default class WorkCanvas extends React.Component {
                     positionDict={componentSocketPositionCache}
                     componentDict={componentPositionCache}
                     onCanvasUpdated={c => this.triggerUpdate(c)}
-                    onNodeClicked={c => this.handleSettingsClicked(c)}
+                    onNodeClicked={(c, flag) => this.handleSettingsClicked(c, flag)}
                     // selection={selection}
                     projectId={projectId}
                     // offset={offset}
