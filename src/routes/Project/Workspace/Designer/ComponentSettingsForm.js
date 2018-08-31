@@ -15,16 +15,33 @@ import styles from './ComponentSettingsForm.less';
   work_component_settings,
 }))
 export default class ComponentSettingsForm extends React.PureComponent {
+  constructor(props) {
+    super(props);
+    // close is the flag used to identify whether to close the settings form.
+    this.state = { close: false };
+  }
+
   submitForm() {
     this.submitButton.click();
   }
 
+  submitFormAndClose() {
+    this.submitForm();
+    this.setState({ close: true });
+  }
+
   handleFormSubmit(value) {
-    const { dispatch } = this.props;
+    const { dispatch, onClose } = this.props;
+    const { close } = this.state;
     dispatch({
       type: 'work_component_settings/saveCurrentComponentSettings',
       payload: {
         id: this.props.match.params.id,
+      },
+      callback: () => {
+        if (close && onClose) {
+          onClose();
+        }
       },
     });
   }
@@ -84,9 +101,10 @@ export default class ComponentSettingsForm extends React.PureComponent {
           </JsonSchemaForm>
         </Scrollbars>
         <Affix offsetBottom={10} style={{ height: '46px', textAlign: 'center', background: '#fafafa' }}>
-          <Button style={{ margin: '10px 50px' }} type="primary" onClick={e => this.submitForm(e)}> <Icon type="save" />保存 </Button>
-          <Button style={{ margin: '10px 50px' }} disabled={!dirty} onClick={() => this.resetForm()} > <Icon type="sync" />重置 </Button>
           <Button style={{ margin: '10px 50px' }} type="danger" disabled={jsonSchema === undefined} onClick={() => this.clearForm()} > <Icon type="delete" />清空 </Button>
+          <Button style={{ margin: '10px 50px' }} type="dashed" disabled={!dirty} onClick={() => this.resetForm()} > <Icon type="sync" />重置 </Button>
+          <Button style={{ margin: '10px 50px' }} onClick={e => this.submitForm(e)}> <Icon type="save" />应用 </Button>
+          <Button style={{ margin: '10px 50px' }} type="primary" onClick={e => this.submitFormAndClose(e)}> <Icon type="save" />保存并关闭 </Button>
         </Affix >
       </Fragment>
     );

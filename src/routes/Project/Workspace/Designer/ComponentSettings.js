@@ -84,7 +84,7 @@ export default class ComponentSettings extends React.PureComponent {
         // onOk={() => this.handleOk()}
         onCancel={() => this.onCloseClicked()}
         destroyOnClose
-        width={800}
+        width={900}
       >
         {/* <div className={styles.workSettingDiv}> */}
         <div style={{ height: '500px' }}>
@@ -105,6 +105,7 @@ export default class ComponentSettings extends React.PureComponent {
               <ComponentSettingsForm
                 match={this.props.match}
                 style={{ paddingTop: '20px', background: '#f5f5f5', height: '100%', zIndex: 200 }}
+                onClose={() => this.onCloseClicked()}
               />
             )
           )
