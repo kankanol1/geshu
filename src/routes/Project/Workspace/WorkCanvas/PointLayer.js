@@ -76,22 +76,27 @@ class PointLayer extends React.Component {
       if (draggingMetaType === 'input') {
         const candidate = overlappedOutputs[0];
         if (candidate.component.id === draggingComponent) {
-          message.info('暂不能将同一组件首位相连');
+          message.warn('暂不能将同一组件首位相连');
         } else if (draggingConnects.includes(candidate.type)) {
           // candidate is output, meaning dragging source should be an output.
           // add connectFrom to the candidate point.
           // add new line.
-          const newOp = new ConnectionAdd(model, new Connection(
-            candidate.component.id,
-            candidate.pointId,
-            draggingPoint,
-          ));
-          canvas.apply(newOp);
+          if (model.connections.length === 0) {
+            // only add when the input point is not connected.
+            const newOp = new ConnectionAdd(model, new Connection(
+              candidate.component.id,
+              candidate.pointId,
+              draggingPoint,
+            ));
+            canvas.apply(newOp);
+          } else {
+            message.warn('输入点已连接，一个输入点仅能连出一条线');
+          }
         } else {
-          message.info('not compatiable');
+          message.warn('不兼容的输入输出节点，无法连接');
         }
       } else {
-        message.info('needs to be connected with an output point');
+        message.warn('需与输入节点相连，不能连接到输出节点');
       }
     }
     if (overlappedInputs.length !== 0) {
@@ -102,15 +107,19 @@ class PointLayer extends React.Component {
         if (candidate.component.id === draggingComponent) {
           message.info('暂不能将同一组件首位相连');
         } else if (candidate.connects.includes(draggingType)) {
-          const newOp = new ConnectionAdd(candidate.component, new Connection(
-            draggingComponent, draggingPoint, candidate.pointId,
-          ));
-          canvas.apply(newOp);
+          if (candidate.component.connections.length === 0) {
+            const newOp = new ConnectionAdd(candidate.component, new Connection(
+              draggingComponent, draggingPoint, candidate.pointId,
+            ));
+            canvas.apply(newOp);
+          } else {
+            message.warn('输入点已连接，一个输入点仅能连出一条线');
+          }
         } else {
-          message.info('not compatiable');
+          message.warn('不兼容的输入输出节点，无法连接');
         }
       } else {
-        message.info('needs to be connected with an input point');
+        message.warn('需与输出节点相连，不能连接到输入节点');
       }
     }
     this.props.dispatch({
