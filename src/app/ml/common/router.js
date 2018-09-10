@@ -150,8 +150,17 @@ export const getRouterData = (app) => {
     // () => import('../../../routes/Database/DatabaseQuery')),
     // },
     // dataset
-    '/storage/dataset/': {
+    '/storage/dataset/index': {
       component: dynamicWrapper(app, ['dataset'], () => import('../../../routes/Dataset/DatasetList')),
+    },
+    '/storage/dataset/create': {
+      component: dynamicWrapper(app, ['dataset'], () => import('../../../routes/Dataset/EditDataset')),
+    },
+    '/storage/dataset/update/:id': {
+      component: dynamicWrapper(app, ['dataset'], () => import('../../../routes/Dataset/EditDataset')),
+    },
+    '/storage/dataset/show/:id': {
+      component: dynamicWrapper(app, ['databasedetail'], () => import('../../../routes/Dataset/DatasetDetail')),
     },
     /* center storage */
     '/storage/filelist': {

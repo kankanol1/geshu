@@ -269,3 +269,54 @@ export function updateDataset(req, res, u, b) {
     return result;
   }
 }
+
+export function createDatasetGetSchema(req, res, u, b) {
+  let url = u;
+  if (!url || Object.prototype.toString.call(url) !== '[object String]') {
+    url = req.url; // eslint-disable-line
+  }
+
+  const body = (b && b.body) || req.body;
+  const { id, name, description, isPublic } = body;
+
+  const result = {
+    success: true,
+    message: '验证成功',
+    schema: [
+      { name: 'key', type: '"string"', nullable: false },
+      { name: 'value', type: '"string"', nullable: true },
+    ],
+  };
+
+  if (res && res.json) {
+    res.json(result);
+  } else {
+    return result;
+  }
+}
+
+
+export function getDatasetInfoForId(req, res, u, b) {
+  let url = u;
+  if (!url || Object.prototype.toString.call(url) !== '[object String]') {
+    url = req.url; // eslint-disable-line
+  }
+
+  const params = getUrlParams(url);
+  let dataSource = [...datasetDatasource];
+  if (params.id) {
+    dataSource = dataSource.filter((data) => {
+      if (params.id === data.id) {
+        return true;
+      } else {
+        return false;
+      }
+    });
+  }
+  const result = dataSource[0];
+  if (res && res.json) {
+    res.json(result);
+  } else {
+    return result;
+  }
+}

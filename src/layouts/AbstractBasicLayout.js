@@ -140,7 +140,7 @@ class AbstractBasicLayout extends LoadedLayout {
               // redirects.
             }
             <Redirect exact from="/models/serving" to="/models/serving/list" />
-            <Redirect exact from="/storage/dblist" to="/storage/dblist/index" />
+            <Redirect exact from="/storage/dataset" to="/storage/dataset/index" />
             {this.getCustomRedirect()}
             <Route render={NotFound} />
           </Switch>

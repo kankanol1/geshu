@@ -1,6 +1,5 @@
 import { message } from 'antd';
-import { queryDataset, makePublicDataset, makePrivateDataset, updateDataset, removeDataset } from '../services/datasetAPI';
-import { createDataset } from '../../mock/dataset';
+import { queryDataset, makePublicDataset, makePrivateDataset, updateDataset, removeDataset, getDatasetSchema, createDataset, getDatasetInfoForId } from '../services/datasetAPI';
 
 export default {
   namespace: 'dataset',
@@ -9,6 +8,11 @@ export default {
     data: {
       list: [],
       pagination: {},
+    },
+    create: {
+      // schema return.
+      scehma: {},
+      result: {},
     },
   },
 
@@ -19,6 +23,26 @@ export default {
         data: {
           ...state.data,
           ...payload,
+        },
+      };
+    },
+
+    saveDatasetSchema(state, { payload }) {
+      return {
+        ...state,
+        create: {
+          ...state.create,
+          schema: payload,
+        },
+      };
+    },
+
+    saveCreateDatasetResult(state, { payload }) {
+      return {
+        ...state,
+        create: {
+          ...state.create,
+          result: payload,
         },
       };
     },
@@ -65,34 +89,38 @@ export default {
         message.error(response.message);
       }
     },
+
     *updateDataset({ payload, callback }, { call, put }) {
-      const response = yield call(updateDataset, { ...payload });
-      if (response.success) {
-        message.success(response.message);
-        callback();
-      } else {
-        // show message.
-        message.error(response.message);
-      }
+      const response = yield call(updateDataset, payload);
+      yield put({
+        type: 'saveCreateDatasetResult',
+        payload: response,
+      });
+      if (callback) callback();
     },
 
-    *createDataset({ payload, resolve, reject }, { call, put }) {
-      const response = yield call(createDataset, { ...payload });
-      if (response.success) {
-        message.success(response.message);
-        yield put({
-          type: 'fetchDatabaseList',
-          payload: payload.refreshParams,
-        });
-        if (resolve !== undefined) {
-          resolve(response);
-        }
-      } else {
-        // show message.
-        message.error(response.message);
-        if (reject !== undefined) {
-          reject(response);
-        }
+    *getSchema({ payload, callback }, { call, put }) {
+      const response = yield call(getDatasetSchema, payload);
+      yield put({
+        type: 'saveDatasetSchema',
+        payload: response,
+      });
+      if (callback) callback();
+    },
+
+    *createDataset({ payload, callback }, { call, put }) {
+      const response = yield call(createDataset, payload);
+      yield put({
+        type: 'saveCreateDatasetResult',
+        payload: response,
+      });
+      if (callback) callback();
+    },
+
+    *fetchDatasetInfoForId({ payload, callback }, { call, put }) {
+      const response = yield call(getDatasetInfoForId, payload);
+      if (callback) {
+        callback(response);
       }
     },
   },

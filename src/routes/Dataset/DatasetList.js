@@ -1,13 +1,12 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
-import { Link } from 'dva/router';
+import { Link, routerRedux } from 'dva/router';
 import moment from 'moment';
 import { Popconfirm, Tag, Row, Col, Card, Form, Input, Select, Icon, Button, Menu, InputNumber, DatePicker, Modal, message, Badge, Divider } from 'antd';
 import StandardTable from '../../components/StandardTable';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './DatasetList.less';
 import { buildTagSelect } from '../../utils/uiUtils';
-import CreateDatasetForm from './CreateDatasetForm';
 
 const FormItem = Form.Item;
 const { RangePicker } = DatePicker;
@@ -23,7 +22,6 @@ const getValue = obj => Object.keys(obj).map(key => obj[key]).join(',');
 @Form.create()
 export default class DatasetList extends PureComponent {
   state = {
-    modalVisible: false,
     selectedRows: [],
     expendForm: false,
     currentRecord: undefined,
@@ -83,9 +81,9 @@ export default class DatasetList extends PureComponent {
       align: 'center',
       render: (text, record) => (
         <Fragment>
-          <Link to={`/storage/dblist/show/${record.id}`}>查看</Link>
+          <Link to={`/storage/dataset/show/${record.id}`}>查看</Link>
           <Divider type="vertical" />
-          <a onClick={() => this.handleEdit(record)} >编辑</a>
+          <Link to={`/storage/dataset/update/${record.id}`}>编辑</Link>
           <Divider type="vertical" />
           <Popconfirm
             title={record.isPublic ? '确认取消公开吗?' : '确认设为公开吗?'}
@@ -119,14 +117,6 @@ export default class DatasetList extends PureComponent {
     this.refreshParams = params;
   }
 
-  handleEdit = (record) => {
-    // handle record edit.
-    this.setState({
-      ...this.state,
-      currentRecord: record,
-      modalVisible: true,
-    });
-  }
   handlePublic = (record) => {
     const { dispatch } = this.props;
     dispatch({
@@ -157,21 +147,6 @@ export default class DatasetList extends PureComponent {
       ...this.state,
       selectedRows: rows,
     });
-  }
-
-  handleUpdate = (fieldsValue, currentRecord) => {
-    const { dataset: { data }, dispatch } = this.props;
-    dispatch({
-      type: 'dataset/updateDataset',
-      payload: {
-        ...fieldsValue,
-        id: currentRecord.id,
-      },
-      callback: () => {
-        this.performQuery(this.refreshParams);
-      },
-    });
-    this.handleModalVisible(false);
   }
 
   handleSearch = (e) => {
@@ -228,13 +203,6 @@ export default class DatasetList extends PureComponent {
     this.performQuery(params);
   }
 
-  handleModalVisible = (visible) => {
-    this.setState({ ...this.state,
-      modalVisible: !!visible,
-      currentRecord: undefined,
-    });
-  }
-
   handleMultiDelete = () => {
     const { dispatch } = this.props;
     const ids = this.state.selectedRows.map(record => record.id);
@@ -259,6 +227,11 @@ export default class DatasetList extends PureComponent {
       formValues: {},
     });
     this.performQuery({});
+  }
+
+  handleNewDataset = () => {
+    const { dispatch } = this.props;
+    dispatch(routerRedux.push('create'));
   }
 
   toggleForm = () => {
@@ -360,10 +333,9 @@ export default class DatasetList extends PureComponent {
 
   render() {
     const { dataset: { data }, loading } = this.props;
-    const { selectedRows, modalVisible, currentRecord } = this.state;
+    const { selectedRows, currentRecord } = this.state;
 
     const parentMethods = {
-      handleModalVisible: this.handleModalVisible,
       currentRecord,
       handleUpdate: this.handleUpdate,
     };
@@ -374,7 +346,7 @@ export default class DatasetList extends PureComponent {
             title: '首页',
             href: '/',
           }, {
-            title: '数据库列表',
+            title: '数据集列表',
           }]
         }
       >
@@ -384,6 +356,9 @@ export default class DatasetList extends PureComponent {
               {this.renderForm()}
             </div>
             <div className={styles.tableListOperator}>
+              <Button icon="plus" type="primary" onClick={() => this.handleNewDataset()}>
+                新建
+              </Button>
               <Popconfirm title="确认删除吗?" onConfirm={() => this.handleMultiDelete()}>
                 {
                   selectedRows.length > 0 && (
@@ -402,10 +377,6 @@ export default class DatasetList extends PureComponent {
             onChange={this.handleStandardTableChange}
           />
         </Card>
-        <CreateDatasetForm
-          {...parentMethods}
-          modalVisible={modalVisible}
-        />
       </PageHeaderLayout>
     );
   }

@@ -21,7 +21,7 @@ import { getQueryResult, getLastestDatabasesForProject, persistDataQuery } from 
 import { fetchSchema } from './mock/workspace/components';
 import { allProjectListForStorage, listFileForType, mkdirForType, renameForType, moveForType, deleteForType, registeredStoreTypes } from './mock/storage';
 import { getTableData, getTableHeatmap, getTableHistogram } from './mock/dataquerybase';
-import { getDatasetList, createDataset, updateDataset, deleteDataset, makePublicDataset, makePrivateDataset } from './mock/dataset';
+import { getDatasetList, createDataset, updateDataset, deleteDataset, makePublicDataset, makePrivateDataset, createDatasetGetSchema, getDatasetInfoForId } from './mock/dataset';
 // import { createDatabase, updateDatabase } from './src/services/databaseAPI';
 // import { deleteDatabase } from './mock/database';
 
@@ -84,6 +84,8 @@ const proxy = serverEnabled ?
   'POST /api/dataset/delete': deleteDataset,
   'POST /api/dataset/publicize': makePublicDataset,
   'POST /api/dataset/privatize': makePrivateDataset,
+  'POST /api/dataset/schema': createDatasetGetSchema,
+  'GET /api/dataset/get': getDatasetInfoForId,
 
   // login
   'POST /api/login/account': login,

@@ -53,6 +53,19 @@ export async function createDataset(params) {
   });
 }
 
+export async function getDatasetSchema(params) {
+  return request('/api/dataset/schema', {
+    method: 'POST',
+    body: {
+      ...params,
+    },
+  });
+}
+
+export async function getDatasetInfoForId(params) {
+  return request(`/api/dataset/get?${stringify(params)}`);
+}
+
 export default {
   queryDataset,
   createDataset,
@@ -60,4 +73,5 @@ export default {
   updateDataset,
   makePrivateDataset,
   makePublicDataset,
+  getDatasetSchema,
 };

@@ -1,9 +1,19 @@
 import React from 'react';
+import { Modal, Button } from 'antd';
+import PropTypes from 'prop-types';
 import StorageFilePicker from './StorageFilePicker';
 
 export default class FilePickerForForm extends React.PureComponent {
+  static defaultProps = {
+    type: 'default',
+    folderOnly: false,
+    allowSelectFolder: true,
+    value: undefined,
+  }
   state={
     selected: undefined,
+    visible: false,
+    candidate: undefined,
   }
 
   onChange = (v) => {
@@ -19,21 +29,64 @@ export default class FilePickerForForm extends React.PureComponent {
       return `[项目文件](${selected.projectName}) ${selected.path}`;
     }
   }
+
+  renderDefault() {
+    return (
+      <StorageFilePicker
+        smallSize
+        height={280}
+        onChange={this.onChange}
+        folderOnly={this.props.folderOnly}
+        allowSelectFolder={this.props.allowSelectFolder}
+      />
+    );
+  }
+
+  renderInline() {
+    return (
+      <React.Fragment>
+        <Button onClick={() => { this.setState({ visible: !this.state.visible }); }} >选择</Button>
+        <Modal
+          visible={this.state.visible}
+          title="选择文件"
+          onOk={() => {
+              this.onChange(this.state.candidate);
+              this.setState({ visible: false });
+            }
+          }
+          onCancel={() => this.setState({ candidate: undefined, visible: false })}
+        >
+          <StorageFilePicker
+            smallSize
+            height={280}
+            folderOnly={this.props.folderOnly}
+            onChange={v => this.setState({ candidate: v })}
+            allowSelectFolder={this.props.allowSelectFolder}
+          />
+        </Modal>
+      </React.Fragment>
+    );
+  }
   render() {
+    const { type, value } = this.props;
     const { selected } = this.state;
+    const renderValue = selected || value;
     return (
       <div>
-        <span style={{ lineHeight: '16px', display: 'inline-block' }}>{selected ?
-          `已选择:${this.generateDescription(selected)}`
+        <span style={{ paddingLeft: '20px', paddingRight: '20px', lineHeight: '16px', display: 'inline-block' }}>{renderValue ?
+          `已选择:${this.generateDescription(renderValue)}`
           : '请选择'}
         </span>
-        <StorageFilePicker
-          smallSize
-          allowSelectFolder
-          height={280}
-          onChange={this.onChange}
-        />
+        {type === 'inline' ? this.renderInline() : this.renderDefault()}
       </div>
     );
   }
 }
+
+FilePickerForForm.propTypes = {
+  type: PropTypes.string,
+  folderOnly: PropTypes.bool,
+  allowSelectFolder: PropTypes.bool,
+  value: PropTypes.object,
+};
+
