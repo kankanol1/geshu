@@ -136,15 +136,22 @@ export const getRouterData = (app) => {
     },
 
     // database
-    '/storage/dblist/index': {
-      component: dynamicWrapper(app, ['database'], () => import('../../../routes/Database/DatabaseList')),
-    },
-    '/storage/dblist/show/:table': {
-      component: dynamicWrapper(app, ['databasedetail'], () => import('../../../routes/Database/DatabaseDetail')),
-    },
-    /* database */
-    '/storage/dbquery': {
-      component: dynamicWrapper(app, ['dataview/dataquery'], () => import('../../../routes/Database/DatabaseQuery')),
+    // '/storage/dblist/index': {
+    //   component: dynamicWrapper(app, ['database'],
+    // () => import('../../../routes/Database/DatabaseList')),
+    // },
+    // '/storage/dblist/show/:table': {
+    //   component: dynamicWrapper(app, ['databasedetail'],
+    // () => import('../../../routes/Database/DatabaseDetail')),
+    // },
+    // /* database */
+    // '/storage/dbquery': {
+    //   component: dynamicWrapper(app, ['dataview/dataquery'],
+    // () => import('../../../routes/Database/DatabaseQuery')),
+    // },
+    // dataset
+    '/storage/dataset/': {
+      component: dynamicWrapper(app, ['dataset'], () => import('../../../routes/Dataset/DatasetList')),
     },
     /* center storage */
     '/storage/filelist': {
