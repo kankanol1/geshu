@@ -160,7 +160,7 @@ export const getRouterData = (app) => {
       component: dynamicWrapper(app, ['dataset'], () => import('../../../routes/Dataset/EditDataset')),
     },
     '/storage/dataset/show/:id': {
-      component: dynamicWrapper(app, ['databasedetail'], () => import('../../../routes/Dataset/DatasetDetail')),
+      component: dynamicWrapper(app, ['datasetdetail'], () => import('../../../routes/Dataset/DatasetDetail')),
     },
     /* center storage */
     '/storage/filelist': {

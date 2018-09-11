@@ -186,9 +186,15 @@ const proxy = serverEnabled ?
   'POST /api/data/hive/query': getQueryResult,
   'POST /api/data/hive/persist': persistDataQuery,
 
-  'POST /api/data/base/data': getTableData,
-  'POST /api/data/base/heatmap': getTableHeatmap,
-  'POST /api/data/base/histogram': getTableHistogram,
+  // old fake queries ============.
+  // 'POST /api/data/base/data': getTableData,
+  // 'POST /api/data/base/heatmap': getTableHeatmap,
+  // 'POST /api/data/base/histogram': getTableHistogram,
+  // ================= end.
+  
+  'GET /api/dataset/query/data': getTableData,
+  'GET /api/dataset/query/heatmap': getTableHeatmap,
+  'GET /api/dataset/query/histogram': getTableHistogram,
 
   /** component: component utils */
   'POST /api/component/schema/prefetch': fetchSchema,

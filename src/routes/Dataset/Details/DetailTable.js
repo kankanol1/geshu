@@ -6,25 +6,41 @@ import ReactTable from 'react-table';
 import 'react-table/react-table.css';
 import { Chart, Geom, Axis, Tooltip } from 'bizcharts';
 
-@connect(({ databasedetail, loading }) => ({
-  databasedetail,
-  loading: loading.models.databasedetail,
+@connect(({ datasetdetail, loading }) => ({
+  datasetdetail,
+  loading: loading.models.datasetdetail,
 }))
 export default class DetailTable extends React.Component {
+  state = {
+    // column widths,
+    width: {},
+  }
   componentWillMount() {
-    this.props.dispatch({
-      type: 'databasedetail/fetchHistogram',
+    const { datasetId, dispatch } = this.props;
+    dispatch({
+      type: 'datasetdetail/fetchHistogram',
+      payload: {
+        id: datasetId,
+      },
     });
-    this.props.dispatch({
-      type: 'databasedetail/fetchData',
+    dispatch({
+      type: 'datasetdetail/fetchData',
+      payload: {
+        id: datasetId,
+      },
     });
   }
 
-  renderChartTest = (col) => {
-    const { histogram } = this.props.databasedetail;
+  renderChartTest = (col, props) => {
+    const { histogram } = this.props.datasetdetail;
     return (
       <div>
-        <Chart height={100} padding={0} data={histogram[col]} forceFit>
+        <Chart
+          height={100}
+          padding={0}
+          data={histogram[col]}
+          width={(this.state.width[col] || 300) - 20}
+        >
           {/* <Axis name="range" />
           <Axis name="count" />
           <Tooltip
@@ -39,8 +55,8 @@ export default class DetailTable extends React.Component {
   }
 
   render() {
-    const { loading, databasedetail } = this.props;
-    const { histogram, tableData } = databasedetail;
+    const { loading, datasetdetail } = this.props;
+    const { histogram, tableData } = datasetdetail;
     if (loading || !tableData || !histogram) {
       return <Spin />;
     }
@@ -48,9 +64,9 @@ export default class DetailTable extends React.Component {
     const cols = [];
     for (const key of Object.keys(data[0])) {
       cols.push({
-        Header: () => <div><span>{key}</span>{this.renderChartTest(key.trim())}</div>,
+        Header: props => <div><span>{key}</span>{this.renderChartTest(key.trim(), props)}</div>,
         accessor: key,
-        width: 400,
+        width: 300,
       });
     }
     return (
@@ -65,6 +81,13 @@ export default class DetailTable extends React.Component {
           className="-striped -highlight"
           // pages={pages}
           // onFetchData={(state, instance) => this.fetchData(state, instance)}
+          onResizedChange={(newResized, event) => {
+            const newSizes = {};
+            newResized.forEach((i) => {
+              newSizes[i.id] = i.value;
+            });
+            this.setState({ width: { ...this.state.width, ...newSizes } });
+          }}
         />
       </div>
     );

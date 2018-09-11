@@ -4,20 +4,23 @@ import { connect } from 'dva';
 import { Spin, Card } from 'antd';
 import { Chart, Geom, Axis, Tooltip, Label } from 'bizcharts';
 
-@connect(({ databasedetail, loading }) => ({
-  databasedetail,
-  loading: loading.models.databasedetail,
+@connect(({ datasetdetail, loading }) => ({
+  datasetdetail,
+  loading: loading.models.datasetdetail,
 }))
 export default class DetailOverview extends PureComponent {
   componentWillMount() {
     this.props.dispatch({
-      type: 'databasedetail/fetchHeatmap',
+      type: 'datasetdetail/fetchHeatmap',
+      payload: {
+        id: this.props.datasetId,
+      },
     });
   }
 
   renderHeatmap = () => {
-    const { databasedetail, loading } = this.props;
-    const { data, cols } = databasedetail.heatmap;
+    const { datasetdetail, loading } = this.props;
+    const { data, cols } = datasetdetail.heatmap;
     if (loading) {
       return <Spin />;
     }
@@ -28,7 +31,7 @@ export default class DetailOverview extends PureComponent {
         scale={cols}
         style={{ overflow: 'auto' }}
         padding={[20, 80, 40, 85]}
-        width={1800}
+        width={1000}
         // forceFit
       >
         <Axis

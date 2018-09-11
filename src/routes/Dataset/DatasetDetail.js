@@ -12,12 +12,12 @@ const { TabPane } = Tabs;
 export default class DatasetDetail extends React.Component {
   componentWillUnmount() {
     this.props.dispatch({
-      type: 'databassedetail/clearData',
+      type: 'datasetdetail/clearData',
     });
   }
 
   render() {
-    const tableId = this.props.match.params.table;
+    const datasetId = this.props.match.params.id;
     return (
       <PageHeaderLayout
         breadcrumbList={[{
@@ -35,10 +35,10 @@ export default class DatasetDetail extends React.Component {
         >
           <Tabs defaultActiveKey="1">
             <TabPane tab="概览" key="1">
-              <DetailOverview tableId={tableId} />
+              <DetailOverview datasetId={datasetId} />
             </TabPane>
             <TabPane tab="数据" key="2">
-              <DetailTable tableId={tableId} />
+              <DetailTable datasetId={datasetId} />
             </TabPane>
           </Tabs>
         </Card>

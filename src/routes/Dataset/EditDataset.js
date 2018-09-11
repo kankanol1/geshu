@@ -38,7 +38,7 @@ export default class EditDataset extends PureComponent {
       // do sth.
       this.props.dispatch({
         type: 'dataset/fetchDatasetInfoForId',
-        id: modifyId,
+        payload: { id: modifyId },
         callback: (response) => {
           this.setState({ id: modifyId, step: 0, formValues: response });
         },
@@ -239,7 +239,7 @@ export default class EditDataset extends PureComponent {
             href: '/',
           }, {
             title: '数据集列表',
-            href: 'index',
+            href: '/storage/dataset/index',
           }, {
             title: '新建数据集',
           }]
