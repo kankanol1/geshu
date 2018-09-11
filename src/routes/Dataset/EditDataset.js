@@ -123,7 +123,7 @@ export default class EditDataset extends PureComponent {
           label="是否公开"
         >
           {form.getFieldDecorator('isPublic', {
-              initialValue: currentRecord ? currentRecord.isPublic || '' : '',
+              initialValue: currentRecord ? currentRecord.isPublic || false : false,
               valuePropName: 'checked',
             })(
               <Checkbox />

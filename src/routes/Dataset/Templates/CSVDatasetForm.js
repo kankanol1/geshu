@@ -14,7 +14,7 @@ const CSVDatasetForm = (props) => {
         label="包含文件头"
       >
         {form.getFieldDecorator('properties.header', {
-              initialValue: properties ? properties.header || '' : '',
+              initialValue: properties ? properties.header || false : false,
               valuePropName: 'checked',
       })(
         <Checkbox />
