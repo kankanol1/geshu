@@ -241,7 +241,7 @@ export default class EditDataset extends PureComponent {
             title: '数据集列表',
             href: '/storage/dataset/index',
           }, {
-            title: '新建数据集',
+            title: this.state.id ? '编辑数据集' : '新建数据集',
           }]
         }
       >
