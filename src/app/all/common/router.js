@@ -136,15 +136,31 @@ export const getRouterData = (app) => {
     },
 
     // database
-    '/storage/dblist/index': {
-      component: dynamicWrapper(app, ['database'], () => import('../../../routes/Database/DatabaseList')),
+    // '/storage/dblist/index': {
+    //   component: dynamicWrapper(app, ['database'],
+    // () => import('../../../routes/Database/DatabaseList')),
+    // },
+    // '/storage/dblist/show/:table': {
+    //   component: dynamicWrapper(app, ['databasedetail'],
+    // () => import('../../../routes/Database/DatabaseDetail')),
+    // },
+    // /* database */
+    // '/storage/dbquery': {
+    //   component: dynamicWrapper(app, ['dataview/dataquery'],
+    // () => import('../../../routes/Database/DatabaseQuery')),
+    // },
+    // dataset
+    '/storage/dataset/index': {
+      component: dynamicWrapper(app, ['dataset'], () => import('../../../routes/Dataset/DatasetList')),
     },
-    '/storage/dblist/show/:table': {
-      component: dynamicWrapper(app, ['databasedetail'], () => import('../../../routes/Database/DatabaseDetail')),
+    '/storage/dataset/create': {
+      component: dynamicWrapper(app, ['dataset'], () => import('../../../routes/Dataset/EditDataset')),
     },
-    /* database */
-    '/storage/dbquery': {
-      component: dynamicWrapper(app, ['dataview/dataquery'], () => import('../../../routes/Database/DatabaseQuery')),
+    '/storage/dataset/update/:id': {
+      component: dynamicWrapper(app, ['dataset'], () => import('../../../routes/Dataset/EditDataset')),
+    },
+    '/storage/dataset/show/:id': {
+      component: dynamicWrapper(app, ['datasetdetail'], () => import('../../../routes/Dataset/DatasetDetail')),
     },
     /* center storage */
     '/storage/filelist': {

@@ -55,8 +55,8 @@ const menuData = [
       name: '文件列表',
       path: 'filelist',
     }, {
-      name: '数据库列表',
-      path: 'dblist',
+      name: '数据集列表',
+      path: 'dataset',
     },
     //  {
     //   name: '数据库查询',
