@@ -29,6 +29,7 @@ const allComponents = {
       },
     },
   },
+
   OneHotEncoderPStage: {
     title: 'OneHotEncoderPStageConf',
     type: 'object',
@@ -434,7 +435,7 @@ const allComponents = {
             type: 'string',
           },
         },
-        description: '拆分模式',
+        description: '分隔符',
       },
       sourceColumn: {
         title: 'Fixed_Column',
@@ -834,6 +835,10 @@ const allComponents = {
         title: 'Type_Value_Array',
         type: 'object',
         properties: {
+          fieldFormat: {
+            required: false,
+            type: 'string',
+          },
           fieldType: {
             type: 'string',
             enum: [
@@ -1039,6 +1044,10 @@ const allComponents = {
         title: 'Value_Type_Pair',
         type: 'object',
         properties: {
+          fieldFormat: {
+            required: false,
+            type: 'string',
+          },
           fieldType: {
             type: 'string',
             enum: [
@@ -1318,6 +1327,114 @@ const allComponents = {
       },
     },
   },
+  SwitchCaseTransformer: {
+    title: 'SwitchCaseTransformerConf',
+    type: 'object',
+    properties: {
+      caseValues: {
+        title: 'Dual_Value_Type_Pair_Array',
+        type: 'object',
+        properties: {
+          value: {
+            type: 'array',
+            items: {
+              title: 'Dual_Value_Type_Pair',
+              type: 'object',
+              properties: {
+                fieldFormat1: {
+                  required: false,
+                  type: 'string',
+                },
+                fieldFormat2: {
+                  required: false,
+                  type: 'string',
+                },
+                fieldType1: {
+                  type: 'string',
+                  enum: [
+                    'date',
+                    'long',
+                    'int',
+                    'float',
+                    'string',
+                    'decimal',
+                    'double',
+                    'short',
+                    'timestamp',
+                    'boolean',
+                    'byte',
+                  ],
+                },
+                fieldType2: {
+                  type: 'string',
+                  enum: [
+                    'date',
+                    'long',
+                    'int',
+                    'float',
+                    'string',
+                    'decimal',
+                    'double',
+                    'short',
+                    'timestamp',
+                    'boolean',
+                    'byte',
+                  ],
+                },
+                value1: {
+                  type: 'string',
+                },
+                value2: {
+                  type: 'string',
+                },
+              },
+            },
+          },
+        },
+        description: '匹配列表',
+      },
+      defaultValue: {
+        title: 'Value_Type_Pair',
+        type: 'object',
+        properties: {
+          fieldFormat: {
+            required: false,
+            type: 'string',
+          },
+          fieldType: {
+            type: 'string',
+            enum: [
+              'date',
+              'long',
+              'int',
+              'float',
+              'string',
+              'decimal',
+              'double',
+              'short',
+              'timestamp',
+              'boolean',
+              'byte',
+            ],
+          },
+          value: {
+            type: 'string',
+          },
+        },
+        description: '默认值',
+      },
+      inputCol: {
+        title: 'Fixed_Column',
+        type: 'object',
+        properties: {
+          value: {
+            type: 'string',
+          },
+        },
+        description: '列名',
+      },
+    },
+  },
   BucketizerPStage: {
     title: 'BucketizerPStageConf',
     type: 'object',
@@ -1347,6 +1464,52 @@ const allComponents = {
           },
         },
         description: '分隔数组',
+      },
+    },
+  },
+  AggregateTransformer: {
+    title: 'AggregateTransformerConf',
+    type: 'object',
+    properties: {
+      aggregations: {
+        title: 'Column_Aggregate_Pair_Array',
+        type: 'object',
+        properties: {
+          value: {
+            type: 'array',
+            items: {
+              title: 'Column_Aggregate_Pair',
+              type: 'object',
+              properties: {
+                aggregate: {
+                  type: 'string',
+                  enum: [
+                    'max',
+                    'count',
+                    'min',
+                    'avg',
+                    'sum',
+                  ],
+                },
+                column: {
+                  type: 'string',
+                },
+              },
+            },
+          },
+        },
+      },
+      groupByValues: {
+        title: 'Fixed_Column_Array',
+        type: 'object',
+        properties: {
+          value: {
+            type: 'array',
+            items: {
+              type: 'string',
+            },
+          },
+        },
       },
     },
   },
@@ -1532,6 +1695,10 @@ const allComponents = {
               type: 'object',
               properties: {
                 column: {
+                  type: 'string',
+                },
+                fieldFormat: {
+                  required: false,
                   type: 'string',
                 },
                 fieldType: {

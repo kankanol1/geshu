@@ -212,6 +212,33 @@ const componentList = [
         ],
       },
       {
+        name: 'AggregateTransformer',
+        code: 'AggregateTransformer',
+        type: 'Transformer',
+        inputs: [
+          {
+            id: 'i1',
+            label: 'data',
+            hint: 'data',
+            x: 3,
+            y: 0.5,
+            connects: [
+              'Dataset',
+            ],
+          },
+        ],
+        outputs: [
+          {
+            id: 'o1',
+            label: 'data',
+            hint: 'Dataset',
+            x: 1,
+            y: 0.5,
+            type: 'Dataset',
+          },
+        ],
+      },
+      {
         name: 'FilterTransformer',
         code: 'FilterTransformer',
         type: 'Transformer',
@@ -241,6 +268,33 @@ const componentList = [
       {
         name: 'ProjectTransformer',
         code: 'ProjectTransformer',
+        type: 'Transformer',
+        inputs: [
+          {
+            id: 'i1',
+            label: 'data',
+            hint: 'data',
+            x: 3,
+            y: 0.5,
+            connects: [
+              'Dataset',
+            ],
+          },
+        ],
+        outputs: [
+          {
+            id: 'o1',
+            label: 'data',
+            hint: 'Dataset',
+            x: 1,
+            y: 0.5,
+            type: 'Dataset',
+          },
+        ],
+      },
+      {
+        name: 'SwitchCaseTransformer',
+        code: 'SwitchCaseTransformer',
         type: 'Transformer',
         inputs: [
           {
