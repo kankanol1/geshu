@@ -49,6 +49,23 @@ export default class ConfigurationTable extends React.Component {
     }
   }
 
+  handleSelectAllItem() {
+    const newData = this.state.data.map(
+      (item, i) => {
+        return { ...item, checked: true };
+      }
+    );
+    this.notifyChange(newData);
+  }
+
+  handleDeleteAllItem() {
+    const newData = this.state.data.map(
+      (item, i) => {
+        return { ...item, checked: false };
+      }
+    );
+    this.notifyChange(newData);
+  }
   handleItemDelete(item, index) {
     this.notifyChange(this.state.data.filter((_, i) => i !== index));
   }
@@ -99,11 +116,28 @@ export default class ConfigurationTable extends React.Component {
           <div className={styles.tableHeader} >
             <Row>
               {columns.map(
-                (item, i) => (
-                  <Col span={item.span} key={i}>
-                    <div className={styles.header}>{item.title}</div>
-                  </Col>
-                )
+                (item, i) => {
+                  if (item.type === 'checked') {
+                    return (
+                      <Col span={item.span} key={i}>
+                        <div className={styles.header}>
+                          <Button type="primary" size="small" onClick={() => this.handleSelectAllItem()} >
+                            全选
+                          </Button>
+                          &nbsp;
+                          <Button type="primary" size="small" onClick={() => this.handleDeleteAllItem()} >
+                            全不选
+                          </Button>
+                        </div>
+                      </Col>
+                    );
+                  }
+                  return (
+                    <Col span={item.span} key={i}>
+                      <div className={styles.header}>{item.title}</div>
+                    </Col>
+                  );
+                }
               )}
               <Col span={opSpan}>
                 {
