@@ -63,7 +63,7 @@ export default class ColumnSelectCheckboxWidget extends React.Component {
         }, {
           name: 'checked',
           title: '是否选择',
-          type: 'checked',
+          type: 'checkbox',
           render: (v, item, onChange) => (
             <div style={{ textAlign: 'center' }}>
               <Checkbox

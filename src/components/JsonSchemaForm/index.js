@@ -13,6 +13,7 @@ import AnyValueWidget from './Widgets/AnyValueWidget';
 import DatabaseSelectorWidget from './Widgets/DB/DatabaseSelectorWidget';
 import FileSourceConfWidget from './Widgets/Composite/FileSourceConfWidget';
 import InputColumnWidget from './Widgets/Column/InputColumnWidget';
+import ValueTypePairWidget from './Widgets/Column/ValueTypePairWidget';
 import NumberSliderWidget from './Widgets/NumberSliderWidget';
 import NumberInputWidget from './Widgets/NumberInputWidget';
 import CategorizedFileSelectorWidget from './Widgets/File/CategorizedFileSelectorWidget';
@@ -42,6 +43,7 @@ const registeredFields = {
   database_selector: DatabaseSelectorWidget,
   file_source_conf: FileSourceConfWidget,
   input_column: InputColumnWidget,
+  value_type_pair: ValueTypePairWidget,
   number_slider: NumberSliderWidget,
   number_input: NumberInputWidget,
   column_mapping_array: ColumnMappingWidget,

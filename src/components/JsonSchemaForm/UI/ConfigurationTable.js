@@ -49,23 +49,17 @@ export default class ConfigurationTable extends React.Component {
     }
   }
 
-  handleSelectAllItem() {
+  handleAllItemsCheckedStatus(nameKey, checked) {
     const newData = this.state.data.map(
       (item, i) => {
-        return { ...item, checked: true };
+        const obj = { ...item };
+        obj[nameKey] = checked;
+        return obj;
       }
     );
     this.notifyChange(newData);
   }
 
-  handleDeleteAllItem() {
-    const newData = this.state.data.map(
-      (item, i) => {
-        return { ...item, checked: false };
-      }
-    );
-    this.notifyChange(newData);
-  }
   handleItemDelete(item, index) {
     this.notifyChange(this.state.data.filter((_, i) => i !== index));
   }
@@ -117,15 +111,15 @@ export default class ConfigurationTable extends React.Component {
             <Row>
               {columns.map(
                 (item, i) => {
-                  if (item.type === 'checked') {
+                  if (item.type === 'checkbox') {
                     return (
                       <Col span={item.span} key={i}>
                         <div className={styles.header}>
-                          <Button type="primary" size="small" onClick={() => this.handleSelectAllItem()} >
+                          <Button type="primary" size="small" onClick={() => this.handleAllItemsCheckedStatus(item.name, true)} >
                             全选
                           </Button>
                           &nbsp;
-                          <Button type="primary" size="small" onClick={() => this.handleDeleteAllItem()} >
+                          <Button type="primary" size="small" onClick={() => this.handleAllItemsCheckedStatus(item.name, false)} >
                             全不选
                           </Button>
                         </div>

@@ -32,6 +32,7 @@ const registeredSpecialUISchemas = {
 
   Column_Type_Pair_Array: translateColumnTypePairArrayUISchema,
   RandomSplitTransformerConf: translateRandomSplitTransformerConfUISchema,
+  Value_Type_Pair: translateValueTypePairUISchema,
 };
 
 /* fixed any */
@@ -86,6 +87,12 @@ function translateInputColumnUISchema(originJsonSchema, id, code, name, projectI
   return { 'ui:field': 'input_column',
     'ui:options': { getField: () => FuncUtils.getAllColumnsFromUpstream(id),
     } };
+}
+
+function translateValueTypePairUISchema(originJsonSchema, id, code, name, projectId) {
+  return { 'ui:field': 'value_type_pair',
+    'ui:options': { fields: originJsonSchema.properties.fieldType.enum },
+  };
 }
 
 function translateColumnMappingArrayUISchema(originJsonSchema, id, code, name, projectId) {
