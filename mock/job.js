@@ -271,6 +271,44 @@ export function cancelJobs(req, res, u, b) {
   }
 }
 
+export function getJobDetails(req, res, u, b) {
+  let url = u;
+  if (!url || Object.prototype.toString.call(url) !== '[object String]') {
+    url = req.url; // eslint-disable-line
+  }
+
+  const params = getUrlParams(url);
+
+  const dataList = [
+    {
+      id: '1',
+      createdAt: moment('2018-01-08', 'YYYY-MM-DD'),
+      name: '文件名称',
+      schema: [],
+    },
+  ];
+
+  const modelList = [{
+    id: '1',
+    createdAt: moment('2018-01-08', 'YYYY-MM-DD'),
+    name: '文件名称',
+  }];
+
+  const result = {
+    id: params.id,
+    projectName: '项目名称1',
+    projectId: 1,
+    dataList,
+    modelList,
+  };
+
+  if (res && res.json) {
+    res.json(result);
+  } else {
+    return result;
+  }
+}
+
 export default {
   getJobs,
   deleteJobs,

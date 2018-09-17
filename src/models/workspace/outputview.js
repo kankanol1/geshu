@@ -7,11 +7,36 @@ export default {
 
   state: {
     joblist: {},
+    panes: [],
+    defaultPane: 'default',
   },
 
   reducers: {
     saveJobList(state, { payload }) {
       return { ...state, joblist: payload };
+    },
+
+    addPane(state, { payload }) {
+      let add = true;
+      state.panes.forEach((p) => {
+        if (p.title === payload.title) {
+          add = false;
+        }
+      });
+      return { ...state,
+        panes: add ? [...state.panes, payload] : state.panes,
+        defaultPane: payload.title,
+      };
+    },
+
+    activePane(state, { payload }) {
+      return { ...state, defaultPane: payload.title };
+    },
+
+    removePane(state, { payload }) {
+      const key = payload.title;
+      const newPanes = state.panes.filter(i => i.title !== key);
+      return { ...state, panes: newPanes, defaultPane: key === state.defaultPane ? 'default' : state.defaultPane };
     },
   },
 

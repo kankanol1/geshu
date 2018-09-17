@@ -26,7 +26,12 @@ export async function cancelJobs(params) {
   });
 }
 
+export async function getJobDetails(params) {
+  return request(`/api/jobs/detail?${stringify(params)}`);
+}
+
 export default {
   queryJobs,
   cancelJobs,
+  getJobDetails,
 };

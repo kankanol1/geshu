@@ -1,15 +1,9 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
-import { Link } from 'dva/router';
 import moment from 'moment';
-import { Popconfirm, Progress, Row, Col, Card, Form, Input, Select, Icon, Button, Menu, InputNumber, DatePicker, Tag, message, Badge, Divider } from 'antd';
+import { Popconfirm, Card, Form, Icon, Button, Tag } from 'antd';
 import StandardTable from '../../../../components/StandardTable';
 import styles from './JobList.less';
-
-const FormItem = Form.Item;
-const { Option } = Select;
-const { RangePicker } = DatePicker;
-const { TextArea } = Input;
 
 const statusMap = {
   waiting: '排队中',
@@ -40,9 +34,6 @@ const statusIconMap = {
   finished: 'check-circle-o',
   failed: 'exclamation-circle-o',
 };
-
-const getValue = obj => Object.keys(obj).map(key => obj[key]).join(',');
-
 
 @connect(({ outputview, loading }) => ({
   outputview,
@@ -213,7 +204,6 @@ export default class JobList extends PureComponent {
   render() {
     const { outputview: { joblist: data }, loading } = this.props;
     const { selectedRows } = this.state;
-
     return (
       <Card>
         <div className={styles.tableList}>
