@@ -1,26 +1,55 @@
 
 import React, { PureComponent, Fragment } from 'react';
-import { connect } from 'dva';
 import { Spin, Card } from 'antd';
 import { Chart, Geom, Axis, Tooltip, Label } from 'bizcharts';
+import { queryDatasetHeatmap } from '../../../services/datasetAPI';
 
-@connect(({ datasetdetail, loading }) => ({
-  datasetdetail,
-  loading: loading.models.datasetdetail,
-}))
 export default class DetailOverview extends PureComponent {
+  state={
+    heatmap: {
+      // data, cols.
+    },
+    loading: true,
+  }
   componentWillMount() {
-    this.props.dispatch({
-      type: 'datasetdetail/fetchHeatmap',
-      payload: {
-        id: this.props.datasetId,
+    this.setState({ loading: true });
+    queryDatasetHeatmap({ id: this.props.datasetId }).then(
+      (response) => {
+        const { columns, values } = response;
+        const converted = [];
+        for (let i = 0; i < values.length; i++) {
+          for (let j = 0; j < values[0].length; j++) {
+            converted.push({
+              c1: i,
+              c2: j,
+              value: parseFloat(values[i][j]),
+            });
+          }
+        }
+        const cols = {
+          c1: {
+            type: 'cat',
+            values: columns,
+          },
+          c2: {
+            type: 'cat',
+            values: columns,
+          },
+        };
+        this.setState({
+          heatmap: {
+            data: converted,
+            cols,
+          },
+          loading: false,
+        });
       },
-    });
+    );
   }
 
   renderHeatmap = () => {
-    const { datasetdetail, loading } = this.props;
-    const { data, cols } = datasetdetail.heatmap;
+    const { heatmap, loading } = this.state;
+    const { data, cols } = heatmap;
     if (loading) {
       return <Spin />;
     }

@@ -1,21 +1,8 @@
 import React, { PureComponent, Fragment } from 'react';
-import { connect } from 'dva';
-import { Tabs, Card } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
-import DetailOverview from './Details/DetailOverview';
-import DetailTable from './Details/DetailTable';
+import DatasetDetailsComponent from './Details/DatasetDetailsComponent';
 
-const { TabPane } = Tabs;
-
-@connect(() => ({
-}))
-export default class DatasetDetail extends React.Component {
-  componentWillUnmount() {
-    this.props.dispatch({
-      type: 'datasetdetail/clearData',
-    });
-  }
-
+export default class DatasetDetail extends React.PureComponent {
   render() {
     const datasetId = this.props.match.params.id;
     return (
@@ -30,18 +17,7 @@ export default class DatasetDetail extends React.Component {
             title: '数据集查看',
           }]}
       >
-        <Card
-          title="数据表"
-        >
-          <Tabs defaultActiveKey="1">
-            <TabPane tab="概览" key="1">
-              <DetailOverview datasetId={datasetId} />
-            </TabPane>
-            <TabPane tab="数据" key="2">
-              <DetailTable datasetId={datasetId} />
-            </TabPane>
-          </Tabs>
-        </Card>
+        <DatasetDetailsComponent datasetId={datasetId} />
       </PageHeaderLayout>
     );
   }

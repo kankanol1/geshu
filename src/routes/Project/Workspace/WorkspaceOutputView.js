@@ -10,6 +10,8 @@ import JobList from './OutputView/JobList';
 import styles from './WorkspaceOutputView.less';
 import JobOutput from './OutputView/JobOutput';
 import ModelServingTest from '../../Model/ModelServingTest';
+import ModelTestComponent from '../../Model/ModelTestComponent';
+import DatasetDetailsComponent from '../../Dataset/Details/DatasetDetailsComponent';
 
 const { Header } = Layout;
 const { TabPane } = Tabs;
@@ -97,36 +99,29 @@ export default class WorkspaceOutputView extends React.Component {
             </TabPane>
             {
               panes.map((p, i) => {
+                let content = null;
                 if (p.type === 'job') {
-                  return (
-                    <TabPane tab={p.title} key={p.title} > <JobOutput
-                      id={p.id}
-                      onModelClicked={modelId => this.handleModelClicked(modelId)}
-                      onDataClicked={dataId => this.handleDataClicked(dataId)}
-                    />
-                    </TabPane>
-                  );
+                    content = (
+                      <JobOutput
+                        id={p.id}
+                        onModelClicked={modelId => this.handleModelClicked(modelId)}
+                        onDataClicked={dataId => this.handleDataClicked(dataId)}
+                      />
+                      );
                 } else if (p.type === 'model') {
-                  return (
-                    <TabPane tab={p.title} key={p.title} >
-                      {
-                        // TODO
-                      }
-                      模型测试 {p.id}
-                    </TabPane>
-                  );
+                  content = <ModelTestComponent id={p.id} />;
                 } else if (p.type === 'data') {
-                  return (
-                    <TabPane tab={p.title} key={p.title} >
-                      {
-                        // TODO
-                      }
-                      数据查看 {p.id}
-                    </TabPane>
-                  );
+                  content = <DatasetDetailsComponent datasetId={p.id} />;
                 } else {
                   return null;
                 }
+                return (
+                  <TabPane tab={p.title} key={p.title} >
+                    <Scrollbars style={{ padding: '0', height: '100%', overflow: 'auto' }}>
+                      {content}
+                    </Scrollbars>
+                  </TabPane>
+                );
               })
             }
           </Tabs>

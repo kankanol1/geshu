@@ -1,38 +1,41 @@
 
 import React, { PureComponent, Fragment } from 'react';
-import { connect } from 'dva';
 import { Spin } from 'antd';
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
 import { Chart, Geom, Axis, Tooltip } from 'bizcharts';
+import { queryDatasetData, queryDatasetHistogram } from '../../../services/datasetAPI';
 
-@connect(({ datasetdetail, loading }) => ({
-  datasetdetail,
-  loading: loading.models.datasetdetail,
-}))
 export default class DetailTable extends React.Component {
   state = {
     // column widths,
     width: {},
+    tableData: undefined,
+    histogram: undefined,
+    loading: true,
   }
   componentWillMount() {
     const { datasetId, dispatch } = this.props;
-    dispatch({
-      type: 'datasetdetail/fetchHistogram',
-      payload: {
-        id: datasetId,
-      },
+    this.setState({ loading: true });
+    let finishCount = 0;
+    const handleLoading = () => {
+      finishCount++;
+      if (finishCount === 2) {
+        this.setState({ loading: false });
+      }
+    };
+    queryDatasetData({ id: datasetId }).then((response) => {
+      this.setState({ tableData: response });
+      handleLoading();
     });
-    dispatch({
-      type: 'datasetdetail/fetchData',
-      payload: {
-        id: datasetId,
-      },
+    queryDatasetHistogram({ id: datasetId }).then((response) => {
+      this.setState({ histogram: response });
+      handleLoading();
     });
   }
 
   renderChartTest = (col, props) => {
-    const { histogram } = this.props.datasetdetail;
+    const { histogram } = this.state;
     return (
       <div>
         <Chart
@@ -55,8 +58,7 @@ export default class DetailTable extends React.Component {
   }
 
   render() {
-    const { loading, datasetdetail } = this.props;
-    const { histogram, tableData } = datasetdetail;
+    const { loading, histogram, tableData } = this.state;
     if (loading || !tableData || !histogram) {
       return <Spin />;
     }

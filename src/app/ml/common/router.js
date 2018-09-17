@@ -111,7 +111,7 @@ export const getRouterData = (app) => {
       component: dynamicWrapper(app, ['models/servingmodels'], () => import('../../../routes/Model/ServingModelList')),
     },
     '/models/serving/test/:id': {
-      component: dynamicWrapper(app, ['models/modeltest'], () => import('../../../routes/Model/ModelServingTest')),
+      component: dynamicWrapper(app, [], () => import('../../../routes/Model/ModelServingTest')),
     },
 
     /* job manage */
@@ -163,7 +163,7 @@ export const getRouterData = (app) => {
       component: dynamicWrapper(app, ['dataset'], () => import('../../../routes/Dataset/EditDataset')),
     },
     '/storage/dataset/show/:id': {
-      component: dynamicWrapper(app, ['datasetdetail'], () => import('../../../routes/Dataset/DatasetDetail')),
+      component: dynamicWrapper(app, [], () => import('../../../routes/Dataset/DatasetDetail')),
     },
     /* center storage */
     '/storage/filelist': {
