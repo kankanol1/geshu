@@ -136,6 +136,7 @@ const proxy = serverEnabled ?
   // query data releated metadata.
   'GET /api/workspace/dataview/': getLastestDatabasesForProject,
 
+
   // graph
   'GET /api/graph/project/recent': recentGraph,
   'GET /api/graph/project/detail': getGraph,
