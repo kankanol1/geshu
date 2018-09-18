@@ -36,12 +36,16 @@ export default class DetailTable extends React.Component {
     }
     const { queryData, queryHistogram } = apis;
     queryData({ id: datasetId }).then((response) => {
-      this.setState({ tableData: response });
-      handleLoading();
+      if (response) {
+        this.setState({ tableData: response });
+        handleLoading();
+      }
     });
     queryHistogram({ id: datasetId }).then((response) => {
-      this.setState({ histogram: response });
-      handleLoading();
+      if (response) {
+        this.setState({ histogram: response });
+        handleLoading();
+      }
     });
   }
 

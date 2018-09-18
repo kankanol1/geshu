@@ -16,7 +16,7 @@ export default class JobOutput extends React.PureComponent {
   componentWillMount() {
     const { id } = this.props;
     this.setState({ loading: true });
-    getJobDetails({ id }).then(response => this.setState({
+    getJobDetails({ id }).then(response => response && this.setState({
       loading: false, data: response,
     }));
   }
@@ -24,27 +24,33 @@ export default class JobOutput extends React.PureComponent {
   handleDataDelete = (id) => {
     this.setState({ dataLoading: true });
     removePrivateDataset({ ids: [id] }).then((response) => {
-      if (response.success) {
-        message.info(response.message);
-      } else {
-        message.error(response.message);
+      if (response) {
+        if (response.success) {
+          message.info(response.message);
+        } else {
+          message.error(response.message);
+        }
       }
     });
-    getJobDetails({ id: this.props.id }).then(response => this.setState({
-      dataLoading: false, data: response,
-    }));
+    getJobDetails({ id: this.props.id }).then((response) => {
+      if (response) {
+        this.setState({ dataLoading: false, data: response });
+      }
+    });
   }
 
   handleModelDelete = (id) => {
     this.setState({ modelLoading: true });
     removeCandidateModels({ ids: [id] }).then((response) => {
-      if (response.success) {
-        message.info(response.message);
-      } else {
-        message.error(response.message);
+      if (response) {
+        if (response.success) {
+          message.info(response.message);
+        } else {
+          message.error(response.message);
+        }
       }
     });
-    getJobDetails({ id: this.props.id }).then(response => this.setState({
+    getJobDetails({ id: this.props.id }).then(response => response && this.setState({
       modelLoading: false, data: response,
     }));
   }

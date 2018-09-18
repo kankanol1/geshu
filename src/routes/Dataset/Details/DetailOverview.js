@@ -20,34 +20,36 @@ export default class DetailOverview extends PureComponent {
     const queryAPI = this.props.type === 'private' ? queryPrivateDatasetHeatmap : queryDatasetHeatmap;
     queryAPI({ id: this.props.datasetId }).then(
       (response) => {
-        const { columns, values } = response;
-        const converted = [];
-        for (let i = 0; i < values.length; i++) {
-          for (let j = 0; j < values[0].length; j++) {
-            converted.push({
-              c1: i,
-              c2: j,
-              value: parseFloat(values[i][j]),
-            });
+        if (response) {
+          const { columns, values } = response;
+          const converted = [];
+          for (let i = 0; i < values.length; i++) {
+            for (let j = 0; j < values[0].length; j++) {
+              converted.push({
+                c1: i,
+                c2: j,
+                value: parseFloat(values[i][j]),
+              });
+            }
           }
+          const cols = {
+            c1: {
+              type: 'cat',
+              values: columns,
+            },
+            c2: {
+              type: 'cat',
+              values: columns,
+            },
+          };
+          this.setState({
+            heatmap: {
+              data: converted,
+              cols,
+            },
+            loading: false,
+          });
         }
-        const cols = {
-          c1: {
-            type: 'cat',
-            values: columns,
-          },
-          c2: {
-            type: 'cat',
-            values: columns,
-          },
-        };
-        this.setState({
-          heatmap: {
-            data: converted,
-            cols,
-          },
-          loading: false,
-        });
       },
     );
   }

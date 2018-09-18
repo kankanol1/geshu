@@ -23,14 +23,18 @@ export default class ModelTestComponent extends React.PureComponent {
   fetchModelInfo = (id) => {
     this.setState({ loading: true });
     queryModelDetails(id).then((response) => {
-      this.setState({ loading: false, model: response });
+      if (response) {
+        this.setState({ loading: false, model: response });
+      }
     });
   }
 
   submitSchema(fieldsValue) {
     this.setState({ loading: true });
     executeModel(this.props.id, fieldsValue).then((response) => {
-      this.setState({ loading: false, result: response });
+      if (response) {
+        this.setState({ loading: false, result: response });
+      }
     });
   }
 
