@@ -1,5 +1,6 @@
 import React from 'react';
 import { Col, Row, Spin } from 'antd';
+import Cookie from 'js-cookie';
 import styles from './FileSourceConfWidget.less';
 import CompositeWidget from '../CompositWidget';
 
@@ -52,6 +53,7 @@ export default class FileSourceConfWidget extends CompositeWidget {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json; charset=utf-8',
+        'X-XSRF-TOKEN': Cookie.get('XSRF-TOKEN'),
       },
       body: data,
     };
