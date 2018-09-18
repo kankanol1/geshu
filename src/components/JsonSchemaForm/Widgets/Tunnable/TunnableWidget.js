@@ -1,7 +1,8 @@
 import React from 'react';
 import { Row, Col, Select, Switch, Icon } from 'antd';
+import CompositeWidget from '../CompositWidget';
 
-export default class TunnableWidget extends React.Component {
+export default class TunnableWidget extends CompositeWidget {
   constructor(props) {
     super(props);
     const extra = {};
@@ -14,7 +15,7 @@ export default class TunnableWidget extends React.Component {
     };
   }
 
-  onPropertyChange(name, value) {
+  onPropertyChanged(name, value) {
     const newData = { ...this.state.formData, [name]: value };
     const dataCopy = { ...newData };
     if (dataCopy.tunableValue === undefined) {
@@ -23,37 +24,7 @@ export default class TunnableWidget extends React.Component {
     if (dataCopy.value === undefined) {
       dataCopy.value = -1;
     }
-    this.setState({
-      formData: dataCopy,
-    }, () => {
-      this.props.onChange(dataCopy);
-    });
-  }
-
-  renderSchema(name, extraProps = {}) {
-    const { registry, schema, idSchema, formData, uiSchema,
-      errorSchema, onBlur, onFocus, disabled, readonly } = this.props;
-    const { fields } = registry;
-    const { SchemaField } = fields;
-    return (
-      <SchemaField
-        key={name}
-        name={name}
-        required={false}
-        schema={schema.properties[name]}
-        uiSchema={uiSchema[name]}
-        errorSchema={errorSchema[name]}
-        idSchema={idSchema[name]}
-        formData={formData[name]}
-        onChange={value => this.onPropertyChange(name, value)}
-        onBlur={onBlur}
-        onFocus={onFocus}
-        registry={registry}
-        disabled={disabled}
-        readonly={readonly}
-        {...extraProps}
-      />
-    );
+    this.onFormDataChanged(dataCopy);
   }
 
   renderTunableTypes() {
@@ -63,7 +34,7 @@ export default class TunnableWidget extends React.Component {
         <Col span={16}>
           <Select
             placeholder="请选择"
-            onChange={e => this.onPropertyChange('tunableType', e)}
+            onChange={e => this.onPropertyChanged('tunableType', e)}
             value={this.state.formData.tunableType}
           >
             <Select.Option value="GRID">GRID</Select.Option>
@@ -94,7 +65,7 @@ export default class TunnableWidget extends React.Component {
             <Col span={6}>
               <div style={{ lineHeight: '35px' }}>
                 <Switch
-                  onChange={v => this.onPropertyChange('tunableType', v ? 'GRID' : 'FIXED')}
+                  onChange={v => this.onPropertyChanged('tunableType', v ? 'GRID' : 'FIXED')}
                   checkedChildren="可调节"
                   unCheckedChildren="固定值"
                   defaultChecked={tunableType !== 'FIXED'}

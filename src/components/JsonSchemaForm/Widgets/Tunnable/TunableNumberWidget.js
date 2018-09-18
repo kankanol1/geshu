@@ -1,53 +1,15 @@
 import React from 'react';
 import { Row, Col, Input, Button, Icon } from 'antd';
 import styles from '../../index.less';
+import CompositeWidget from '../CompositWidget';
 
-export default class TunableNumberWidget extends React.PureComponent {
+export default class TunableNumberWidget extends CompositeWidget {
   constructor(props) {
     super(props);
     this.state = {
       expand: true,
       formData: { ...props.formData },
     };
-  }
-
-  onPropertyChange(name, value) {
-    const dataCopy = { ...this.state.formData, [name]: value };
-    this.setState({
-      formData: dataCopy,
-    }, () => {
-      this.props.onChange(dataCopy);
-    });
-  }
-
-  toggleState() {
-    this.setState({ expand: !this.state.expand });
-  }
-
-  renderSchema(name, extraProps = {}) {
-    const { registry, schema, idSchema, formData, uiSchema,
-      errorSchema, onBlur, onFocus, disabled, readonly } = this.props;
-    const { fields } = registry;
-    const { SchemaField } = fields;
-    return (
-      <SchemaField
-        key={name}
-        name={name}
-        required={false}
-        schema={schema.properties[name]}
-        uiSchema={uiSchema[name]}
-        errorSchema={errorSchema[name]}
-        idSchema={idSchema[name]}
-        formData={formData[name]}
-        onChange={value => this.onPropertyChange(name, value)}
-        onBlur={onBlur}
-        onFocus={onFocus}
-        registry={registry}
-        disabled={disabled}
-        readonly={readonly}
-        {...extraProps}
-      />
-    );
   }
 
   render() {

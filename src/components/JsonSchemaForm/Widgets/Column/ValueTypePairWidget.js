@@ -4,6 +4,7 @@ import React from 'react';
 import { Row, Col } from 'antd';
 import { TextWidget } from 'react-jsonschema-form/lib/components/widgets';
 import NumberInputWidget from '../base/NumberInputWidget';
+import CompositeWidget from '../CompositWidget';
 
 const typeConfig = {
   date: TextWidget,
@@ -36,15 +37,8 @@ const valueConverter = {
   byte: v => v,
 };
 
-export default class ValueTypePairWidget extends React.PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = {
-      formData: { ...props.formData },
-    };
-  }
-
-  onPropertyChange(name, value) {
+export default class ValueTypePairWidget extends CompositeWidget {
+  onPropertyChanged(name, value) {
     // check value for `value` field.
     const { fieldType, value: vValue } = this.state.formData;
     let type = fieldType;
@@ -67,53 +61,16 @@ export default class ValueTypePairWidget extends React.PureComponent {
       }
     }
     const dataCopy = Object.assign({}, { ...this.state.formData, [name]: value, ...extraV });
-    this.setState({
-      formData: dataCopy,
-    }, () => this.props.onChange(dataCopy));
-  }
-
-  isRequired(name) {
-    const { schema } = this.props;
-    return (
-      Array.isArray(schema.required) && schema.required.indexOf(name) !== -1
-    );
-  }
-
-  renderSchema(name, description, SpecifiedSchemaField) {
-    const { registry, schema, idSchema, formData, uiSchema,
-      errorSchema, onBlur, onFocus, disabled, readonly } = this.props;
-    const { fields } = registry;
-    let RenderSchemaField = SpecifiedSchemaField;
-    if (!RenderSchemaField) {
-      RenderSchemaField = fields.SchemaField;
-    }
-    return (
-      <RenderSchemaField
-        key={name}
-        name={name}
-        required={this.isRequired(name)}
-        schema={{ ...schema.properties[name], description }}
-        uiSchema={uiSchema[name]}
-        errorSchema={errorSchema[name]}
-        idSchema={idSchema[name]}
-        formData={formData[name]}
-        onChange={value => this.onPropertyChange(name, value)}
-        onBlur={onBlur}
-        onFocus={onFocus}
-        registry={registry}
-        disabled={disabled}
-        readonly={readonly}
-      />
-    );
+    this.onFormDataChanged(dataCopy);
   }
 
   render() {
     const { fieldType } = this.props.formData;
     return (
       <React.Fragment>
-        {this.renderSchema('fieldType', '类型')}
+        {this.renderSchema('fieldType', {}, {}, undefined, { description: '类型' })}
         {fieldType ?
-          this.renderSchema('value', '值', typeConfig[fieldType])
+          this.renderSchema('value', {}, {}, typeConfig[fieldType], { description: '值' })
           : (
             <Row>
               <Col span={8}>值 *</Col>

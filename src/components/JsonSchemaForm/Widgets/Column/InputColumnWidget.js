@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Tag, Icon, Row, Col } from 'antd';
-import SelectWidget from '../SelectWidget';
+import SelectWidget from '../base/SelectWidget';
 import { callFuncElseError } from '../../utils';
 
 export default class InputColumnWidget extends React.PureComponent {

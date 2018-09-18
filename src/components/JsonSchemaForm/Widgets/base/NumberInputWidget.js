@@ -1,10 +1,10 @@
 import React from 'react';
-import { Modal, Button, Row, Col, InputNumber } from 'antd';
+import { Row, Col, InputNumber } from 'antd';
 
 const NumberInputWidget = (props) => {
   const { required, onChange, formData, uiSchema, schema } = props;
   const { description } = schema;
-  const options = uiSchema ? uiSchema['ui:options'] : {};
+  const options = uiSchema ? uiSchema['ui:options'] || {} : {};
   const { min, max, step } = options;
   return (
     <Row>
