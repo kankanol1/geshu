@@ -61,8 +61,13 @@ const registeredFields = {
 
 const replaceLastPathTo = (pathSelector, lastPath) => {
   const pathArr = pathSelector.split('.');
-  pathArr[pathArr.length - 1] = lastPath;
-  return pathArr.join('..');
+  if (pathSelector.endsWith('value')) {
+    pathArr[pathArr.length - 1] = lastPath;
+  } else {
+    pathArr.push(lastPath);
+  }
+  const v = pathArr.join('..');
+  return v;
 };
 
 
