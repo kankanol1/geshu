@@ -98,6 +98,22 @@ export default class ConfigurationTable extends React.Component {
     );
   }
 
+  renderCheckboxHeader= (item, key, data) => {
+    const checkedNum = data.filter(it => it[item.name]).length;
+    return (
+      <Col span={item.span} key={key}>
+        <div className={styles.header}>
+          <Checkbox
+            indeterminate={checkedNum > 0 && checkedNum < data.length}
+            checked={checkedNum === data.length}
+            className={styles.checkbox}
+            onChange={v => this.handleAllItemsCheckedStatus(item.name, v.target.checked)}
+          /> {item.title}
+        </div>
+      </Col>
+    );
+  }
+
   render() {
     const { canAdd, maxHeight, canDelete, columns, opSpan } = this.props;
     const { data } = this.state;
@@ -112,19 +128,7 @@ export default class ConfigurationTable extends React.Component {
               {columns.map(
                 (item, i) => {
                   if (item.type === 'checkbox') {
-                    return (
-                      <Col span={item.span} key={i}>
-                        <div className={styles.header}>
-                          <Button type="primary" size="small" onClick={() => this.handleAllItemsCheckedStatus(item.name, true)} >
-                            全选
-                          </Button>
-                          &nbsp;
-                          <Button type="primary" size="small" onClick={() => this.handleAllItemsCheckedStatus(item.name, false)} >
-                            全不选
-                          </Button>
-                        </div>
-                      </Col>
-                    );
+                    return this.renderCheckboxHeader(item, i, data);
                   }
                   return (
                     <Col span={item.span} key={i}>

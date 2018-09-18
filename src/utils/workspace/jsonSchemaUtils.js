@@ -90,9 +90,7 @@ function translateInputColumnUISchema(originJsonSchema, id, code, name, projectI
 }
 
 function translateValueTypePairUISchema(originJsonSchema, id, code, name, projectId) {
-  return { 'ui:field': 'value_type_pair',
-    'ui:options': { fields: originJsonSchema.properties.fieldType.enum },
-  };
+  return { 'ui:field': 'value_type_pair' };
 }
 
 function translateColumnMappingArrayUISchema(originJsonSchema, id, code, name, projectId) {
