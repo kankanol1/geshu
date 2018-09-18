@@ -43,31 +43,37 @@ export default {
   effects: {
     *fetchJobList({ payload }, { call, put }) {
       const response = yield call(queryJobsByProjectId, payload);
-      yield put({
-        type: 'saveJobList',
-        payload: response,
-      });
+      if (response) {
+        yield put({
+          type: 'saveJobList',
+          payload: response,
+        });
+      }
     },
 
     *removeJobs({ payload, callback }, { call, put }) {
       const response = yield call(removeJobs, { ids: payload.ids });
-      if (response.success) {
-        message.success(response.message);
-        if (callback) callback();
-      } else {
-        // show message.
-        message.error(response.message);
+      if (response) {
+        if (response.success) {
+          message.success(response.message);
+          if (callback) callback();
+        } else {
+          // show message.
+          message.error(response.message);
+        }
       }
     },
 
     *cancelJobs({ payload, callback }, { call, put }) {
       const response = yield call(cancelJobs, { ids: payload.ids });
-      if (response.success) {
-        message.success(response.message);
-        if (callback) callback();
-      } else {
-        // show message.
-        message.error(response.message);
+      if (response) {
+        if (response.success) {
+          message.success(response.message);
+          if (callback) callback();
+        } else {
+          // show message.
+          message.error(response.message);
+        }
       }
     },
   },

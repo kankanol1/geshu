@@ -194,17 +194,19 @@ export default {
   effects: {
     *initialize({ payload }, { call, put }) {
       const response = yield call(getGraph, { id: payload.id });
-      yield put({
-        type: 'init',
-        payload: {
-          ...response.data,
-          ...payload,
-        },
-      });
-      yield put({
-        type: 'loadFile',
-        payload: '/',
-      });
+      if (response) {
+        yield put({
+          type: 'init',
+          payload: {
+            ...response.data,
+            ...payload,
+          },
+        });
+        yield put({
+          type: 'loadFile',
+          payload: '/',
+        });
+      }
     },
     *getDataSourceColumns({ payload }, { call, put, select }) {
       const { path, projectId, fileType } = payload;
@@ -219,13 +221,15 @@ export default {
           projectId: projectId || '-1',
           type: fileType,
         });
-        yield put({
-          type: 'saveDataSourceColumn',
-          payload: {
-            id: path,
-            data,
-          },
-        });
+        if (data) {
+          yield put({
+            type: 'saveDataSourceColumn',
+            payload: {
+              id: path,
+              data,
+            },
+          });
+        }
       }
       yield put({
         type: 'saveCurrentDataSourceColumn',
@@ -245,12 +249,13 @@ export default {
           backendMappingJson,
           id,
         });
-
-      if (!payload) {
-        message.info(response.message);
-      } else {
-        const execution = yield call(execute, { type: 'mapping', id });
-        if (execution.success) { yield put(routerRedux.push('/graph/jobs')); } else { message.info(execution.message); }
+      if (response) {
+        if (!payload) {
+          message.info(response.message);
+        } else {
+          const execution = yield call(execute, { type: 'mapping', id });
+          if (execution.success) { yield put(routerRedux.push('/graph/jobs')); } else { message.info(execution.message); }
+        }
       }
     },
 

@@ -51,70 +51,84 @@ export default {
 
     *fetchDatasetList({ payload }, { call, put }) {
       const response = yield call(queryDataset, payload);
-      yield put({
-        type: 'saveDatasetList',
-        payload: response,
-      });
+      if (response) {
+        yield put({
+          type: 'saveDatasetList',
+          payload: response,
+        });
+      }
     },
 
     *removeDataset({ payload, callback }, { call, put }) {
       const response = yield call(removeDataset, { ids: payload.ids });
-      if (response.success) {
-        message.success(response.message);
-        callback();
-      } else {
+      if (response) {
+        if (response.success) {
+          message.success(response.message);
+          callback();
+        } else {
         // show message.
-        message.error(response.message);
+          message.error(response.message);
+        }
       }
     },
 
     *makePublicDataset({ payload, callback }, { call, put }) {
       const response = yield call(makePublicDataset, { ids: payload.ids });
-      if (response.success) {
-        message.success(response.message);
-        callback();
-      } else {
+      if (response) {
+        if (response.success) {
+          message.success(response.message);
+          callback();
+        } else {
         // show message.
-        message.error(response.message);
+          message.error(response.message);
+        }
       }
     },
 
     *makePrivateDataset({ payload, callback }, { call, put }) {
       const response = yield call(makePrivateDataset, { ids: payload.ids });
-      if (response.success) {
-        message.success(response.message);
-        callback();
-      } else {
+      if (response) {
+        if (response.success) {
+          message.success(response.message);
+          callback();
+        } else {
         // show message.
-        message.error(response.message);
+          message.error(response.message);
+        }
       }
     },
 
     *updateDataset({ payload, callback }, { call, put }) {
       const response = yield call(updateDataset, payload);
-      yield put({
-        type: 'saveCreateDatasetResult',
-        payload: response,
-      });
-      if (callback) callback();
+      if (response) {
+        yield put({
+          type: 'saveCreateDatasetResult',
+          payload: response,
+        });
+        if (callback) callback();
+      }
     },
 
     *getSchema({ payload, callback }, { call, put }) {
       const response = yield call(getDatasetSchema, payload);
-      yield put({
-        type: 'saveDatasetSchema',
-        payload: response,
-      });
-      if (callback) callback();
+      if (response) {
+        yield put({
+          type: 'saveDatasetSchema',
+          payload: response,
+        });
+        if (callback) callback();
+      }
     },
 
     *createDataset({ payload, callback }, { call, put }) {
       const response = yield call(createDataset, payload);
-      yield put({
-        type: 'saveCreateDatasetResult',
-        payload: response,
-      });
-      if (callback) callback();
+      if (response) {
+        yield put({
+          type: 'saveCreateDatasetResult',
+          payload: response,
+        });
+        if (callback) callback();
+      }
     },
 
     *fetchDatasetInfoForId({ payload, callback }, { call, put }) {

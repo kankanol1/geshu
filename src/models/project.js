@@ -63,61 +63,73 @@ export default {
   effects: {
     *fetchProjectList({ payload }, { call, put }) {
       const response = yield call(queryProjects, payload);
-      yield put({
-        type: 'saveProjectList',
-        payload: response,
-      });
+      if (response) {
+        yield put({
+          type: 'saveProjectList',
+          payload: response,
+        });
+      }
     },
 
     *fetchRecentProjects({ payload }, { call, put }) {
       const response = yield call(queryRecentProjects);
-      yield put({
-        type: 'saveRecentProjects',
-        payload: response,
-      });
+      if (response) {
+        yield put({
+          type: 'saveRecentProjects',
+          payload: response,
+        });
+      }
     },
 
     *fetchLabelsList({ payload }, { call, put }) {
       const response = yield call(queryProjectLabels, payload);
-      yield put({
-        type: 'saveLabelsList',
-        payload: response,
-      });
+      if (response) {
+        yield put({
+          type: 'saveLabelsList',
+          payload: response,
+        });
+      }
     },
 
     *removeProject({ payload }, { call, put }) {
       const response = yield call(removeProject, { ids: payload.ids });
-      if (response.success) {
-        message.success(response.message);
-        yield put({
-          type: 'fetchProjectList',
-          payload: payload.refreshParams,
-        });
-      } else {
+      if (response) {
+        if (response.success) {
+          message.success(response.message);
+          yield put({
+            type: 'fetchProjectList',
+            payload: payload.refreshParams,
+          });
+        } else {
         // show message.
-        message.error(response.message);
+          message.error(response.message);
+        }
       }
     },
 
     *updateProject({ payload, callback }, { call, put }) {
       const response = yield call(updateProject, { ...payload });
-      if (response.success) {
-        message.success(response.message);
-        if (callback) callback();
-      } else {
+      if (response) {
+        if (response.success) {
+          message.success(response.message);
+          if (callback) callback();
+        } else {
         // show message.
-        message.error(response.message);
+          message.error(response.message);
+        }
       }
     },
 
     *createProject({ payload, callback }, { call, put }) {
       const response = yield call(createProject, { ...payload });
-      if (response.success) {
-        message.success(response.message);
-        if (callback) callback(response.id);
-      } else {
+      if (response) {
+        if (response.success) {
+          message.success(response.message);
+          if (callback) callback(response.id);
+        } else {
         // show message.
-        message.error(response.message);
+          message.error(response.message);
+        }
       }
     },
 

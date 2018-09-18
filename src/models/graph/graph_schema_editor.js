@@ -192,13 +192,15 @@ export default {
   effects: {
     *initialize({ payload }, { call, put }) {
       const response = yield call(getGraph, { id: payload.id });
-      yield put({
-        type: 'init',
-        payload: {
-          ...response.data,
-          ...payload,
-        },
-      });
+      if (response) {
+        yield put({
+          type: 'init',
+          payload: {
+            ...response.data,
+            ...payload,
+          },
+        });
+      }
     },
     *saveSchema({ payload }, { call, select, put }) {
       const { indexData, id } =
@@ -225,11 +227,13 @@ export default {
           indexJson,
           id,
         });
-      if (!payload) {
-        message.info(response.message);
-      } else {
-        const execution = yield call(execute, { type: 'schema', id });
-        message.info(execution.message);
+      if (response) {
+        if (!payload) {
+          message.info(response.message);
+        } else {
+          const execution = yield call(execute, { type: 'schema', id });
+          if (execution) message.info(execution.message);
+        }
       }
     },
   },

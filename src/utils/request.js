@@ -21,12 +21,41 @@ const codeMessage = {
   503: '服务不可用，服务器暂时过载或维护。',
   504: '网关超时。',
 };
+
+let notifications = [];
+
+let checking = false;
+
+function showNotification({ message, description }) {
+  if (notifications.filter(i => description === i.description).length === 0) {
+    // add to notification
+    notifications.push({ message, description });
+  }
+  if (!checking) {
+    displayNextNotification();
+    setTimeout(displayNextNotification, 2);
+    checking = true;
+  }
+}
+
+const displayNextNotification = () => {
+  const nt = notifications[0];
+  if (nt) {
+    notifications = notifications.filter((x, i) => i !== 0);
+    notification.error({
+      message: nt.message,
+      description: nt.description,
+      duration: 2,
+    });
+  }
+};
+
 function checkStatus(response) {
   if (response.status >= 200 && response.status < 300) {
     return response;
   }
   const errortext = codeMessage[response.status] || response.statusText;
-  notification.error({
+  showNotification({
     message: `请求错误 ${response.status}: ${response.url}`,
     description: errortext,
   });

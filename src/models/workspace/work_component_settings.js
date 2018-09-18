@@ -132,15 +132,17 @@ export default {
     *fetchComponentSettings({ code, id, name, projectId }, { call, put }) {
       yield put({ type: 'workcanvas/addMessage', payload: { message: `加载配置[${code}](${name})...` } });
       const data = yield call(fetchComponentSetting, code);
-      yield put({ type: 'registerComponentMetaDict', component: data, code, id, name });
-      yield put({
-        type: 'initComponentSettingsForId',
-        id,
-        code,
-        name,
-        projectId,
-      });
-      yield put({ type: 'workcanvas/addMessage', payload: { message: `配置[${code}](${name})加载完毕` } });
+      if (data) {
+        yield put({ type: 'registerComponentMetaDict', component: data, code, id, name });
+        yield put({
+          type: 'initComponentSettingsForId',
+          id,
+          code,
+          name,
+          projectId,
+        });
+        yield put({ type: 'workcanvas/addMessage', payload: { message: `配置[${code}](${name})加载完毕` } });
+      }
     },
 
     /**
@@ -203,20 +205,22 @@ export default {
       });
       const response = yield call(saveComponentSettings,
         { id: projectId, component: currentComponent, payload: displayFormData });
-      if (response.success) {
-        message.info(response.message);
-        yield put({
-          type: 'workcanvas/saveProject',
-          // force save to remote.
-          payload: {
-            force: true,
-          },
-        });
-        if (callback) {
-          callback();
+      if (response) {
+        if (response.success) {
+          message.info(response.message);
+          yield put({
+            type: 'workcanvas/saveProject',
+            // force save to remote.
+            payload: {
+              force: true,
+            },
+          });
+          if (callback) {
+            callback();
+          }
+        } else {
+          message.error(response.message);
         }
-      } else {
-        message.error(response.message);
       }
       yield put({ type: 'setLoading', payload: false });
     },

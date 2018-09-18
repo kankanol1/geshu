@@ -99,92 +99,106 @@ export default {
   effects: {
     *fetchDatabaseList({ payload }, { call, put }) {
       const response = yield call(queryDatabase, payload);
-      yield put({
-        type: 'saveDatabasetList',
-        payload: response,
-      });
+      if (response) {
+        yield put({
+          type: 'saveDatabasetList',
+          payload: response,
+        });
+      }
     },
 
     *fetchAllDatabaseList({ payload }, { call, put }) {
       const response = yield call(queryAllDatabase);
-      yield put({
-        type: 'saveAllDataList',
-        payload: response,
-      });
+      if (response) {
+        yield put({
+          type: 'saveAllDataList',
+          payload: response,
+        });
+      }
     },
 
     *removeDatabase({ payload }, { call, put }) {
       const response = yield call(removeDatabase, { ids: payload.ids });
-      if (response.success) {
-        message.success(response.message);
-        yield put({
-          type: 'fetchDatabaseList',
-          payload: payload.refreshParams,
-        });
-      } else {
+      if (response) {
+        if (response.success) {
+          message.success(response.message);
+          yield put({
+            type: 'fetchDatabaseList',
+            payload: payload.refreshParams,
+          });
+        } else {
         // show message.
-        message.error(response.message);
+          message.error(response.message);
+        }
       }
     },
 
     *makePublicDatabase({ payload }, { call, put }) {
       const response = yield call(makePublicDatabase, { ids: payload.ids });
-      if (response.success) {
-        message.success(response.message);
-        yield put({
-          type: 'fetchDatabaseList',
-          payload: payload.refreshParams,
-        });
-      } else {
+      if (response) {
+        if (response.success) {
+          message.success(response.message);
+          yield put({
+            type: 'fetchDatabaseList',
+            payload: payload.refreshParams,
+          });
+        } else {
         // show message.
-        message.error(response.message);
+          message.error(response.message);
+        }
       }
     },
 
     *makePrivateDatabase({ payload }, { call, put }) {
       const response = yield call(makePrivateDatabase, { ids: payload.ids });
-      if (response.success) {
-        message.success(response.message);
-        yield put({
-          type: 'fetchDatabaseList',
-          payload: payload.refreshParams,
-        });
-      } else {
+      if (response) {
+        if (response.success) {
+          message.success(response.message);
+          yield put({
+            type: 'fetchDatabaseList',
+            payload: payload.refreshParams,
+          });
+        } else {
         // show message.
-        message.error(response.message);
+          message.error(response.message);
+        }
       }
     },
 
     *updateDatabase({ payload }, { call, put }) {
       const response = yield call(updateDatabase, { ...payload });
-      if (response.success) {
-        message.success(response.message);
-        yield put({
-          type: 'fetchDatabaseList',
-          payload: payload.refreshParams,
-        });
-      } else {
+      if (response) {
+        if (response.success) {
+          message.success(response.message);
+          yield put({
+            type: 'fetchDatabaseList',
+            payload: payload.refreshParams,
+          });
+        } else {
         // show message.
-        message.error(response.message);
+          message.error(response.message);
+        }
       }
     },
 
     *createDatabase({ payload, resolve, reject }, { call, put }) {
       const response = yield call(createDatabase, { ...payload });
-      if (response.success) {
-        message.success(response.message);
-        yield put({
-          type: 'fetchDatabaseList',
-          payload: payload.refreshParams,
-        });
-        if (resolve !== undefined) {
-          resolve(response);
-        }
-      } else {
+      if (response) {
+        if (response.success) {
+          message.success(response.message);
+          yield put({
+            type: 'fetchDatabaseList',
+            payload: payload.refreshParams,
+          });
+          if (resolve !== undefined) {
+            resolve(response);
+          }
+        } else {
         // show message.
-        message.error(response.message);
-        if (reject !== undefined) {
-          reject(response);
+          message.error(response.message);
+          if (reject !== undefined) {
+            reject(response);
+          }
         }
       }
     },

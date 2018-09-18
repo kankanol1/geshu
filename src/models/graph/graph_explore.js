@@ -149,13 +149,15 @@ export default {
   effects: {
     *initialize({ payload }, { call, put }) {
       const graphData = yield call(getGraph, { id: payload.id });
-      yield put({
-        type: 'init',
-        payload: {
-          ...graphData.data,
-          ...payload,
-        },
-      });
+      if (graphData) {
+        yield put({
+          type: 'init',
+          payload: {
+            ...graphData.data,
+            ...payload,
+          },
+        });
+      }
     },
     *searchGraph({ payload }, { call, put, select }) {
       const { id, type2Label2Attrs, type2Attrs, tableName } =

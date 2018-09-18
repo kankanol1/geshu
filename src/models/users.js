@@ -85,47 +85,55 @@ export default {
   effects: {
     *fetchUserList({ payload }, { call, put }) {
       const response = yield call(queryUsers, payload);
-      yield put({
-        type: 'saveUsersList',
-        payload: response,
-      });
+      if (response) {
+        yield put({
+          type: 'saveUsersList',
+          payload: response,
+        });
+      }
     },
 
     *removeUsers({ payload }, { call, put }) {
       const response = yield call(removeUsers, { userNames: payload.userNames });
-      if (response.success) {
-        message.success(response.message);
-        yield put({
-          type: 'fetchUserList',
-          payload: payload.refreshParams,
-        });
-      } else {
+      if (response) {
+        if (response.success) {
+          message.success(response.message);
+          yield put({
+            type: 'fetchUserList',
+            payload: payload.refreshParams,
+          });
+        } else {
         // show message.
-        message.error(response.message);
+          message.error(response.message);
+        }
       }
     },
 
     *updateUser({ payload }, { call, put }) {
       const response = yield call(updateUser, { ...payload });
-      if (response.success) {
-        message.success(response.message);
-        yield put({
-          type: 'fetchUserList',
-          payload: payload.refreshParams,
-        });
-      } else {
+      if (response) {
+        if (response.success) {
+          message.success(response.message);
+          yield put({
+            type: 'fetchUserList',
+            payload: payload.refreshParams,
+          });
+        } else {
         // show message.
-        message.error(response.message);
+          message.error(response.message);
+        }
       }
     },
 
     *createUser({ payload }, { call, put }) {
       const response = yield call(createUser, { ...payload });
-      if (response.success) {
-        message.success(response.message);
-      } else {
+      if (response) {
+        if (response.success) {
+          message.success(response.message);
+        } else {
         // show message.
-        message.error(response.message);
+          message.error(response.message);
+        }
       }
     },
 
@@ -145,27 +153,33 @@ export default {
         });
       } else {
         const response = yield call(queryUserName, { ...payload });
-        yield put({
-          type: 'endValidationUserName',
-          payload: response,
-        });
+        if (response) {
+          yield put({
+            type: 'endValidationUserName',
+            payload: response,
+          });
+        }
       }
     },
 
     *queryCurrentUser(_, { call, put }) {
       const response = yield call(queryCurrentUser);
-      yield put({ type: 'updateState', payload: { currentUser: response === undefined ? {} : response } });
+      if (response) {
+        yield put({ type: 'updateState', payload: { currentUser: response === undefined ? {} : response } });
+      }
     },
 
     *updatePassword({ payload, resolve, reject }, { call }) {
       const response = yield call(updatePassword, payload);
-      if (response.success) {
-        message.success(response.message);
-        resolve();
-      } else {
-      // show message.
-        message.error(response.message);
-        reject();
+      if (response) {
+        if (response.success) {
+          message.success(response.message);
+          resolve();
+        } else {
+          // show message.
+          message.error(response.message);
+          reject();
+        }
       }
     },
   },

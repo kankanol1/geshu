@@ -179,15 +179,18 @@ export default {
   },
   effects: {
     *initialize({ payload }, { call, put }) {
-      const { data: { name, tableName } } = yield call(getGraph, { id: payload.id });
-      yield put({
-        type: 'init',
-        payload: {
-          ...payload,
-          tableName,
-          name,
-        },
-      });
+      const response = yield call(getGraph, { id: payload.id });
+      if (response) {
+        const { data: { name, tableName } } = response;
+        yield put({
+          type: 'init',
+          payload: {
+            ...payload,
+            tableName,
+            name,
+          },
+        });
+      }
     },
     *saveQuery({ payload }, { call, put, select }) {
       const { queryId, code, querySaveName } = yield select(state => state.graph_query);
@@ -196,7 +199,9 @@ export default {
         query: code,
         name: querySaveName,
       });
-      message.info(response.message);
+      if (response) {
+        message.info(response.message);
+      }
     },
     *saveAsQuery({ payload }, { call, put, select }) {
       const { id, code } = yield select(state => state.graph_query);
@@ -205,7 +210,9 @@ export default {
         query: code,
         name: payload,
       });
-      message.info(response.message);
+      if (response) {
+        message.info(response.message);
+      }
     },
     *queryGraph({ payload }, { call, put, select }) {
       const { id, code, tableName } = yield select(state => state.graph_query);
@@ -244,28 +251,32 @@ export default {
     *updateQuery({ payload }, { call, put, select }) {
       const { graphId } = yield select(state => state.graph_query);
       const response = yield call(updateQuery, { ...payload, graphId });
-      if (response.success) {
-        message.success(response.message);
-        yield put({
-          type: 'queryList',
-          graphId,
-        });
-      } else {
-        // show message.
-        message.error(response.message);
+      if (response) {
+        if (response.success) {
+          message.success(response.message);
+          yield put({
+            type: 'queryList',
+            graphId,
+          });
+        } else {
+          // show message.
+          message.error(response.message);
+        }
       }
     },
     *removeQuery({ payload }, { call, put }) {
       const response = yield call(removeQuery, { ids: payload.ids });
-      if (response.success) {
-        message.success(response.message);
-        yield put({
-          type: 'queryList',
-          payload: payload.refreshParams,
-        });
-      } else {
-        // show message.
-        message.error(response.message);
+      if (response) {
+        if (response.success) {
+          message.success(response.message);
+          yield put({
+            type: 'queryList',
+            payload: payload.refreshParams,
+          });
+        } else {
+          // show message.
+          message.error(response.message);
+        }
       }
     },
   },

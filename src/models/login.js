@@ -45,10 +45,12 @@ export default {
         // const redirectPath = replaceUrlWithParams('/#/user/login',
         // { urlParams, redirect: pathname });
         const response = yield call(userLogout);
-        if (response.success) {
-          message.info(response.message);
-        } else {
-          message.error(response.message);
+        if (response) {
+          if (response.success) {
+            message.info(response.message);
+          } else {
+            message.error(response.message);
+          }
         }
       } finally {
         yield put({

@@ -236,23 +236,25 @@ export default {
   effects: {
     *initProject({ payload }, { put, call }) {
       const response = yield call(openProject, payload.id);
-      // save to this.
-      const { settings, components, ...rest } = response;
-      yield put({
-        type: 'saveProjectInfoToState',
-        payload: {
-          ...rest,
-          components,
-          id: payload.id,
-        },
-      });
-      // save settings.
-      yield put({
-        type: 'work_component_settings/initSettings',
-        payload: {
-          settings,
-        },
-      });
+      if (response) {
+        // save to this.
+        const { settings, components, ...rest } = response;
+        yield put({
+          type: 'saveProjectInfoToState',
+          payload: {
+            ...rest,
+            components,
+            id: payload.id,
+          },
+        });
+        // save settings.
+        yield put({
+          type: 'work_component_settings/initSettings',
+          payload: {
+            settings,
+          },
+        });
+      }
     },
 
     *saveProject({ payload }, { put, call, select }) {
@@ -267,42 +269,38 @@ export default {
           { id: currentState.state.projectId,
             payload: { components: currentState.canvas.toJson() } }
         );
-        if (response.success) {
-          if (showMessage) {
-            message.info('保存成功');
+        if (response) {
+          if (response.success) {
+            if (showMessage) {
+              message.info('保存成功');
+            }
+            yield put({
+              type: 'updateProjectSchema',
+              payload: {
+                schema: response.schema,
+                validation: response.validation,
+              },
+            });
+          } else if (showMessage) {
+            message.error('保存出错！请检查重试');
           }
           yield put({
-            type: 'updateProjectSchema',
+            type: 'addMessage',
             payload: {
-              schema: response.schema,
-              validation: response.validation,
+              message: `项目保存${response.success ? '成功' : '失败'}`,
             },
           });
-          // yield put({
-          //   type: 'saveState',
-          //   payload: {
-          //     dirty: false,
-          //   },
-          // });
-        } else if (showMessage) {
-          message.error('保存出错！请检查重试');
         }
-        yield put({
-          type: 'addMessage',
-          payload: {
-            message: `项目保存${response.success ? '成功' : '失败'}`,
-          },
-        });
-      }
-      if (yieldCallback) {
-        yield yieldCallback();
-      }
-      if (callback) {
-        callback();
+        if (yieldCallback) {
+          yield yieldCallback();
+        }
+        if (callback) {
+          callback();
+        }
       }
     },
 
-    *canvasDeleteSelected({ payload }, { put, call, select }) {
+    *canvasDeleteSelected({ payload }, { put, select }) {
       const { canvas } = yield select(state => state.workcanvas);
       // divide the selection to two different sets.
       const componentSelectionSet = [];

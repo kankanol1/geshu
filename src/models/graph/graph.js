@@ -48,19 +48,23 @@ export default {
   effects: {
     *fetchRecent({ payload }, { call, put }) {
       const response = yield call(recentGraph);
-      if (response.success) {
-        yield put({
-          type: 'saveRecent',
-          payload: response.data,
-        });
+      if (response) {
+        if (response.success) {
+          yield put({
+            type: 'saveRecent',
+            payload: response.data,
+          });
+        }
       }
     },
     *fetchProjectList({ payload }, { call, put }) {
       const response = yield call(queryGraphList, payload);
-      yield put({
-        type: 'saveProjectList',
-        payload: response,
-      });
+      if (response) {
+        yield put({
+          type: 'saveProjectList',
+          payload: response,
+        });
+      }
     },
     *init({ payload }, { put }) {
       yield put({
@@ -69,56 +73,64 @@ export default {
     },
     *removeProject({ payload }, { call, put }) {
       const response = yield call(removeProject, { ids: payload.ids });
-      if (response.success) {
-        message.success(response.message);
-        yield put({
-          type: 'fetchProjectList',
-          payload: payload.refreshParams,
-        });
-      } else {
-        // show message.
-        message.error(response.message);
+      if (response) {
+        if (response.success) {
+          message.success(response.message);
+          yield put({
+            type: 'fetchProjectList',
+            payload: payload.refreshParams,
+          });
+        } else {
+          // show message.
+          message.error(response.message);
+        }
       }
     },
     *updateProject({ payload }, { call, put }) {
       const response = yield call(updateProject, { ...payload });
-      if (response.success) {
-        message.success(response.message);
-        yield put({
-          type: 'fetchProjectList',
-          payload: payload.refreshParams,
-        });
-      } else {
-        // show message.
-        message.error(response.message);
+      if (response) {
+        if (response.success) {
+          message.success(response.message);
+          yield put({
+            type: 'fetchProjectList',
+            payload: payload.refreshParams,
+          });
+        } else {
+          // show message.
+          message.error(response.message);
+        }
       }
     },
     *createProject({ payload, resolve, reject }, { call, put }) {
       const response = yield call(createProject, { ...payload });
-      if (response.success) {
-        message.success('创建成功！');
-        yield put({
-          type: 'fetchProjectList',
-          payload: payload.refreshParams,
-        });
-        if (resolve !== undefined) {
-          resolve(response);
-        }
-      } else {
-      // show message.
-        message.error(response.message);
-        if (reject !== undefined) {
-          reject(response);
+      if (response) {
+        if (response.success) {
+          message.success('创建成功！');
+          yield put({
+            type: 'fetchProjectList',
+            payload: payload.refreshParams,
+          });
+          if (resolve !== undefined) {
+            resolve(response);
+          }
+        } else {
+        // show message.
+          message.error(response.message);
+          if (reject !== undefined) {
+            reject(response);
+          }
         }
       }
     },
     *createAndRedirect({ payload }, { call, put }) {
       const response = yield call(createProject, { ...payload });
-      if (response.success) {
-        yield put(routerRedux.push(`/graph/detail/${payload.redirect}/${response.message}`));
-      } else {
-      // show message.
-        message.error(response.message);
+      if (response) {
+        if (response.success) {
+          yield put(routerRedux.push(`/graph/detail/${payload.redirect}/${response.message}`));
+        } else {
+        // show message.
+          message.error(response.message);
+        }
       }
     },
   },

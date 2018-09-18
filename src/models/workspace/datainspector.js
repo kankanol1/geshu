@@ -20,12 +20,14 @@ export default {
   effects: {
     *inspectData({ payload }, { put, call }) {
       const response = yield call(inspectData, { ...payload });
-      yield put({
-        type: 'saveResult',
-        payload: {
-          ...response,
-        },
-      });
+      if (response) {
+        yield put({
+          type: 'saveResult',
+          payload: {
+            ...response,
+          },
+        });
+      }
     },
   },
 };

@@ -84,18 +84,22 @@ export default {
   effects: {
     *querySQLTmp({ payload }, { call, put }) {
       const response = yield call(performDataQueryTmp, payload);
-      yield put({
-        type: 'updateQueryResult',
-        payload: response,
-      });
+      if (response) {
+        yield put({
+          type: 'updateQueryResult',
+          payload: response,
+        });
+      }
     },
 
     *querySQL({ payload }, { call, put }) {
       const response = yield call(performDataQuery, payload);
-      yield put({
-        type: 'updateQueryResult',
-        payload: response,
-      });
+      if (response) {
+        yield put({
+          type: 'updateQueryResult',
+          payload: response,
+        });
+      }
     },
 
     *persistTable({ payload, callback }, { call, put }) {
@@ -118,10 +122,12 @@ export default {
 
     *getAvailableDatabases({ payload }, { call, put }) {
       const response = yield call(getLatestDatabaseForProject, payload);
-      yield put({
-        type: 'updateDatabases',
-        payload: response,
-      });
+      if (response) {
+        yield put({
+          type: 'updateDatabases',
+          payload: response,
+        });
+      }
     },
   },
 };

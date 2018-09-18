@@ -26,23 +26,27 @@ export default {
   effects: {
     *fetchModelList({ payload }, { call, put }) {
       const response = yield call(queryServingModels, payload);
-      yield put({
-        type: 'saveModelList',
-        payload: response,
-      });
+      if (response) {
+        yield put({
+          type: 'saveModelList',
+          payload: response,
+        });
+      }
     },
 
     *offlineModel({ payload }, { call, put }) {
       const response = yield call(offlineServingModels, { ids: payload.ids });
-      if (response.success) {
-        message.success(response.message);
-        yield put({
-          type: 'fetchModelList',
-          payload: payload.refreshParams,
-        });
-      } else {
-        // show message.
-        message.error(response.message);
+      if (response) {
+        if (response.success) {
+          message.success(response.message);
+          yield put({
+            type: 'fetchModelList',
+            payload: payload.refreshParams,
+          });
+        } else {
+          // show message.
+          message.error(response.message);
+        }
       }
     },
   },

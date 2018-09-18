@@ -118,17 +118,19 @@ export default {
   effects: {
     *fetchComponentList({ payload }, { call, put }) {
       const data = yield call(fetchComponentList);
-      const translatedData = data.map(
-        (group) => {
-          const newComponents = group.components.map(
-            (component) => {
-              return { ...component, name: translateName(component.name) };
-            }
-          );
-          return { ...group, components: newComponents, name: translateName(group.name) };
-        }
-      );
-      yield put({ type: 'replaceComponentList', data: translatedData });
+      if (data) {
+        const translatedData = data.map(
+          (group) => {
+            const newComponents = group.components.map(
+              (component) => {
+                return { ...component, name: translateName(component.name) };
+              }
+            );
+            return { ...group, components: newComponents, name: translateName(group.name) };
+          }
+        );
+        yield put({ type: 'replaceComponentList', data: translatedData });
+      }
     },
   },
 
