@@ -1,6 +1,6 @@
 
 import { message } from 'antd';
-import { queryJobs, removeJobs, cancelJobs } from '../../services/jobsAPI';
+import { queryJobs, removeJobs, cancelJobs, queryJobsByProjectId } from '../../services/jobsAPI';
 
 export default {
   namespace: 'outputview',
@@ -42,7 +42,7 @@ export default {
 
   effects: {
     *fetchJobList({ payload }, { call, put }) {
-      const response = yield call(queryJobs, payload);
+      const response = yield call(queryJobsByProjectId, payload);
       yield put({
         type: 'saveJobList',
         payload: response,

@@ -118,6 +118,7 @@ const proxy = serverEnabled ?
 
   // job manage.
   'GET /api/jobs/list': getJobs,
+  'GET /api/jobs/listbypid': getJobs,
   'GET /api/jobs/detail': getJobDetails,
   'POST /api/jobs/cancel': cancelJobs,
   'POST /api/jobs/delete': deleteJobs,
@@ -197,6 +198,12 @@ const proxy = serverEnabled ?
   'GET /api/dataset/query/data': getTableData,
   'GET /api/dataset/query/heatmap': getTableHeatmap,
   'GET /api/dataset/query/histogram': getTableHistogram,
+
+  // private dataset, for workspace output view.
+  'GET /api/dataset/private/query/data': getTableData,
+  'GET /api/dataset/private/query/heatmap': getTableHeatmap,
+  'GET /api/dataset/private/query/histogram': getTableHistogram,
+  'POST /api/dataset/private/delete': deleteDataset,
 
   /** component: component utils */
   'POST /api/component/schema/prefetch': fetchSchema,

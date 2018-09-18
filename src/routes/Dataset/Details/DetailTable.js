@@ -2,11 +2,15 @@
 import React, { PureComponent, Fragment } from 'react';
 import { Spin } from 'antd';
 import ReactTable from 'react-table';
+import PropTypes from 'prop-types';
 import 'react-table/react-table.css';
 import { Chart, Geom, Axis, Tooltip } from 'bizcharts';
-import { queryDatasetData, queryDatasetHistogram } from '../../../services/datasetAPI';
+import { queryDatasetData, queryDatasetHistogram, queryPrivateDatasetData, queryPrivateDatasetHistogram } from '../../../services/datasetAPI';
 
 export default class DetailTable extends React.Component {
+  static defaultProps = {
+    type: 'normal',
+  }
   state = {
     // column widths,
     width: {},
@@ -24,11 +28,18 @@ export default class DetailTable extends React.Component {
         this.setState({ loading: false });
       }
     };
-    queryDatasetData({ id: datasetId }).then((response) => {
+    let apis = {};
+    if (this.props.type === 'private') {
+      apis = { queryData: queryPrivateDatasetData, queryHistogram: queryPrivateDatasetHistogram };
+    } else {
+      apis = { queryData: queryDatasetData, queryHistogram: queryDatasetHistogram };
+    }
+    const { queryData, queryHistogram } = apis;
+    queryData({ id: datasetId }).then((response) => {
       this.setState({ tableData: response });
       handleLoading();
     });
-    queryDatasetHistogram({ id: datasetId }).then((response) => {
+    queryHistogram({ id: datasetId }).then((response) => {
       this.setState({ histogram: response });
       handleLoading();
     });
@@ -95,3 +106,8 @@ export default class DetailTable extends React.Component {
     );
   }
 }
+
+DetailTable.propTypes = {
+  datasetId: PropTypes.number.isRequired,
+  type: PropTypes.string,
+};

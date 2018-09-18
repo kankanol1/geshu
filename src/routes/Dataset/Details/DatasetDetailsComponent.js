@@ -13,10 +13,10 @@ const DatasetDetailsComponent = (props) => {
     >
       <Tabs defaultActiveKey="1">
         <TabPane tab="概览" key="1">
-          <DetailOverview datasetId={props.datasetId} />
+          <DetailOverview datasetId={props.datasetId} type={props.type} />
         </TabPane>
         <TabPane tab="数据" key="2">
-          <DetailTable datasetId={props.datasetId} />
+          <DetailTable datasetId={props.datasetId} type={props.type} />
         </TabPane>
       </Tabs>
     </Card>

@@ -8,6 +8,10 @@ export async function queryJobs(params) {
   return request(`/api/jobs/list?${stringify(params)}`);
 }
 
+export async function queryJobsByProjectId(params) {
+  return request(`/api/jobs/listbypid?${stringify(params)}`);
+}
+
 export async function removeJobs(params) {
   return request('/api/jobs/delete', {
     method: 'POST',
@@ -34,4 +38,5 @@ export default {
   queryJobs,
   cancelJobs,
   getJobDetails,
+  queryJobsByProjectId,
 };

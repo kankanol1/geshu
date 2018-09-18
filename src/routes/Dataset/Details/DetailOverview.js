@@ -1,10 +1,14 @@
 
 import React, { PureComponent, Fragment } from 'react';
 import { Spin, Card } from 'antd';
+import PropTypes from 'prop-types';
 import { Chart, Geom, Axis, Tooltip, Label } from 'bizcharts';
-import { queryDatasetHeatmap } from '../../../services/datasetAPI';
+import { queryDatasetHeatmap, queryPrivateDatasetHeatmap } from '../../../services/datasetAPI';
 
 export default class DetailOverview extends PureComponent {
+  static defaultProps = {
+    type: 'normal',
+  }
   state={
     heatmap: {
       // data, cols.
@@ -13,7 +17,8 @@ export default class DetailOverview extends PureComponent {
   }
   componentWillMount() {
     this.setState({ loading: true });
-    queryDatasetHeatmap({ id: this.props.datasetId }).then(
+    const queryAPI = this.props.type === 'private' ? queryPrivateDatasetHeatmap : queryDatasetHeatmap;
+    queryAPI({ id: this.props.datasetId }).then(
       (response) => {
         const { columns, values } = response;
         const converted = [];
@@ -145,3 +150,8 @@ export default class DetailOverview extends PureComponent {
     );
   }
 }
+
+DetailOverview.propTypes = {
+  datasetId: PropTypes.number.isRequired,
+  type: PropTypes.string,
+};

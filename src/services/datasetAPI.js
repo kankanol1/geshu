@@ -78,6 +78,27 @@ export async function queryDatasetHistogram(params) {
   return request(`/api/dataset/query/histogram?${stringify(params)}`);
 }
 
+export async function queryPrivateDatasetHeatmap(params) {
+  return request(`/api/dataset/private/query/heatmap?${stringify(params)}`);
+}
+
+export async function queryPrivateDatasetData(params) {
+  return request(`/api/dataset/private/query/data?${stringify(params)}`);
+}
+
+export async function queryPrivateDatasetHistogram(params) {
+  return request(`/api/dataset/private/query/histogram?${stringify(params)}`);
+}
+
+export async function removePrivateDataset(params) {
+  return request('/api/dataset/private/delete', {
+    method: 'POST',
+    body: {
+      ...params,
+    },
+  });
+}
+
 export default {
   queryDataset,
   createDataset,

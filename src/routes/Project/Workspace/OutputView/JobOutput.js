@@ -3,6 +3,7 @@ import { Tag, Icon, Row, Col, Card, Spin, List, Button, Popconfirm, message } fr
 import moment from 'moment';
 import { getJobDetails } from '../../../../services/jobsAPI';
 import { removeCandidateModels } from '../../../../services/modelsAPI';
+import { removePrivateDataset } from '../../../../services/datasetAPI';
 
 export default class JobOutput extends React.PureComponent {
   state={
@@ -21,11 +22,20 @@ export default class JobOutput extends React.PureComponent {
   }
 
   handleDataDelete = (id) => {
-    // TODO
+    this.setState({ dataLoading: true });
+    removePrivateDataset({ ids: [id] }).then((response) => {
+      if (response.success) {
+        message.info(response.message);
+      } else {
+        message.error(response.message);
+      }
+    });
+    getJobDetails({ id: this.props.id }).then(response => this.setState({
+      dataLoading: false, data: response,
+    }));
   }
 
   handleModelDelete = (id) => {
-    // TODO.
     this.setState({ modelLoading: true });
     removeCandidateModels({ ids: [id] }).then((response) => {
       if (response.success) {
@@ -34,7 +44,7 @@ export default class JobOutput extends React.PureComponent {
         message.error(response.message);
       }
     });
-    getJobDetails({ id }).then(response => this.setState({
+    getJobDetails({ id: this.props.id }).then(response => this.setState({
       modelLoading: false, data: response,
     }));
   }

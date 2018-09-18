@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'dva';
-import { Layout, Tabs, Input, Select, Row, Col, List, Icon, Spin, Tooltip } from 'antd';
+import { Layout, Tabs } from 'antd';
 import { Scrollbars } from 'react-custom-scrollbars';
 import WorkspaceViewMenu from './WorkspaceViewMenu';
 
@@ -9,7 +9,6 @@ import JobList from './OutputView/JobList';
 
 import styles from './WorkspaceOutputView.less';
 import JobOutput from './OutputView/JobOutput';
-import ModelServingTest from '../../Model/ModelServingTest';
 import ModelTestComponent from '../../Model/ModelTestComponent';
 import DatasetDetailsComponent from '../../Dataset/Details/DatasetDetailsComponent';
 
@@ -111,7 +110,7 @@ export default class WorkspaceOutputView extends React.Component {
                 } else if (p.type === 'model') {
                   content = <ModelTestComponent id={p.id} />;
                 } else if (p.type === 'data') {
-                  content = <DatasetDetailsComponent datasetId={p.id} />;
+                  content = <DatasetDetailsComponent datasetId={p.id} type="private" />;
                 } else {
                   return null;
                 }
