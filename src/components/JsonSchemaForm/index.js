@@ -29,6 +29,7 @@ import ExpressionEditor from './Widgets/ExprEditor/ExpressionEditor';
 import ColumnAssemblerConfWidget from './Widgets/Composite/ColumnAssemblerConfWidget';
 import ColumnTypePairTable from './Widgets/Column/ColumnTypePairTable';
 import RandomSplitWidget from './Widgets/Composite/RandomSplitWidget';
+import ColumnAggregatePairArrayWidget from './Widgets/Column/ColumnAggregatePairArrayWidget';
 
 const registeredWidgets = {
   SelectWidget,
@@ -57,6 +58,7 @@ const registeredFields = {
   // tunnable widgets
   // tunable_int: TunableNumberWidget,
   tunable_int: TunnableIntWidget,
+  column_aggregate_pair_array: ColumnAggregatePairArrayWidget,
 };
 
 const replaceLastPathTo = (pathSelector, lastPath) => {

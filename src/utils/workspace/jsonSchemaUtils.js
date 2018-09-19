@@ -33,6 +33,7 @@ const registeredSpecialUISchemas = {
   Column_Type_Pair_Array: translateColumnTypePairArrayUISchema,
   RandomSplitTransformerConf: translateRandomSplitTransformerConfUISchema,
   Value_Type_Pair: translateValueTypePairUISchema,
+  Column_Aggregate_Pair_Array: translateColumnAggregatePairArrayUISchema,
 };
 
 /* fixed any */
@@ -113,6 +114,14 @@ function translateColumnMappingItemUISchema(originJsonSchema, id, code, name, pr
 function translateColumnSelectCheckboxUISchema(originJsonSchema, id, code, name, projectId) {
   return { 'ui:field': 'column_selector_checkbox',
     'ui:options': { getField: () => FuncUtils.getAllColumnsFromUpstream(id) },
+  };
+}
+
+function translateColumnAggregatePairArrayUISchema(originJsonSchema, id, code, name, projectId) {
+  return { 'ui:field': 'column_aggregate_pair_array',
+    'ui:options': {
+      getField: () => FuncUtils.getAllColumnsFromUpstream(id),
+    },
   };
 }
 
