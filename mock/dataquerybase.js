@@ -18,14 +18,14 @@ export function getTableData(req, res, u, b) {
     data.push({ value: `bye-page-${pageNum}-${i}`, key: `key-page-${pageNum}-${i}` });
   }
 
-  const pagination = { total: pageSize * 10, pagesize: pageSize, current: pageNum };
+  const pagination = { total: pageSize * 10, pageSize, current: pageNum };
 
   const result = { data,
     pagination,
     meta:
     [
-      { size: 1, name: 'key', label: 'key' },
-      { size: 1, name: 'value', label: 'value' },
+      { name: 'key', type: 'string', nullable: true },
+      { name: 'value', type: 'string', nullable: true },
     ],
     success: true,
     message: '执行错误',

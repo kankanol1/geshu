@@ -17,11 +17,13 @@ export default class DetailTable extends React.Component {
     tableData: undefined,
     histogram: undefined,
     loading: true,
+    dataLoading: true,
+    pageSize: 10,
   }
   componentWillMount() {
-    const { datasetId, dispatch } = this.props;
+    const { datasetId } = this.props;
     this.setState({ loading: true });
-    let finishCount = 0;
+    let finishCount = 1;
     const handleLoading = () => {
       finishCount++;
       if (finishCount === 2) {
@@ -35,7 +37,7 @@ export default class DetailTable extends React.Component {
       apis = { queryData: queryDatasetData, queryHistogram: queryDatasetHistogram };
     }
     const { queryData, queryHistogram } = apis;
-    queryData({ id: datasetId }).then((response) => {
+    queryData({ id: datasetId, pageSize: this.state.pageSize, currentPage: 1 }).then((response) => {
       if (response) {
         this.setState({ tableData: response });
         handleLoading();
@@ -45,6 +47,21 @@ export default class DetailTable extends React.Component {
       if (response) {
         this.setState({ histogram: response });
         handleLoading();
+      }
+    });
+  }
+
+  fetchData(state, instance) {
+    const { datasetId } = this.props;
+    const { pageSize, page } = state;
+    this.setState({ pageSize });
+    const queryData = this.props.type === 'private' ? queryPrivateDatasetData : queryDatasetData;
+    this.setState({ dataLoading: true });
+    queryData({ id: datasetId,
+      pageSize,
+      currentPage: page + 1 }).then((response) => {
+      if (response) {
+        this.setState({ tableData: response, dataLoading: false });
       }
     });
   }
@@ -73,31 +90,38 @@ export default class DetailTable extends React.Component {
   }
 
   render() {
-    const { loading, histogram, tableData } = this.state;
+    const { loading, histogram, tableData, dataLoading } = this.state;
     if (loading || !tableData || !histogram) {
       return <Spin />;
     }
-    const { data } = tableData;
+    const { data, pagination, meta } = tableData;
+    const { total, pageSize, current } = pagination;
+    const pages = Math.ceil(total / pageSize);
     const cols = [];
-    for (const key of Object.keys(data[0])) {
-      cols.push({
-        Header: props => <div><span>{key}</span>{this.renderChartTest(key.trim(), props)}</div>,
-        accessor: key,
-        width: 300,
+    if (meta) {
+      meta.forEach((key) => {
+        cols.push({
+          Header: props => (
+            <div><span>{key.name}</span>
+              {this.renderChartTest(key.name.trim(), props)}
+            </div>
+          ),
+          accessor: key.name,
+          width: 300,
+        });
       });
     }
     return (
       <div>
         <ReactTable
-          // manual
-          loading={false}
+          manual
+          loading={dataLoading}
           data={data}
           columns={cols}
-          // defaultPageSize={this.state.pageSize}
-          defaultPageSize={10}
+          defaultPageSize={this.state.pageSize}
           className="-striped -highlight"
-          // pages={pages}
-          // onFetchData={(state, instance) => this.fetchData(state, instance)}
+          pages={pages}
+          onFetchData={(state, instance) => this.fetchData(state, instance)}
           onResizedChange={(newResized, event) => {
             const newSizes = {};
             newResized.forEach((i) => {
