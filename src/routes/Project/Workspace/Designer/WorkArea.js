@@ -1,7 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { Prompt } from 'react-router-dom';
 import { connect } from 'dva';
 import { Layout, Button, Spin } from 'antd';
+import { routerRedux } from 'dva/router';
 import WorkCanvas from '../WorkCanvas/WorkCanvas';
 import ComponentSettings from './ComponentSettings';
 import WorkAreaBottomBar from './WorkAreaBottomBar';
@@ -89,6 +91,13 @@ export default class WorkArea extends React.Component {
           <WorkAreaBottomBar />
           <ComponentSettings match={this.props.match} />
         </Content>
+        <Prompt
+          when={this.props.workcanvas.state.dirty || false}
+          message={location =>
+            '当前有未保存的改动，确认离开吗？'
+          }
+
+        />
       </React.Fragment>
     );
   }
