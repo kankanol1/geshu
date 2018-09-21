@@ -19,6 +19,8 @@ export default class DetailTable extends React.Component {
     loading: true,
     dataLoading: true,
     pageSize: 10,
+    histgoramLoading: false,
+    loadingMessage: undefined,
   }
   componentWillMount() {
     const { datasetId } = this.props;
@@ -45,11 +47,34 @@ export default class DetailTable extends React.Component {
     });
     queryHistogram({ id: datasetId }).then((response) => {
       if (response) {
-        this.setState({ histogram: response });
+        const { data, loading, message } = response;
+        this.setState({ histogram: data, histgoramLoading: loading, loadingMessage: message });
         handleLoading();
+        if (loading) {
+          // start timeout task.
+          setTimeout(() => this.fetchIfStillLoading(), 1000);
+        }
       }
     });
   }
+
+  fetchIfStillLoading = () => {
+    const { datasetId } = this.props;
+    const { histgoramLoading } = this.state;
+    const queryHistogram = this.props.type === 'private' ? queryPrivateDatasetHistogram : queryDatasetHistogram;
+    if (histgoramLoading) {
+      queryHistogram({ id: datasetId }).then((response) => {
+        if (response) {
+          const { data, loading, message } = response;
+          this.setState({ histogram: data, histgoramLoading: loading, loadingMessage: message });
+          if (loading) {
+            // start timeout task.
+            setTimeout(() => this.fetchIfStillLoading(), 1000);
+          }
+        }
+      });
+    }
+  };
 
   fetchData(state, instance) {
     const { datasetId } = this.props;
@@ -67,7 +92,14 @@ export default class DetailTable extends React.Component {
   }
 
   renderChartTest = (col, props) => {
-    const { histogram } = this.state;
+    const { histogram, histgoramLoading, loadingMessage } = this.state;
+    if (histgoramLoading) {
+      return (
+        <div style={{ padding: '20px' }}>
+          <Spin size="small" style={{ paddingRight: '20px' }} /><span>{loadingMessage}</span>
+        </div>
+      );
+    }
     return (
       <div>
         <Chart
@@ -136,6 +168,6 @@ export default class DetailTable extends React.Component {
 }
 
 DetailTable.propTypes = {
-  datasetId: PropTypes.number.isRequired,
+  datasetId: PropTypes.string.isRequired,
   type: PropTypes.string,
 };

@@ -1,5 +1,7 @@
 import { getUrlParams } from './utils';
 
+const count = [0, 0];
+
 export function getTableData(req, res, u, b) {
   let url = u;
   if (!url || Object.prototype.toString.call(url) !== '[object String]') {
@@ -39,7 +41,7 @@ export function getTableData(req, res, u, b) {
 }
 
 export function getTableStatistics(req, res, u, b) {
-  const result = {
+  const data = {
     columns: [
       {
         name: 'c1',
@@ -198,6 +200,14 @@ export function getTableStatistics(req, res, u, b) {
     },
   };
 
+  const result = {
+    loading: count[0] % 3 !== 1,
+    message: '计算中,请稍后...',
+    data,
+  };
+
+  count[0]++;
+
   if (res && res.json) {
     res.json(result);
   } else {
@@ -206,7 +216,7 @@ export function getTableStatistics(req, res, u, b) {
 }
 
 export function getTableHistogram(req, res, u, b) {
-  const result = {
+  const data = {
     key: [
       {
         range: '1951 年',
@@ -277,6 +287,13 @@ export function getTableHistogram(req, res, u, b) {
       },
     ],
   };
+  const result = {
+    loading: count[1] % 3 !== 1,
+    message: '计算中，请稍后....',
+    data,
+  };
+
+  count[1]++;
 
   if (res && res.json) {
     res.json(result);

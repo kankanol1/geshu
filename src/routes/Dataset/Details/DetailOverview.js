@@ -13,53 +13,81 @@ export default class DetailOverview extends PureComponent {
     heatmap: {
       // data, cols.
     },
+    dataLoading: true,
+    loadingMessage: undefined,
     loading: true,
   }
   componentWillMount() {
     this.setState({ loading: true });
+    setTimeout(() => this.fetchIfStillLoading(), 100);
+  }
+
+  fetchIfStillLoading = () => {
     const queryAPI = this.props.type === 'private' ? queryPrivateDatasetStatistics : queryDatasetStatistics;
     queryAPI({ id: this.props.datasetId }).then(
       (response) => {
         if (response) {
-          const { heatMap } = response;
-          const { columns, values } = heatMap;
-          const converted = [];
-          for (let i = 0; i < values.length; i++) {
-            for (let j = 0; j < values[0].length; j++) {
-              converted.push({
-                c1: i,
-                c2: j,
-                value: parseFloat(values[i][j]),
-              });
+          const { data, loading, message } = response;
+          if (loading) {
+            this.setState({
+              heatmap: { },
+              loading: false,
+              dataLoading: loading,
+              loadingMessage: message,
+            });
+            // start timeout.
+            setTimeout(() => this.fetchIfStillLoading(), 1000);
+          } else {
+            const { heatMap } = data;
+            const { columns, values } = heatMap;
+            const converted = [];
+            for (let i = 0; i < values.length; i++) {
+              for (let j = 0; j < values[0].length; j++) {
+                converted.push({
+                  c1: i,
+                  c2: j,
+                  value: parseFloat(values[i][j]),
+                });
+              }
             }
+            const cols = {
+              c1: {
+                type: 'cat',
+                values: columns,
+              },
+              c2: {
+                type: 'cat',
+                values: columns,
+              },
+            };
+            this.setState({
+              heatmap: {
+                data: converted,
+                cols,
+              },
+              loading: false,
+              dataLoading: loading,
+              loadingMessage: message,
+            });
           }
-          const cols = {
-            c1: {
-              type: 'cat',
-              values: columns,
-            },
-            c2: {
-              type: 'cat',
-              values: columns,
-            },
-          };
-          this.setState({
-            heatmap: {
-              data: converted,
-              cols,
-            },
-            loading: false,
-          });
         }
       },
     );
   }
 
   renderHeatmap = () => {
-    const { heatmap, loading } = this.state;
+    const { heatmap, loading, dataLoading, loadingMessage } = this.state;
     const { data, cols } = heatmap;
     if (loading) {
       return <Spin />;
+    }
+    if (dataLoading) {
+      return (
+        <div style={{ textAlign: 'center' }}>
+          <div style={{ textAlign: 'center', marginBottom: '20px' }}><Spin /></div>
+          <span>{loadingMessage}</span>
+        </div>
+      );
     }
     return (
       <Chart
@@ -155,6 +183,6 @@ export default class DetailOverview extends PureComponent {
 }
 
 DetailOverview.propTypes = {
-  datasetId: PropTypes.number.isRequired,
+  datasetId: PropTypes.string.isRequired,
   type: PropTypes.string,
 };
