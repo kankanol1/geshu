@@ -3,7 +3,7 @@ import React, { PureComponent, Fragment } from 'react';
 import { Spin, Card } from 'antd';
 import PropTypes from 'prop-types';
 import { Chart, Geom, Axis, Tooltip, Label } from 'bizcharts';
-import { queryDatasetHeatmap, queryPrivateDatasetHeatmap } from '../../../services/datasetAPI';
+import { queryPrivateDatasetStatistics, queryDatasetStatistics } from '../../../services/datasetAPI';
 
 export default class DetailOverview extends PureComponent {
   static defaultProps = {
@@ -17,11 +17,12 @@ export default class DetailOverview extends PureComponent {
   }
   componentWillMount() {
     this.setState({ loading: true });
-    const queryAPI = this.props.type === 'private' ? queryPrivateDatasetHeatmap : queryDatasetHeatmap;
+    const queryAPI = this.props.type === 'private' ? queryPrivateDatasetStatistics : queryDatasetStatistics;
     queryAPI({ id: this.props.datasetId }).then(
       (response) => {
         if (response) {
-          const { columns, values } = response;
+          const { heatMap } = response;
+          const { columns, values } = heatMap;
           const converted = [];
           for (let i = 0; i < values.length; i++) {
             for (let j = 0; j < values[0].length; j++) {

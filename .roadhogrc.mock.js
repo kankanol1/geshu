@@ -20,7 +20,7 @@ import { getServingModels, offlineServingModels, onlineServingModels } from './m
 import { getQueryResult, getLastestDatabasesForProject, persistDataQuery } from './mock/dataquery';
 import { fetchSchema } from './mock/workspace/components';
 import { allProjectListForStorage, listFileForType, mkdirForType, renameForType, moveForType, deleteForType, registeredStoreTypes } from './mock/storage';
-import { getTableData, getTableHeatmap, getTableHistogram } from './mock/dataquerybase';
+import { getTableData, getTableStatistics, getTableHistogram } from './mock/dataquerybase';
 import { getDatasetList, createDataset, updateDataset, deleteDataset, makePublicDataset, makePrivateDataset, createDatasetGetSchema, getDatasetInfoForId } from './mock/dataset';
 // import { createDatabase, updateDatabase } from './src/services/databaseAPI';
 // import { deleteDatabase } from './mock/database';
@@ -196,12 +196,12 @@ const proxy = serverEnabled ?
   // ================= end.
   
   'GET /api/dataset/query/data': getTableData,
-  'GET /api/dataset/query/heatmap': getTableHeatmap,
+  'GET /api/dataset/query/statistics': getTableStatistics,
   'GET /api/dataset/query/histogram': getTableHistogram,
 
   // private dataset, for workspace output view.
   'GET /api/dataset/private/query/data': getTableData,
-  'GET /api/dataset/private/query/heatmap': getTableHeatmap,
+  'GET /api/dataset/private/query/statistics': getTableStatistics,
   'GET /api/dataset/private/query/histogram': getTableHistogram,
   'POST /api/dataset/private/delete': deleteDataset,
 

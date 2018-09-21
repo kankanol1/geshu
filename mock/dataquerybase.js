@@ -38,15 +38,164 @@ export function getTableData(req, res, u, b) {
   }
 }
 
-export function getTableHeatmap(req, res, u, b) {
+export function getTableStatistics(req, res, u, b) {
   const result = {
-    columns: ['v1', 'v2', 'v3', 'v4'],
-    values: [
-      ['NaN', 0.2, 0.3, 0.4],
-      [0.1, 'NaN', 0.6, 0.4],
-      [0.6, 0.6, 'NaN', 0.9],
-      [0.8, 0.6, 0.1, 'NaN'],
+    columns: [
+      {
+        name: 'c1',
+        type: 'string',
+      },
+      {
+        name: 'c2',
+        type: 'numeric',
+      },
+      {
+        name: 'c3',
+        type: 'numeric',
+      },
     ],
+    histograms: {
+      c3: [
+        {
+          range: '110.0-197.0',
+          count: 1,
+        },
+        {
+          range: '197.0-284.0',
+          count: 1,
+        },
+        {
+          range: '284.0-371.0',
+          count: 0,
+        },
+        {
+          range: '371.0-458.0',
+          count: 0,
+        },
+        {
+          range: '458.0-545.0',
+          count: 0,
+        },
+        {
+          range: '545.0-632.0',
+          count: 0,
+        },
+        {
+          range: '632.0-719.0',
+          count: 0,
+        },
+        {
+          range: '719.0-806.0',
+          count: 0,
+        },
+        {
+          range: '806.0-893.0',
+          count: 0,
+        },
+        {
+          range: '893.0-980.0',
+          count: 1,
+        },
+      ],
+      c1: [
+        {
+          range: 'name2',
+          count: 1,
+        },
+        {
+          range: 'name1',
+          count: 1,
+        },
+        {
+          range: 'n y',
+          count: 1,
+        },
+      ],
+      c2: [
+        {
+          range: '11.0-18.9',
+          count: 1,
+        },
+        {
+          range: '18.9-26.8',
+          count: 1,
+        },
+        {
+          range: '26.8-34.7',
+          count: 0,
+        },
+        {
+          range: '34.7-42.6',
+          count: 0,
+        },
+        {
+          range: '42.6-50.5',
+          count: 0,
+        },
+        {
+          range: '50.5-58.4',
+          count: 0,
+        },
+        {
+          range: '58.4-66.3',
+          count: 0,
+        },
+        {
+          range: '66.3-74.2',
+          count: 0,
+        },
+        {
+          range: '74.2-82.1',
+          count: 0,
+        },
+        {
+          range: '82.1-90.0',
+          count: 1,
+        },
+      ],
+    },
+    statistics: {
+      c3: {
+        nullNum: 0,
+        count: 3,
+        min: 110,
+        mean: 430,
+        max: 980,
+        stdev: 390.6404996924922,
+      },
+      c1: {
+        nullNum: 0,
+        count: 0,
+        min: 0,
+        mean: 0,
+        max: 0,
+        stdev: 0,
+      },
+      c2: {
+        nullNum: 0,
+        count: 3,
+        min: 11,
+        mean: 40.333333333333336,
+        max: 90,
+        stdev: 35.31131389355102,
+      },
+    },
+    heatMap: {
+      columns: [
+        'c2',
+        'c3',
+      ],
+      values: [
+        [
+          1,
+          0.9999495455006998,
+        ],
+        [
+          0.9999495455006998,
+          1,
+        ],
+      ],
+    },
   };
 
   if (res && res.json) {

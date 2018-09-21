@@ -66,8 +66,8 @@ export async function getDatasetInfoForId(params) {
   return request(`/api/dataset/get?${stringify(params)}`);
 }
 
-export async function queryDatasetHeatmap(params) {
-  return request(`/api/dataset/query/heatmap?${stringify(params)}`);
+export async function queryDatasetStatistics(params) {
+  return request(`/api/dataset/query/statistics?${stringify(params)}`);
 }
 
 export async function queryDatasetData(params) {
@@ -78,8 +78,8 @@ export async function queryDatasetHistogram(params) {
   return request(`/api/dataset/query/histogram?${stringify(params)}`);
 }
 
-export async function queryPrivateDatasetHeatmap(params) {
-  return request(`/api/dataset/private/query/heatmap?${stringify(params)}`);
+export async function queryPrivateDatasetStatistics(params) {
+  return request(`/api/dataset/private/query/statistics?${stringify(params)}`);
 }
 
 export async function queryPrivateDatasetData(params) {
@@ -108,6 +108,6 @@ export default {
   makePublicDataset,
   getDatasetSchema,
   queryDatasetData,
-  queryDatasetHeatmap,
+  queryDatasetStatistics,
   queryDatasetHistogram,
 };
