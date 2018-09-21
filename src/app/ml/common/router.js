@@ -80,7 +80,7 @@ export const getRouterData = (app) => {
       component: dynamicWrapper(app, ['project'], () => import('../../../routes/Project/ProjectList')),
     },
     '/project/workspace': {
-      component: dynamicWrapper(app, ['workspace/datainspector', 'workspace/workcanvas', 'workspace/work_component_list', 'workspace/work_component_settings'], () => import('../../../layouts/WorkspaceLayout')),
+      component: dynamicWrapper(app, ['workspace/outputview', 'workspace/datainspector', 'workspace/workcanvas', 'workspace/work_component_list', 'workspace/work_component_settings'], () => import('../../../layouts/WorkspaceLayout')),
     },
     '/project/workspace/index': {
       component: dynamicWrapper(app, [], () => import('../../../routes/Project/Workspace/WorkspaceIndex')),
@@ -89,7 +89,7 @@ export const getRouterData = (app) => {
       component: dynamicWrapper(app, [], () => import('../../../routes/Project/Workspace/WorkspaceEditor')),
     },
     '/project/workspace/output/:id': {
-      component: dynamicWrapper(app, ['workspace/outputview'], () => import('../../../routes/Project/Workspace/WorkspaceOutputView')),
+      component: dynamicWrapper(app, [], () => import('../../../routes/Project/Workspace/WorkspaceOutputView')),
     },
     // '/project/workspace/dataview/:id': {
     //   component: dynamicWrapper(app, ['dataview/dataquery'],
