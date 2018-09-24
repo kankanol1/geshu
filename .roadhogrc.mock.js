@@ -11,7 +11,7 @@ import { getDatabase, createDatabase, updateDatabase, deleteDatabase, getRecentD
 import { login, userList, createUser, deleteUser, queryUserName, updateUser } from './mock/user';
 import { getModels, addModel, updateModel, deleteModels, getModelInfo, getModelResult } from './mock/model';
 import { getCandidateModels, updateCandidateModel, deleteCandidateModels, publishCandidateModels } from './mock/candidatemodel';
-import { getJobs, cancelJobs, deleteJobs, getJobDetails } from './mock/job';
+import { getJobs, cancelJobs, deleteJobs, getJobDetails, getNewPipelineJobByProjectId } from './mock/job';
 import { open, save, saveSettings, submit, validate, inspectData } from './mock/workspace/workspace';
 import { getUserInfo, updatePassword } from './mock/selfmanage';
 import {recentGraph,saveGraph,getGraph,deleteGraph,getDataSources,getDataSourceColumns,getGraphList,getQueryList,saveQuery,saveAsQuery,updateQuery,deleteQuery,executeGraph,createGraph} from './mock/graph';
@@ -122,6 +122,7 @@ const proxy = serverEnabled ?
   'GET /api/jobs/detail': getJobDetails,
   'POST /api/jobs/cancel': cancelJobs,
   'POST /api/jobs/delete': deleteJobs,
+  'GET /api/jobs/newjobresultbypid': getNewPipelineJobByProjectId,
 
   // workspace related.
   'GET /api/workspace/component_list': componentList,

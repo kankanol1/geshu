@@ -309,6 +309,81 @@ export function getJobDetails(req, res, u, b) {
   }
 }
 
+export function getNewPipelineJobByProjectId(req, res, u, b) {
+  let url = u;
+  if (!url || Object.prototype.toString.call(url) !== '[object String]') {
+    url = req.url; // eslint-disable-line
+  }
+
+  const params = getUrlParams(url);
+
+  const result = [
+    {
+      id: 1,
+      projectId: 12,
+      mistId: '83dc615f-4a31-4f8b-82d1-042c78485080',
+      createTime: 1532379898000,
+      startTime: 1532379905000,
+      endTime: 1532379908000,
+      checkTime: 1532379932000,
+      status: 'failed',
+      type: 'pipeline',
+      submittedBy: 1,
+      submittedByName: null,
+      projectName: null,
+      properties: '{}',
+      opIds: [
+        '向量组装1535487929871',
+        '分词1531527496608',
+      ],
+    },
+    {
+      id: 2,
+      projectId: 12,
+      mistId: '83dc615f-4a31-4f8b-82d1-042c78485080',
+      createTime: 1532379898000,
+      startTime: 1532379905000,
+      endTime: 1532379908000,
+      checkTime: 1532379932000,
+      status: 'finished',
+      type: 'pipeline',
+      submittedBy: 1,
+      submittedByName: null,
+      projectName: null,
+      properties: '{}',
+      opIds: [
+        '文件读取1531527496607',
+        'Join1532467809093',
+      ],
+    },
+    {
+      id: 3,
+      projectId: 12,
+      mistId: '83dc615f-4a31-4f8b-82d1-042c78485080',
+      createTime: 1532379898000,
+      startTime: 1532379905000,
+      endTime: 1532379908000,
+      checkTime: 1532379932000,
+      status: 'started',
+      type: 'pipeline',
+      submittedBy: 1,
+      submittedByName: null,
+      projectName: null,
+      properties: '{}',
+      opIds: [
+        '分词15315274966',
+        '分词1531527496608',
+      ],
+    },
+  ];
+
+  if (res && res.json) {
+    res.json(result);
+  } else {
+    return result;
+  }
+}
+
 export default {
   getJobs,
   deleteJobs,
@@ -316,4 +391,5 @@ export default {
   pauseJobs,
   restartJobs,
   cancelJobs,
+  getNewPipelineJobByProjectId,
 };

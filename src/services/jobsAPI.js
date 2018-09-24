@@ -34,9 +34,14 @@ export async function getJobDetails(params) {
   return request(`/api/jobs/detail?${stringify(params)}`);
 }
 
+export async function getNewPipelineJobs(params) {
+  return request(`/api/jobs/newjobresultbypid?${stringify(params)}`);
+}
+
 export default {
   queryJobs,
   cancelJobs,
   getJobDetails,
   queryJobsByProjectId,
+  getNewPipelineJobs,
 };

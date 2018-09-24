@@ -117,6 +117,16 @@ export default class WorkCanvas extends React.Component {
         this.setState({ mode: 'move' });
       }
     });
+
+    dispatch({
+      type: 'workcanvas/fetchJobTips',
+    });
+    // start fetch job tips.
+    this.intervalTask = setInterval(() => {
+      dispatch({
+        type: 'workcanvas/fetchJobTips',
+      });
+    }, 10000);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -143,6 +153,10 @@ export default class WorkCanvas extends React.Component {
     // clear listener.
     keyUpListener.length = 0;
     keyDownLisener.length = 0;
+
+    if (this.intervalTask) {
+      clearInterval(this.intervalTask);
+    }
   }
 
   handleDrag(e, draggableData) {
@@ -372,7 +386,8 @@ export default class WorkCanvas extends React.Component {
   }
 
   render() {
-    const { state: { projectId }, canvas, validation, contextmenu } = this.props.workcanvas;
+    const { state: { projectId }, canvas, validation,
+      contextmenu, jobTips } = this.props.workcanvas;
     const { mode, opMode } = this.state;
     if (canvas === undefined) return null;
     const { componentPositionCache, componentSocketPositionCache } = canvas;
@@ -454,6 +469,7 @@ export default class WorkCanvas extends React.Component {
                     validation={validation[component.id]}
                     canvas={canvas}
                     isMoveMode={this.state.mode === 'move'}
+                    jobTips={jobTips[component.id]}
                   />
                   {
                     /* 3. point layer */

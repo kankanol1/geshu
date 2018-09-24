@@ -74,9 +74,13 @@
   border-color: #faad14;
 }
 
-.iconTip {
+.baseIconTip {
   font-size: 20px;
   cursor: pointer;
+}
+
+.iconTip {
+  .baseIconTip;
   -webkit-animation: breath 2s;
   animation: breath 2s;
   -webkit-animation-iteration-count: infinite;
@@ -91,4 +95,19 @@
 .warnTip {
   .iconTip;
   color: #faad14;
+}
+
+.taskFinishedTip {
+  .baseIconTip;
+  color: #95de64;
+}
+
+.taskFailedTip {
+  .baseIconTip;
+  color: #ff7875;
+}
+
+.taskRunningTip {
+  .baseIconTip;
+  color: #1890ff;
 }

@@ -1,14 +1,32 @@
 import React from 'react';
 import { DraggableCore } from 'react-draggable';
-import { Icon, Modal } from 'antd';
+import { Icon, Modal, Tooltip } from 'antd';
 import styles from './styles.less';
 import { getIconNameForComponent, getStylesForType, componentSize } from './styles';
 import './icon.less';
 import ComponentDraggingMove from '../../../../obj/workspace/op/ComponentDraggingMove';
 import ComponentMove from '../../../../obj/workspace/op/ComponentMove';
-import SelectionChange from '../../../../obj/workspace/op/SelectionChange';
 import BatchUntrackedOperation from '../../../../obj/workspace/op/BatchUntrackedOperation';
 import BatchOperation from '../../../../obj/workspace/op/BatchOperation';
+
+const jobTipDescription = {
+  failed: '作业失败，点击查看',
+  finished: '作业完成，点击查看',
+  started: '作业运行中，点击查看',
+};
+
+const jobTipIcons = {
+  failed: 'close-circle',
+  finished: 'check-circle',
+  started: 'loading',
+};
+
+const jobTipStyle = {
+  failed: styles.taskFailedTip,
+  finished: styles.taskFinishedTip,
+  started: styles.taskRunningTip,
+};
+
 
 /**
  * Node Layer: the bottom/first layer of the work canvas.
@@ -148,13 +166,27 @@ class NodeLayer extends React.Component {
     }
   }
 
+  renderJobTips = (job, k) => {
+    const title = jobTipDescription[job.status];
+    return (
+      <Tooltip title={title || ''} key={k}>
+        <Icon
+          type={jobTipIcons[job.status]}
+          className={jobTipStyle[job.status]}
+          // TODO add click handler.
+          // onClick={() => {this.props.dispatch()}}
+        />
+      </Tooltip>
+    );
+  }
+
   render() {
     const { name, id, code, type } = this.props.model;
     const { x, y } =
       this.props.componentDict === undefined ?
         this.props.model : this.props.componentDict[id];
     const icon = getIconNameForComponent(code);
-    const { validation } = this.props;
+    const { validation, jobTips } = this.props;
     let errorDisplay;
     if (validation) {
       errorDisplay = validation.errors ? 'error' : 'warn';
@@ -176,6 +208,16 @@ class NodeLayer extends React.Component {
             </div>
           ) : null
         }
+        <div style={{ width: '0px', height: '0px', transform: `translate(${x + componentSize.width + 8}px, ${(y + componentSize.height) - 20}px)` }}>
+          {
+            // first running.
+            jobTips && jobTips.filter(i => i.status === 'started').map((j, i) => this.renderJobTips(j, `r${i}`))
+          }
+          {
+            // then finished & failed.
+            jobTips && jobTips.filter(i => i.status === 'finished' || i.status === 'failed').map((j, i) => this.renderJobTips(j, `f${i}`))
+          }
+        </div>
         <DraggableCore
           onStop={e => this.handleDragStop(e)}
           onDrag={(e, draggableData) => this.handleDrag(e, draggableData)}

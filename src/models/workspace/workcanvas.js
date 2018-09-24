@@ -1,5 +1,6 @@
 import { message } from 'antd';
 import { openProject, saveProject } from '../../services/componentAPI';
+import { getNewPipelineJobs } from '../../services/jobsAPI';
 import Canvas from '../../obj/workspace/Canvas';
 import ComponentAdd from '../../obj/workspace/op/ComponentAdd';
 import Component from '../../obj/workspace/Component';
@@ -75,6 +76,10 @@ export default {
         stopY: 0,
       },
     },
+    // job tips.
+    jobTips: [
+      // opId: [{id, status}]
+    ],
   },
 
   reducers: {
@@ -231,6 +236,13 @@ export default {
         },
       };
     },
+
+    storeJobTips(state, { payload }) {
+      return {
+        ...state,
+        jobTips: payload,
+      };
+    },
   },
 
   effects: {
@@ -345,6 +357,28 @@ export default {
         },
       });
     },
+
+    *fetchJobTips({ payload }, { put, select }) {
+      const currentState = yield select(state => state.workcanvas);
+      const jobInfo = yield getNewPipelineJobs({ id: currentState.state.projectId });
+      if (jobInfo) {
+        const opMap = {};
+        jobInfo.forEach((job) => {
+          if (job.opIds) {
+            job.opIds.forEach((op) => {
+              const oldId = opMap[op] || [];
+              oldId.push({ id: job.id, status: job.status });
+              opMap[op] = oldId;
+            });
+          }
+        });
+        yield put({
+          type: 'storeJobTips',
+          payload: opMap,
+        });
+      }
+    },
   },
+
 
 };
