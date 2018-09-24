@@ -174,7 +174,8 @@ export default class Canvas {
     const transform = i => (`${i.type}-${i.id}-${i.source}-${i.from}-${i.target}-${i.to}`);
     const oldSelectionStr = this.selection.map(i => transform(i));
     const newSelectionStr = newSelection.map(i => transform(i));
-    return newSelectionStr.filter(i => oldSelectionStr.includes(i)).length !== 0;
+    const result = newSelectionStr.filter(i => !oldSelectionStr.includes(i)).length === 0;
+    return result;
   }
 
   getSelectedComponents() {

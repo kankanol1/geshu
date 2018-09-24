@@ -3,6 +3,7 @@ import { Spin, Modal } from 'antd';
 import { connect } from 'dva';
 import { DraggableCore } from 'react-draggable';
 import key from 'keymaster';
+import { routerRedux } from 'dva/router';
 import NodeLayer from './NodeLayer';
 import PointLayer from './PointLayer';
 import LineLayer from './LineLayer';
@@ -470,6 +471,30 @@ export default class WorkCanvas extends React.Component {
                     canvas={canvas}
                     isMoveMode={this.state.mode === 'move'}
                     jobTips={jobTips[component.id]}
+                    // handle job clicked.
+                    onJobStatusClicked={(job) => {
+                      if (job.status === 'started') {
+                        // go to job list.
+                        this.props.dispatch({
+                          type: 'outputview/activePane',
+                          payload: {
+                            title: 'default',
+                          },
+                        });
+                      } else {
+                        // add pane.
+                        this.props.dispatch({
+                          type: 'outputview/addPane',
+                          payload: {
+                            id: job.id,
+                            type: 'job',
+                            title: `作业详细[${job.id}]`,
+                          },
+                        });
+                      }
+                      // redirect.
+                      this.props.dispatch(routerRedux.push(`/project/workspace/output/${projectId}`));
+                    }}
                   />
                   {
                     /* 3. point layer */

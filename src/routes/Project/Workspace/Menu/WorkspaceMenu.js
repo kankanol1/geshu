@@ -85,6 +85,9 @@ export default class WorkspaceMenu extends React.PureComponent {
           case 'save':
             dispatch({
               type: 'workcanvas/saveProject',
+              payload: {
+                showMessage: true,
+              },
             });
             break;
           default:

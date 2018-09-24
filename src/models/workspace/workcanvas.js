@@ -246,7 +246,8 @@ export default {
   },
 
   effects: {
-    *initProject({ payload }, { put, call }) {
+    *initProject({ payload }, { put, call, select }) {
+      const currentState = yield select(state => state.workcanvas);
       const response = yield call(openProject, payload.id);
       if (response) {
         // save to this.
@@ -266,6 +267,12 @@ export default {
             settings,
           },
         });
+        if (currentState.state.projectId !== payload.id) {
+        // reset output view.
+          yield put({
+            type: 'outputview/reset',
+          });
+        }
       }
     },
 

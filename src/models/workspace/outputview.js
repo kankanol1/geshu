@@ -17,12 +17,7 @@ export default {
     },
 
     addPane(state, { payload }) {
-      let add = true;
-      state.panes.forEach((p) => {
-        if (p.title === payload.title) {
-          add = false;
-        }
-      });
+      const add = state.panes.filter(p => p.title === payload.title).length === 0;
       return { ...state,
         panes: add ? [...state.panes, payload] : state.panes,
         defaultPane: payload.title,
@@ -37,6 +32,11 @@ export default {
       const key = payload.title;
       const newPanes = state.panes.filter(i => i.title !== key);
       return { ...state, panes: newPanes, defaultPane: key === state.defaultPane ? 'default' : state.defaultPane };
+    },
+
+    reset(state) {
+      // reset data for further use.
+      return { joblist: {}, panes: [], defaultPane: 'default' };
     },
   },
 

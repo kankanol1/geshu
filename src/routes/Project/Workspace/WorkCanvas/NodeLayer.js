@@ -173,8 +173,11 @@ class NodeLayer extends React.Component {
         <Icon
           type={jobTipIcons[job.status]}
           className={jobTipStyle[job.status]}
-          // TODO add click handler.
-          // onClick={() => {this.props.dispatch()}}
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            if (this.props.onJobStatusClicked) this.props.onJobStatusClicked(job);
+          }}
         />
       </Tooltip>
     );
