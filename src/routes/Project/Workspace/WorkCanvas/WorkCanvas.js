@@ -119,17 +119,12 @@ export default class WorkCanvas extends React.Component {
       }
     });
 
-    dispatch({
-      type: 'workcanvas/fetchJobTips',
-    });
+    this.fetchJobTips();
     // start fetch job tips.
     this.intervalTask = setInterval(() => {
-      dispatch({
-        type: 'workcanvas/fetchJobTips',
-      });
-    }, 10000);
+      this.fetchJobTips();
+    }, 60000);
   }
-
   componentWillReceiveProps(nextProps) {
     const newMatch = nextProps.match;
     const { match } = this.props;
@@ -159,6 +154,17 @@ export default class WorkCanvas extends React.Component {
       clearInterval(this.intervalTask);
     }
   }
+
+  fetchJobTips = () => {
+    const { dispatch, match } = this.props;
+    dispatch({
+      type: 'workcanvas/fetchJobTips',
+      payload: {
+        id: match.params.id,
+      },
+    });
+  }
+
 
   handleDrag(e, draggableData) {
     e.preventDefault();

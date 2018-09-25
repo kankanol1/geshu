@@ -61,8 +61,16 @@ export default {
 
       jsonSchemaDict[id] = { ...translatedJsonSchema, id, name };
       uiSchemaDict[id] = { ...translatedUISchema, id, name };
+      // get formData if exists.
       // 3. don't forget to change the selection.
-      return { ...state, jsonSchemaDict, uiSchemaDict, componentSettings, loading: false };
+      return { ...state,
+        jsonSchemaDict,
+        uiSchemaDict,
+        componentSettings,
+        display: {
+          dirty: false, displayFormData: state.formDataDict[id],
+        },
+        loading: false };
     },
 
     setCurrentComponent(state, { id }) {

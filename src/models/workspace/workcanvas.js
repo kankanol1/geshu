@@ -310,12 +310,12 @@ export default {
             },
           });
         }
-        if (yieldCallback) {
-          yield yieldCallback();
-        }
-        if (callback) {
-          callback();
-        }
+      }
+      if (yieldCallback) {
+        yield yieldCallback();
+      }
+      if (callback) {
+        callback();
       }
     },
 
@@ -366,8 +366,7 @@ export default {
     },
 
     *fetchJobTips({ payload }, { put, select }) {
-      const currentState = yield select(state => state.workcanvas);
-      const jobInfo = yield getNewPipelineJobs({ id: currentState.state.projectId });
+      const jobInfo = yield getNewPipelineJobs(payload);
       if (jobInfo) {
         const opMap = {};
         jobInfo.forEach((job) => {
