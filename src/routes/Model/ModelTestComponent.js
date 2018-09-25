@@ -39,13 +39,12 @@ export default class ModelTestComponent extends React.PureComponent {
   }
 
   renderTestForm() {
-    const { inputSchema } = this.state.model;
-    if (inputSchema) {
-      const parsedSchema = JSON.parse(inputSchema);
+    const { servingSchema } = this.state.model;
+    if (servingSchema) {
       return (
         <InputSchemaForm
           dispatch={this.props.dispatch}
-          schema={parsedSchema}
+          schema={servingSchema}
           onSubmit={e => this.submitSchema(e)}
         />
       );
@@ -65,7 +64,7 @@ export default class ModelTestComponent extends React.PureComponent {
             { loading ? <Spin /> : (
               <Row>
                 <Col span={4}>
-                  <label htmlFor="label">Label</label>
+                  <label htmlFor="label">返回结果</label>
                 </Col>
                 <Col span={20}>
                   <TextArea id="label" value={`${result.result === undefined ? '' : result.result}`} rows={10} disabled />

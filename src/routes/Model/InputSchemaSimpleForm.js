@@ -4,19 +4,28 @@ import { Form, Input, Button, Row, Col } from 'antd';
 const { TextArea } = Input;
 const FormItem = Form.Item;
 
+const defaultValueForType = {
+  boolean: false,
+  short: 0,
+  byte: '',
+  int: 0,
+  long: 0,
+  float: 0.0,
+  double: 0.0,
+  string: '',
+  byte_string: '',
+};
+
 @Form.create()
 export default class InputSchemaSimpleForm extends React.Component {
   render() {
     const { form, schema } = this.props;
     const { getFieldDecorator } = form;
     // {parsedSchema.fields.map(i => <p key={i}>{i.name}</p>)}
-    let renderFields = schema.fields || schema;
-    if (renderFields.length === 3) {
-      renderFields = renderFields.filter(i => i.name !== 'label');
-    }
+    const renderFields = schema || [];
     const generateJson = {};
     renderFields.forEach((i) => {
-      generateJson[i.name] = '';
+      generateJson[i.name] = defaultValueForType[i.type];
     });
     return (
       <Form onSubmit={(e) => {

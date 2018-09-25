@@ -199,6 +199,123 @@ export function getModelInfo(req, res, u, b) {
     onlinedAt: '2018-07-12 15:17:04',
     projectId: 4,
     updatedAt: '2018-07-12 16:05:41',
+    servingSchema: [
+      {
+        nullable: true,
+        name: 'ZS_COUNT',
+        type: 'double',
+      },
+      {
+        nullable: true,
+        name: 'XB_ZW',
+        type: 'string',
+      },
+      {
+        nullable: true,
+        name: 'DQM_ZW',
+        type: 'string',
+      },
+      {
+        nullable: true,
+        name: 'WHCD_ZW',
+        type: 'string',
+      },
+      {
+        nullable: true,
+        name: 'MZ_ZW',
+        type: 'string',
+      },
+      {
+        nullable: true,
+        name: 'Grade3',
+        type: 'double',
+      },
+      {
+        nullable: true,
+        name: 'SW_COUNT',
+        type: 'double',
+      },
+      {
+        nullable: true,
+        name: 'COUNT_RELATION2',
+        type: 'double',
+      },
+      {
+        nullable: true,
+        name: 'FZ_COUNT',
+        type: 'double',
+      },
+      {
+        nullable: true,
+        name: 'AGE',
+        type: 'double',
+      },
+      {
+        nullable: true,
+        name: 'BYZK_ZW',
+        type: 'string',
+      },
+      {
+        nullable: true,
+        name: 'SFYC',
+        type: 'double',
+      },
+      {
+        nullable: true,
+        name: 'COUNT_RELATION1',
+        type: 'double',
+      },
+      {
+        nullable: true,
+        name: 'Grade2',
+        type: 'double',
+      },
+      {
+        nullable: true,
+        name: 'DangerRegions',
+        type: 'double',
+      },
+      {
+        nullable: true,
+        name: 'SSSSXQ_ZW',
+        type: 'string',
+      },
+      {
+        nullable: true,
+        name: 'HYZK_ZW',
+        type: 'string',
+      },
+      {
+        nullable: true,
+        name: 'Grade1',
+        type: 'double',
+      },
+      {
+        nullable: true,
+        name: 'GY_COUNT',
+        type: 'double',
+      },
+      {
+        nullable: true,
+        name: 'SFZZRK',
+        type: 'double',
+      },
+      {
+        nullable: true,
+        name: 'SFZT',
+        type: 'double',
+      },
+      {
+        nullable: true,
+        name: 'SFLDRK',
+        type: 'double',
+      },
+      {
+        nullable: true,
+        name: 'JTWZ_COUNT',
+        type: 'double',
+      },
+    ],
   };
   if (res && res.json) {
     res.json(response);
