@@ -62,6 +62,8 @@ const nameMapping = {
   VectorAssemblerPStage: '向量组装',
   BucketizerPStage: '离散化',
   ImputerPStage: '补空值',
+  AggregateTransformer: '聚集函数',
+  SwitchCaseTransformer: '条件函数',
 
 
   /* config name mapping */
@@ -115,7 +117,8 @@ const nameMapping = {
   AvroDataSourceConf: 'Avor文件读取',
   BucketizerPStageConf: '离散化配置',
   ImputerPStageConf: '补空值配置',
-
+  AggregateTransformerConf: '聚集函数配置',
+  SwitchCaseTransformerConf: '条件函数配置',
 };
 
 export default function translateName(name) {

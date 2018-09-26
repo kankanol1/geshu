@@ -105,6 +105,9 @@ const componentIconDict = {
 
   ImputerPStage: 'icon-preparation-add-null',
   BucketizerPStage: 'icon-preparation-split-column',
+
+  AggregateTransformer: 'icon-preparation-filter',
+  SwitchCaseTransformer: 'icon-preparation-filter',
 };
 
 export const getIconNameForComponent = (str) => {
