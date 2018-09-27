@@ -4,10 +4,6 @@ import { Select } from 'antd';
 const { Option } = Select;
 
 export const buildTagSelect = (options, tagMode = false, disabled = false) => {
-  const children = [];
-  for (let i = 0; i < options.length; i++) {
-    children.push(<Option key={i.toString(options.length)}>{options[i]}</Option>);
-  }
   return (
     <Select
       mode={tagMode ? 'tags' : 'multiple'}
@@ -16,7 +12,7 @@ export const buildTagSelect = (options, tagMode = false, disabled = false) => {
       tokenSeparators={[',']}
       disable={disabled}
     >
-      {children}
+      {options.map((v, i) => <Option key={i}>{v}</Option>)}
     </Select>
   );
 };
