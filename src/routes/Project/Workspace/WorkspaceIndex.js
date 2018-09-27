@@ -121,15 +121,19 @@ export default class WorkspaceEditor extends Component {
         <Card title="工作区项目" className={styles.firstCard}>
           {
             loading ? <Spin /> :
-            recentProjects.data.map(item =>
-              (
-                <p key={item.id}>
-                  <Link to={`/project/workspace/editor/${item.id}`} className={styles.clickableItem}>
-                    <Icon type="file" /> {item.name} (最后编辑于 {moment(item.updatedAt).format('YYYY-MM-DD HH:mm:ss')})
-                  </Link>
-                </p>
+            (
+              recentProjects.data.length === 0 ? <span>暂无最近项目</span>
+              : recentProjects.data.map(item =>
+                (
+                  <p key={item.id}>
+                    <Link to={`/project/workspace/editor/${item.id}`} className={styles.clickableItem}>
+                      <Icon type="file" /> {item.name} (最后编辑于 {moment(item.updatedAt).format('YYYY-MM-DD HH:mm:ss')})
+                    </Link>
+                  </p>
+                )
               )
-            )
+              )
+
           }
           <Divider />
           <Button type="primary" className={styles.button} onClick={() => this.handleModalVisible(true)} > <Icon type="folder-add" />新建项目</Button>
