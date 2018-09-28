@@ -20,7 +20,7 @@
     "dev-build:ml": "npm run setup:ml && npm run dev-build",
     "dev-build:graph": "npm run setup:graph && npm run dev-build",
     "release": "node ./scripts/build.js",
-    "dev-release": "node ./scripts/build.js * dev",
+    "dev-release": "node ./scripts/build.js -dev",
     "site": "roadhog-api-doc static && gh-pages -d dist",
     "analyze": "cross-env ANALYZE=true roadhog build",
     "lint:style": "stylelint \"src/**/*.less\" --syntax less",
@@ -64,7 +64,6 @@
     "path-to-regexp": "^2.4.0",
     "prop-types": "^15.6.2",
     "qs": "^6.5.2",
-    "rc-drawer": "^1.7.6",
     "rc-drawer-menu": "^1.1.0",
     "react": "^16.5.2",
     "react-codemirror": "^1.0.0",
@@ -112,7 +111,6 @@
   "optionalDependencies": {
     "nightmare": "^2.10.0"
   },
-  
   "lint-staged": {
     "**/*.{js,jsx,less}": [
       "git add"
