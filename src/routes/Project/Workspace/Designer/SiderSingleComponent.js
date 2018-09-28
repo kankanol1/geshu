@@ -1,5 +1,4 @@
 import React from 'react';
-import Radium from 'radium';
 import DraggableWithPreview from '../../../../components/DraggableWithPreview';
 import ComponentPreview from './ComponentPreview';
 import { fillDefaultSize } from '../../../../utils/PositionCalculation';
@@ -30,11 +29,11 @@ class SiderSingleComponent extends React.PureComponent {
             marginTop: '5px',
             marginBottom: '5px',
             border: '1px solid #bfbfbf',
-            ':hover': {
-              background: '#1890FF',
-              color: 'white',
-              cursor: 'move',
-            },
+            // ':hover': {
+            //   background: '#1890FF',
+            //   color: 'white',
+            //   cursor: 'move',
+            // },
           }}
         >
           {name}
@@ -44,4 +43,4 @@ class SiderSingleComponent extends React.PureComponent {
   }
 }
 
-export default Radium(SiderSingleComponent);
+export default SiderSingleComponent;
