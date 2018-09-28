@@ -2,10 +2,9 @@ import React from 'react';
 import { connect } from 'dva';
 import { Menu, Spin, Modal, Progress, Button, Icon } from 'antd';
 import { routerRedux } from 'dva/router';
-import ScopeMenuItem from './ScopeMenuItem';
-import ScopeSubMenu from './ScopeSubMenu';
 import { runPipeline, validatePipeline } from '../../../../services/componentAPI';
 import styles from './WorkspaceMenu.less';
+import { renderIfInScope } from './Utils';
 
 const { SubMenu } = Menu;
 
@@ -272,24 +271,43 @@ export default class WorkspaceMenu extends React.PureComponent {
               {this.renderRecentProjects()}
             </SubMenu>
           </SubMenu>
-          <ScopeSubMenu scope="editor" env={env} title={<span> <Icon type="edit" />编辑</span>}>
-            <Menu.Item key="save" disabled={!isProjectDirty} type="command">保存 ({this.renderShortcut('Ctrl+s', '⌘+s')})</Menu.Item>
-            <Menu.Item key="undo" disabled={canvas && !canvas.canUndo()} type="command">撤销 ({this.renderShortcut('Ctrl+z', '⌘+z')})</Menu.Item>
-            <Menu.Item key="redo" disabled={canvas && !canvas.canRedo()} type="command" >重做 ({this.renderShortcut('Ctrl+y', '⌘+y')})</Menu.Item>
-            <Menu.Item key="selectAll" type="command">全选 ({this.renderShortcut('Ctrl+a', '⌘+a')})</Menu.Item>
-            <Menu.Item key="deleteSelection" type="command">删除所选项 ({this.renderShortcut('Delete')})</Menu.Item>
-          </ScopeSubMenu>
-          <ScopeSubMenu scope="editor" env={env} title={<span><Icon type="eye-o" />显示</span>}>
-            <Menu.Item key="fullScreen" type="command">{fullScreen ? '√ ' : null}全屏</Menu.Item>
-          </ScopeSubMenu>
-          <ScopeSubMenu scope="editor" env={env} title={<span><Icon type="code-o" />调试</span>}>
-            <ScopeMenuItem scope="editor" env={env} key="validate" type="command" >验证</ScopeMenuItem>
-            {/* <Menu.Item key="sampledata" >取样执行</Menu.Item>
-            <Menu.Item key="samplepipeline">执行至指定组件</Menu.Item> */}
-          </ScopeSubMenu>
-          <ScopeSubMenu scope="editor" env={env} title={<span><Icon type="cloud-upload-o" />部署</span>}>
-            <Menu.Item key="submit" type="command">提交运行</Menu.Item>
-          </ScopeSubMenu>
+          {renderIfInScope(
+            <SubMenu scope="editor" env={env} title={<span><Icon type="cloud-upload-o" />部署</span>}>
+              <Menu.Item key="submit" type="command">提交运行</Menu.Item>
+            </SubMenu>
+            , 'editor', env
+          )}
+          {
+            renderIfInScope(
+              <SubMenu scope="editor" env={env} title={<span> <Icon type="edit" />编辑</span>}>
+                <Menu.Item key="save" disabled={!isProjectDirty} type="command">保存 ({this.renderShortcut('Ctrl+s', '⌘+s')})</Menu.Item>
+                <Menu.Item key="undo" disabled={canvas && !canvas.canUndo()} type="command">撤销 ({this.renderShortcut('Ctrl+z', '⌘+z')})</Menu.Item>
+                <Menu.Item key="redo" disabled={canvas && !canvas.canRedo()} type="command" >重做 ({this.renderShortcut('Ctrl+y', '⌘+y')})</Menu.Item>
+                <Menu.Item key="selectAll" type="command">全选 ({this.renderShortcut('Ctrl+a', '⌘+a')})</Menu.Item>
+                <Menu.Item key="deleteSelection" type="command">删除所选项 ({this.renderShortcut('Delete')})</Menu.Item>
+              </SubMenu>
+              , 'editor', env
+            )
+          }
+          {
+            renderIfInScope(
+              <SubMenu scope="editor" env={env} title={<span><Icon type="eye-o" />显示</span>}>
+                <Menu.Item key="fullScreen" type="command">{fullScreen ? '√ ' : null}全屏</Menu.Item>
+              </SubMenu>
+              , 'editor', env
+            )
+          }
+          {
+            renderIfInScope(
+
+              <SubMenu scope="editor" env={env} title={<span><Icon type="code-o" />调试</span>}>
+                <Menu.Item scope="editor" env={env} key="validate" type="command" >验证</Menu.Item>
+                {/* <Menu.Item key="sampledata" >取样执行</Menu.Item>
+              <Menu.Item key="samplepipeline">执行至指定组件</Menu.Item> */}
+              </SubMenu>
+              , 'editor', env
+            )
+          }
           <Menu.Item key="help">
             <a><Icon type="question-circle-o" />帮助</a>
           </Menu.Item>
