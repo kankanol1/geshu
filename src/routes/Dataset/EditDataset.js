@@ -142,9 +142,15 @@ export default class EditDataset extends PureComponent {
         </FormItem>
         <ExtraItems form={form} currentRecord={currentRecord} formItemProps={formItemProps} />
         <div >
-          <Button style={{ marginLeft: 20 }} onClick={() => form.resetFields()}>重置</Button>
+          <Button
+            style={{ marginLeft: 20 }}
+            onClick={() =>
+              this.props.dispatch(routerRedux.push('/storage/dataset/index'))
+              }
+          >&lt;&nbsp;返回
+          </Button>
           <div style={{ textAlign: 'center', padding: '20px', float: 'right' }}>
-            <Button type="primary" htmlType="submit" loading={loading} >下一步</Button>
+            <Button type="primary" htmlType="submit" loading={loading} >下一步&nbsp;&gt;</Button>
           </div>
         </div>
       </Form>
@@ -169,11 +175,11 @@ export default class EditDataset extends PureComponent {
           </div>
         )}
         <div >
-          <Button onClick={() => this.setState({ step: 0 })}>返回上一步</Button>
+          <Button onClick={() => this.setState({ step: 0 })}>&lt;&nbsp;返回上一步</Button>
           {success
             ? (
               <div style={{ textAlign: 'center', padding: '20px', float: 'right' }}>
-                <Button type="primary" onClick={e => this.handleSchemaDone(e)} loading={loading}>下一步</Button>
+                <Button type="primary" onClick={e => this.handleSchemaDone(e)} loading={loading}>下一步&nbsp;&gt;</Button>
               </div>
             ) : null
           }
