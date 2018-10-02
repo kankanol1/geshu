@@ -3,6 +3,10 @@ const nameMapping = {
   Stage: '机器学习B',
   PStage: '机器学习A',
 
+  Feature: '特征提取',
+  Regression: '回归算法',
+  Classification: '分类算法',
+
   /** component groups and components */
   DataSink: '数据存储',
   ConsoleDataSink: '数据存储',

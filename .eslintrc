@@ -27,6 +27,7 @@
     "react/no-find-dom-node": [1],
     "react/jsx-boolean-value": [1],
     "react/destructuring-assignment": [0],
+    "react/no-access-state-in-setstate": [1],
     "camelcase": [1],
     "no-console":[2],
     "no-unused-vars": [1],

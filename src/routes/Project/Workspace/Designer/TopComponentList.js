@@ -38,24 +38,6 @@ export default class TopComponentList extends React.PureComponent {
     }
   }
 
-  handlePreviewChange(preview) {
-    if (preview === null) {
-      this.setState({
-        ...this.state,
-        preview: null,
-      });
-    } else {
-      const displayPreview = React.cloneElement(preview, { style: {
-        ...preview.props.style,
-        ...{
-          top: `${parseInt(preview.props.style.top, 0) - this.state.offsetY}px`,
-        },
-      } });
-      this.setState({
-        preview: displayPreview,
-      });
-    }
-  }
 
   handleSearch = (filter) => {
     const { dispatch } = this.props;
@@ -69,7 +51,6 @@ export default class TopComponentList extends React.PureComponent {
 
   handleScroll = (event) => {
     this.setState({
-      ...this.state,
       offsetY: event.target.scrollTop,
     });
   }
@@ -87,6 +68,25 @@ export default class TopComponentList extends React.PureComponent {
     this.scrollbar.scrollLeft(left + maxDelta);
   }
 
+  handlePreviewChange(preview) {
+    if (preview === null) {
+      this.setState({
+        preview: null,
+      });
+    } else {
+      const { offsetY } = this.state;
+      const displayPreview = React.cloneElement(preview, { style: {
+        ...preview.props.style,
+        ...{
+          top: `${parseInt(preview.props.style.top, 0) - offsetY}px`,
+        },
+      } });
+      this.setState({
+        preview: displayPreview,
+      });
+    }
+  }
+
   render() {
     const { activekeys, groups } = this.props.work_component_list;
     const { loading } = this.props;
@@ -101,15 +101,15 @@ export default class TopComponentList extends React.PureComponent {
                   groups.map(
                     (group) => {
                       return (
-                        group.components.length === 0 ? null :
-                        (
-                          <TabPane tab={group.name} key={group.key}>
-                            <Scrollbars
-                              ref={(e) => { this.scrollbar = e; }}
-                              style={{ height: '100px', whiteSpace: 'nowrap' }}
-                              onWheel={e => this.handleComponentWheelScroll(e)}
-                            >
-                              {
+                        group.components.length === 0 ? null
+                          : (
+                            <TabPane tab={group.name} key={group.key}>
+                              <Scrollbars
+                                ref={(e) => { this.scrollbar = e; }}
+                                style={{ height: '100px', whiteSpace: 'nowrap' }}
+                                onWheel={e => this.handleComponentWheelScroll(e)}
+                              >
+                                {
                                 group.components.map(
                                   (component, i) => {
                                     return (
@@ -125,9 +125,9 @@ export default class TopComponentList extends React.PureComponent {
                                   }
                                 )
                               }
-                            </Scrollbars>
-                          </TabPane>
-                        )
+                              </Scrollbars>
+                            </TabPane>
+                          )
                       );
                     }
                   )
@@ -146,4 +146,3 @@ export default class TopComponentList extends React.PureComponent {
     );
   }
 }
-
