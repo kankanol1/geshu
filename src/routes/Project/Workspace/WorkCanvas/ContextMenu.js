@@ -7,7 +7,7 @@ const style = {
 
 class ContextMenu extends React.PureComponent {
   handleClick({ item, key, keyPath }) {
-    const { onInspectClicked, onSettingsClicked } = this.props;
+    const { onInspectClicked, onSettingsClicked, onRunToThisClicked } = this.props;
     switch (key) {
       case 'settings':
         if (onSettingsClicked) {
@@ -17,6 +17,11 @@ class ContextMenu extends React.PureComponent {
       case 'inspect':
         if (onInspectClicked) {
           onInspectClicked();
+        }
+        break;
+      case 'runtothis':
+        if (onRunToThisClicked) {
+          onRunToThisClicked();
         }
         break;
       default:
@@ -45,10 +50,10 @@ class ContextMenu extends React.PureComponent {
           <Menu.Item key="settings" style={style}>
             查看设置
           </Menu.Item>
-          {/* <Menu.Item key="1" style={style}>
+          <Menu.Item key="runtothis" style={style}>
             执行到此处
           </Menu.Item>
-          <Menu.Item key="2" style={style}>
+          {/* <Menu.Item key="2" style={style}>
             从此处开始执行
           </Menu.Item> */}
           <Menu.Item key="inspect" style={style}>

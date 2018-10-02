@@ -17,6 +17,7 @@ import CanvasDraggingMove from '../../../../obj/workspace/op/CanvasDraggingMove'
 import { addEvent } from '../../../../utils/utils';
 import SelectionChange from '../../../../obj/workspace/op/SelectionChange';
 import ScaleChange from '../../../../obj/workspace/op/ScaleChange';
+import SubmitPipelineModal from '../Menu/SubmitPipelineModal';
 
 const keyUpListener = [];
 const keyDownLisener = [];
@@ -125,6 +126,7 @@ export default class WorkCanvas extends React.Component {
       this.fetchJobTips();
     }, 60000);
   }
+
   componentWillReceiveProps(nextProps) {
     const newMatch = nextProps.match;
     const { match } = this.props;
@@ -218,10 +220,10 @@ export default class WorkCanvas extends React.Component {
 
       const { canvas } = this.props.workcanvas;
       // calculate selected components.
-      const { xMin, xMax } = startX > stopX ?
-        { xMin: stopX, xMax: startX } : { xMin: startX, xMax: stopX };
-      const { yMin, yMax } = startY > stopY ?
-        { yMin: stopY, yMax: startY } : { yMin: startY, yMax: stopY };
+      const { xMin, xMax } = startX > stopX
+        ? { xMin: stopX, xMax: startX } : { xMin: startX, xMax: stopX };
+      const { yMin, yMax } = startY > stopY
+        ? { yMin: stopY, yMax: startY } : { yMin: startY, yMax: stopY };
       const selections = canvas.getSelectionInRange(xMin, yMin, xMax, yMax);
       if (!canvas.isCurrentSelection(selections)) {
         canvas.apply(new SelectionChange(selections));
@@ -229,7 +231,6 @@ export default class WorkCanvas extends React.Component {
       }
       // reset && trigger update.
       this.setState({ draggingSelection: {
-        ...this.state.draggingSelection,
         dragging: false,
         startX: 0,
         startY: 0,
@@ -317,6 +318,19 @@ export default class WorkCanvas extends React.Component {
     });
   }
 
+  handleRunToThisClicked(component) {
+    this.props.dispatch({
+      type: 'pipeline_submit/submitPipeline',
+      payload: {
+        id: this.props.match.params.id,
+        sinkId: component.id,
+      },
+    });
+    this.props.dispatch({
+      type: 'workcanvas/hideContextMenu',
+    });
+  }
+
   handleCanvasMouseWheel(e) {
     if (key.isPressed('space')) {
       const { deltaX, deltaY } = e;
@@ -355,13 +369,12 @@ export default class WorkCanvas extends React.Component {
     };
 
     return (
-      <div className={styles.toolbarContainer} >
+      <div className={styles.toolbarContainer}>
         <div className={styles.toolbar}>
           {
-            opMode === 'select' ?
-              <div><i {...props} onClick={() => this.setState({ opMode: 'move', mode: 'move' })}>&#xe615;</i></div>
-            :
-              <div><i {...props} onClick={() => this.setState({ opMode: 'select', mode: 'select' })}>&#xe68d;</i></div>
+            opMode === 'select'
+              ? <div><i {...props} onClick={() => this.setState({ opMode: 'move', mode: 'move' })}>&#xe615;</i></div>
+              : <div><i {...props} onClick={() => this.setState({ opMode: 'select', mode: 'select' })}>&#xe68d;</i></div>
           }
           <div>
             <i
@@ -372,7 +385,8 @@ export default class WorkCanvas extends React.Component {
                 e.stopPropagation();
                 this.handleCanvasScaleUpdate(0.1);
               }}
-            >&#xe713;
+            >
+            &#xe713;
             </i>
           </div>
           <div>
@@ -384,7 +398,8 @@ export default class WorkCanvas extends React.Component {
                 e.stopPropagation();
                 this.handleCanvasScaleUpdate(-0.1);
               }}
-            >&#xe714;
+            >
+            &#xe714;
             </i>
           </div>
         </div>
@@ -406,6 +421,7 @@ export default class WorkCanvas extends React.Component {
           {...contextmenu}
           onSettingsClicked={() => this.handleSettingsClicked(component, true)}
           onInspectClicked={() => this.handleInspectClicked(component)}
+          onRunToThisClicked={() => this.handleRunToThisClicked(component)}
         />
       );
     }
@@ -434,7 +450,7 @@ export default class WorkCanvas extends React.Component {
               transform: `scale(${canvas.scale})`,
               overflow: 'hidden',
               ...viewPort,
-             }}
+            }}
             className="work-canvas"
             onWheel={e => this.handleCanvasMouseWheel(e)}
           >
@@ -519,7 +535,7 @@ export default class WorkCanvas extends React.Component {
                     // offset={offset}
                   />
                 </React.Fragment>
-                );
+              );
             }
           )
         }
@@ -561,6 +577,9 @@ export default class WorkCanvas extends React.Component {
             onClose={e => this.setState({ inspectData: false, component: undefined })}
           />
         ) : null
+      }
+        {
+          <SubmitPipelineModal id={projectId} />
       }
       </div>
     );

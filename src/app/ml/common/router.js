@@ -80,7 +80,7 @@ export const getRouterData = (app) => {
       component: dynamicWrapper(app, ['project'], () => import('../../../routes/Project/ProjectList')),
     },
     '/project/workspace': {
-      component: dynamicWrapper(app, ['workspace/outputview', 'workspace/datainspector', 'workspace/workcanvas', 'workspace/work_component_list', 'workspace/work_component_settings'], () => import('../../../layouts/WorkspaceLayout')),
+      component: dynamicWrapper(app, ['workspace/pipeline_submit', 'workspace/outputview', 'workspace/datainspector', 'workspace/workcanvas', 'workspace/work_component_list', 'workspace/work_component_settings'], () => import('../../../layouts/WorkspaceLayout')),
     },
     '/project/workspace/index': {
       component: dynamicWrapper(app, [], () => import('../../../routes/Project/Workspace/WorkspaceIndex')),

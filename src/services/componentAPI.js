@@ -30,11 +30,12 @@ export async function saveComponentSettings({ id, component, payload }) {
   });
 }
 
-export async function runPipeline({ id }) {
+export async function runPipeline({ id, sinkId }) {
   return request('/api/workspace/run', {
     method: 'POST',
     body: {
-      id,
+      projectId: id,
+      sinkId,
     },
   });
 }

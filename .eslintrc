@@ -26,6 +26,7 @@
     "react/no-array-index-key": [0],
     "react/no-find-dom-node": [1],
     "react/jsx-boolean-value": [1],
+    "react/destructuring-assignment": [0],
     "camelcase": [1],
     "no-console":[2],
     "no-unused-vars": [1],
@@ -68,8 +69,10 @@
     "compat/compat": "error"
   },
   "parserOptions": {
+    "ecmaVersion": 2015,
     "ecmaFeatures": {
-      "experimentalObjectRestSpread": true
+      "experimentalObjectRestSpread": true,
+      "legacyDecorators": true 
     }
   },
   "settings": {
