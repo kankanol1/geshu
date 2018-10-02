@@ -1,9 +1,10 @@
 
 import React, { PureComponent, Fragment } from 'react';
-import { Spin, Card } from 'antd';
+import { Spin, Card, Row, Col } from 'antd';
 import PropTypes from 'prop-types';
 import { Chart, Geom, Axis, Tooltip, Label } from 'bizcharts';
 import { queryPrivateDatasetStatistics, queryDatasetStatistics } from '../../../services/datasetAPI';
+import styles from './DetailOverview.less';
 
 export default class DetailOverview extends PureComponent {
   static defaultProps = {
@@ -13,6 +14,7 @@ export default class DetailOverview extends PureComponent {
     heatmap: {
       // data, cols.
     },
+    statistics: [],
     dataLoading: true,
     loadingMessage: undefined,
     loading: true,
@@ -21,7 +23,69 @@ export default class DetailOverview extends PureComponent {
     this.setState({ loading: true });
     setTimeout(() => this.fetchIfStillLoading(), 100);
   }
+  formatHeatMapData = (data) => {
+    const { heatMap } = data;
+    const { columns, values } = heatMap;
+    const converted = [];
+    for (let i = 0; i < values.length; i++) {
+      for (let j = 0; j < values[0].length; j++) {
+        converted.push({
+          c1: i,
+          c2: j,
+          value: parseFloat(values[i][j]),
+        });
+      }
+    }
+    const cols = {
+      c1: {
+        type: 'cat',
+        values: columns,
+      },
+      c2: {
+        type: 'cat',
+        values: columns,
+      },
+    };
+    this.setState({
+      heatmap: {
+        data: converted,
+        cols,
+      },
+    });
+  }
+  formatStatisticsData = (data) => {
+    const { columns, histograms, statistics } = data;
+    const columnsData = [];
+    columns.forEach((item) => {
+      const key = item.name;
+      const histogramsData = [];
+      const statisticsData = { ...statistics[key] } || {};
+      histograms[key].forEach((item1) => {
+        const newItem = { ...item1 };
+        if (item.type === 'string') {
+          const persent = Math.floor((newItem.count * 100) / histograms[key][0].count);
+          newItem.v = `${persent}%`;
+        }
+        histogramsData.push(newItem);
+      });
 
+      const columnItem = {
+        ...item,
+        histogramsData,
+        statisticsData,
+      };
+      columnsData.push(columnItem);
+    });
+    this.setState({
+      statistics: columnsData,
+    });
+  }
+  clearData = () => {
+    this.setState({
+      heatmap: { },
+      statistics: [],
+    });
+  }
   fetchIfStillLoading = () => {
     const queryAPI = this.props.type === 'private' ? queryPrivateDatasetStatistics : queryDatasetStatistics;
     queryAPI({ id: this.props.datasetId }).then(
@@ -29,8 +93,8 @@ export default class DetailOverview extends PureComponent {
         if (response) {
           const { data, loading, message } = response;
           if (loading) {
+            this.clearData();
             this.setState({
-              heatmap: { },
               loading: false,
               dataLoading: loading,
               loadingMessage: message,
@@ -38,33 +102,9 @@ export default class DetailOverview extends PureComponent {
             // start timeout.
             setTimeout(() => this.fetchIfStillLoading(), 1000);
           } else {
-            const { heatMap } = data;
-            const { columns, values } = heatMap;
-            const converted = [];
-            for (let i = 0; i < values.length; i++) {
-              for (let j = 0; j < values[0].length; j++) {
-                converted.push({
-                  c1: i,
-                  c2: j,
-                  value: parseFloat(values[i][j]),
-                });
-              }
-            }
-            const cols = {
-              c1: {
-                type: 'cat',
-                values: columns,
-              },
-              c2: {
-                type: 'cat',
-                values: columns,
-              },
-            };
+            this.formatHeatMapData(data);
+            this.formatStatisticsData(data);
             this.setState({
-              heatmap: {
-                data: converted,
-                cols,
-              },
               loading: false,
               dataLoading: loading,
               loadingMessage: message,
@@ -74,7 +114,128 @@ export default class DetailOverview extends PureComponent {
       },
     );
   }
-
+  renderNumberChart = (statistics, data) => {
+    return (
+      <div>
+        <Chart
+          height={100}
+          padding={0}
+          data={data}
+          width={400}
+        >
+          <Geom type="interval" position="range*count" />
+        </Chart>
+        <div className={styles.statisticsProcessBox}>
+          <Row>
+            {Object.keys(statistics).map(key =>
+              (
+                <Col key={key} style={{ marginBottom: '2px' }}>
+                  <div className={styles.statisticsProcessItem}>
+                    <div className={styles.statisticsProcessLabel}>{key}</div>
+                    <div className={styles.statisticsProcessCount}>
+                      <span className={styles.fontGrey}>
+                        {statistics[key]}
+                      </span>
+                    </div>
+                  </div>
+                </Col>
+              )
+            )
+            }
+          </Row>
+        </div>
+      </div>
+    );
+  }
+  renderStringChart = (data) => {
+    return (
+      <Row>
+        {data.map((item, i) =>
+          (
+            <Col key={i} style={{ marginBottom: '2px' }}>
+              <div className={styles.stringChartBox}>
+                <div className={styles.stringChartProcessBox}>
+                  <div className={styles.stringChartTitle}>{item.range}</div>
+                  <div
+                    className={styles.stringChartProcess}
+                    style={{ width: `${item.v}` }}
+                  />
+                </div>
+                <div className={styles.stringChartLabel}>{item.count}</div>
+              </div>
+            </Col>
+          )
+        )
+        }
+      </Row>
+    );
+  }
+  renderStatistics = () => {
+    const { statistics, loading, dataLoading, loadingMessage } = this.state;
+    if (loading) {
+      return <Spin />;
+    }
+    if (dataLoading) {
+      return (
+        <div style={{ textAlign: 'center' }}>
+          <div style={{ textAlign: 'center', marginBottom: '20px' }}><Spin /></div>
+          <span>{loadingMessage}</span>
+        </div>
+      );
+    }
+    return (
+      <Card title="列统计">
+        <Row>
+          {statistics.map((item, i) =>
+            (
+              <Col span={8} key={i}>
+                <Card
+                  style={{ width: '100%', padding: '0' }}
+                  bodyStyle={{ padding: 0 }}
+                >
+                  <div className={styles.statisticsTitle}>
+                    {item.name}
+                  </div>
+                  <div className={styles.statisticsProcess}>
+                    <div
+                      className={styles.statisticsProcessChart}
+                      style={{
+                        width: '80%',
+                      }}
+                    />
+                  </div>
+                  <div className={styles.statisticsProcessBox}>
+                    <div className={styles.statisticsProcessItem}>
+                      <div className={styles.statisticsProcessLabel}>Count</div>
+                      <div className={styles.statisticsProcessCount}>
+                        <span className={styles.fontBlue}>
+                          {item.statisticsData.count}
+                        </span>
+                      </div>
+                    </div>
+                    <div className={styles.statisticsProcessItem}>
+                      <div className={styles.statisticsProcessLabel}>Empty</div>
+                      <div className={styles.statisticsProcessCount}>
+                        <span className={styles.fontBlack}>
+                          {item.statisticsData.count - item.statisticsData.nullNum}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <div>
+                    {item.type === 'numeric' ?
+                      this.renderNumberChart(item.statisticsData, item.histogramsData) :
+                      this.renderStringChart(item.histogramsData)
+                    }
+                  </div>
+                </Card>
+              </Col>
+            )
+          )
+          }
+        </Row>
+      </Card>);
+  }
   renderHeatmap = () => {
     const { heatmap, loading, dataLoading, loadingMessage } = this.state;
     const { data, cols } = heatmap;
@@ -170,13 +331,16 @@ export default class DetailOverview extends PureComponent {
   render() {
     return (
       <div>
-        {/* <Row>
-          <Col span={12}> */}
-        <Card title="列相关性表格">
-          {this.renderHeatmap()}
-        </Card>
-        {/* </Col>
-        </Row> */}
+        <Row>
+          <Col span={24}>
+            {this.renderStatistics()}
+          </Col>
+          <Col span={24}>
+            <Card title="列相关性表格">
+              {this.renderHeatmap()}
+            </Card>
+          </Col>
+        </Row>
       </div>
     );
   }
