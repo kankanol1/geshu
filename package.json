@@ -81,6 +81,7 @@
     "url-polyfill": "^1.1.0"
   },
   "devDependencies": {
+    "babel-plugin-react-require": "3.0.0",
     "babel-eslint": "^10.0.1",
     "babel-plugin-dva-hmr": "^0.4.1",
     "babel-plugin-import": "^1.9.1",
