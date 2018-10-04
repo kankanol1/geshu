@@ -13,18 +13,30 @@ const jobTipDescription = {
   failed: '作业失败，点击查看',
   finished: '作业完成，点击查看',
   started: '作业运行中，点击查看',
+  waiting: '作业运行中，点击查看',
+  initialized: '作业运行中，点击查看',
+  queued: '作业运行中，点击查看',
+  canceled: '作业运行中，点击查看',
 };
 
 const jobTipIcons = {
   failed: 'close-circle',
   finished: 'check-circle',
   started: 'loading',
+  waiting: 'loading',
+  initialized: 'loading',
+  queued: 'loading',
+  canceled: 'loading',
 };
 
 const jobTipStyle = {
   failed: styles.taskFailedTip,
   finished: styles.taskFinishedTip,
   started: styles.taskRunningTip,
+  waiting: styles.taskRunningTip,
+  initialized: styles.taskRunningTip,
+  queued: styles.taskRunningTip,
+  canceled: styles.taskRunningTip,
 };
 
 
@@ -147,7 +159,7 @@ class NodeLayer extends React.Component {
     }
   }
 
-  displayValidation = (validation) => {
+  renderValidation = (validation) => {
     if (validation.errors) {
       Modal.error({
         title: '错误提示',
@@ -185,9 +197,8 @@ class NodeLayer extends React.Component {
 
   render() {
     const { name, id, code, type } = this.props.model;
-    const { x, y } =
-      this.props.componentDict === undefined ?
-        this.props.model : this.props.componentDict[id];
+    const { x, y } = this.props.componentDict === undefined
+      ? this.props.model : this.props.componentDict[id];
     const icon = getIconNameForComponent(code);
     const { validation, jobTips } = this.props;
     let errorDisplay;
@@ -206,7 +217,7 @@ class NodeLayer extends React.Component {
               <Icon
                 type="warning"
                 className={errorDisplay === 'error' ? styles.errorTip : styles.warnTip}
-                onClick={() => this.displayValidation(validation)}
+                onClick={() => this.renderValidation(validation)}
               />
             </div>
           ) : null
@@ -214,7 +225,7 @@ class NodeLayer extends React.Component {
         <div style={{ width: '0px', height: '0px', transform: `translate(${x + componentSize.width + 8}px, ${(y + componentSize.height) - 20}px)` }}>
           {
             // first running.
-            jobTips && jobTips.filter(i => i.status === 'started').map((j, i) => this.renderJobTips(j, `r${i}`))
+            jobTips && jobTips.filter(i => i.status !== 'finished' && i.status !== 'failed').map((j, i) => this.renderJobTips(j, `r${i}`))
           }
           {
             // then finished & failed.
@@ -228,11 +239,11 @@ class NodeLayer extends React.Component {
         >
           <div
             style={{
-            width: `${componentSize.width}px`,
-            height: `${componentSize.height}px`,
-            background: `${getStylesForType(type, code)}`,
-            transform: `translate(${x}px, ${y}px)`,
-           }}
+              width: `${componentSize.width}px`,
+              height: `${componentSize.height}px`,
+              background: `${getStylesForType(type, code)}`,
+              transform: `translate(${x}px, ${y}px)`,
+            }}
             onContextMenu={e => this.handleContextMenu(e)}
             className={nodeClassName}
             onDoubleClick={() => {
