@@ -34,23 +34,23 @@ export default class ColumnSelectCheckboxWidget extends React.Component {
       return (
         <React.Fragment>
           <p style={{ color: 'red', display: 'inline-block', paddingRight: '20px' }}>{error.message}</p>
-          <Tag onClick={() => this.forceUpdate()} > <Icon type="sync" /> 刷新 </Tag>
         </React.Fragment>
       );
     }
     const { data } = this.state;
     // translate data to checkbox.
-    const renderData = schema.map(i => ({ name: i, checked: data ? data.includes(i) : false }));
+    const renderData = schema.map(i => ({
+      name: `${i.name}(${i.type})`, checked: data ? data.includes(i.name) : false }));
     return (
       <ConfigurationTable
         onChange={(v) => {
-              const newSelected = v.filter(i => i.checked).map(i => i.name);
-              this.setState({
-                data: newSelected,
-              },
-              () => this.props.onChange({ value: newSelected })
-              );
-            }
+          const newSelected = v.filter(i => i.checked).map(i => i.name);
+          this.setState({
+            data: newSelected,
+          },
+          () => this.props.onChange({ value: newSelected })
+          );
+        }
           }
         data={renderData}
         columns={[{
@@ -58,7 +58,7 @@ export default class ColumnSelectCheckboxWidget extends React.Component {
           title: '列名',
           render: (v, item, onChange) => (
             <Input defaultValue={v} value={v} disabled />
-        ),
+          ),
           span: 18,
         }, {
           name: 'checked',
@@ -71,10 +71,10 @@ export default class ColumnSelectCheckboxWidget extends React.Component {
                 onChange={e => onChange(e.target.checked)}
               />
             </div>
-        ),
+          ),
           span: 4,
         },
-      ]}
+        ]}
       />
     );
   }

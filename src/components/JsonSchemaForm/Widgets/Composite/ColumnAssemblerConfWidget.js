@@ -7,7 +7,7 @@ export default class ColumnAssemblerConfWidget extends CompositeWidget {
     const { getField } = this.props.uiSchema['ui:options'];
     const extraUISchema = { 'ui:options': { getField } };
     return (
-      <div >
+      <div>
         {this.renderSchema('inputs', {}, extraUISchema, ColumnScalingStrategyTable)}
         {this.renderSchema('output')}
       </div>

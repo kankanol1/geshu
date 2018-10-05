@@ -10,6 +10,7 @@ export default class ColumnMappingItemWidget extends React.Component {
       data: formData,
     };
   }
+
   componentWillReceiveProps(props) {
     const { formData } = props;
     this.setState({
@@ -34,29 +35,26 @@ export default class ColumnMappingItemWidget extends React.Component {
           <Col span={8}><legend> 输入列 {required ? '*' : null} </legend></Col>
           <Col span={16}>
             {
-            error ?
-             (
-               <React.Fragment>
-                 <p style={{ color: 'red', display: 'inline-block', paddingRight: '20px' }}>{error.message}</p>
-                 <Tag onClick={() => this.forceUpdate()} > <Icon type="sync" /> 刷新 </Tag>
-               </React.Fragment>
-            )
-            :
-              (
+            error
+              ? (
+                <React.Fragment>
+                  <p style={{ color: 'red', display: 'inline-block', paddingRight: '20px' }}>{error.message}</p>
+                </React.Fragment>
+              )
+              : (
                 <Select
                   placeholder="请选择"
                   onChange={e => this.onChange('column', e)}
                   value={data && data.column}
                 >
-                  {schema.map(i =>
-                    (
-                      <Select.Option
-                        key={i}
-                        value={i}
-                      >
-                        {i}
-                      </Select.Option>
-                    )
+                  {schema.map(i => (
+                    <Select.Option
+                      key={i.name}
+                      value={i.name}
+                    >
+                      {`${i.name} (${i.type})`}
+                    </Select.Option>
+                  )
                   )}
                 </Select>
               )

@@ -11,6 +11,7 @@ export default class ColumnMappingWidget extends React.Component {
       data: formData.value || [],
     };
   }
+
   componentWillReceiveProps(props) {
     const { formData } = props;
     this.setState({
@@ -26,7 +27,7 @@ export default class ColumnMappingWidget extends React.Component {
       return (
         <React.Fragment>
           <p style={{ color: 'red', display: 'inline-block', paddingRight: '20px' }}>{error.message}</p>
-          <Tag onClick={() => this.forceUpdate()} > <Icon type="sync" /> 刷新 </Tag>
+          <Tag onClick={() => this.forceUpdate()}> <Icon type="sync" /> 刷新 </Tag>
         </React.Fragment>
       );
     }
@@ -34,12 +35,11 @@ export default class ColumnMappingWidget extends React.Component {
       <ConfigurationTable
         canAdd={schema && this.state.data.length < schema.length}
         canDelete
-        onChange={v =>
-            this.setState({
-              data: v,
-            },
-            () => this.props.onChange({ value: v })
-          )
+        onChange={v => this.setState({
+          data: v,
+        },
+        () => this.props.onChange({ value: v })
+        )
           }
         data={this.state.data}
         columns={[{
@@ -51,19 +51,19 @@ export default class ColumnMappingWidget extends React.Component {
               onChange={e => onChange(e)}
               value={v}
             >
-              {schema.map(i =>
-                (
-                  <Select.Option
-                    key={i}
-                    value={i}
-                    disabled={this.state.data.filter(s => s.column === i).length > 0}
-                  >
-                    {i}
-                  </Select.Option>
-                )
+              {schema.map(i => (
+                <Select.Option
+                  key={i.name}
+                  value={i.name}
+                  disabled={this.state.data.filter(s => s.column === i.name).length > 0}
+                >
+
+                  {`${i.name} (${i.type})`}
+                </Select.Option>
+              )
               )}
             </Select>
-        ),
+          ),
           span: 11,
         }, {
           name: 'name',
@@ -74,10 +74,10 @@ export default class ColumnMappingWidget extends React.Component {
               value={v}
               onChange={e => onChange(e.target.value)}
             />
-        ),
+          ),
           span: 11,
         },
-      ]}
+        ]}
       />
     );
   }

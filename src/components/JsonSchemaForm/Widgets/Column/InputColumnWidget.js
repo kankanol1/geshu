@@ -28,7 +28,6 @@ export default class InputColumnWidget extends React.PureComponent {
           <Col span={16}>
             <React.Fragment>
               <p style={{ color: 'red', display: 'inline-block', paddingRight: '20px' }}>{error.message}</p>
-              <Tag onClick={() => this.forceUpdate()} > <Icon type="sync" /> 刷新 </Tag>
             </React.Fragment>
           </Col>
         </Row>

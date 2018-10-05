@@ -35,7 +35,6 @@ export default class ColumnAggregatePairArrayWidget extends React.Component {
       return (
         <React.Fragment>
           <p style={{ color: 'red', display: 'inline-block', paddingRight: '20px' }}>{error.message}</p>
-          <Tag onClick={() => this.forceUpdate()} > <Icon type="sync" /> 刷新 </Tag>
         </React.Fragment>
       );
     }
@@ -47,12 +46,12 @@ export default class ColumnAggregatePairArrayWidget extends React.Component {
         canAdd={schema && this.state.data.length < schema.length * enumList.length}
         canDelete
         onChange={(v) => {
-              this.setState({
-                data: v,
-              },
-              () => this.props.onChange({ value: v })
-              );
-            }
+          this.setState({
+            data: v,
+          },
+          () => this.props.onChange({ value: v })
+          );
+        }
           }
         data={renderData}
         columns={[{
@@ -64,23 +63,22 @@ export default class ColumnAggregatePairArrayWidget extends React.Component {
               onChange={e => onChange(e)}
               value={v}
             >
-              {schema.map(i =>
-                (
-                  <Select.Option
-                    key={i}
-                    value={i}
-                    disabled={this.state.data.filter((s) => {
-                      return s.aggregate === item.aggregate && s.column === i;
-                    }).length > 0 || this.state.data.filter((s) => {
-                      return s.column === i;
-                    }).length === enumList.length}
-                  >
-                    {i}
-                  </Select.Option>
-                )
+              {schema.map(i => (
+                <Select.Option
+                  key={i.name}
+                  value={i.name}
+                  disabled={this.state.data.filter((s) => {
+                    return s.aggregate === item.aggregate && s.column === i.name;
+                  }).length > 0 || this.state.data.filter((s) => {
+                    return s.column === i.name;
+                  }).length === enumList.length}
+                >
+                  {`${i.name} (${i.type})`}
+                </Select.Option>
+              )
               )}
             </Select>
-        ),
+          ),
           span: 11,
         },
         {
@@ -92,26 +90,25 @@ export default class ColumnAggregatePairArrayWidget extends React.Component {
               onChange={e => onChange(e)}
               value={v}
             >
-              {enumList.map(i =>
-                (
-                  <Select.Option
-                    key={i}
-                    value={i}
-                    disabled={this.state.data.filter((s) => {
-                      return s.column === item.column && s.aggregate === i;
-                    }).length > 0 || this.state.data.filter((s) => {
-                      return s.aggregate === i;
-                    }).length === schema.length}
-                  >
-                    {i}
-                  </Select.Option>
-                )
+              {enumList.map(i => (
+                <Select.Option
+                  key={i}
+                  value={i}
+                  disabled={this.state.data.filter((s) => {
+                    return s.column === item.column && s.aggregate === i;
+                  }).length > 0 || this.state.data.filter((s) => {
+                    return s.aggregate === i;
+                  }).length === schema.length}
+                >
+                  {i}
+                </Select.Option>
+              )
               )}
             </Select>
           ),
           span: 11,
         },
-      ]}
+        ]}
       />
     );
   }

@@ -28,6 +28,7 @@
     "react/jsx-boolean-value": [1],
     "react/destructuring-assignment": [0],
     "react/no-access-state-in-setstate": [1],
+    "react/jsx-one-expression-per-line": [0],
     "camelcase": [1],
     "no-console":[2],
     "no-unused-vars": [1],

@@ -69,8 +69,8 @@ export default class ValueTypePairWidget extends CompositeWidget {
     return (
       <React.Fragment>
         {this.renderSchema('fieldType', {}, {}, undefined, { description: '类型' })}
-        {fieldType ?
-          this.renderSchema('value', {}, {}, typeConfig[fieldType], { description: '值' })
+        {fieldType
+          ? this.renderSchema('value', {}, {}, typeConfig[fieldType], { description: '值' })
           : (
             <Row>
               <Col span={8}>值 *</Col>

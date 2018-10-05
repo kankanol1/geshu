@@ -34,7 +34,6 @@ export default class ColumnSelectSelectorWidget extends React.Component {
       return (
         <React.Fragment>
           <p style={{ color: 'red', display: 'inline-block', paddingRight: '20px' }}>{error.message}</p>
-          <Tag onClick={() => this.forceUpdate()} > <Icon type="sync" /> 刷新 </Tag>
         </React.Fragment>
       );
     }
@@ -46,12 +45,12 @@ export default class ColumnSelectSelectorWidget extends React.Component {
         canAdd={schema && this.state.data.length < schema.length}
         canDelete
         onChange={(v) => {
-              this.setState({
-                data: v,
-              },
-              () => this.props.onChange({ value: v.map(i => i.name) })
-              );
-            }
+          this.setState({
+            data: v,
+          },
+          () => this.props.onChange({ value: v.map(i => i.name) })
+          );
+        }
           }
         data={renderData}
         columns={[{
@@ -63,22 +62,21 @@ export default class ColumnSelectSelectorWidget extends React.Component {
               onChange={e => onChange(e)}
               value={v}
             >
-              {schema.map(i =>
-                (
-                  <Select.Option
-                    key={i}
-                    value={i}
-                    disabled={this.state.data.filter(s => s.input === i).length > 0}
-                  >
-                    {i}
-                  </Select.Option>
-                )
+              {schema.map(i => (
+                <Select.Option
+                  key={i.name}
+                  value={i.name}
+                  disabled={this.state.data.filter(s => s.input === i.name).length > 0}
+                >
+                  {`${i.name} (${i.type})`}
+                </Select.Option>
+              )
               )}
             </Select>
-        ),
+          ),
           span: 22,
         },
-      ]}
+        ]}
       />
     );
   }

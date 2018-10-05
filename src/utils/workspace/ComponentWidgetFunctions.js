@@ -23,7 +23,8 @@ export const getAllColumnsFromUpstream = (id) => {
     throw new Error('无相应schema信息');
   }
   const allFields = schema[upstreamId][upstreamPoint];
-  return allFields.map(item => item.name);
+  const transType = t => t.substring(1, t.length - 1);
+  return allFields.map((i) => { return { name: i.name, type: transType(i.type) }; });
 };
 
 export const getAllInputSchemaForComponent = (id) => {

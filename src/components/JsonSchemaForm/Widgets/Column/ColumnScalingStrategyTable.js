@@ -33,7 +33,6 @@ export default class ColumnScalingStrategyTable extends React.Component {
       return (
         <React.Fragment>
           <p style={{ color: 'red', display: 'inline-block', paddingRight: '20px' }}>{error.message}</p>
-          <Tag onClick={() => this.forceUpdate()} > <Icon type="sync" /> 刷新 </Tag>
         </React.Fragment>
       );
     }
@@ -45,12 +44,12 @@ export default class ColumnScalingStrategyTable extends React.Component {
         canAdd={schema && this.state.data.length < schema.length}
         canDelete
         onChange={(v) => {
-              this.setState({
-                data: v,
-              },
-              () => this.props.onChange(v)
-              );
-            }
+          this.setState({
+            data: v,
+          },
+          () => this.props.onChange(v)
+          );
+        }
           }
         data={renderData}
         columns={[{
@@ -62,19 +61,18 @@ export default class ColumnScalingStrategyTable extends React.Component {
               onChange={e => onChange(e)}
               value={v}
             >
-              {schema.map(i =>
-                (
-                  <Select.Option
-                    key={i}
-                    value={i}
-                    disabled={this.state.data.filter(s => s.column === i).length > 0}
-                  >
-                    {i}
-                  </Select.Option>
-                )
+              {schema.map(i => (
+                <Select.Option
+                  key={i.name}
+                  value={i.name}
+                  disabled={this.state.data.filter(s => s.column === i.name).length > 0}
+                >
+                  {`${i.name} (${i.type})`}
+                </Select.Option>
+              )
               )}
             </Select>
-        ),
+          ),
           span: 14,
         }, {
           name: 'strategy',
@@ -85,21 +83,20 @@ export default class ColumnScalingStrategyTable extends React.Component {
               onChange={e => onChange(e)}
               value={v}
             >
-              {this.props.schema.items.properties.strategy.enum.map(i =>
-                (
-                  <Select.Option
-                    key={i}
-                    value={i}
-                  >
-                    {i}
-                  </Select.Option>
-                )
+              {this.props.schema.items.properties.strategy.enum.map(i => (
+                <Select.Option
+                  key={i}
+                  value={i}
+                >
+                  {i}
+                </Select.Option>
+              )
               )}
             </Select>
-        ),
+          ),
           span: 8,
         },
-      ]}
+        ]}
       />
     );
   }
