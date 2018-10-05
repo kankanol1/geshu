@@ -77,7 +77,7 @@ export default class WorkspaceOutputView extends React.Component {
     const { id } = this.props.match.params;
     const { panes, defaultPane } = this.props.outputview;
     return (
-      <Layout style={{ padding: '0', height: '100%' }} theme="light">
+      <Layout style={{ padding: '0', height: '100%', position: 'relative' }} theme="light">
         <Header style={{ padding: '0px', height: '48px', lineHeight: '46px', background: '#eee' }}>
           <WorkspaceMenu env={['dataview']} />
           <WorkspaceViewMenu currentPath={this.props.location} />

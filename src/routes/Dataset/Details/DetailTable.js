@@ -119,12 +119,12 @@ export default class DetailTable extends React.Component {
           width={(this.state.width[col] || 300) - 20}
         >
           {/* <Axis name="range" />
-          <Axis name="count" />
+          <Axis name="count" /> */}
           <Tooltip
             crosshairs={{
-              type: 'y',
+              type: 'rect',
             }}
-          /> */}
+          />
           <Geom type="interval" position="range*count" />
         </Chart>
       </div>
@@ -164,6 +164,7 @@ export default class DetailTable extends React.Component {
           defaultPageSize={this.state.pageSize}
           className="-striped -highlight"
           pages={pages}
+          sortable={false}
           onFetchData={(state, instance) => this.fetchData(state, instance)}
           onResizedChange={(newResized, event) => {
             const newSizes = {};
