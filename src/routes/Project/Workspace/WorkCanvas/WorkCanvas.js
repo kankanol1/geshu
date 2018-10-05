@@ -495,15 +495,7 @@ export default class WorkCanvas extends React.Component {
                     jobTips={jobTips[component.id]}
                     // handle job clicked.
                     onJobStatusClicked={(job) => {
-                      if (job.status === 'started') {
-                        // go to job list.
-                        this.props.dispatch({
-                          type: 'outputview/activePane',
-                          payload: {
-                            title: 'default',
-                          },
-                        });
-                      } else {
+                      if (job.status === 'finished') {
                         // add pane.
                         this.props.dispatch({
                           type: 'outputview/addPane',
@@ -511,6 +503,14 @@ export default class WorkCanvas extends React.Component {
                             id: job.id,
                             type: 'job',
                             title: `作业详细[${job.id}]`,
+                          },
+                        });
+                      } else {
+                        // go to job list.
+                        this.props.dispatch({
+                          type: 'outputview/activePane',
+                          payload: {
+                            title: 'default',
                           },
                         });
                       }
