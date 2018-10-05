@@ -549,320 +549,6 @@ const componentList = [
     ],
   },
   {
-    name: 'PStage',
-    key: 'PStage',
-    components: [
-      {
-        name: 'DecisionTreeClassifierPStage',
-        code: 'DecisionTreeClassifierPStage',
-        type: 'PStage',
-        inputs: [
-          {
-            id: 'i1',
-            label: 'dataset',
-            hint: 'dataset',
-            x: 3,
-            y: 0.5,
-            connects: [
-              'Model',
-              'Dataset',
-            ],
-          },
-        ],
-        outputs: [
-          {
-            id: 'o1',
-            label: 'model',
-            hint: 'Model',
-            x: 1,
-            y: 0.5,
-            type: 'Model',
-          },
-        ],
-      },
-      {
-        name: 'StringIndexerPStage',
-        code: 'StringIndexerPStage',
-        type: 'PStage',
-        inputs: [
-          {
-            id: 'i1',
-            label: 'dataset',
-            hint: 'dataset',
-            x: 3,
-            y: 0.5,
-            connects: [
-              'Model',
-              'Dataset',
-            ],
-          },
-        ],
-        outputs: [
-          {
-            id: 'o1',
-            label: 'model',
-            hint: 'Model',
-            x: 1,
-            y: 0.5,
-            type: 'Model',
-          },
-        ],
-      },
-      {
-        name: 'GradientBoostedTreeRegressorPStage',
-        code: 'GradientBoostedTreeRegressorPStage',
-        type: 'PStage',
-        inputs: [
-          {
-            id: 'i1',
-            label: 'dataset',
-            hint: 'dataset',
-            x: 3,
-            y: 0.5,
-            connects: [
-              'Model',
-              'Dataset',
-            ],
-          },
-        ],
-        outputs: [
-          {
-            id: 'o1',
-            label: 'model',
-            hint: 'Model',
-            x: 1,
-            y: 0.5,
-            type: 'Model',
-          },
-        ],
-      },
-      {
-        name: 'BucketizerPStage',
-        code: 'BucketizerPStage',
-        type: 'PStage',
-        inputs: [
-          {
-            id: 'i1',
-            label: 'dataset',
-            hint: 'dataset',
-            x: 3,
-            y: 0.5,
-            connects: [
-              'Model',
-              'Dataset',
-            ],
-          },
-        ],
-        outputs: [
-          {
-            id: 'o1',
-            label: 'model',
-            hint: 'Model',
-            x: 1,
-            y: 0.5,
-            type: 'Model',
-          },
-        ],
-      },
-      {
-        name: 'RandomForestClassifierPStage',
-        code: 'RandomForestClassifierPStage',
-        type: 'PStage',
-        inputs: [
-          {
-            id: 'i1',
-            label: 'dataset',
-            hint: 'dataset',
-            x: 3,
-            y: 0.5,
-            connects: [
-              'Model',
-              'Dataset',
-            ],
-          },
-        ],
-        outputs: [
-          {
-            id: 'o1',
-            label: 'model',
-            hint: 'Model',
-            x: 1,
-            y: 0.5,
-            type: 'Model',
-          },
-        ],
-      },
-      {
-        name: 'OneHotEncoderPStage',
-        code: 'OneHotEncoderPStage',
-        type: 'PStage',
-        inputs: [
-          {
-            id: 'i1',
-            label: 'dataset',
-            hint: 'dataset',
-            x: 3,
-            y: 0.5,
-            connects: [
-              'Model',
-              'Dataset',
-            ],
-          },
-        ],
-        outputs: [
-          {
-            id: 'o1',
-            label: 'model',
-            hint: 'Model',
-            x: 1,
-            y: 0.5,
-            type: 'Model',
-          },
-        ],
-      },
-      {
-        name: 'DecisionTreeRegressorPStage',
-        code: 'DecisionTreeRegressorPStage',
-        type: 'PStage',
-        inputs: [
-          {
-            id: 'i1',
-            label: 'dataset',
-            hint: 'dataset',
-            x: 3,
-            y: 0.5,
-            connects: [
-              'Model',
-              'Dataset',
-            ],
-          },
-        ],
-        outputs: [
-          {
-            id: 'o1',
-            label: 'model',
-            hint: 'Model',
-            x: 1,
-            y: 0.5,
-            type: 'Model',
-          },
-        ],
-      },
-      {
-        name: 'GradientBoostedTreeClassifierPStage',
-        code: 'GradientBoostedTreeClassifierPStage',
-        type: 'PStage',
-        inputs: [
-          {
-            id: 'i1',
-            label: 'dataset',
-            hint: 'dataset',
-            x: 3,
-            y: 0.5,
-            connects: [
-              'Model',
-              'Dataset',
-            ],
-          },
-        ],
-        outputs: [
-          {
-            id: 'o1',
-            label: 'model',
-            hint: 'Model',
-            x: 1,
-            y: 0.5,
-            type: 'Model',
-          },
-        ],
-      },
-      {
-        name: 'RandomForestRegressorPStage',
-        code: 'RandomForestRegressorPStage',
-        type: 'PStage',
-        inputs: [
-          {
-            id: 'i1',
-            label: 'dataset',
-            hint: 'dataset',
-            x: 3,
-            y: 0.5,
-            connects: [
-              'Model',
-              'Dataset',
-            ],
-          },
-        ],
-        outputs: [
-          {
-            id: 'o1',
-            label: 'model',
-            hint: 'Model',
-            x: 1,
-            y: 0.5,
-            type: 'Model',
-          },
-        ],
-      },
-      {
-        name: 'ImputerPStage',
-        code: 'ImputerPStage',
-        type: 'PStage',
-        inputs: [
-          {
-            id: 'i1',
-            label: 'dataset',
-            hint: 'dataset',
-            x: 3,
-            y: 0.5,
-            connects: [
-              'Model',
-              'Dataset',
-            ],
-          },
-        ],
-        outputs: [
-          {
-            id: 'o1',
-            label: 'model',
-            hint: 'Model',
-            x: 1,
-            y: 0.5,
-            type: 'Model',
-          },
-        ],
-      },
-      {
-        name: 'VectorAssemblerPStage',
-        code: 'VectorAssemblerPStage',
-        type: 'PStage',
-        inputs: [
-          {
-            id: 'i1',
-            label: 'dataset',
-            hint: 'dataset',
-            x: 3,
-            y: 0.5,
-            connects: [
-              'Model',
-              'Dataset',
-            ],
-          },
-        ],
-        outputs: [
-          {
-            id: 'o1',
-            label: 'model',
-            hint: 'Model',
-            x: 1,
-            y: 0.5,
-            type: 'Model',
-          },
-        ],
-      },
-    ],
-  },
-  {
     name: 'ModelSink',
     key: 'ModelSink',
     components: [
@@ -907,18 +593,18 @@ const componentList = [
     ],
   },
   {
-    name: 'Stage',
-    key: 'Stage',
+    name: 'Classification',
+    key: 'Classification',
     components: [
       {
-        name: 'TokenizerStage',
-        code: 'TokenizerStage',
-        type: 'Stage',
+        name: 'DecisionTreeClassifierPStage',
+        code: 'DecisionTreeClassifierPStage',
+        type: 'PStage',
         inputs: [
           {
             id: 'i1',
-            label: 'all',
-            hint: 'all',
+            label: 'dataset',
+            hint: 'dataset',
             x: 3,
             y: 0.5,
             connects: [
@@ -941,34 +627,6 @@ const componentList = [
       {
         name: 'SupportVectorMachineClassifierStage',
         code: 'SupportVectorMachineClassifierStage',
-        type: 'Stage',
-        inputs: [
-          {
-            id: 'i1',
-            label: 'all',
-            hint: 'all',
-            x: 3,
-            y: 0.5,
-            connects: [
-              'Model',
-              'Dataset',
-            ],
-          },
-        ],
-        outputs: [
-          {
-            id: 'o1',
-            label: 'model',
-            hint: 'Model',
-            x: 1,
-            y: 0.5,
-            type: 'Model',
-          },
-        ],
-      },
-      {
-        name: 'LinearRegressionStage',
-        code: 'LinearRegressionStage',
         type: 'Stage',
         inputs: [
           {
@@ -1023,14 +681,42 @@ const componentList = [
         ],
       },
       {
-        name: 'HashingTFStage',
-        code: 'HashingTFStage',
-        type: 'Stage',
+        name: 'RandomForestClassifierPStage',
+        code: 'RandomForestClassifierPStage',
+        type: 'PStage',
         inputs: [
           {
             id: 'i1',
-            label: 'all',
-            hint: 'all',
+            label: 'dataset',
+            hint: 'dataset',
+            x: 3,
+            y: 0.5,
+            connects: [
+              'Model',
+              'Dataset',
+            ],
+          },
+        ],
+        outputs: [
+          {
+            id: 'o1',
+            label: 'model',
+            hint: 'Model',
+            x: 1,
+            y: 0.5,
+            type: 'Model',
+          },
+        ],
+      },
+      {
+        name: 'GradientBoostedTreeClassifierPStage',
+        code: 'GradientBoostedTreeClassifierPStage',
+        type: 'PStage',
+        inputs: [
+          {
+            id: 'i1',
+            label: 'dataset',
+            hint: 'dataset',
             x: 3,
             y: 0.5,
             connects: [
@@ -1079,8 +765,98 @@ const componentList = [
         ],
       },
       {
-        name: 'KMeansStage',
-        code: 'KMeansStage',
+        name: 'LogisticRegressionStage',
+        code: 'LogisticRegressionStage',
+        type: 'Stage',
+        inputs: [
+          {
+            id: 'i1',
+            label: 'all',
+            hint: 'all',
+            x: 3,
+            y: 0.5,
+            connects: [
+              'Model',
+              'Dataset',
+            ],
+          },
+        ],
+        outputs: [
+          {
+            id: 'o1',
+            label: 'model',
+            hint: 'Model',
+            x: 1,
+            y: 0.5,
+            type: 'Model',
+          },
+        ],
+      },
+    ],
+  },
+  {
+    name: 'Regression',
+    key: 'Regression',
+    components: [
+      {
+        name: 'RandomForestRegressorPStage',
+        code: 'RandomForestRegressorPStage',
+        type: 'PStage',
+        inputs: [
+          {
+            id: 'i1',
+            label: 'dataset',
+            hint: 'dataset',
+            x: 3,
+            y: 0.5,
+            connects: [
+              'Model',
+              'Dataset',
+            ],
+          },
+        ],
+        outputs: [
+          {
+            id: 'o1',
+            label: 'model',
+            hint: 'Model',
+            x: 1,
+            y: 0.5,
+            type: 'Model',
+          },
+        ],
+      },
+      {
+        name: 'GradientBoostedTreeRegressorPStage',
+        code: 'GradientBoostedTreeRegressorPStage',
+        type: 'PStage',
+        inputs: [
+          {
+            id: 'i1',
+            label: 'dataset',
+            hint: 'dataset',
+            x: 3,
+            y: 0.5,
+            connects: [
+              'Model',
+              'Dataset',
+            ],
+          },
+        ],
+        outputs: [
+          {
+            id: 'o1',
+            label: 'model',
+            hint: 'Model',
+            x: 1,
+            y: 0.5,
+            type: 'Model',
+          },
+        ],
+      },
+      {
+        name: 'LinearRegressionStage',
+        code: 'LinearRegressionStage',
         type: 'Stage',
         inputs: [
           {
@@ -1107,14 +883,14 @@ const componentList = [
         ],
       },
       {
-        name: 'LogisticRegressionStage',
-        code: 'LogisticRegressionStage',
-        type: 'Stage',
+        name: 'DecisionTreeRegressorPStage',
+        code: 'DecisionTreeRegressorPStage',
+        type: 'PStage',
         inputs: [
           {
             id: 'i1',
-            label: 'all',
-            hint: 'all',
+            label: 'dataset',
+            hint: 'dataset',
             x: 3,
             y: 0.5,
             connects: [
@@ -1191,6 +967,236 @@ const componentList = [
             x: 1,
             y: 0.5,
             type: 'TunedModel',
+          },
+        ],
+      },
+    ],
+  },
+  {
+    name: 'Feature',
+    key: 'Feature',
+    components: [
+      {
+        name: 'TokenizerStage',
+        code: 'TokenizerStage',
+        type: 'Stage',
+        inputs: [
+          {
+            id: 'i1',
+            label: 'all',
+            hint: 'all',
+            x: 3,
+            y: 0.5,
+            connects: [
+              'Model',
+              'Dataset',
+            ],
+          },
+        ],
+        outputs: [
+          {
+            id: 'o1',
+            label: 'model',
+            hint: 'Model',
+            x: 1,
+            y: 0.5,
+            type: 'Model',
+          },
+        ],
+      },
+      {
+        name: 'StringIndexerPStage',
+        code: 'StringIndexerPStage',
+        type: 'PStage',
+        inputs: [
+          {
+            id: 'i1',
+            label: 'dataset',
+            hint: 'dataset',
+            x: 3,
+            y: 0.5,
+            connects: [
+              'Model',
+              'Dataset',
+            ],
+          },
+        ],
+        outputs: [
+          {
+            id: 'o1',
+            label: 'model',
+            hint: 'Model',
+            x: 1,
+            y: 0.5,
+            type: 'Model',
+          },
+        ],
+      },
+      {
+        name: 'BucketizerPStage',
+        code: 'BucketizerPStage',
+        type: 'PStage',
+        inputs: [
+          {
+            id: 'i1',
+            label: 'dataset',
+            hint: 'dataset',
+            x: 3,
+            y: 0.5,
+            connects: [
+              'Model',
+              'Dataset',
+            ],
+          },
+        ],
+        outputs: [
+          {
+            id: 'o1',
+            label: 'model',
+            hint: 'Model',
+            x: 1,
+            y: 0.5,
+            type: 'Model',
+          },
+        ],
+      },
+      {
+        name: 'HashingTFStage',
+        code: 'HashingTFStage',
+        type: 'Stage',
+        inputs: [
+          {
+            id: 'i1',
+            label: 'all',
+            hint: 'all',
+            x: 3,
+            y: 0.5,
+            connects: [
+              'Model',
+              'Dataset',
+            ],
+          },
+        ],
+        outputs: [
+          {
+            id: 'o1',
+            label: 'model',
+            hint: 'Model',
+            x: 1,
+            y: 0.5,
+            type: 'Model',
+          },
+        ],
+      },
+      {
+        name: 'OneHotEncoderPStage',
+        code: 'OneHotEncoderPStage',
+        type: 'PStage',
+        inputs: [
+          {
+            id: 'i1',
+            label: 'dataset',
+            hint: 'dataset',
+            x: 3,
+            y: 0.5,
+            connects: [
+              'Model',
+              'Dataset',
+            ],
+          },
+        ],
+        outputs: [
+          {
+            id: 'o1',
+            label: 'model',
+            hint: 'Model',
+            x: 1,
+            y: 0.5,
+            type: 'Model',
+          },
+        ],
+      },
+      {
+        name: 'KMeansStage',
+        code: 'KMeansStage',
+        type: 'Stage',
+        inputs: [
+          {
+            id: 'i1',
+            label: 'all',
+            hint: 'all',
+            x: 3,
+            y: 0.5,
+            connects: [
+              'Model',
+              'Dataset',
+            ],
+          },
+        ],
+        outputs: [
+          {
+            id: 'o1',
+            label: 'model',
+            hint: 'Model',
+            x: 1,
+            y: 0.5,
+            type: 'Model',
+          },
+        ],
+      },
+      {
+        name: 'ImputerPStage',
+        code: 'ImputerPStage',
+        type: 'PStage',
+        inputs: [
+          {
+            id: 'i1',
+            label: 'dataset',
+            hint: 'dataset',
+            x: 3,
+            y: 0.5,
+            connects: [
+              'Model',
+              'Dataset',
+            ],
+          },
+        ],
+        outputs: [
+          {
+            id: 'o1',
+            label: 'model',
+            hint: 'Model',
+            x: 1,
+            y: 0.5,
+            type: 'Model',
+          },
+        ],
+      },
+      {
+        name: 'VectorAssemblerPStage',
+        code: 'VectorAssemblerPStage',
+        type: 'PStage',
+        inputs: [
+          {
+            id: 'i1',
+            label: 'dataset',
+            hint: 'dataset',
+            x: 3,
+            y: 0.5,
+            connects: [
+              'Model',
+              'Dataset',
+            ],
+          },
+        ],
+        outputs: [
+          {
+            id: 'o1',
+            label: 'model',
+            hint: 'Model',
+            x: 1,
+            y: 0.5,
+            type: 'Model',
           },
         ],
       },

@@ -77,7 +77,7 @@ export default class WorkspaceOutputView extends React.Component {
     const { id } = this.props.match.params;
     const { panes, defaultPane } = this.props.outputview;
     return (
-      <Layout style={{ padding: '0', height: '100%' }} theme="light" >
+      <Layout style={{ padding: '0', height: '100%' }} theme="light">
         <Header style={{ padding: '0px', height: '48px', lineHeight: '46px', background: '#eee' }}>
           <WorkspaceMenu env={['dataview']} />
           <WorkspaceViewMenu currentPath={this.props.location} />
@@ -92,21 +92,21 @@ export default class WorkspaceOutputView extends React.Component {
             onEdit={(key, action) => this.handleTabEdit(key, action)}
           >
             <TabPane tab="作业历史" key="default" closable={false}>
-              <Scrollbars style={{ padding: '0', height: '100%', overflow: 'auto' }}>
-                <JobList id={id} onJobClicked={jobId => this.handleJobClicked(jobId)} />
-              </Scrollbars>
+              {/* <Scrollbars style={{ padding: '0', height: '100%', overflow: 'auto' }}> */}
+              <JobList id={id} onJobClicked={jobId => this.handleJobClicked(jobId)} />
+              {/* </Scrollbars> */}
             </TabPane>
             {
               panes.map((p, i) => {
                 let content = null;
                 if (p.type === 'job') {
-                    content = (
-                      <JobOutput
-                        id={p.id}
-                        onModelClicked={modelId => this.handleModelClicked(modelId)}
-                        onDataClicked={dataId => this.handleDataClicked(dataId)}
-                      />
-                      );
+                  content = (
+                    <JobOutput
+                      id={p.id}
+                      onModelClicked={modelId => this.handleModelClicked(modelId)}
+                      onDataClicked={dataId => this.handleDataClicked(dataId)}
+                    />
+                  );
                 } else if (p.type === 'model') {
                   content = <ModelTestComponent id={p.id} />;
                 } else if (p.type === 'data') {
@@ -115,10 +115,10 @@ export default class WorkspaceOutputView extends React.Component {
                   return null;
                 }
                 return (
-                  <TabPane tab={p.title} key={p.title} >
-                    <Scrollbars style={{ padding: '0', height: '100%', overflow: 'auto' }}>
-                      {content}
-                    </Scrollbars>
+                  <TabPane tab={p.title} key={p.title}>
+                    {/* <Scrollbars style={{ padding: '0', height: '100%', overflow: 'auto' }}> */}
+                    {content}
+                    {/* </Scrollbars> */}
                   </TabPane>
                 );
               })

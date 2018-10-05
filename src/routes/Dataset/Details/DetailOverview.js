@@ -9,6 +9,7 @@ export default class DetailOverview extends PureComponent {
   static defaultProps = {
     type: 'normal',
   }
+
   state={
     heatmap: {
       // data, cols.
@@ -17,6 +18,7 @@ export default class DetailOverview extends PureComponent {
     loadingMessage: undefined,
     loading: true,
   }
+
   componentWillMount() {
     this.setState({ loading: true });
     setTimeout(() => this.fetchIfStillLoading(), 100);
@@ -109,14 +111,14 @@ export default class DetailOverview extends PureComponent {
             autoRotate: false,
           }}
           grid={{
-              align: 'center',
-              lineStyle: {
-                lineWidth: 1,
-                lineDash: null,
-                stroke: '#f0f0f0',
-              },
-              showFirstLine: true,
-            }}
+            align: 'center',
+            lineStyle: {
+              lineWidth: 1,
+              lineDash: null,
+              stroke: '#f0f0f0',
+            },
+            showFirstLine: true,
+          }}
         />
         <Axis
           name="c2"
@@ -126,13 +128,13 @@ export default class DetailOverview extends PureComponent {
             },
           }}
           grid={{
-              align: 'center',
-              lineStyle: {
-                lineWidth: 1,
-                lineDash: null,
-                stroke: '#f0f0f0',
-              },
-            }}
+            align: 'center',
+            lineStyle: {
+              lineWidth: 1,
+              lineDash: null,
+              stroke: '#f0f0f0',
+            },
+          }}
         />
         <Tooltip />
         <Geom
@@ -148,9 +150,9 @@ export default class DetailOverview extends PureComponent {
           }]}
           color={['value', '#BAE7FF-#1890FF-#0050B3']}
           style={{
-              stroke: '#fff',
-              lineWidth: 1,
-            }}
+            stroke: '#fff',
+            lineWidth: 1,
+          }}
         >
           {/* <Label
             content="value"

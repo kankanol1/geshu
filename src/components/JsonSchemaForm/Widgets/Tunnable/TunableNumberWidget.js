@@ -24,30 +24,30 @@ export default class TunableNumberWidget extends CompositeWidget {
     const isRoot = idSchema.$id === 'root';
     return (
       <div className={isRoot ? null : styles.groupDiv}>
-        <div onClick={() => this.toggleState()} className={styles.groupHeader} >
+        <div onClick={() => this.toggleState()} className={styles.groupHeader}>
           {
-          isRoot ? null :
-          (
-            <Row>
-              <Col span={2} >
-                <Icon type={this.state.expand ? 'down' : 'right'} className={styles.groupIcon} />
-              </Col>
-              <Col span={22} >
-                <TitleField title={displayTitle} className={styles.groupLegend} />
-              </Col>
-            </Row>
-          )
+          isRoot ? null
+            : (
+              <Row>
+                <Col span={2}>
+                  <Icon type={this.state.expand ? 'down' : 'right'} className={styles.groupIcon} />
+                </Col>
+                <Col span={22}>
+                  <TitleField title={displayTitle} className={styles.groupLegend} />
+                </Col>
+              </Row>
+            )
         }
         </div>
-        { this.state.expand ?
-        (
-          <div className={isRoot ? null : styles.groupContent}>
-            {this.renderSchema('tunableType')}
-            {this.renderSchema('tunableValue')}
-            {this.renderSchema('value')}
-          </div>
-        )
-        : null
+        { this.state.expand
+          ? (
+            <div className={isRoot ? null : styles.groupContent}>
+              {this.renderSchema('tunableType')}
+              {this.renderSchema('tunableValue')}
+              {this.renderSchema('value')}
+            </div>
+          )
+          : null
         }
       </div>
     );

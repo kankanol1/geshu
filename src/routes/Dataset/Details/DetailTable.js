@@ -11,6 +11,7 @@ export default class DetailTable extends React.Component {
   static defaultProps = {
     type: 'normal',
   }
+
   state = {
     // column widths,
     width: {},
@@ -22,6 +23,9 @@ export default class DetailTable extends React.Component {
     histgoramLoading: false,
     loadingMessage: undefined,
   }
+
+  mounted = false;
+
   componentWillMount() {
     const { datasetId } = this.props;
     this.setState({ loading: true });
@@ -56,6 +60,11 @@ export default class DetailTable extends React.Component {
         }
       }
     });
+    this.mounted = true;
+  }
+
+  componentWillUnmount() {
+    this.mounted = false;
   }
 
   fetchIfStillLoading = () => {
@@ -64,7 +73,7 @@ export default class DetailTable extends React.Component {
     const queryHistogram = this.props.type === 'private' ? queryPrivateDatasetHistogram : queryDatasetHistogram;
     if (histgoramLoading) {
       queryHistogram({ id: datasetId }).then((response) => {
-        if (response) {
+        if (response && this.mounted) {
           const { data, loading, message } = response;
           this.setState({ histogram: data, histgoramLoading: loading, loadingMessage: message });
           if (loading) {
@@ -96,7 +105,8 @@ export default class DetailTable extends React.Component {
     if (histgoramLoading) {
       return (
         <div style={{ padding: '20px' }}>
-          <Spin size="small" style={{ paddingRight: '20px' }} /><span>{loadingMessage}</span>
+          <Spin size="small" style={{ paddingRight: '20px' }} />
+          <span>{loadingMessage}</span>
         </div>
       );
     }
@@ -134,7 +144,8 @@ export default class DetailTable extends React.Component {
       meta.forEach((key) => {
         cols.push({
           Header: props => (
-            <div><span>{key.name}</span>
+            <div>
+              <span>{key.name}</span>
               {this.renderChartTest(key.name.trim(), props)}
             </div>
           ),

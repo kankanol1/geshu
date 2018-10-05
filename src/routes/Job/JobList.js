@@ -58,13 +58,6 @@ export default class JobList extends PureComponent {
     formValues: [],
   }
 
-  componentDidMount() {
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'jobs/fetchJobList',
-    });
-  }
-
   columns = [
     {
       title: '编号',
@@ -77,7 +70,12 @@ export default class JobList extends PureComponent {
     {
       title: '状态',
       dataIndex: 'status',
-      render: val => <Tag color={statusColorMap[val]}><Icon type={statusIconMap[val]} />{` ${statusMap[val]}`}</Tag>,
+      render: val => (
+        <Tag color={statusColorMap[val]}>
+          <Icon type={statusIconMap[val]} />
+          {` ${statusMap[val]}`}
+        </Tag>
+      ),
     },
     /* {
       title: '作业进度',
@@ -139,6 +137,13 @@ export default class JobList extends PureComponent {
   ];
 
   refreshParams = {}
+
+  componentDidMount() {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'jobs/fetchJobList',
+    });
+  }
 
   /**
    * perform query and store query params locally.
@@ -288,7 +293,13 @@ export default class JobList extends PureComponent {
                   <Option value="">全部</Option>
                   {
                     Object.entries(statusMap).map(
-                      ([k, v]) => (<Option key={k} value={k}> {v} </Option>)
+                      ([k, v]) => (
+                        <Option key={k} value={k}>
+                          {' '}
+                          {v}
+                          {' '}
+                        </Option>
+                      )
                     )
                   }
                 </Select>
@@ -300,7 +311,9 @@ export default class JobList extends PureComponent {
               <Button type="primary" htmlType="submit">查询</Button>
               <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>重置</Button>
               <a style={{ marginLeft: 8 }} onClick={this.toggleForm}>
-                展开 <Icon type="down" />
+                展开
+                {' '}
+                <Icon type="down" />
               </a>
             </span>
           </Col>
@@ -333,7 +346,13 @@ export default class JobList extends PureComponent {
                   <Option value="">全部</Option>
                   {
                     Object.entries(statusMap).map(
-                      ([k, v]) => (<Option key={k} value={k}> {v} </Option>)
+                      ([k, v]) => (
+                        <Option key={k} value={k}>
+                          {' '}
+                          {v}
+                          {' '}
+                        </Option>
+                      )
                     )
                   }
                 </Select>
@@ -361,7 +380,9 @@ export default class JobList extends PureComponent {
               <Button type="primary" htmlType="submit">查询</Button>
               <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>重置</Button>
               <a style={{ marginLeft: 8 }} onClick={this.toggleForm}>
-                收起 <Icon type="up" />
+                收起
+                {' '}
+                <Icon type="up" />
               </a>
             </span>
           </Col>

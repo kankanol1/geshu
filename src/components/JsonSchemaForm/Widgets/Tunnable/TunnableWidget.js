@@ -22,7 +22,7 @@ export default class TunnableWidget extends CompositeWidget {
       dataCopy.tunableValue = [];
     }
     if (dataCopy.value === undefined) {
-      dataCopy.value = -1;
+      dataCopy.value = 0;
     }
     this.onFormDataChanged(dataCopy);
   }
@@ -30,7 +30,16 @@ export default class TunnableWidget extends CompositeWidget {
   renderTunableTypes() {
     return (
       <Row>
-        <Col span={8}><legend> {this.props.schema.properties.tunableType.description} {'*'} </legend></Col>
+        <Col span={8}>
+          <legend>
+            {' '}
+            {this.props.schema.properties.tunableType.description}
+            {' '}
+            {'*'}
+            {' '}
+          </legend>
+
+        </Col>
         <Col span={16}>
           <Select
             placeholder="请选择"
@@ -57,9 +66,9 @@ export default class TunnableWidget extends CompositeWidget {
     const { tunableType } = this.state.formData;
     return (
       <div>
-        <div >
+        <div>
           <Row>
-            <Col span={18} >
+            <Col span={18}>
               <TitleField title={displayTitle} />
             </Col>
             <Col span={6}>
@@ -74,10 +83,12 @@ export default class TunnableWidget extends CompositeWidget {
             </Col>
           </Row>
         </div>
-        {tunableType && tunableType !== 'FIXED' ?
-          (
+        {tunableType && tunableType !== 'FIXED'
+          ? (
             <React.Fragment>
-              {this.renderTunableTypes()} {this.renderSchema('tunableValue')}
+              {this.renderTunableTypes()}
+              {' '}
+              {this.renderSchema('tunableValue')}
             </React.Fragment>
           ) : this.renderSchema('value')}
       </div>
