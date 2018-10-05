@@ -202,117 +202,22 @@ export function getModelInfo(req, res, u, b) {
     servingSchema: [
       {
         nullable: true,
-        name: 'ZS_COUNT',
+        name: '年龄',
         type: 'double',
       },
       {
         nullable: true,
-        name: 'XB_ZW',
+        name: '犯罪次数',
+        type: 'double',
+      },
+      {
+        nullable: true,
+        name: '学历',
         type: 'string',
       },
       {
         nullable: true,
-        name: 'DQM_ZW',
-        type: 'string',
-      },
-      {
-        nullable: true,
-        name: 'WHCD_ZW',
-        type: 'string',
-      },
-      {
-        nullable: true,
-        name: 'MZ_ZW',
-        type: 'string',
-      },
-      {
-        nullable: true,
-        name: 'Grade3',
-        type: 'double',
-      },
-      {
-        nullable: true,
-        name: 'SW_COUNT',
-        type: 'double',
-      },
-      {
-        nullable: true,
-        name: 'COUNT_RELATION2',
-        type: 'double',
-      },
-      {
-        nullable: true,
-        name: 'FZ_COUNT',
-        type: 'double',
-      },
-      {
-        nullable: true,
-        name: 'AGE',
-        type: 'double',
-      },
-      {
-        nullable: true,
-        name: 'BYZK_ZW',
-        type: 'string',
-      },
-      {
-        nullable: true,
-        name: 'SFYC',
-        type: 'double',
-      },
-      {
-        nullable: true,
-        name: 'COUNT_RELATION1',
-        type: 'double',
-      },
-      {
-        nullable: true,
-        name: 'Grade2',
-        type: 'double',
-      },
-      {
-        nullable: true,
-        name: 'DangerRegions',
-        type: 'double',
-      },
-      {
-        nullable: true,
-        name: 'SSSSXQ_ZW',
-        type: 'string',
-      },
-      {
-        nullable: true,
-        name: 'HYZK_ZW',
-        type: 'string',
-      },
-      {
-        nullable: true,
-        name: 'Grade1',
-        type: 'double',
-      },
-      {
-        nullable: true,
-        name: 'GY_COUNT',
-        type: 'double',
-      },
-      {
-        nullable: true,
-        name: 'SFZZRK',
-        type: 'double',
-      },
-      {
-        nullable: true,
-        name: 'SFZT',
-        type: 'double',
-      },
-      {
-        nullable: true,
-        name: 'SFLDRK',
-        type: 'double',
-      },
-      {
-        nullable: true,
-        name: 'JTWZ_COUNT',
+        name: '是否在逃',
         type: 'double',
       },
     ],
@@ -326,8 +231,94 @@ export function getModelInfo(req, res, u, b) {
 
 export function getModelResult(req, res, u, b) {
   const response = {
+    message: '执行成功',
     success: true,
-    result: 'test result whatever',
+    data: {
+      schema: [
+        {
+          name: '年龄',
+          type: 'double',
+          nullable: true,
+        },
+        {
+          name: '犯罪次数',
+          type: 'double',
+          nullable: true,
+        },
+        {
+          name: '学历',
+          type: 'string',
+          nullable: true,
+        },
+        {
+          name: '是否在逃',
+          type: 'double',
+          nullable: true,
+        },
+        {
+          name: '学历_idx',
+          type: 'double',
+          nullable: false,
+        },
+        {
+          name: '学历_oneHot',
+          type: 'double',
+          nullable: true,
+        },
+        {
+          name: 'features_none',
+          type: 'double',
+          nullable: true,
+        },
+        {
+          name: 'features_standard_tmp',
+          type: 'double',
+          nullable: true,
+        },
+        {
+          name: 'features_standard',
+          type: 'double',
+          nullable: true,
+        },
+        {
+          name: 'features',
+          type: 'double',
+          nullable: true,
+        },
+        {
+          name: 'rawPrediction',
+          type: 'double',
+          nullable: true,
+        },
+        {
+          name: 'probability',
+          type: 'double',
+          nullable: true,
+        },
+        {
+          name: 'prediction',
+          type: 'double',
+          nullable: false,
+        },
+      ],
+      data: [
+        {
+          学历_idx: 19,
+          probability: '[0.8939003276284048, 0.1060996723715952]',
+          犯罪次数: 0,
+          features_standard_tmp: '[0.0]',
+          是否在逃: 0,
+          features_standard: '[0.0]',
+          学历: '',
+          features: '[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]',
+          rawPrediction: '[2.1312153209151674, -2.1312153209151674]',
+          prediction: 0,
+          年龄: 0,
+          学历_oneHot: '[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]',
+          features_none: '[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]',
+        },
+      ],
+    },
   };
   if (res && res.json) {
     res.json(response);
@@ -344,4 +335,3 @@ export default {
   getModelInfo,
   getModelResult,
 };
-

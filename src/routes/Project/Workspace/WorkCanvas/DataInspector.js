@@ -56,8 +56,8 @@ export default class DataInspector extends React.Component {
         <Table
           className={styles.table}
           style={{ marginTop: '10px' }}
-          columns={schema &&
-              schema.map(i => ({ width: 100, title: i.name, key: i.name, dataIndex: i.name }))}
+          columns={schema
+              && schema.map(i => ({ width: 100, title: i.name, key: i.name, dataIndex: i.name }))}
           dataSource={data.data || []}
           scroll={{ x: schema && schema.length * 100, y: 400 }}
           pagination={false}
@@ -78,48 +78,49 @@ export default class DataInspector extends React.Component {
         footer={null}
       >
         {
-        outputs.length === 0 ?
-        (<span>该组件无输出节点，无法查看</span>)
-        :
-        (
-          <Row>
-            <Col span={4}>
-              <span>查看输出点</span>
-            </Col>
-            <Col span={4}>
-              <Select value={this.state.output} style={{ width: '100%' }} onChange={e => this.setState({ output: e })} >
-                {
-                outputs && outputs.map(i =>
-                  <Select.Option key={i.id} value={i.id}>{i.id}</Select.Option>
-                )
-              }
-              </Select>
-            </Col>
-            <Col span={2} />
-            <Col span={14}>
-              <Button
-                type="primary"
-                onClick={(e) => {
+        outputs.length === 0
+          ? (<span>该组件无输出节点，无法查看</span>)
+          : (
+            <Row>
+              <Col span={4}>
+                <span>查看输出点</span>
+              </Col>
+              <Col span={4}>
+                <Select value={this.state.output} style={{ width: '100%' }} onChange={e => this.setState({ output: e })}>
+                  {
+                    outputs && outputs.map(i => (
+                      <Select.Option key={i.id} value={i.id}>
+                        {i.id}
+                      </Select.Option>
+                    ))
+                  }
+                </Select>
+              </Col>
+              <Col span={2} />
+              <Col span={14}>
+                <Button
+                  type="primary"
+                  onClick={(e) => {
                     e.preventDefault();
                     this.performQuery();
-                }}
-              > 查看
-              </Button>
-            </Col>
-          </Row>
-        )
+                  }}
+                > 查看
+                </Button>
+              </Col>
+            </Row>
+          )
       }
 
         <div className={styles.tableWrapper}>
           { loading ? <Spin className={styles.notTable} /> : (
-          success ? table : (
-            <span
-              className={styles.notTable}
-              style={{ display: 'inline-block', color: 'red' }}
-            >{message}
-            </span>
-          )
-        )}
+            success ? table : (
+              <span
+                className={styles.notTable}
+                style={{ display: 'inline-block', color: 'red' }}
+              >{message}
+              </span>
+            )
+          )}
         </div>
       </Modal>
     );

@@ -44,16 +44,16 @@ export default class InputSchemaSimpleForm extends React.Component {
       }}
       >
         <FormItem
-          labelCol={{ span: 5 }}
-          wrapperCol={{ span: 15 }}
-          label="请求参数"
+          labelCol={{ span: 3 }}
+          wrapperCol={{ span: 19 }}
+          label="请求内容"
         >
           {getFieldDecorator('value', {
-                rules: [{ required: true, message: '请求参数不能为空' }],
-                initialValue: JSON.stringify(generateJson),
-              })(
-                <TextArea rows={10} placeholder="请输入请求参数" />
-            )}
+            rules: [{ required: true, message: '请求参数不能为空' }],
+            initialValue: JSON.stringify(generateJson),
+          })(
+            <TextArea rows={10} placeholder="请输入请求参数" />
+          )}
         </FormItem>
         <Row>
           <Col span={8} />
@@ -68,7 +68,7 @@ export default class InputSchemaSimpleForm extends React.Component {
                 this.props.dispatch({
                   type: 'modeltest/resetResult',
                 });
-            }}
+              }}
             >清空
             </Button>
           </Col>

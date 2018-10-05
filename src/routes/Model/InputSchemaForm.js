@@ -22,22 +22,28 @@ export default class InputSchemaForm extends React.Component {
         });
       }}
       >
-        {
-          renderFields.map(i => (
-            <FormItem
-              key={i}
-              labelCol={{ span: 5 }}
-              wrapperCol={{ span: 15 }}
-              label={i.name}
+        <Row gutter={24}>
+          {
+          renderFields.map((i, k) => (
+            <Col
+              span={12}
+              key={k}
             >
-              {getFieldDecorator(i.name, {
-                rules: [{ required: true, message: `${i.name}不能为空` }],
-              })(
-                <Input placeholder="请输入" />
-            )}
-            </FormItem>
+              <FormItem
+                labelCol={{ span: 5 }}
+                wrapperCol={{ span: 15 }}
+                label={i.name}
+              >
+                {getFieldDecorator(i.name, {
+                  rules: [{ required: true, message: `${i.name}不能为空` }],
+                })(
+                  <Input placeholder="请输入" />
+                )}
+              </FormItem>
+            </Col>
           ))
         }
+        </Row>
         <Row>
           <Col span={8} />
           <Col span={4}>
@@ -51,7 +57,7 @@ export default class InputSchemaForm extends React.Component {
                 this.props.dispatch({
                   type: 'modeltest/resetResult',
                 });
-            }}
+              }}
             >清空
             </Button>
           </Col>
