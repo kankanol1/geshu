@@ -327,6 +327,26 @@ export function getModelResult(req, res, u, b) {
   }
 }
 
+export function getModelMetrics(req, res, u, b) {
+  const response = {
+    name: '2_18_模型存储1538746943901_metrics',
+    modelId: 28,
+    tuningMethod: 'TrainValidationSplit',
+    evaluator: 'binEval_34f330543670',
+    bestMetrics: 0.6961732066304913,
+    bestParameters: {
+      logreg_a4026844c1eb__maxIter: '10',
+    },
+    largerBetter: true,
+  };
+
+  if (res && res.json) {
+    res.json(response);
+  } else {
+    return response;
+  }
+}
+
 export default {
   getModels,
   deleteModels,
@@ -334,4 +354,5 @@ export default {
   addModel,
   getModelInfo,
   getModelResult,
+  getModelMetrics,
 };

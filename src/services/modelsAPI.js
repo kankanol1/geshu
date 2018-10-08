@@ -92,6 +92,10 @@ export async function executeModel(id, params) {
   });
 }
 
+export async function getModelMetricsDetails(id) {
+  return request(`/api/models/get/metrics/${id}`, { method: 'GET' });
+}
+
 export default {
   updateModel,
   removeModels,
@@ -104,4 +108,5 @@ export default {
   offlineServingModels,
   queryModelDetails,
   executeModel,
+  getModelMetricsDetails,
 };

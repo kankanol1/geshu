@@ -6,6 +6,7 @@ import { Popconfirm, Row, Col, Card, Form, Input, Button, DatePicker, Divider } 
 import StandardTable from '../../components/StandardTable';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './ModelList.less';
+import ModelDetailsDialog from './ModelDetailsDialog';
 
 const FormItem = Form.Item;
 const { RangePicker } = DatePicker;
@@ -25,7 +26,13 @@ export default class ServingModelList extends PureComponent {
     expendForm: false,
     currentRecord: undefined,
     formValues: [],
+    modelMetrics: {
+      visible: false,
+      id: undefined,
+    },
   }
+
+  refreshParams = {}
 
   componentDidMount() {
     const { dispatch } = this.props;
@@ -67,9 +74,14 @@ export default class ServingModelList extends PureComponent {
         title: '操作',
         render: (text, record) => (
           (currentUser.userName === record.onlinedBy || currentUser.role === 'admin')
-            ?
-            (
+            ? (
               <React.Fragment>
+                <a onClick={() => {
+                  this.setState({ modelMetrics: { visible: true, id: record.id } });
+                }}
+                >详细
+                </a>
+                <Divider type="vertical" />
                 <Link to={`/models/serving/test/${record.id}`}>模型测试</Link>
                 <Divider type="vertical" />
                 <Popconfirm title="确认下线吗?" onConfirm={() => this.handleRecordDelete(record)}>
@@ -82,8 +94,6 @@ export default class ServingModelList extends PureComponent {
       },
     ];
   };
-
-  refreshParams = {}
 
   /**
    * perform query and store query params locally.
@@ -120,7 +130,6 @@ export default class ServingModelList extends PureComponent {
 
   handleSelectRows = (rows) => {
     this.setState({
-      ...this.state,
       selectedRows: rows,
     });
   }
@@ -184,7 +193,6 @@ export default class ServingModelList extends PureComponent {
     });
     // update selection.
     this.setState({
-      ...this.state,
       selectedRows: [],
     });
   }
@@ -242,7 +250,7 @@ export default class ServingModelList extends PureComponent {
   render() {
     const { servingmodels: { data }, loading } = this.props;
     const { selectedRows } = this.state;
-
+    const { id, visible } = this.state.modelMetrics;
     return (
       <PageHeaderLayout
         breadcrumbList={[{
@@ -274,6 +282,11 @@ export default class ServingModelList extends PureComponent {
             columns={this.getColumns(this.props.currentUser)}
             onSelectRow={this.handleSelectRows}
             onChange={this.handleStandardTableChange}
+          />
+          <ModelDetailsDialog
+            id={id}
+            visible={visible}
+            onCancel={() => { this.setState({ modelMetrics: { visible: false, id: undefined } }); }}
           />
         </Card>
       </PageHeaderLayout>

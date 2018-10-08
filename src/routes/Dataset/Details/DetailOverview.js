@@ -32,6 +32,7 @@ export default class DetailOverview extends PureComponent {
     this.setState({ loading: true });
     setTimeout(() => this.fetchIfStillLoading(), 100);
   }
+
   formatHeatMapData = (data) => {
     const { heatMap } = data;
     const { columns, values } = heatMap;
@@ -62,6 +63,7 @@ export default class DetailOverview extends PureComponent {
       },
     });
   }
+
   formatStatisticsData = (data) => {
     const { columns, histograms, statistics } = data;
     const columnsData = [];
@@ -89,12 +91,14 @@ export default class DetailOverview extends PureComponent {
       statistics: columnsData,
     });
   }
+
   clearData = () => {
     this.setState({
       heatmap: { },
       statistics: [],
     });
   }
+
   fetchIfStillLoading = () => {
     const queryAPI = this.props.type === 'private' ? queryPrivateDatasetStatistics : queryDatasetStatistics;
     queryAPI({ id: this.props.datasetId }).then(
@@ -123,6 +127,7 @@ export default class DetailOverview extends PureComponent {
       },
     );
   }
+
   renderNumberChart = (statistics, data) => {
     return (
       <div>
@@ -145,8 +150,7 @@ export default class DetailOverview extends PureComponent {
           <Row>
             {Object.keys(statistics)
               .filter(k => Object.keys(keyTranslate).includes(k))
-              .map(key =>
-              (
+              .map(key => (
                 <Col key={key} style={{ marginBottom: '2px' }}>
                   <div className={styles.statisticsProcessItem}>
                     <div className={styles.statisticsProcessLabel}>{keyTranslate[key]}</div>
@@ -158,36 +162,37 @@ export default class DetailOverview extends PureComponent {
                   </div>
                 </Col>
               )
-            )
+              )
             }
           </Row>
         </div>
       </div>
     );
   }
+
   renderStringChart = (data) => {
     return (
       <Row>
-        {data.map((item, i) =>
-          (
-            <Col key={i} style={{ marginBottom: '2px' }}>
-              <div className={styles.stringChartBox}>
-                <div className={styles.stringChartProcessBox}>
-                  <div className={styles.stringChartTitle}>{item.range}</div>
-                  <div
-                    className={styles.stringChartProcess}
-                    style={{ width: `${item.v}` }}
-                  />
-                </div>
-                <div className={styles.stringChartLabel}>{item.count}</div>
+        {data.map((item, i) => (
+          <Col key={i} style={{ marginBottom: '2px' }}>
+            <div className={styles.stringChartBox}>
+              <div className={styles.stringChartProcessBox}>
+                <div className={styles.stringChartTitle}>{item.range}</div>
+                <div
+                  className={styles.stringChartProcess}
+                  style={{ width: `${item.v}` }}
+                />
               </div>
-            </Col>
-          )
+              <div className={styles.stringChartLabel}>{item.count}</div>
+            </div>
+          </Col>
+        )
         )
         }
       </Row>
     );
   }
+
   renderStatistics = () => {
     const { statistics, loading, dataLoading, loadingMessage } = this.state;
     if (loading) {
@@ -204,57 +209,57 @@ export default class DetailOverview extends PureComponent {
     return (
       <Card title="列统计">
         <Row>
-          {statistics.map((item, i) =>
-            (
-              <Col span={12} key={i}>
-                <Card
-                  style={{ width: '100%', padding: '0' }}
-                  bodyStyle={{ padding: '20px' }}
-                  title={item.name}
-                >
-                  {/* <div className={styles.statisticsTitle}>
+          {statistics.map((item, i) => (
+            <Col span={12} key={i}>
+              <Card
+                style={{ width: '100%', padding: '0' }}
+                bodyStyle={{ padding: '20px' }}
+                title={item.name}
+              >
+                {/* <div className={styles.statisticsTitle}>
                     {item.name}
                   </div> */}
-                  <div className={styles.statisticsProcess}>
-                    <div
-                      className={styles.statisticsProcessChart}
-                      style={{
-                        width: (((item.statisticsData.count - item.statisticsData.nullNum)/item.statisticsData.count) * 100).toFixed(2) + '%',
-                      }}
-                    />
-                  </div>
-                  <div className={styles.statisticsProcessBox}>
-                    <div className={styles.statisticsProcessItem}>
-                      <div className={styles.statisticsProcessLabel}>总条数</div>
-                      <div className={styles.statisticsProcessCount}>
-                        <span className={styles.fontBlue}>
-                          {item.statisticsData.count}
-                        </span>
-                      </div>
-                    </div>
-                    <div className={styles.statisticsProcessItem}>
-                      <div className={styles.statisticsProcessLabel}>空值</div>
-                      <div className={styles.statisticsProcessCount}>
-                        <span className={styles.fontBlack}>
-                          {item.statisticsData.nullNum}
-                        </span>
-                      </div>
+                <div className={styles.statisticsProcess}>
+                  <div
+                    className={styles.statisticsProcessChart}
+                    style={{
+                      width: `${(((item.statisticsData.count - item.statisticsData.nullNum) / item.statisticsData.count) * 100).toFixed(2)}%`,
+                    }}
+                  />
+                </div>
+                <div className={styles.statisticsProcessBox}>
+                  <div className={styles.statisticsProcessItem}>
+                    <div className={styles.statisticsProcessLabel}>总条数</div>
+                    <div className={styles.statisticsProcessCount}>
+                      <span className={styles.fontBlue}>
+                        {item.statisticsData.count}
+                      </span>
                     </div>
                   </div>
-                  <div>
-                    {item.type === 'numeric' ?
-                      this.renderNumberChart(item.statisticsData, item.histogramsData) :
-                      this.renderStringChart(item.histogramsData)
+                  <div className={styles.statisticsProcessItem}>
+                    <div className={styles.statisticsProcessLabel}>空值</div>
+                    <div className={styles.statisticsProcessCount}>
+                      <span className={styles.fontBlack}>
+                        {item.statisticsData.nullNum}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  {item.type === 'numeric'
+                    ? this.renderNumberChart(item.statisticsData, item.histogramsData)
+                    : this.renderStringChart(item.histogramsData)
                     }
-                  </div>
-                </Card>
-              </Col>
-            )
+                </div>
+              </Card>
+            </Col>
+          )
           )
           }
         </Row>
       </Card>);
   }
+
   renderHeatmap = () => {
     const { heatmap, loading, dataLoading, loadingMessage } = this.state;
     const { data, cols } = heatmap;

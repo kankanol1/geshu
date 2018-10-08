@@ -4,6 +4,7 @@ import moment from 'moment';
 import { getJobDetails } from '../../../../services/jobsAPI';
 import { removeCandidateModels } from '../../../../services/modelsAPI';
 import { removePrivateDataset } from '../../../../services/datasetAPI';
+import ModelDetailsDialog from '../../../Model/ModelDetailsDialog';
 
 export default class JobOutput extends React.PureComponent {
   state={
@@ -11,6 +12,10 @@ export default class JobOutput extends React.PureComponent {
     loading: true,
     dataLoading: false,
     modelLoading: false,
+    modelMetrics: {
+      visible: false,
+      id: undefined,
+    },
   }
 
   componentWillMount() {
@@ -61,6 +66,7 @@ export default class JobOutput extends React.PureComponent {
       return <Spin />;
     }
     const { dataList, modelList } = data;
+    const { visible, id } = this.state.modelMetrics;
     return (
       <Row gutter={24}>
         <Col span={12}>
@@ -80,9 +86,9 @@ export default class JobOutput extends React.PureComponent {
                       size="small"
                       type="primary"
                       onClick={() => {
-                      const { onDataClicked } = this.props;
-                      if (onDataClicked) onDataClicked(item.id);
-                    }}
+                        const { onDataClicked } = this.props;
+                        if (onDataClicked) onDataClicked(item.id);
+                      }}
                     >查看
                     </Button>]
                   }
@@ -107,6 +113,11 @@ export default class JobOutput extends React.PureComponent {
               item => (
                 <List.Item actions={
                   [
+                    <a onClick={() => {
+                      this.setState({ modelMetrics: { visible: true, id: item.id } });
+                    }}
+                    >详细
+                    </a>,
                     <Popconfirm title="确认删除吗?" onConfirm={() => this.handleModelDelete(item.id)}>
                       <a>删除</a>
                     </Popconfirm>,
@@ -114,9 +125,9 @@ export default class JobOutput extends React.PureComponent {
                       size="small"
                       type="primary"
                       onClick={() => {
-                      const { onModelClicked } = this.props;
-                      if (onModelClicked) onModelClicked(item.id);
-                    }}
+                        const { onModelClicked } = this.props;
+                        if (onModelClicked) onModelClicked(item.id);
+                      }}
                     >测试
                     </Button>]
                   }
@@ -128,6 +139,14 @@ export default class JobOutput extends React.PureComponent {
                 </List.Item>
               )
             }
+            />
+
+            <ModelDetailsDialog
+              id={id}
+              visible={visible}
+              onCancel={() => {
+                this.setState({ modelMetrics: { visible: false, id: undefined } });
+              }}
             />
           </Card>
         </Col>

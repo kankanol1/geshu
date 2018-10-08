@@ -6,6 +6,7 @@ import { Popconfirm, Tag, Row, Col, Card, Form, Input, Select, Icon, Button, Men
 import StandardTable from '../../components/StandardTable';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './ModelList.less';
+import ModelDetailsDialog from './ModelDetailsDialog';
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -90,13 +91,10 @@ export default class CandidateModelList extends PureComponent {
     expendForm: false,
     currentRecord: undefined,
     formValues: [],
-  }
-
-  componentDidMount() {
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'candidatemodels/fetchCandidateModelList',
-    });
+    modelMetrics: {
+      visible: false,
+      id: undefined,
+    },
   }
 
   columns = [
@@ -131,26 +129,31 @@ export default class CandidateModelList extends PureComponent {
       title: '操作',
       render: (text, record) => (
         <Fragment>
+          <a onClick={() => {
+            this.setState({ modelMetrics: { visible: true, id: record.id } });
+          }}
+          >详细
+          </a>
+          <Divider type="vertical" />
           <Popconfirm title="确认公开至模型库吗?" onConfirm={() => this.changeMakePublic(record)}>
             <a>公开</a>
           </Popconfirm>
           <Divider type="vertical" />
           {
             record.isOnline
-            ? (
-              <Popconfirm title="确认下线吗?" onConfirm={() => this.handleOfflineModel(record)}>
-                <a>下线</a>
-              </Popconfirm>
+              ? (
+                <Popconfirm title="确认下线吗?" onConfirm={() => this.handleOfflineModel(record)}>
+                  <a>下线</a>
+                </Popconfirm>
               )
-               :
-               (
-                 <Popconfirm title="确认上线吗?" onConfirm={() => this.handleOnlineModel(record)}>
-                   <a>上线</a>
-                 </Popconfirm>
+              : (
+                <Popconfirm title="确认上线吗?" onConfirm={() => this.handleOnlineModel(record)}>
+                  <a>上线</a>
+                </Popconfirm>
               )
           }
           <Divider type="vertical" />
-          <a onClick={() => this.handleEdit(record)} >编辑</a>
+          <a onClick={() => this.handleEdit(record)}>编辑</a>
           <Divider type="vertical" />
           <span>
             <Popconfirm title="确认删除吗?" onConfirm={() => this.handleRecordDelete(record)}>
@@ -163,6 +166,13 @@ export default class CandidateModelList extends PureComponent {
   ];
 
   refreshParams = {}
+
+  componentDidMount() {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'candidatemodels/fetchCandidateModelList',
+    });
+  }
 
   /**
    * perform query and store query params locally.
@@ -399,6 +409,7 @@ export default class CandidateModelList extends PureComponent {
       handleUpdate: this.handleUpdate,
     };
 
+    const { visible, id } = this.state.modelMetrics;
     return (
       <PageHeaderLayout>
         <Card>
@@ -435,6 +446,11 @@ export default class CandidateModelList extends PureComponent {
         <ModifyForm
           {...parentMethods}
           modalVisible={modalVisible}
+        />
+        <ModelDetailsDialog
+          id={id}
+          visible={visible}
+          onCancel={() => { this.setState({ modelMetrics: { visible: false, id: undefined } }); }}
         />
       </PageHeaderLayout>
     );

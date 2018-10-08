@@ -128,7 +128,8 @@ export default class WorkspaceMenu extends React.PureComponent {
   }
 
   handleValidatePipelineModalClose() {
-    this.setState({ validatePipelineModal: { ...this.state.validatePipelineModal, visible: false } });
+    this.setState({ validatePipelineModal: {
+      ...this.state.validatePipelineModal, visible: false } });
   }
 
   renderRecentProjects() {

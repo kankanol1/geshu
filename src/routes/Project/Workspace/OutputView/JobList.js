@@ -45,10 +45,6 @@ export default class JobList extends PureComponent {
     selectedRows: [],
   }
 
-  componentDidMount() {
-    this.performQuery();
-  }
-
   refreshParams = {};
 
   columns = [
@@ -114,6 +110,10 @@ export default class JobList extends PureComponent {
       },
     },
   ];
+
+  componentDidMount() {
+    this.performQuery();
+  }
 
   performQuery = (params = {}) => {
     const { dispatch, id } = this.props;
