@@ -6,6 +6,13 @@ import { Chart, Geom, Axis, Tooltip, Label } from 'bizcharts';
 import { queryPrivateDatasetStatistics, queryDatasetStatistics } from '../../../services/datasetAPI';
 import styles from './DetailOverview.less';
 
+const keyTranslate = {
+  min: '最小值',
+  max: '最大值',
+  mean: '平均值',
+  stdev: '标准差',
+};
+
 export default class DetailOverview extends PureComponent {
   static defaultProps = {
     type: 'normal',
@@ -118,23 +125,32 @@ export default class DetailOverview extends PureComponent {
     return (
       <div>
         <Chart
-          height={100}
-          padding={0}
+          height={220}
+          padding={[20, 20, 60, 50]}
           data={data}
-          width={400}
+          scale={{
+            range: { alias: '范围' },
+            count: { alias: '总数' },
+          }}
+          forceFit
         >
+          <Axis name="range" title />
+          <Axis name="count" title />
+          <Tooltip />
           <Geom type="interval" position="range*count" />
         </Chart>
         <div className={styles.statisticsProcessBox}>
           <Row>
-            {Object.keys(statistics).map(key =>
+            {Object.keys(statistics)
+              .filter(k => Object.keys(keyTranslate).includes(k))
+              .map(key =>
               (
                 <Col key={key} style={{ marginBottom: '2px' }}>
                   <div className={styles.statisticsProcessItem}>
-                    <div className={styles.statisticsProcessLabel}>{key}</div>
+                    <div className={styles.statisticsProcessLabel}>{keyTranslate[key]}</div>
                     <div className={styles.statisticsProcessCount}>
                       <span className={styles.fontGrey}>
-                        {statistics[key]}
+                        {parseFloat(statistics[key]).toFixed(2)}
                       </span>
                     </div>
                   </div>
@@ -188,14 +204,15 @@ export default class DetailOverview extends PureComponent {
         <Row>
           {statistics.map((item, i) =>
             (
-              <Col span={8} key={i}>
+              <Col span={12} key={i}>
                 <Card
                   style={{ width: '100%', padding: '0' }}
-                  bodyStyle={{ padding: 0 }}
+                  bodyStyle={{ padding: '20px' }}
+                  title={item.name}
                 >
-                  <div className={styles.statisticsTitle}>
+                  {/* <div className={styles.statisticsTitle}>
                     {item.name}
-                  </div>
+                  </div> */}
                   <div className={styles.statisticsProcess}>
                     <div
                       className={styles.statisticsProcessChart}
@@ -206,7 +223,7 @@ export default class DetailOverview extends PureComponent {
                   </div>
                   <div className={styles.statisticsProcessBox}>
                     <div className={styles.statisticsProcessItem}>
-                      <div className={styles.statisticsProcessLabel}>Count</div>
+                      <div className={styles.statisticsProcessLabel}>总条数</div>
                       <div className={styles.statisticsProcessCount}>
                         <span className={styles.fontBlue}>
                           {item.statisticsData.count}
@@ -214,7 +231,7 @@ export default class DetailOverview extends PureComponent {
                       </div>
                     </div>
                     <div className={styles.statisticsProcessItem}>
-                      <div className={styles.statisticsProcessLabel}>Empty</div>
+                      <div className={styles.statisticsProcessLabel}>空值</div>
                       <div className={styles.statisticsProcessCount}>
                         <span className={styles.fontBlack}>
                           {item.statisticsData.count - item.statisticsData.nullNum}

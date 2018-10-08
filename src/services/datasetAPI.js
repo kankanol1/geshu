@@ -78,10 +78,6 @@ export async function queryDatasetHistogram(params) {
   return request(`/api/dataset/query/histogram?${stringify(params)}`);
 }
 
-export async function queryFieldsStatisticsData(params) {
-  return request(`/api/dataset/query/statistics?${stringify(params)}`);
-}
-
 export async function queryPrivateDatasetStatistics(params) {
   return request(`/api/dataset/private/query/statistics?${stringify(params)}`);
 }
@@ -114,5 +110,4 @@ export default {
   queryDatasetData,
   queryDatasetStatistics,
   queryDatasetHistogram,
-  queryFieldsStatisticsData,
 };
