@@ -40,7 +40,7 @@ export default class ColumnSelectCheckboxWidget extends React.Component {
     const { data } = this.state;
     // translate data to checkbox.
     const renderData = schema.map(i => ({
-      name: `${i.name}(${i.type})`, checked: data ? data.includes(i.name) : false }));
+      name: i.name, disName: `${i.name}(${i.type})`, checked: data ? data.includes(i.name) : false }));
     return (
       <ConfigurationTable
         onChange={(v) => {
@@ -54,7 +54,7 @@ export default class ColumnSelectCheckboxWidget extends React.Component {
           }
         data={renderData}
         columns={[{
-          name: 'name',
+          name: 'disName',
           title: '列名',
           render: (v, item, onChange) => (
             <Input defaultValue={v} value={v} disabled />
