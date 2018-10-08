@@ -236,7 +236,7 @@ export default class DetailOverview extends PureComponent {
                       <div className={styles.statisticsProcessLabel}>空值</div>
                       <div className={styles.statisticsProcessCount}>
                         <span className={styles.fontBlack}>
-                          {item.statisticsData.count - item.statisticsData.nullNum}
+                          {item.statisticsData.nullNum}
                         </span>
                       </div>
                     </div>
