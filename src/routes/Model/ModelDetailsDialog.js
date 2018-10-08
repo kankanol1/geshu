@@ -32,19 +32,21 @@ export default class ModelDetailsDialog extends React.Component {
   }
 
   renderResult = (result) => {
+    const { data, success } = result;
+    if (!data) { return '无相应度量数据'; }
     return (
       <div style={{ maxHeight: '600px', overflow: 'auto' }}>
-        <span>调优方法: {result.tuningMethod}</span>
+        <span>调优方法: {data.tuningMethod}</span>
         <Divider />
-        <span>最优度量: {result.bestMetrics}</span>
+        <span>最优度量: {data.bestMetrics}</span>
         <Divider />
-        <span>比较方法: {result.largerBetter ? '度量数值越大越好' : '度量数值越小越好'}</span>
+        <span>比较方法: {data.largerBetter ? '度量数值越大越好' : '度量数值越小越好'}</span>
 
         <Divider>最优参数列表</Divider>
-        {Object.keys(result.bestParameters).map((item) => {
+        {Object.keys(data.bestParameters).map((item) => {
           return (
             <React.Fragment key={item}>
-              <span>{item}={result.bestParameters[item]}</span> <br />
+              <span>{item}={data.bestParameters[item]}</span> <br />
             </React.Fragment>
           );
         })}
