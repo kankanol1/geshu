@@ -123,12 +123,12 @@ export default class WorkspaceMenu extends React.PureComponent {
       id: match.params.id,
     });
     result.then(a => this.setState({ validatePipelineModal: {
-      loading: false, result: a,
+      ...this.state.validatePipelineModal, loading: false, result: a,
     } }));
   }
 
   handleValidatePipelineModalClose() {
-    this.setState({ validatePipelineModal: { visible: false } });
+    this.setState({ validatePipelineModal: { ...this.state.validatePipelineModal, visible: false } });
   }
 
   renderRecentProjects() {
