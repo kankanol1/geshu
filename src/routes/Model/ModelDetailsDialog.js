@@ -22,6 +22,8 @@ export default class ModelDetailsDialog extends React.Component {
   }
 
   fetchDisplayData(id) {
+    // skip undefinded.
+    if (!id) return;
     this.setState({ loading: true });
     getModelMetricsDetails(id)
       .then((response) => {
