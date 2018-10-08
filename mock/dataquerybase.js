@@ -167,7 +167,7 @@ export function getTableStatistics(req, res, u, b) {
       },
       c1: {
         nullNum: 0,
-        count: 0,
+        count: 3,
         min: 0,
         mean: 0,
         max: 0,

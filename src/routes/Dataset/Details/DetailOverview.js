@@ -219,7 +219,7 @@ export default class DetailOverview extends PureComponent {
                     <div
                       className={styles.statisticsProcessChart}
                       style={{
-                        width: '80%',
+                        width: (((item.statisticsData.count - item.statisticsData.nullNum)/item.statisticsData.count) * 100).toFixed(2) + '%',
                       }}
                     />
                   </div>
