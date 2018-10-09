@@ -164,7 +164,7 @@ export default class JobList extends PureComponent {
       payload: {
         ids,
       },
-      callback: () => this.performQuery(),
+      callback: () => this.performQuery(this.refreshParams),
     });
     // update selection.
     this.setState({
@@ -207,6 +207,11 @@ export default class JobList extends PureComponent {
     return (
       <Card>
         <div className={styles.tableList}>
+          <div className={styles.tableListForm}>
+            <Button type="primary" onClick={() => this.performQuery(this.refreshParams)}>
+              <Icon type="sync" /> 刷新
+            </Button>
+          </div>
           <div className={styles.tableListOperator}>
             <Popconfirm title="确认删除吗?" onConfirm={() => this.handleMultiDelete()}>
               {

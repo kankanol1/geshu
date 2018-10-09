@@ -10,6 +10,14 @@ export default class SubmitPipelineModal extends React.Component {
   handleSubmitPipelineModalOk() {
     this.handleSubmitPipelineModalCancel();
     const { dispatch } = this.props;
+    // set to default.
+    // go to job list.
+    dispatch({
+      type: 'outputview/activePane',
+      payload: {
+        title: 'default',
+      },
+    });
     dispatch(routerRedux.push(`/project/workspace/output/${this.props.id}`));
   }
 
