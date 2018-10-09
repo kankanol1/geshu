@@ -6,6 +6,7 @@ const nameMapping = {
   Feature: '特征提取',
   Regression: '回归算法',
   Classification: '分类算法',
+  Clustering: '聚类算法',
 
   /** component groups and components */
   DataSink: '数据存储',

@@ -973,6 +973,40 @@ const componentList = [
     ],
   },
   {
+    name: 'Clustering',
+    key: 'Clustering',
+    components: [
+      {
+        name: 'KMeansStage',
+        code: 'KMeansStage',
+        type: 'Stage',
+        inputs: [
+          {
+            id: 'i1',
+            label: 'all',
+            hint: 'all',
+            x: 3,
+            y: 0.5,
+            connects: [
+              'Model',
+              'Dataset',
+            ],
+          },
+        ],
+        outputs: [
+          {
+            id: 'o1',
+            label: 'model',
+            hint: 'Model',
+            x: 1,
+            y: 0.5,
+            type: 'Model',
+          },
+        ],
+      },
+    ],
+  },
+  {
     name: 'Feature',
     key: 'Feature',
     components: [
@@ -1097,34 +1131,6 @@ const componentList = [
             id: 'i1',
             label: 'dataset',
             hint: 'dataset',
-            x: 3,
-            y: 0.5,
-            connects: [
-              'Model',
-              'Dataset',
-            ],
-          },
-        ],
-        outputs: [
-          {
-            id: 'o1',
-            label: 'model',
-            hint: 'Model',
-            x: 1,
-            y: 0.5,
-            type: 'Model',
-          },
-        ],
-      },
-      {
-        name: 'KMeansStage',
-        code: 'KMeansStage',
-        type: 'Stage',
-        inputs: [
-          {
-            id: 'i1',
-            label: 'all',
-            hint: 'all',
             x: 3,
             y: 0.5,
             connects: [

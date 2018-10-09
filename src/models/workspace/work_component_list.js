@@ -1,7 +1,7 @@
 import { fetchComponentList } from '../../services/componentAPI';
 import translateName from '../../config/ComponentNameMapping';
 
-const groupOrder = ['DataSource', 'ModelSource', 'Transformer', 'Feature', 'Regression', 'Classification', 'Tuner', 'ModelSink', 'DataSink', 'Predictor'];
+const groupOrder = ['DataSource', 'ModelSource', 'Transformer', 'Feature', 'Regression', 'Classification', 'Clustering', 'Tuner', 'ModelSink', 'DataSink', 'Predictor'];
 
 export default {
   namespace: 'work_component_list',
