@@ -26,6 +26,19 @@ class PointLayer extends React.Component {
     return result;
   }
 
+  handleDragStart = (e) => {
+    // trigger canvas drag.
+    if (this.props.isMoveMode) return false;
+    e.preventDefault();
+    // stop propagation to parent.
+    e.stopPropagation();
+
+    // hide context menu if possible.
+    this.props.dispatch({
+      type: 'workcanvas/hideContextMenu',
+    });
+  }
+
   handleDragStop(e) {
     e.preventDefault();
     // calculate overlapped points.
@@ -37,8 +50,8 @@ class PointLayer extends React.Component {
     const overlapped = [];
     Object.entries(canvas.componentSocketPositionCache).forEach(([id, positionDict]) => {
       Object.entries(positionDict).forEach(([pid, { x, y }]) => {
-        if (Math.abs(x - draggingTarget.x) <= overlapRange &&
-            Math.abs(y - draggingTarget.y) <= overlapRange) {
+        if (Math.abs(x - draggingTarget.x) <= overlapRange
+            && Math.abs(y - draggingTarget.y) <= overlapRange) {
           overlapped.push(`${id}-${pid}`);
         }
       });
@@ -81,7 +94,7 @@ class PointLayer extends React.Component {
           // candidate is output, meaning dragging source should be an output.
           // add connectFrom to the candidate point.
           // add new line.
-          if (model.connections.length === 0) {
+          if (model.connections.filter(conn => conn.to === draggingPoint).length === 0) {
             // only add when the input point is not connected.
             const newOp = new ConnectionAdd(model, new Connection(
               candidate.component.id,
@@ -107,7 +120,8 @@ class PointLayer extends React.Component {
         if (candidate.component.id === draggingComponent) {
           message.info('暂不能将同一组件首位相连');
         } else if (candidate.connects.includes(draggingType)) {
-          if (candidate.component.connections.length === 0) {
+          if (candidate.component.connections.filter(
+            conn => conn.to === candidate.pointId).length === 0) {
             const newOp = new ConnectionAdd(candidate.component, new Connection(
               draggingComponent, draggingPoint, candidate.pointId,
             ));
@@ -127,22 +141,10 @@ class PointLayer extends React.Component {
     });
   }
 
-  handleDragStart = (e) => {
-    // trigger canvas drag.
-    if (this.props.isMoveMode) return false;
-    e.preventDefault();
-    // stop propagation to parent.
-    e.stopPropagation();
-
-    // hide context menu if possible.
-    this.props.dispatch({
-      type: 'workcanvas/hideContextMenu',
-    });
-  }
-
   handleMouseEnter(e, id) {
     this.setState({ hovering: [id] });
   }
+
   handleMouseLeave() {
     this.setState({ hovering: [] });
   }
@@ -169,10 +171,10 @@ class PointLayer extends React.Component {
         y: originy,
       },
       draggingTarget: {
-        x: (draggingTarget.x == null ? originx :
-          draggingTarget.x) + (deltaX * scaleParam),
-        y: (draggingTarget.y == null ? originy :
-          draggingTarget.y) + (deltaY * scaleParam),
+        x: (draggingTarget.x == null ? originx
+          : draggingTarget.x) + (deltaX * scaleParam),
+        y: (draggingTarget.y == null ? originy
+          : draggingTarget.y) + (deltaY * scaleParam),
       },
       draggingMetaType: point.metatype,
       ...varObj,
@@ -181,8 +183,8 @@ class PointLayer extends React.Component {
 
   render() {
     const { inputs, outputs } = this.props.model;
-    const pointDict = this.props.positionDict === undefined ?
-      calculatePointPositionDict(this.props.model)
+    const pointDict = this.props.positionDict === undefined
+      ? calculatePointPositionDict(this.props.model)
       : this.props.positionDict[this.props.model.id];
 
     const renderPoint = (p, i, type) => {
@@ -193,20 +195,20 @@ class PointLayer extends React.Component {
       return (
         <React.Fragment key={i}>
           <DraggableCore
-            onDrag={(e, draggableData) =>
-              this.handleDrag(e, draggableData, point, { x: offsetX + r, y })}
+            onDrag={(e, draggableData) => this.handleDrag(e,
+              draggableData, point, { x: offsetX + r, y })}
             onStop={e => this.handleDragStop(e)}
             onStart={e => this.handleDragStart(e)}
           >
             <div
               style={{
-            width: `${r * 2}px`,
-            height: `${r * 2}px`,
-            transform: `translate(${offsetX}px, ${y - r}px)`,
-            lineHeight: `${(r * 2) - 6}px`,
-            fontSize: `${r}px`,
-            background: 'white',
-          }}
+                width: `${r * 2}px`,
+                height: `${r * 2}px`,
+                transform: `translate(${offsetX}px, ${y - r}px)`,
+                lineHeight: `${(r * 2) - 6}px`,
+                fontSize: `${r}px`,
+                background: 'white',
+              }}
               className={styles.pointDiv}
               onMouseEnter={e => this.handleMouseEnter(e, point.id)}
               onMouseLeave={e => this.handleMouseLeave(e, point.id)}

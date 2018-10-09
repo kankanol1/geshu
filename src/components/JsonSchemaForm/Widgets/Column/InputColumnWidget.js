@@ -15,7 +15,7 @@ export default class InputColumnWidget extends React.PureComponent {
         <SelectWidget
           {...this.props}
           value={this.props.formData.value}
-          options={{ enumOptions: schema.map((i) => { return { label: i, value: i }; }) }}
+          options={{ enumOptions: schema.map((i) => { return { label: `${i.name}(${i.type})`, value: i.name }; }) }}
           onChange={(v) => { this.props.onChange({ value: v }); }}
         />
       );

@@ -22,11 +22,21 @@ export default class RandomSplitWidget extends React.PureComponent {
   }
 
   handleValueChange(v) {
-    this.setState({ value: v }, () => {
-      this.props.onChange({ firstWeight: { value: v },
-        secondWeight: { value: parseFloat((1 - v).toFixed(2)) } }
+    let nv = parseFloat(v);
+    if (isNaN(nv)) nv = 0.0;
+    if (nv > 1) nv = 1;
+    this.setState({ value: nv }, () => {
+      this.props.onChange({ firstWeight: { value: nv },
+        secondWeight: { value: parseFloat((1 - nv).toFixed(2)) } }
       );
     });
+  }
+
+  handleSecondValueChange(v) {
+    let nv = parseFloat(v);
+    if (isNaN(nv)) nv = 0.0;
+    if (nv > 1) nv = 1;
+    this.handleValueChange(1 - nv);
   }
 
   render() {
@@ -61,7 +71,7 @@ export default class RandomSplitWidget extends React.PureComponent {
             max={1}
             step={0.01}
             value={(1 - this.state.value).toFixed(2)}
-            onChange={v => this.handleValueChange((1 - v).toFixed(2))}
+            onChange={v => this.handleSecondValueChange(v)}
           />
         </Col>
       </Row>
