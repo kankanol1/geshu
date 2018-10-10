@@ -22,8 +22,8 @@ const registeredSpecialUISchemas = {
 
   Column_Name_Pair_Array: translateColumnMappingArrayUISchema,
   Column_Name_Pair: translateColumnMappingItemUISchema,
-  Fixed_String_Array: translateColumnSelectCheckboxUISchema,
-  Fixed_Column_Array: translateColumnSelectSelectorUISchema,
+  // Fixed_String_Array: translateColumnSelectCheckboxUISchema,
+  Fixed_Column_Array: translateColumnSelectCheckboxUISchema,
 
   // expression.
   Fixed_Expression: translateBooleanExpressionUISchema,

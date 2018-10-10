@@ -78,7 +78,8 @@
     "react-splitter-layout": "^3.0.1",
     "react-table": "^6.8.6",
     "save-svg-as-png": "^1.4.6",
-    "url-polyfill": "^1.1.0"
+    "url-polyfill": "^1.1.0",
+    "webpack": "^3.12.0"
   },
   "devDependencies": {
     "babel-eslint": "^10.0.1",

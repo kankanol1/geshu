@@ -63,7 +63,9 @@ export default class ExpressionEditor extends React.Component {
       } else {
         // search
         startPos = token.start + 1;
-        tipList = table[tableName].filter(v => v.startsWith(token.string.substring(1)));
+        const tableFileds = table[tableName];
+        const filterStr = token.string.substring(1);
+        tipList = tableFileds && tableFileds.filter(v => v.startsWith(filterStr)).map(v => `\`${v}\``);
       }
     } else if (token.type !== 'keyword') {
       // search for name directly.
@@ -122,8 +124,8 @@ export default class ExpressionEditor extends React.Component {
             if (value && this.state.sql && value.length < this.state.sql.length) {
               this.lastOpIsDelete = true;
             }
-          this.setState({ sql: value });
-        }}
+            this.setState({ sql: value });
+          }}
           className={styles.codemirror}
         />
       </div>
@@ -146,7 +148,7 @@ export default class ExpressionEditor extends React.Component {
                     {s.name}
                     ({s.type.substring(1, s.type.length - 1)})
                   </Tag>
-              ))}
+                ))}
               </div>
             </Card>
 
@@ -182,9 +184,9 @@ export default class ExpressionEditor extends React.Component {
             </Radio.Group> */}
           </div>
           <Row style={{ clear: 'both' }}>
-            <Col span={16}> {this.state.mode === 'simple' ?
-            this.renderSimpleForm() :
-            this.renderAdvanceInput()}
+            <Col span={16}> {this.state.mode === 'simple'
+              ? this.renderSimpleForm()
+              : this.renderAdvanceInput()}
             </Col>
             <Col span={8}> {this.renderTableSchema()} </Col>
           </Row>
@@ -192,6 +194,7 @@ export default class ExpressionEditor extends React.Component {
       </Modal>
     );
   }
+
   render() {
     const { schema, required, uiSchema } = this.props;
     const { getTableSchema } = uiSchema['ui:options'];
@@ -202,7 +205,7 @@ export default class ExpressionEditor extends React.Component {
       // error.
       error = e;
     }
-    if (error) return <p style={{ color: 'red' }}>{error.message} <Tag onClick={() => this.forceUpdate()} > <Icon type="sync" /> 刷新 </Tag></p>;
+    if (error) return <p style={{ color: 'red' }}>{error.message} <Tag onClick={() => this.forceUpdate()}> <Icon type="sync" /> 刷新 </Tag></p>;
     return (
       <Row>
         <Col span={6}><legend>{schema.description} {required ? ' *' : null}</legend></Col>
