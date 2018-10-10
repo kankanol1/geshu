@@ -94,18 +94,18 @@ export default class ComponentSettingsForm extends React.PureComponent {
             uiSchema={uiSchema}
             onChange={v => this.handleFormChange(v)}
             onSubmit={v => this.handleFormSubmit(v)}
-            validate={(formData, errors) =>
-               validate(formData, errors, jsonSchema, uiSchema, component)}
+            validate={(formData, errors) => validate(
+              formData, errors, jsonSchema, uiSchema, component)}
           >
             <button ref={(btn) => { this.submitButton = btn; }} className={styles.hidden} />
           </JsonSchemaForm>
         </Scrollbars>
         <Affix offsetBottom={10} style={{ height: '46px', textAlign: 'center', background: '#fafafa' }}>
-          <Button style={{ margin: '10px 50px' }} type="danger" disabled={jsonSchema === undefined} onClick={() => this.clearForm()} > <Icon type="delete" />清空 </Button>
-          <Button style={{ margin: '10px 50px' }} type="dashed" disabled={!dirty} onClick={() => this.resetForm()} > <Icon type="sync" />重置 </Button>
+          <Button style={{ margin: '10px 50px' }} type="danger" disabled={jsonSchema === undefined} onClick={() => this.clearForm()}> <Icon type="delete" />清空 </Button>
+          <Button style={{ margin: '10px 50px' }} type="dashed" disabled={!dirty} onClick={() => this.resetForm()}> <Icon type="sync" />重置 </Button>
           <Button style={{ margin: '10px 50px' }} onClick={e => this.submitForm(e)}> <Icon type="save" />应用 </Button>
           <Button style={{ margin: '10px 50px' }} type="primary" onClick={e => this.submitFormAndClose(e)}> <Icon type="save" />保存并关闭 </Button>
-        </Affix >
+        </Affix>
       </Fragment>
     );
   }

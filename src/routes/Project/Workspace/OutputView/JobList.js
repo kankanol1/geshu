@@ -93,17 +93,22 @@ export default class JobList extends PureComponent {
                 <Popconfirm title="确认删除吗?" onConfirm={() => this.handleRecordDelete(record)}>
                   <a>删除</a>
                 </Popconfirm>
-                <Button
-                  size="small"
-                  type="primary"
-                  style={{ marginLeft: '20px' }}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    const { onJobClicked } = this.props;
-                    if (onJobClicked) onJobClicked(record.id);
-                  }}
-                >查看
-                </Button>
+                {record.status === 'finished'
+                  ? (
+                    <Button
+                      size="small"
+                      type="primary"
+                      style={{ marginLeft: '20px' }}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        const { onJobClicked } = this.props;
+                        if (onJobClicked) onJobClicked(record.id);
+                      }}
+                    >查看
+                    </Button>
+                  )
+                  : null
+                }
               </React.Fragment>
             );
         }

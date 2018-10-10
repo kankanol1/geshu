@@ -2,6 +2,12 @@ import React from 'react';
 import { Modal, Button, Input, Spin, Icon, Row, Col, List } from 'antd';
 import StorageFilePicker from '../../../../routes/Storage/StorageFilePicker';
 
+const getFileName = (path) => {
+  if (!path) return;
+  const arr = path.split(/[/|\\]/);
+  return arr[arr.length - 1];
+};
+
 export default class CategorizedFileSelectorWidget extends React.PureComponent {
   constructor(props) {
     super(props);
@@ -55,7 +61,7 @@ export default class CategorizedFileSelectorWidget extends React.PureComponent {
           </Button>
         </Col>
         <Col span={13}>
-          <Input value={(lastSelected === undefined) ? '未指定' : lastSelected} disabled />
+          <Input value={(lastSelected === undefined) ? '未指定' : getFileName(lastSelected)} disabled />
         </Col>
         <Modal
           title={`选择文件${mode === 'directory' ? '夹' : ''}`}
