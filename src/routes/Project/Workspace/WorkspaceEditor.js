@@ -36,7 +36,7 @@ export default class WorkspaceEditor extends Component {
           </div>
           <WorkspaceViewMenu currentPath={this.props.location} />
         </Header>
-        <Layout style={{ padding: '0' }} theme="light">
+        <Layout style={{ padding: '0', zIndex: '0' }} theme="light">
           <WorkArea match={this.props.match} />
         </Layout>
       </Layout>
