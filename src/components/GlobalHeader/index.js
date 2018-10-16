@@ -1,102 +1,43 @@
 import React, { PureComponent } from 'react';
-import { Menu, Icon, Spin, Tag, Dropdown, Avatar, Divider, Tooltip } from 'antd';
-import moment from 'moment';
-import groupBy from 'lodash/groupBy';
+import { Icon } from 'antd';
+import Link from 'umi/link';
 import Debounce from 'lodash-decorators/debounce';
-import { Link } from 'dva/router';
-import Identicon from 'identicon.js';
-import hash from 'object-hash';
 import styles from './index.less';
+import RightContent from './RightContent';
 
 export default class GlobalHeader extends PureComponent {
   componentWillUnmount() {
     this.triggerResizeEvent.cancel();
   }
-  getNoticeData() {
-    const { notices = [] } = this.props;
-    if (notices.length === 0) {
-      return {};
-    }
-    const newNotices = notices.map((notice) => {
-      const newNotice = { ...notice };
-      if (newNotice.datetime) {
-        newNotice.datetime = moment(notice.datetime).fromNow();
-      }
-      // transform id to item key
-      if (newNotice.id) {
-        newNotice.key = newNotice.id;
-      }
-      if (newNotice.extra && newNotice.status) {
-        const color = ({
-          todo: '',
-          processing: 'blue',
-          urgent: 'red',
-          doing: 'gold',
-        })[newNotice.status];
-        newNotice.extra = <Tag color={color} style={{ marginRight: 0 }}>{newNotice.extra}</Tag>;
-      }
-      return newNotice;
-    });
-    return groupBy(newNotices, 'type');
+  /* eslint-disable*/
+  @Debounce(600)
+  triggerResizeEvent() {
+    // eslint-disable-line
+    const event = document.createEvent('HTMLEvents');
+    event.initEvent('resize', true, false);
+    window.dispatchEvent(event);
   }
   toggle = () => {
     const { collapsed, onCollapse } = this.props;
     onCollapse(!collapsed);
     this.triggerResizeEvent();
-  }
-  @Debounce(600)
-  triggerResizeEvent() { // eslint-disable-line
-    const event = document.createEvent('HTMLEvents');
-    event.initEvent('resize', true, false);
-    window.dispatchEvent(event);
-  }
+  };
   render() {
-    const {
-      currentUser, collapsed, fetchingNotices, isMobile, logo,
-      onNoticeVisibleChange, onMenuClick, onNoticeClear,
-    } = this.props;
-    const menu = (
-      <Menu className={styles.menu} selectedKeys={[]} onClick={onMenuClick}>
-        <Menu.Item key="self"><Icon type="user" />个人中心</Menu.Item>
-        <Menu.Divider />
-        <Menu.Item key="logout"><Icon type="logout" />退出登录</Menu.Item>
-      </Menu>
-    );
-    const { avatar, userName } = currentUser;
-    let displayAvatar = null;
-    if (avatar !== undefined) {
-      displayAvatar = avatar;
-    } else if (userName !== undefined) {
-      const imgData = new Identicon(hash(userName), 32).toString();
-      displayAvatar = `data:image/png;base64,${imgData}`;
-    }
+    const { collapsed, isMobile, logo } = this.props;
     return (
       <div className={styles.header}>
         {isMobile && (
-          [
-            (
-              <Link to="/" className={styles.logo} key="logo">
-                <img src={logo} alt="logo" width="32" />
-              </Link>
-            ),
-            <Divider type="vertical" key="line" />,
-          ]
+          <Link to="/" className={styles.logo} key="logo">
+            <img src={logo} alt="logo" width="32" />
+          </Link>
         )}
         <Icon
           className={styles.trigger}
           type={collapsed ? 'menu-unfold' : 'menu-fold'}
           onClick={this.toggle}
         />
-        <div className={styles.right}>
-          {currentUser.userName ? (
-            <Dropdown overlay={menu}>
-              <span className={`${styles.action} ${styles.account}`}>
-                <Avatar size="small" className={styles.avatar} src={displayAvatar} />
-                <span className={styles.name}>{currentUser.userName}</span>
-              </span>
-            </Dropdown>
-          ) : <Spin size="small" style={{ marginLeft: 8 }} />}
-        </div>
+
+        <RightContent {...this.props} />
       </div>
     );
   }

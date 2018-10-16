@@ -41,7 +41,7 @@ export async function queryUserName(params) {
   });
 }
 
-export async function queryCurrentUser() {
+export async function queryCurrent() {
   return request('/api/self/info');
 }
 

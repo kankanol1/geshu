@@ -1,8 +1,8 @@
 import React from 'react';
 import { Modal, Button, Input, Spin, Icon, Row, Col, List } from 'antd';
-import StorageFilePicker from '../../../../routes/Storage/StorageFilePicker';
+import StorageFilePicker from '@/pages/Storage/StorageFilePicker';
 
-const getFileName = (path) => {
+const getFileName = path => {
   if (!path) return;
   const arr = path.split(/[/|\\]/);
   return arr[arr.length - 1];
@@ -39,13 +39,16 @@ export default class CategorizedFileSelectorWidget extends React.PureComponent {
       this.setState({ error: '未选择文件' });
       return;
     }
-    this.setState({
-      formData: {
-        value: selectionCache.fullPath,
+    this.setState(
+      {
+        formData: {
+          value: selectionCache.fullPath,
+        },
+        modalVisible: false,
+        error: undefined,
       },
-      modalVisible: false,
-      error: undefined,
-    }, () => this.props.onChange(this.state.formData));
+      () => this.props.onChange(this.state.formData)
+    );
   }
 
   render() {
@@ -54,14 +57,21 @@ export default class CategorizedFileSelectorWidget extends React.PureComponent {
     const { projectId, mode } = this.props.uiSchema['ui:options'];
     return (
       <Row>
-        <Col span={6}><legend>{schema.description} {required ? ' *' : null}</legend></Col>
+        <Col span={6}>
+          <legend>
+            {schema.description} {required ? ' *' : null}
+          </legend>
+        </Col>
         <Col span={5}>
           <Button type="primary" onClick={() => this.setState({ modalVisible: true })}>
             选择
           </Button>
         </Col>
         <Col span={13}>
-          <Input value={(lastSelected === undefined) ? '未指定' : getFileName(lastSelected)} disabled />
+          <Input
+            value={lastSelected === undefined ? '未指定' : getFileName(lastSelected)}
+            disabled
+          />
         </Col>
         <Modal
           title={`选择文件${mode === 'directory' ? '夹' : ''}`}

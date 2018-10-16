@@ -23,7 +23,19 @@ yarn-error.log
 yarn.lock
 package-lock.json
 *bak
-jsconfig.json
-.prettierrc
+.vscode
 
-.vscode/
+# visual studio code
+.history
+*.log
+
+functions/mock
+.temp/**
+
+# umi
+.umi
+.umi-production
+
+# ignore files that need to be replaced.
+config/router.config.js
+src/defaultSettings.js

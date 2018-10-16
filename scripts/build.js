@@ -4,10 +4,12 @@
 
 const shell = require('shelljs');
 
-const partOpt = process.argv.filter((_, i) => i > 0 && process.argv[i-1] === '-part');
+const partOpt = process.argv.filter((_, i) => i > 0 && process.argv[i - 1] === '-part');
 const buildOpt = partOpt.length === 0 ? '-' : partOpt[0];
 
-const isRelease = !process.argv.includes('-dev');
+// @TODO support isRelease latter.
+// const isRelease = !process.argv.includes('-dev');
+const isRelease = true;
 console.log('buildOpt', buildOpt);
 
 const tmpDir = 'dist-tmp';
@@ -46,4 +48,4 @@ if (buildOpt === '-' || buildOpt === 'graph') {
 
 // write to dist;
 shell.rm('-r', 'dist');
-shell.mv('dist-tmp', "dist");
+shell.mv('dist-tmp', 'dist');

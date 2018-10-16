@@ -1,0 +1,90 @@
+.buttonBar {
+  padding: 10px;
+
+  :global(.ant-btn) {
+    margin-right: 5px;
+    padding: 0 8px;
+  }
+}
+
+.mainCard {
+  margin: 0;
+  :global {
+    .ant-card-body {
+      padding: 2px;
+    }
+    .ant-card-head-title {
+      font-size: 14px;
+      padding: 6px 0;
+    }
+    .ant-card-head {
+      min-height: 32px;
+      padding: 0 12px;
+    }
+  }
+}
+
+.bodyCard {
+  :global(.ant-card-body) {
+    padding: 10px;
+  }
+  :global(.ant-list-item) {
+    padding: 0;
+  }
+}
+
+.indexItems {
+  width: 100%;
+  padding: 8px;
+
+  &:hover,
+  &.selectedItem {
+    background: #e6f7ff;
+    cursor: pointer;
+
+    .opIcons {
+      opacity: 1;
+    }
+  }
+
+  .indexIcon {
+    margin: auto 5px;
+  }
+
+  .listTitle {
+    font-weight: 600;
+    margin-bottom: 5px;
+  }
+
+  .listDetail {
+    color: #afafaf;
+    font-style: italic;
+    padding-left: 10px;
+    font-size: 0.9em;
+  }
+
+  .listDesc {
+    color: #8c8c8c;
+  }
+}
+
+.opIcons {
+  float: right;
+  padding-left: 20px;
+  opacity: 0;
+
+  &:hover {
+    opacity: 1;
+  }
+
+  :global {
+    .anticon {
+      margin-left: 5px;
+      padding: 5px;
+    }
+
+    .anticon:hover {
+      color: #1890ff;
+    }
+  }
+}

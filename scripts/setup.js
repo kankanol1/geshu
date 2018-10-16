@@ -2,13 +2,27 @@
 
 /* eslint-disable */
 
-const fs = require('fs');
+const { copyFileTo } = require('./utils');
 
-if (process.argv.length > 2) {
-  // get the 3rd argument as source file.
-  const file = process.argv[2];
-  fs.createReadStream(file).pipe(fs.createWriteStream('.webpackrc'));
+const opts = {
+  all: [
+    { from: 'all/router.entry.js', to: 'config/router.config.js' },
+    { from: 'all/defaultSettings.js', to: 'src/defaultSettings.js' },
+  ],
+  ml: [
+    { from: 'ml/router.entry.js', to: 'config/router.config.js' },
+    { from: 'ml/defaultSettings.js', to: 'src/defaultSettings.js' },
+  ],
+  graph: [
+    { from: 'graph/router.entry.js', to: 'config/router.config.js' },
+    { from: 'graph/defaultSettings.js', to: 'src/defaultSettings.js' },
+  ],
+};
+
+try {
+  let opt = process.argv.length > 2 ? process.argv[2] : 'all';
+  opts[opt].map(item => copyFileTo(`config/app/${item.from}`, item.to));
   console.log('environment setup done.');
-} else {
-  console.error('setup requires a file path for .webpackrc!');
+} catch (e) {
+  console.error('error setting up environment!', e);
 }

@@ -1,4 +1,4 @@
-import { componentSize } from '../routes/Project/Workspace/WorkCanvas/styles';
+import { componentSize } from '@/pages/Project/Workspace/WorkCanvas/styles';
 
 const pointMargin = 10;
 
@@ -9,23 +9,23 @@ const calculatePointCenter = (x, y, width, height, xIndex, yIndex) => {
   switch (xIndex) {
     case 0:
       // top
-      px = x + (yIndex * width);
+      px = x + yIndex * width;
       py = y - pointMargin;
       break;
     case 1:
       // right
       px = x + width + pointMargin;
-      py = y + (height * yIndex);
+      py = y + height * yIndex;
       break;
     case 2:
       // bottom
-      px = x + (height * yIndex);
+      px = x + height * yIndex;
       py = y + pointMargin;
       break;
     case 3:
       // left
       px = x - pointMargin;
-      py = y + (height * yIndex);
+      py = y + height * yIndex;
       break;
     default:
       break;
@@ -38,8 +38,8 @@ const calculateLineStrDirectly = (srcX, srcY, desX, desY) => {
 };
 
 const calculateLineCurly = (srcX, srcY, desX, desY, curvature = 0.4) => {
-  const hx1 = srcX + (Math.abs(srcX - desX) * curvature);
-  const hx2 = desX - (Math.abs(desX - srcX) * curvature);
+  const hx1 = srcX + Math.abs(srcX - desX) * curvature;
+  const hx2 = desX - Math.abs(desX - srcX) * curvature;
   return `M ${srcX} ${srcY} C ${hx1} ${srcY} ${hx2} ${desY} ${desX} ${desY}`;
 };
 
@@ -86,33 +86,31 @@ const getComponentSize = () => {
   return componentSize;
 };
 
-const calculatePointPositionDict = (component) => {
+const calculatePointPositionDict = component => {
   const pointDict = {};
   const { x, y } = component;
   const { width, height } = componentSize;
-  const calculatePoint = (point) => {
+  const calculatePoint = point => {
     const { px, py } = calculatePointCenter(x, y, width, height, point.x, point.y);
     pointDict[point.id] = { x: px, y: py };
   };
-  component.inputs.forEach(
-    (point) => { calculatePoint(point); }
-  );
-  component.outputs.forEach(
-    (point) => { calculatePoint(point); }
-  );
+  component.inputs.forEach(point => {
+    calculatePoint(point);
+  });
+  component.outputs.forEach(point => {
+    calculatePoint(point);
+  });
   return pointDict;
 };
 
 const updateCache = (components, offset) => {
   const componentDict = {}; // store: componentid: {x, y}
   const componentPointPosition = {}; // store: componentid: {pointid: {x, y}}
-  components.forEach(
-    (component) => {
-      const { c, p } = updateCacheForComponent(component, offset);
-      componentDict[component.id] = c;
-      componentPointPosition[component.id] = p;
-    }
-  );
+  components.forEach(component => {
+    const { c, p } = updateCacheForComponent(component, offset);
+    componentDict[component.id] = c;
+    componentPointPosition[component.id] = p;
+  });
   return {
     componentDict,
     pointDict: componentPointPosition,
@@ -125,8 +123,7 @@ const updateCacheForComponent = (component, offset) => {
     y: component.y + offset.y,
   };
   const c = calculatedPosition;
-  const p =
-    calculatePointPositionDict({ ...component, ...calculatedPosition });
+  const p = calculatePointPositionDict({ ...component, ...calculatedPosition });
   return { c, p };
 };
 
@@ -139,41 +136,48 @@ const addCacheForComponent = (state, nc) => {
     y: nc.y + offset.y,
   };
   componentDict[nc.id] = calculatedPosition;
-  componentPointPosition[nc.id] =
-    calculatePointPositionDict({ ...nc, ...calculatedPosition });
-  return Object.assign({}, { ...state,
-    ...{ cache:
-      { componentDict,
-        pointDict: componentPointPosition,
+  componentPointPosition[nc.id] = calculatePointPositionDict({ ...nc, ...calculatedPosition });
+  return Object.assign(
+    {},
+    {
+      ...state,
+      ...{
+        cache: {
+          componentDict,
+          pointDict: componentPointPosition,
+        },
       },
-    } });
+    }
+  );
 };
 
-const createCache = (state) => {
+const createCache = state => {
   const componentDict = {}; // store: componentid: {x, y}
   const componentPointPosition = {}; // store: componentid: {pointid: {x, y}}
   const { offset } = state;
-  state.components.forEach(
-    (component) => {
-      const calculatedPosition = {
-        x: component.x + offset.x,
-        y: component.y + offset.y,
-      };
-      componentDict[component.id] = calculatedPosition;
-      componentPointPosition[component.id] =
-        calculatePointPositionDict({ ...component, ...calculatedPosition });
-    }
-  );
-  return { ...state,
-    cache:
-      { componentDict,
-        pointDict: componentPointPosition,
-      },
+  state.components.forEach(component => {
+    const calculatedPosition = {
+      x: component.x + offset.x,
+      y: component.y + offset.y,
+    };
+    componentDict[component.id] = calculatedPosition;
+    componentPointPosition[component.id] = calculatePointPositionDict({
+      ...component,
+      ...calculatedPosition,
+    });
+  });
+  return {
+    ...state,
+    cache: {
+      componentDict,
+      pointDict: componentPointPosition,
+    },
   };
 };
 
-const fillDefaultSize = (component) => {
-  return { ...component,
+const fillDefaultSize = component => {
+  return {
+    ...component,
     x: 10,
     y: 0,
   };
