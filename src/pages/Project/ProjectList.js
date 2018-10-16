@@ -22,7 +22,7 @@ import {
   Divider,
 } from 'antd';
 import StandardTable from '../../components/StandardTable';
-import PageHeaderLayout from '../../layouts/PageHeaderLayout';
+import PageHeaderWrapper from '../../components/PageHeaderWrapper';
 import styles from './ProjectList.less';
 import { buildTagSelect } from '../../utils/uiUtils';
 import CreateProjectForm from './CreateProjectForm';
@@ -360,7 +360,7 @@ class ProjectList extends PureComponent {
     };
 
     return (
-      <PageHeaderLayout>
+      <PageHeaderWrapper>
         <Card>
           <div className={styles.tableList}>
             <div className={styles.tableListForm}>{this.renderForm()}</div>
@@ -383,7 +383,7 @@ class ProjectList extends PureComponent {
           />
         </Card>
         <CreateProjectForm {...parentMethods} modalVisible={modalVisible} />
-      </PageHeaderLayout>
+      </PageHeaderWrapper>
     );
   }
 }

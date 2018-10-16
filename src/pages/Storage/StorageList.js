@@ -1,12 +1,12 @@
 import React, { PureComponent } from 'react';
-import PageHeaderLayout from '../../layouts/PageHeaderLayout';
+import PageHeaderWrapper from '../../components/PageHeaderWrapper';
 import StorageFilePicker from './StorageFilePicker';
 import styles from './StorageList.less';
 
 export default class StorageList extends PureComponent {
   render() {
     return (
-      <PageHeaderLayout>
+      <PageHeaderWrapper>
         <StorageFilePicker
           enableItemOp
           styles={styles}
@@ -17,7 +17,7 @@ export default class StorageList extends PureComponent {
           // type="graph"
           // project={{ id: 1, name: '项目名1' }}
         />
-      </PageHeaderLayout>
+      </PageHeaderWrapper>
     );
   }
 }

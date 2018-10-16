@@ -1,12 +1,12 @@
 import React, { PureComponent, Fragment } from 'react';
-import PageHeaderLayout from '../../layouts/PageHeaderLayout';
+import PageHeaderWrapper from '../../components/PageHeaderWrapper';
 import DatasetDetailsComponent from './Details/DatasetDetailsComponent';
 
 export default class DatasetDetail extends React.PureComponent {
   render() {
     const datasetId = this.props.match.params.id;
     return (
-      <PageHeaderLayout
+      <PageHeaderWrapper
         breadcrumbList={[
           {
             title: '首页',
@@ -22,7 +22,7 @@ export default class DatasetDetail extends React.PureComponent {
         ]}
       >
         <DatasetDetailsComponent datasetId={datasetId} />
-      </PageHeaderLayout>
+      </PageHeaderWrapper>
     );
   }
 }

@@ -288,6 +288,7 @@ export default {
 
   // =============================the aboves are from antd-pro======================
   // =============================the followings are for our project===============
+  menu: '菜单',
   'menu.project': '项目管理',
   'menu.project.list': '项目列表',
   'menu.project.workspace': '工作区',

@@ -22,7 +22,7 @@ import {
   Divider,
 } from 'antd';
 import StandardTable from '../../components/StandardTable';
-import PageHeaderLayout from '../../layouts/PageHeaderLayout';
+import PageHeaderWrapper from '../../components/PageHeaderWrapper';
 import styles from './JobList.less';
 
 const FormItem = Form.Item;
@@ -426,7 +426,7 @@ class JobList extends PureComponent {
     };
 
     return (
-      <PageHeaderLayout>
+      <PageHeaderWrapper>
         <Card>
           <div className={styles.tableList}>
             <div className={styles.tableListForm}>{this.renderForm()}</div>
@@ -445,7 +445,7 @@ class JobList extends PureComponent {
             onChange={this.handleStandardTableChange}
           />
         </Card>
-      </PageHeaderLayout>
+      </PageHeaderWrapper>
     );
   }
 }

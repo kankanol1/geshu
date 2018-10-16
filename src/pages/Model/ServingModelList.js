@@ -4,7 +4,7 @@ import { Link } from 'dva/router';
 import moment from 'moment';
 import { Popconfirm, Row, Col, Card, Form, Input, Button, DatePicker, Divider } from 'antd';
 import StandardTable from '../../components/StandardTable';
-import PageHeaderLayout from '../../layouts/PageHeaderLayout';
+import PageHeaderWrapper from '../../components/PageHeaderWrapper';
 import styles from './ModelList.less';
 import ModelDetailsDialog from './ModelDetailsDialog';
 
@@ -259,17 +259,7 @@ class ServingModelList extends PureComponent {
     const { selectedRows } = this.state;
     const { id, visible } = this.state.modelMetrics;
     return (
-      <PageHeaderLayout
-        breadcrumbList={[
-          {
-            title: '首页',
-            href: '/',
-          },
-          {
-            title: '模型服务',
-          },
-        ]}
-      >
+      <PageHeaderWrapper>
         <Card>
           <div className={styles.tableList}>
             <div className={styles.tableListForm}>{this.renderAdvancedForm()}</div>
@@ -295,7 +285,7 @@ class ServingModelList extends PureComponent {
             }}
           />
         </Card>
-      </PageHeaderLayout>
+      </PageHeaderWrapper>
     );
   }
 }

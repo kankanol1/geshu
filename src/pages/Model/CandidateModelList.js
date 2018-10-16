@@ -22,7 +22,7 @@ import {
   Divider,
 } from 'antd';
 import StandardTable from '../../components/StandardTable';
-import PageHeaderLayout from '../../layouts/PageHeaderLayout';
+import PageHeaderWrapper from '../../components/PageHeaderWrapper';
 import styles from './ModelList.less';
 import ModelDetailsDialog from './ModelDetailsDialog';
 
@@ -421,7 +421,7 @@ class CandidateModelList extends PureComponent {
 
     const { visible, id } = this.state.modelMetrics;
     return (
-      <PageHeaderLayout>
+      <PageHeaderWrapper>
         <Card>
           <div className={styles.tableList}>
             <div className={styles.tableListForm}>{this.renderAdvancedForm()}</div>
@@ -451,7 +451,7 @@ class CandidateModelList extends PureComponent {
             this.setState({ modelMetrics: { visible: false, id: undefined } });
           }}
         />
-      </PageHeaderLayout>
+      </PageHeaderWrapper>
     );
   }
 }

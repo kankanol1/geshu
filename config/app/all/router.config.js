@@ -11,7 +11,7 @@ export default [
   // app
   {
     path: '/',
-    component: '../layouts/BasicLayout',
+    component: '../layouts/XBasicLayout',
     Routes: ['src/pages/Authorized'],
     authority: ['admin', 'user'],
     routes: [

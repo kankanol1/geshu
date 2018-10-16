@@ -20,7 +20,7 @@ import {
   Badge,
   Divider,
 } from 'antd';
-import PageHeaderLayout from '../../layouts/PageHeaderLayout';
+import PageHeaderWrapper from '../../components/PageHeaderWrapper';
 
 const FormItem = Form.Item;
 const RadioGroup = Radio.Group;
@@ -101,7 +101,7 @@ class UserEdit extends PureComponent {
     const currentRecord = users.selectedUser;
     const updateMode = currentRecord && currentRecord.userName === match.params.userName;
     return (
-      <PageHeaderLayout>
+      <PageHeaderWrapper>
         <Form onSubmit={updateMode ? this.handleUpdate : this.handleAdd}>
           <Card>
             <FormItem
@@ -193,7 +193,7 @@ class UserEdit extends PureComponent {
             </div>
           </Card>
         </Form>
-      </PageHeaderLayout>
+      </PageHeaderWrapper>
     );
   }
 }

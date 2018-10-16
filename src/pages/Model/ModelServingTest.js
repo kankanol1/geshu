@@ -1,32 +1,34 @@
 import React, { Component } from 'react';
-import { connect } from 'dva';
-import { Card, Col, Row, Input, Spin } from 'antd';
-import PageHeaderLayout from '../../layouts/PageHeaderLayout';
-import InputSchemaForm from './InputSchemaSimpleForm';
+import PageHeaderWrapper from '../../components/PageHeaderWrapper';
 import ModelTestComponent from './ModelTestComponent';
-
-const { TextArea } = Input;
 
 export default class ModelServingTest extends Component {
   render() {
     return (
-      <PageHeaderLayout
+      <PageHeaderWrapper
         breadcrumbList={[
           {
-            title: '首页',
             href: '/',
+            name: '首页',
+            title: '首页',
           },
           {
-            title: '模型服务',
+            name: '模型管理',
+            title: '首页',
+          },
+          {
+            name: '模型服务',
+            title: '首页',
             href: '/models/serving',
           },
           {
-            title: '模型测试',
+            name: '模型测试',
+            title: '首页',
           },
         ]}
       >
         <ModelTestComponent id={this.props.match.params.id} />
-      </PageHeaderLayout>
+      </PageHeaderWrapper>
     );
   }
 }

@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
 import { Form, Input, Select, Checkbox, Button, Card, Steps, Progress, Spin } from 'antd';
-import PageHeaderLayout from '../../layouts/PageHeaderLayout';
+import PageHeaderWrapper from '../../components/PageHeaderWrapper';
 import CSVDatasetForm from './Templates/CSVDatasetForm';
 import DefineSchemaWidget from '../../components/JsonSchemaForm/Widgets/Schema/DefineSchemaWidget';
 
@@ -227,7 +227,7 @@ class EditDataset extends PureComponent {
 
   render() {
     return (
-      <PageHeaderLayout
+      <PageHeaderWrapper
         breadcrumbList={[
           {
             title: '首页',
@@ -256,7 +256,7 @@ class EditDataset extends PureComponent {
                 ? this.renderResultForm()
                 : this.renderLoading()}
         </Card>
-      </PageHeaderLayout>
+      </PageHeaderWrapper>
     );
   }
 }

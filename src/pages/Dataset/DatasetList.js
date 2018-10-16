@@ -22,7 +22,7 @@ import {
   Divider,
 } from 'antd';
 import StandardTable from '../../components/StandardTable';
-import PageHeaderLayout from '../../layouts/PageHeaderLayout';
+import PageHeaderWrapper from '../../components/PageHeaderWrapper';
 import styles from './DatasetList.less';
 import { buildTagSelect } from '../../utils/uiUtils';
 
@@ -360,25 +360,9 @@ class DatasetList extends PureComponent {
       dataset: { data },
       loading,
     } = this.props;
-    const { selectedRows, currentRecord } = this.state;
-
-    const parentMethods = {
-      currentRecord,
-      handleUpdate: this.handleUpdate,
-    };
-
+    const { selectedRows } = this.state;
     return (
-      <PageHeaderLayout
-        breadcrumbList={[
-          {
-            title: '首页',
-            href: '/',
-          },
-          {
-            title: '数据集列表',
-          },
-        ]}
-      >
+      <PageHeaderWrapper>
         <Card>
           <div className={styles.tableList}>
             <div className={styles.tableListForm}>{this.renderForm()}</div>
@@ -400,7 +384,7 @@ class DatasetList extends PureComponent {
             onChange={this.handleStandardTableChange}
           />
         </Card>
-      </PageHeaderLayout>
+      </PageHeaderWrapper>
     );
   }
 }

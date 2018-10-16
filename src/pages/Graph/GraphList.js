@@ -18,7 +18,7 @@ import {
   Tag,
 } from 'antd';
 import StandardTable from '../../components/StandardTable';
-import Layout from '../../layouts/PageHeaderLayout';
+import PageHeaderWrapper from '../../components/PageHeaderWrapper';
 import styles from './GraphList.less';
 import CreateGraphForm from './CreateGraphForm';
 
@@ -338,7 +338,7 @@ class ProjectList extends PureComponent {
     };
 
     return (
-      <Layout>
+      <PageHeaderWrapper>
         <Card>
           <div className={styles.tableList}>
             <div className={styles.tableListForm}>{this.renderForm()}</div>
@@ -361,7 +361,7 @@ class ProjectList extends PureComponent {
           />
         </Card>
         <CreateGraphForm {...parentMethods} modalVisible={modalVisible} />
-      </Layout>
+      </PageHeaderWrapper>
     );
   }
 }
