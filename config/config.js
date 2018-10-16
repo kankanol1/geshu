@@ -18,7 +18,7 @@ export default {
           ie: 11,
         },
         locale: {
-          enable: true, // default false
+          enable: false, // default false
           default: 'zh-CN', // default zh-CN
           baseNavigator: true,
           // default true, when it is true, will use `navigator.language` overwrite default
@@ -37,7 +37,7 @@ export default {
           : {}),
       },
     ],
-    ['./config/plugins/global-hook.js', {}],
+    // ['./config/plugins/global-hook.js', {}],
   ],
   targets: {
     ie: 11,

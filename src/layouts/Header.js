@@ -42,19 +42,6 @@ class HeaderView extends PureComponent {
     return collapsed ? 'calc(100% - 80px)' : 'calc(100% - 256px)';
   };
 
-  handleNoticeClear = type => {
-    message.success(
-      `${formatMessage({ id: 'component.noticeIcon.cleared' })} ${formatMessage({
-        id: `component.globalHeader.${type}`,
-      })}`
-    );
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'global/clearNotices',
-      payload: type,
-    });
-  };
-
   handleMenuClick = ({ key }) => {
     const { dispatch } = this.props;
     if (key === 'self') {
@@ -109,8 +96,7 @@ class HeaderView extends PureComponent {
     const width = this.getHeadWidth();
     const HeaderDom = visible ? (
       <Header style={{ padding: 0, width }} className={fixedHeader ? styles.fixedHeader : ''}>
-        {isTop && !isMobile ? // <TopNavHeader // @TODO support this latter.
-        //   theme={navTheme}
+        {isTop && !isMobile ? //   theme={navTheme} // <TopNavHeader // @TODO support this latter.
         //   mode="horizontal"
         //   Authorized={Authorized}
         //   onCollapse={handleMenuCollapse}

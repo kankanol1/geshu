@@ -35,8 +35,9 @@
   },
   "dependencies": {
     "@antv/data-set": "^0.9.6",
-    "@babel/runtime": "^7.0.0",
-    "antd": "^3.9.3",
+    "@babel/core": "^7.0.0",
+    "@babel/runtime": "^7.1.2",
+    "antd": "^3.10.1",
     "bizcharts": "^3.2.4",
     "bizcharts-plugin-slider": "^2.1.1",
     "classnames": "^2.2.6",
@@ -46,12 +47,12 @@
     "dva": "^2.4.0",
     "dva-loading": "^2.0.5",
     "enquire-js": "^0.2.1",
+    "hash.js": "^1.1.5",
     "identicon.js": "^2.3.3",
     "js-cookie": "^2.2.0",
     "jshint": "^2.9.6",
     "jsonpath": "^1.0.0",
     "keymaster": "^1.6.2",
-    "hash.js": "^1.1.5",
     "lodash": "^4.17.11",
     "lodash-decorators": "^6.0.0",
     "lucio-tree-transfer": "^1.0.0-beta.1",
@@ -76,35 +77,35 @@
     "react-document-title": "^2.0.3",
     "react-dom": "^16.5.2",
     "react-draggable": "^3.0.5",
+    "react-fittext": "^1.0.0",
     "react-highlight": "^0.12.0",
-    "react-jsonschema-form": "^1.0.4",
+    "react-jsonschema-form": "^1.0.5",
+    "react-router-dom": "^4.3.1",
     "react-splitter-layout": "^3.0.1",
     "react-table": "^6.8.6",
-    "react-fittext": "^1.0.0",
-    "react-router-dom": "^4.3.1",
     "save-svg-as-png": "^1.4.6",
     "url-polyfill": "^1.1.0",
     "webpack": "^4.4.0"
   },
   "devDependencies": {
-    "@types/react": "^16.4.11",
+    "@types/react": "^16.4.17",
     "@types/react-dom": "^16.0.6",
     "antd-pro-merge-less": "^0.0.9",
     "antd-pro-theme-webpack-plugin": "^1.1.8",
     "babel-eslint": "^10.0.1",
     "cross-env": "^5.2.0",
     "cross-port-killer": "^1.0.1",
-    "enzyme": "^3.6.0",
-    "eslint": "^5.6.0",
+    "enzyme": "^3.7.0",
+    "eslint": "^5.7.0",
     "eslint-config-airbnb": "^17.1.0",
     "eslint-config-prettier": "^3.0.1",
     "eslint-plugin-babel": "^5.2.1",
-    "eslint-plugin-compat": "^2.5.1",
+    "eslint-plugin-compat": "^2.6.2",
     "eslint-plugin-import": "^2.14.0",
-    "eslint-plugin-jsx-a11y": "^6.1.1",
+    "eslint-plugin-jsx-a11y": "^6.1.2",
     "eslint-plugin-react": "^7.11.1",
-    "gh-pages": "^2.0.0",
-    "husky": "^1.0.1",
+    "gh-pages": "^2.0.1",
+    "husky": "^1.1.2",
     "lint-staged": "^7.2.0",
     "merge-umi-mock-data": "^0.0.3",
     "mockjs": "^1.0.1-beta3",
@@ -126,6 +127,7 @@
   },
   "lint-staged": {
     "**/*.{js,jsx,less}": [
+      "prettier --write",
       "git add"
     ],
     "**/*.{js,jsx}": "npm run lint-staged:js",
@@ -135,5 +137,10 @@
     "> 1%",
     "last 2 versions",
     "not ie <= 9"
-  ]
+  ],
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run lint-staged"
+    }
+  }
 }
