@@ -3,6 +3,7 @@ import moment from 'moment';
 const userInfo = {
   userName: 'admin',
   role: 'admin',
+  currentAuthority: [257, 258, 259, 260, 273, 274, 275, 276],
   email: 'admin@gl-data.com',
   password: 'admin',
   createdAt: moment('2018-03-01 12:00:00', 'YYYY-MM-DD HH:mm:SS'),

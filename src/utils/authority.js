@@ -5,13 +5,9 @@ import { getFromRegistory } from '../common/registry';
 const store = getFromRegistory('store');
 
 export function getAuthority() {
-  if (store && store.getState().global.currentUser.role !== undefined) {
-    return store.getState().global.currentUser.role;
-  } else {
-    return localStorage.getItem('projectx-authority') || 'guest';
+  let v = [];
+  if (store && store.getState().global.currentUser !== undefined) {
+    v = store.getState().global.currentUser.currentAuthority;
   }
-}
-
-export function setAuthority(authority) {
-  return localStorage.setItem('projectx-authority', authority);
+  return v;
 }

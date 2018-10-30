@@ -7,7 +7,6 @@ import router from 'umi/router';
 import GlobalHeader from '@/components/XGlobalHeader';
 import TopNavHeader from '@/components/TopNavHeader';
 import styles from './Header.less';
-import Authorized from '@/utils/Authorized';
 
 const { Header } = Layout;
 
@@ -96,8 +95,7 @@ class HeaderView extends PureComponent {
     const width = this.getHeadWidth();
     const HeaderDom = visible ? (
       <Header style={{ padding: 0, width }} className={fixedHeader ? styles.fixedHeader : ''}>
-        {isTop && !isMobile ? //   theme={navTheme} // <TopNavHeader // @TODO support this latter.
-        //   mode="horizontal"
+        {isTop && !isMobile ? //   mode="horizontal" //   theme={navTheme} // <TopNavHeader // @TODO support this latter.
         //   Authorized={Authorized}
         //   onCollapse={handleMenuCollapse}
         //   onMenuClick={this.handleMenuClick}

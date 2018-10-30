@@ -7,6 +7,7 @@
     "setup": "node ./scripts/setup.js all",
     "setup:ml": "node ./scripts/setup.js ml",
     "setup:graph": "node ./scripts/setup.js graph",
+    "setup:datapro": "node ./scripts/setup.js datapro",
     "precommit": "npm run lint-staged",
     "presite": "node ./scripts/generateMock.js && cd functions && npm install",
     "start": "cross-env APP_TYPE=site umi dev",

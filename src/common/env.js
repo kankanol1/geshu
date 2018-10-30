@@ -10,3 +10,8 @@ export const ENV_ALL = 'all';
  * only graph related part is included.
  */
 export const ENV_GRAPH = 'graph';
+
+/**
+ * only data processing part is included.
+ */
+export const ENV_DATAPRO = 'datapro';

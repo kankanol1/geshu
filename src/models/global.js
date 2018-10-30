@@ -1,9 +1,7 @@
-
 import fetch from 'dva/fetch';
 import { routerRedux } from 'dva/router';
 import { message } from 'antd';
-import { reloadAuthorized } from '../utils/Authorized';
-import { setAuthority } from '../utils/authority';
+import P from '../config/UserPrivileges';
 
 export default {
   namespace: 'global',
@@ -30,37 +28,33 @@ export default {
         headers: {
           Accept: 'application/json',
         },
-      }).then((response) => {
-        if (response.status !== 200) {
-          const error = new Error(response.status);
-          error.name = response.status;
-          error.response = response;
-          throw error;
-        } else {
-          return response.json();
-        }
-      }).catch((e) => {
-        if (e.name === 401) {
-          message.info('请先登录');
-        } else {
-          message.info(`服务器错误，状态:${e.name}`);
-        }
-        return { role: 'guest' };
-      });
+      })
+        .then(response => {
+          if (response.status !== 200) {
+            const error = new Error(response.status);
+            error.name = response.status;
+            error.response = response;
+            throw error;
+          } else {
+            return response.json();
+          }
+        })
+        .catch(e => {
+          if (e.name === 401) {
+            message.info('请先登录');
+          } else {
+            message.info(`服务器错误，状态:${e.name}`);
+          }
+          return { role: 'guest' };
+        });
       // first save role.
       yield put({
         type: 'saveCurrentUser',
         payload: {
-          currentUser,
-        },
-      });
-      setAuthority(currentUser.role);
-      // then reload.
-      reloadAuthorized();
-      // last set loading.
-      yield put({
-        type: 'saveCurrentUser',
-        payload: {
+          currentUser: {
+            ...currentUser,
+            currentAuthority: [P.LOGIN_USER, ...currentUser.currentAuthority],
+          },
           loadingUser: false,
         },
       });
@@ -70,16 +64,10 @@ export default {
       /** rediret to index */
       const redirect = payload && payload.redirect;
 
-      if (redirect) {
+      if (!redirect) {
         yield put(routerRedux.push('/'));
       }
-
-      if (currentUser.role === 'guest') {
-        yield put(routerRedux.push('/user/login'));
-        // redirect.
-      }
     },
-
   },
 
   reducers: {
@@ -102,6 +90,5 @@ export default {
     },
   },
 
-  subscriptions: {
-  },
+  subscriptions: {},
 };

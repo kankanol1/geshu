@@ -1,14 +1,11 @@
 import { routerRedux } from 'dva/router';
 import { message } from 'antd';
 import { userLogin, userLogout } from '../services/usersAPI';
-import { reloadAuthorized } from '../utils/Authorized';
-import { setAuthority } from '../utils/authority';
 
 export default {
   namespace: 'login',
 
-  state: {
-  },
+  state: {},
 
   effects: {
     *login({ payload }, { call, put }) {
@@ -25,10 +22,6 @@ export default {
             currentUser: {},
           },
         });
-        // set authority
-        setAuthority(response.currentAuthority);
-        // then reload.
-        reloadAuthorized();
         yield put(routerRedux.push('/'));
       }
     },
@@ -36,7 +29,9 @@ export default {
     *logout(_, { put, select, call }) {
       const pathname = yield select(state => state.routing.location.pathname);
       // do not redirect twice.
-      if (pathname === '/user/login') { return; }
+      if (pathname === '/user/login') {
+        return;
+      }
       try {
         // // get location pathname
         // const url = window.location.href;
@@ -71,6 +66,5 @@ export default {
         status: payload.status,
       };
     },
-
   },
 };

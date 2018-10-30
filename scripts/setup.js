@@ -17,6 +17,10 @@ const opts = {
     { from: 'graph/router.entry.js', to: 'config/router.config.js' },
     { from: 'graph/defaultSettings.js', to: 'src/defaultSettings.js' },
   ],
+  datapro: [
+    { from: 'datapro/router.entry.js', to: 'config/router.config.js' },
+    { from: 'datapro/defaultSettings.js', to: 'src/defaultSettings.js' },
+  ],
 };
 
 try {

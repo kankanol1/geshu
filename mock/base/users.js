@@ -9,6 +9,7 @@ let userListDataSource = [
   {
     userName: 'user',
     role: 'user',
+    privileges: [257, 258, 259, 260, 273, 274, 275, 276],
     email: 'user@gl-data.com',
     password: 'user',
     createdAt: moment('2018-03-01 12:01:00', 'YYYY-MM-DD HH:mm:SS'),
@@ -18,6 +19,7 @@ let userListDataSource = [
   {
     userName: 'admin',
     role: 'admin',
+    privileges: [257, 258, 259, 260, 273, 274, 275, 276],
     email: 'admin@gl-data.com',
     password: 'admin',
     createdAt: moment('2018-03-01 12:00:00', 'YYYY-MM-DD HH:mm:SS'),
@@ -35,7 +37,7 @@ export function login(req, res) {
   if (user) {
     return res.send({
       status: 'ok',
-      currentAuthority: user.role,
+      currentAuthority: user.privileges,
       userName: user.userName,
       avatar: user.avatar,
       email: user.email,
@@ -43,7 +45,7 @@ export function login(req, res) {
   } else {
     return res.send({
       status: 'error',
-      currentAuthority: 'guest',
+      currentAuthority: [],
     });
   }
 }

@@ -98,9 +98,6 @@ class XBasicLayout extends React.PureComponent {
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
-      type: 'global/queryCurrentUser',
-    });
-    dispatch({
       type: 'setting/getSetting',
     });
     this.renderRef = requestAnimationFrame(() => {
