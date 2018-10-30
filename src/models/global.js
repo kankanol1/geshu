@@ -64,8 +64,8 @@ export default {
       /** rediret to index */
       const redirect = payload && payload.redirect;
 
-      if (!redirect) {
-        yield put(routerRedux.push('/'));
+      if (redirect) {
+        yield put(routerRedux.push(redirect));
       }
     },
   },

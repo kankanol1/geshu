@@ -20,6 +20,12 @@ export default [
       { path: '/', redirect: '/project/list' },
       { path: '/self', redirect: '/self/basic' },
       {
+        path: '/testm',
+        name: 'testm',
+        hideInMenu: true,
+        component: './Test/TestMarkdown',
+      },
+      {
         path: '/project',
         name: 'project',
         icon: 'bulb',

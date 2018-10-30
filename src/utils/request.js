@@ -98,17 +98,18 @@ export function wrapOptions(options) {
  * @param  {object} [options] The options we want to pass to "fetch"
  * @return {object}           An object containing either "data" or "err"
  */
-export default function request(url, options) {
-  const newOptions = wrapOptions(options);
+export default function request(url, options = {}) {
+  const { isText, ...restOps } = options;
+  const newOptions = wrapOptions(restOps);
   return fetch(url, newOptions)
     .then(checkStatus)
-    .then((response) => {
+    .then(response => {
       if (newOptions.method === 'DELETE' || response.status === 204) {
         return response.text();
       }
-      return response.json();
+      return isText ? response.text() : response.json();
     })
-    .catch((e) => {
+    .catch(e => {
       const store = getFromRegistory('store');
       const { dispatch } = store;
       const status = e.name;
