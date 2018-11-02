@@ -17,10 +17,7 @@ export default {
       // Login successfully
       if (response.status === 'ok') {
         yield put({
-          type: 'global/saveCurrentUser',
-          payload: {
-            currentUser: {},
-          },
+          type: 'global/resetLoading',
         });
         yield put(routerRedux.push('/'));
       }

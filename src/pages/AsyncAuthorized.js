@@ -13,7 +13,10 @@ class AsyncAuthorized extends React.Component {
   }
 
   renderLayout() {
-    const { children, currentUser } = this.props;
+    const {
+      children,
+      global: { currentUser },
+    } = this.props;
     // get authority directly.
     const authorities = currentUser.currentAuthority;
     const Authorized = RenderAuthorized(authorities);
@@ -28,13 +31,12 @@ class AsyncAuthorized extends React.Component {
   }
 
   render() {
-    const { loadingUser } = this.props;
+    const { loadingUser } = this.props.global;
     return loadingUser ? <PageLoading /> : this.renderLayout();
   }
 }
 
 export default connect(({ global, setting }) => ({
-  loadingUser: global.loadingUser,
-  currentUser: global.currentUser,
+  global,
   ...setting,
 }))(AsyncAuthorized);

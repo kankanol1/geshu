@@ -88,6 +88,13 @@ export default {
         collapsed: payload,
       };
     },
+
+    resetLoading(state) {
+      return {
+        ...state,
+        loadingUser: true,
+      };
+    },
   },
 
   subscriptions: {},
