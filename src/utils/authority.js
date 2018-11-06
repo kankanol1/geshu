@@ -7,7 +7,7 @@ const store = getFromRegistory('store');
 export function getAuthority() {
   let v = [];
   if (store && store.getState().global.currentUser !== undefined) {
-    v = store.getState().global.currentUser.currentAuthority;
+    v = store.getState().global.currentUser.privileges;
   }
   return v;
 }

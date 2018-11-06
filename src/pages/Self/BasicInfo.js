@@ -47,7 +47,7 @@ class BasicInfo extends React.PureComponent {
           {form.getFieldDecorator('userName', {})(<span>{currentRecord.userName}</span>)}
         </FormItem>
         <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="角色">
-          {form.getFieldDecorator('role', {})(<span>{currentRecord.role}</span>)}
+          {form.getFieldDecorator('roleName', {})(<span>{currentRecord.roleName}</span>)}
         </FormItem>
         <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="邮箱">
           {form.getFieldDecorator('email', {

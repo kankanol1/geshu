@@ -8,7 +8,8 @@ import { getUrlParams } from '../utils';
 let userListDataSource = [
   {
     userName: 'user',
-    role: 'user',
+    role: 4,
+    roleName: '数据处理人员',
     privileges: [257, 258, 259, 260, 273, 274, 275, 276],
     email: 'user@gl-data.com',
     password: 'user',
@@ -18,8 +19,31 @@ let userListDataSource = [
   },
   {
     userName: 'admin',
-    role: 'admin',
-    privileges: [257, 258, 259, 260, 273, 274, 275, 276],
+    role: 1,
+    roleName: '超级管理员',
+    privileges: [
+      1,
+      2,
+      3,
+      4,
+      17,
+      18,
+      19,
+      20,
+      33,
+      34,
+      35,
+      36,
+      49,
+      257,
+      258,
+      259,
+      260,
+      273,
+      274,
+      275,
+      276,
+    ],
     email: 'admin@gl-data.com',
     password: 'admin',
     createdAt: moment('2018-03-01 12:00:00', 'YYYY-MM-DD HH:mm:SS'),
@@ -218,6 +242,37 @@ export function updateUser(req, res, u, b) {
 
 // }
 
+export function fetchRoles(req, res, u) {
+  const result = [
+    {
+      id: 1,
+      name: 'SUPER_ADMIN',
+      description: '超级管理员',
+    },
+    {
+      id: 2,
+      name: 'ADVANCED_ADMIN',
+      description: '高级管理员',
+    },
+    {
+      id: 3,
+      name: 'USER_ADMIN',
+      description: '用户管理员',
+    },
+    {
+      id: 4,
+      name: 'PROJECT_USER',
+      description: '数据处理人员',
+    },
+    {
+      id: 5,
+      name: 'DATASET_USER',
+      description: '数据查看人员',
+    },
+  ];
+  return res.json(result);
+}
+
 export default {
   // login
   'POST /api/login/account': login,
@@ -228,4 +283,5 @@ export default {
   'POST /api/users/delete': deleteUser,
   'GET /api/users/username': queryUserName,
   'POST /api/users/update': updateUser,
+  'GET /api/users/roles': fetchRoles,
 };

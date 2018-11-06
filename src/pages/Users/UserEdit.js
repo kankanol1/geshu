@@ -1,42 +1,26 @@
-import React, { PureComponent, Fragment } from 'react';
+import React, { PureComponent } from 'react';
 import { connect } from 'dva';
-import {
-  Popconfirm,
-  Tag,
-  Row,
-  Col,
-  Card,
-  Form,
-  Input,
-  Select,
-  Radio,
-  Button,
-  Dropdown,
-  Menu,
-  InputNumber,
-  DatePicker,
-  Modal,
-  message,
-  Badge,
-  Divider,
-} from 'antd';
+import { Card, Form, Input, Radio, Button } from 'antd';
 import PageHeaderWrapper from '../../components/PageHeaderWrapper';
+import PageLoading from '../../components/PageLoading';
 
 const FormItem = Form.Item;
 const RadioGroup = Radio.Group;
 
-const getValue = obj =>
-  Object.keys(obj)
-    .map(key => obj[key])
-    .join(',');
-
 @connect(({ users, loading }, { match }) => ({
   users,
   match,
-  loading: loading.models.users,
+  loading,
 }))
 @Form.create()
 class UserEdit extends PureComponent {
+  componentDidMount() {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'users/fetchRoles',
+    });
+  }
+
   handleAdd = e => {
     e.preventDefault();
 
@@ -48,6 +32,7 @@ class UserEdit extends PureComponent {
           payload: {
             ...fieldsValue,
           },
+          callback: this.handleFormReset,
         });
       }
     });
@@ -100,6 +85,10 @@ class UserEdit extends PureComponent {
     const { form, match, users } = this.props;
     const currentRecord = users.selectedUser;
     const updateMode = currentRecord && currentRecord.userName === match.params.userName;
+    const loading = this.props.loading.effects['users/fetchRoles'];
+    if (loading || !users.roles) {
+      return <PageLoading />;
+    }
     return (
       <PageHeaderWrapper>
         <Form onSubmit={updateMode ? this.handleUpdate : this.handleAdd}>
@@ -149,11 +138,15 @@ class UserEdit extends PureComponent {
             </FormItem>
             <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="角色">
               {form.getFieldDecorator('role', {
-                initialValue: !updateMode ? 'user' : currentRecord.role,
+                initialValue: !updateMode ? '' : currentRecord.role,
               })(
                 <RadioGroup>
-                  <Radio value="user">普通用户</Radio>
-                  <Radio value="admin">超级管理员</Radio>
+                  {users.roles.map(v => (
+                    <Radio key={v.name} value={v.id}>
+                      {' '}
+                      {v.description}{' '}
+                    </Radio>
+                  ))}
                 </RadioGroup>
               )}
             </FormItem>

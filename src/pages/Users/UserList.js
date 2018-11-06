@@ -81,8 +81,7 @@ class UserList extends PureComponent {
     },
     {
       title: '角色',
-      dataIndex: 'role',
-      render: val => (val === 'admin' ? '超级管理员' : '普通用户'),
+      dataIndex: 'roleName',
     },
     {
       title: '更新时间',

@@ -5,6 +5,7 @@ import {
   updateUser,
   createUser,
   queryUserName,
+  fetchRoles,
 } from '@/services/usersAPI';
 
 export default {
@@ -23,6 +24,7 @@ export default {
       },
     },
     selectedUser: undefined,
+    roles: undefined,
   },
 
   reducers: {
@@ -67,9 +69,7 @@ export default {
       return {
         ...state,
         validate: {
-          ...state.validate,
           userName: {
-            ...state.validate.userName,
             validating: undefined,
             success: true,
             message: '',
@@ -129,11 +129,12 @@ export default {
       }
     },
 
-    *createUser({ payload }, { call, put }) {
+    *createUser({ payload, callback }, { call, put }) {
       const response = yield call(createUser, { ...payload });
       if (response) {
         if (response.success) {
           message.success(response.message);
+          if (callback) callback();
         } else {
           // show message.
           message.error(response.message);
@@ -147,7 +148,7 @@ export default {
       });
       const { userName } = payload;
 
-      if (userName.length < 2) {
+      if (userName.length < 3) {
         yield put({
           type: 'endValidationUserName',
           payload: {
@@ -163,6 +164,16 @@ export default {
             payload: response,
           });
         }
+      }
+    },
+
+    *fetchRoles(_, { call, put }) {
+      const response = yield call(fetchRoles);
+      if (response) {
+        yield put({
+          type: 'updateState',
+          payload: { roles: response },
+        });
       }
     },
   },

@@ -45,27 +45,28 @@ export default {
           } else {
             message.info(`服务器错误，状态:${e.name}`);
           }
-          return { role: 'guest' };
         });
-      // first save role.
-      yield put({
-        type: 'saveCurrentUser',
-        payload: {
-          currentUser: {
-            ...currentUser,
-            currentAuthority: [P.LOGIN_USER, ...currentUser.currentAuthority],
+      if (currentUser) {
+        // first save role.
+        yield put({
+          type: 'saveCurrentUser',
+          payload: {
+            currentUser: {
+              ...currentUser,
+              privileges: [P.LOGIN_USER, ...currentUser.privileges],
+            },
+            loadingUser: false,
           },
-          loadingUser: false,
-        },
-      });
-      if (callback) {
-        callback();
-      }
-      /** rediret to index */
-      const redirect = payload && payload.redirect;
+        });
+        if (callback) {
+          callback();
+        }
+        /** rediret to index */
+        const redirect = payload && payload.redirect;
 
-      if (redirect) {
-        yield put(routerRedux.push(redirect));
+        if (redirect) {
+          yield put(routerRedux.push(redirect));
+        }
       }
     },
   },

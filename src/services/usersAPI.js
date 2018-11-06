@@ -66,3 +66,9 @@ export async function userLogout() {
     method: 'GET',
   });
 }
+
+export async function fetchRoles() {
+  return request('/api/users/roles', {
+    method: 'GET',
+  });
+}

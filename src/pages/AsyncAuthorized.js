@@ -18,7 +18,7 @@ class AsyncAuthorized extends React.Component {
       global: { currentUser },
     } = this.props;
     // get authority directly.
-    const authorities = currentUser.currentAuthority;
+    const authorities = currentUser.privileges;
     const Authorized = RenderAuthorized(authorities);
     return (
       <Authorized
