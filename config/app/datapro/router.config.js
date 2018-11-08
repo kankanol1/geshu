@@ -17,13 +17,25 @@ export default [
     Routes: ['src/pages/AsyncAuthorized'],
     authority: [Privileges.LOGIN_USER],
     routes: [
-      { path: '/', redirect: '/project/list' },
+      { path: '/', redirect: '/projects/list' },
       { path: '/self', redirect: '/self/basic' },
       {
         path: '/testm',
         name: 'testm',
         hideInMenu: true,
         component: './Test/TestMarkdown',
+      },
+      {
+        path: '/projects',
+        name: 'project',
+        icon: 'bulb',
+        routes: [
+          {
+            path: '/projects/list',
+            name: 'list',
+            component: './DataPro/Projects/ProjectList',
+          },
+        ],
       },
       {
         path: 'users',
