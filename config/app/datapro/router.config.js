@@ -40,8 +40,7 @@ export default [
             component: './DataPro/Projects/ProjectList',
           },
           {
-            path: '/projects/show/:id',
-            name: 'show',
+            path: '/projects/p/:pane/:id',
             hideInMenu: true,
             component: './DataPro/Projects/ProjectIndex',
           },

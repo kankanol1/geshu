@@ -136,7 +136,7 @@ class ProjectList extends PureComponent {
               <Card
                 hoverable
                 className={styles.card}
-                actions={[<a>编辑</a>, <Link to={`/projects/show/${item.id}`}>打开</Link>]}
+                actions={[<a>编辑</a>, <Link to={`/projects/p/show/${item.id}`}>打开</Link>]}
               >
                 <Card.Meta
                   avatar={

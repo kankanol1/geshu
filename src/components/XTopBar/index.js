@@ -20,7 +20,7 @@ export default class XTopBar extends PureComponent {
         {title}
         <div className={styles.menuWrapper}>
           {menus.map(item => (
-            <Tooltip key={item.key} title={item.tooltip}>
+            <Tooltip key={item.key} title={item.tooltip} placement="bottom">
               <Link
                 to={item.link}
                 className={item.link === location ? styles.menuSelected : styles.menu}
