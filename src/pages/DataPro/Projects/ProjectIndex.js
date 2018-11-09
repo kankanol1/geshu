@@ -1,10 +1,13 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
+import Link from 'umi/link';
 import { Icon, Card, Row, Col, Tag } from 'antd';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
-import XTopBar from '@/components/XTopBar';
 import PageLoading from '@/components/PageLoading';
 import XTagList from '@/components/XTagList';
+import MarkdownLoader from '@/components/MarkdownLoader';
+
+import { renderTopBar } from './Utils';
 
 import styles from './ProjectIndex.less';
 
@@ -22,45 +25,57 @@ class ProjectIndex extends PureComponent {
     });
   }
 
-  renderOverviewCard = () => {
+  renderOverviewCard = id => {
     return (
       <Card title="概览">
         <Row span={24}>
-          <Col span={4} className={styles.overviewItem}>
-            <Icon className={styles.iconOrange} type="share-alt" />
-            <span>
-              {' '}
-              流程组件 <span>5</span> 个
-            </span>
+          <Col span={6} className={styles.overviewItem}>
+            <Link to={`/projects/pipeline/${id}`} class={styles.overviewLink}>
+              <div>
+                <Icon className={styles.iconOrange} type="share-alt" />
+                <span>
+                  流程组件 <strong className={styles.iconOrange}>5</strong> 个
+                </span>
+              </div>
+            </Link>
           </Col>
-          <Col span={4} className={styles.overviewItem}>
-            <Icon className={styles.iconGreen} type="file-text" />
-            <span>
-              {' '}
-              数据集 <span>5</span> 个
-            </span>
+          <Col span={6} className={styles.overviewItem}>
+            <Link to={`/projects/dataset/${id}`} class={styles.overviewLink}>
+              <div>
+                <Icon className={styles.iconGreen} type="file-text" />
+                <span>
+                  数据集 <strong className={styles.iconGreen}>5</strong> 个
+                </span>
+              </div>
+            </Link>
           </Col>
-          <Col span={4} className={styles.overviewItem}>
-            <Icon className={styles.iconBlue} type="fund" />
-            <span>
-              {' '}
-              数据看板 <span>5</span> 个
-            </span>
+          <Col span={6} className={styles.overviewItem}>
+            <Link to={`/projects/dashboard/${id}`} class={styles.overviewLink}>
+              <div>
+                <Icon className={styles.iconBlue} type="fund" />
+                <span>
+                  数据看板 <strong className={styles.iconBlue}>5</strong> 个
+                </span>
+              </div>
+            </Link>
           </Col>
-          <Col span={4} className={styles.overviewItem}>
-            <Icon className={styles.iconRed} type="clock-circle" />
-            <span>
-              {' '}
-              改动历史 <span>5</span> 个
-            </span>
+          <Col span={6} className={styles.overviewItem}>
+            <Link to={`/projects/versions/${id}`} class={styles.overviewLink}>
+              <div>
+                <Icon className={styles.iconRed} type="clock-circle" />
+                <span>
+                  改动历史 <strong className={styles.iconRed}>5</strong> 次
+                </span>
+              </div>
+            </Link>
           </Col>
-          <Col span={4} className={styles.overviewItem}>
+          {/* <Col span={4} className={styles.overviewItem}>
             <Icon className={styles.iconPurple} type="save" />
             <span>
               {' '}
               最后更新 <span>2018-09-08</span>{' '}
             </span>
-          </Col>
+          </Col> */}
         </Row>
       </Card>
     );
@@ -86,54 +101,14 @@ class ProjectIndex extends PureComponent {
         hiddenBreadcrumb
         title={project.name}
         content={content}
-        top={
-          <XTopBar
-            title={project.name}
-            back="/projects/list"
-            location={pathname}
-            menus={[
-              {
-                tooltip: '概览',
-                key: 'overview',
-                link: `/projects/show/${id}`,
-                content: <Icon type="profile" />,
-              },
-              {
-                tooltip: '数据处理流程',
-                key: 'pipeline',
-                link: `/projects/pipeline/${id}`,
-                content: <Icon type="share-alt" />,
-              },
-              {
-                tooltip: '数据集',
-                key: 'dataset',
-                link: `/projects/dataset/${id}`,
-                content: <Icon type="file-text" />,
-              },
-              {
-                tooltip: '看板',
-                key: 'dashboard',
-                link: `/projects/dashboard/${id}`,
-                content: <Icon type="fund" />,
-              },
-              {
-                tooltip: '历史版本',
-                key: 'versions',
-                link: `/projects/versions/${id}`,
-                content: <Icon type="clock-circle" />,
-              },
-              {
-                tooltip: '项目设置',
-                key: 'settings',
-                link: `/projects/settings/${id}`,
-                content: <Icon type="setting" />,
-              },
-            ]}
-          />
-        }
+        top={renderTopBar(id, project.name, pathname)}
       >
-        {this.renderOverviewCard()}
-        <Card title="项目说明"> README.md </Card>
+        {this.renderOverviewCard(id)}
+        <br />
+        <Card title="项目说明">
+          {' '}
+          <MarkdownLoader url="/doc/test.md" />
+        </Card>
       </PageHeaderWrapper>
     );
   }

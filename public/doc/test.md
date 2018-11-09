@@ -17,4 +17,4 @@
 
 ## Test img.
 
-![Test](../img/doc/test.png)
+![Test](/img/doc/test.png)

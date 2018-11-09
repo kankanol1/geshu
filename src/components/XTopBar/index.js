@@ -4,9 +4,6 @@ import Link from 'umi/link';
 
 import styles from './index.less';
 
-const { SubMenu } = Menu;
-const MenuItemGroup = Menu.ItemGroup;
-
 export default class XTopBar extends PureComponent {
   render() {
     const { back, title, menus, location } = this.props;
@@ -16,7 +13,7 @@ export default class XTopBar extends PureComponent {
         {back ? (
           <Tooltip title="返回">
             <Link to={back} className={styles.home}>
-              <Icon type="left" />
+              <Icon type="home" />
             </Link>
           </Tooltip>
         ) : null}

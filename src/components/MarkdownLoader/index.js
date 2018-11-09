@@ -3,7 +3,10 @@ import { Spin } from 'antd';
 import ReactMarkdown from 'react-markdown';
 import request from '@/utils/request';
 
-export default class MarkdownLoader extends React.Component {
+import 'github-markdown-css'; // import markdown styles.
+import './index.less';
+
+export default class MarkdownLoader extends React.PureComponent {
   state = {
     loading: true,
     markdown: undefined,
@@ -11,10 +14,14 @@ export default class MarkdownLoader extends React.Component {
 
   componentDidMount() {
     this.setState({ loading: true });
-    const { url } = this.props;
-    request(url, { isText: true }).then(result => {
-      this.setState({ loading: false, markdown: result });
-    });
+    const { url, markdown } = this.props;
+    if (url) {
+      request(url, { isText: true }).then(result => {
+        this.setState({ loading: false, markdown: result });
+      });
+    } else if (markdown) {
+      this.setState({ loading: false, markdown });
+    }
   }
 
   renderLoading = () => {
@@ -23,7 +30,11 @@ export default class MarkdownLoader extends React.Component {
 
   renderMarkdown() {
     const { markdown } = this.state;
-    return <ReactMarkdown source={markdown} />;
+    return (
+      <div className="markdown-body">
+        <ReactMarkdown source={markdown} />
+      </div>
+    );
   }
 
   render() {
