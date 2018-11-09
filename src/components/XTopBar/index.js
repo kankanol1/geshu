@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { Menu, Icon } from 'antd';
+import { Menu, Icon, Tooltip } from 'antd';
 import Link from 'umi/link';
 
 import styles from './index.less';
@@ -9,21 +9,29 @@ const MenuItemGroup = Menu.ItemGroup;
 
 export default class XTopBar extends PureComponent {
   render() {
-    const { back, title } = this.props;
+    const { back, title, menus, location } = this.props;
+    // menus: {key:string, tooltip:string, content:recatComponent, link: url}
     return (
       <div className={styles.topbar}>
         {back ? (
-          <Link to={back} className={styles.home}>
-            {' '}
-            <Icon type="left" />
-          </Link>
+          <Tooltip title="返回">
+            <Link to={back} className={styles.home}>
+              <Icon type="left" />
+            </Link>
+          </Tooltip>
         ) : null}
         {title}
         <div className={styles.menuWrapper}>
-          <div className={styles.menuSelected}>Test</div>
-          <div className={styles.menu}>
-            <Icon type="setting" />
-          </div>
+          {menus.map(item => (
+            <Tooltip key={item.key} title={item.tooltip}>
+              <Link
+                to={item.link}
+                className={item.link === location ? styles.menuSelected : styles.menu}
+              >
+                {item.content}
+              </Link>
+            </Tooltip>
+          ))}
         </div>
       </div>
     );

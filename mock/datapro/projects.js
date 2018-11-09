@@ -80,6 +80,13 @@ function getProjectList(req, res) {
   }
 }
 
+export function getProjectById(req, res) {
+  const params = getUrlParams(req.url);
+  const p = projects.filter(i => `${i.id}` === `${params.id}`);
+  res.json(p[0]);
+}
+
 export default {
   'GET /api/datapro/projects/list/all': getProjectList,
+  'GET /api/datapro/projects/get': getProjectById,
 };

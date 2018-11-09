@@ -26,14 +26,21 @@
   margin: 0;
   display: inline-block;
   text-align: center;
-  line-height: 36px;
-  padding: 0 10px;
+  line-height: 32px;
+  padding: 0 20px;
   border-bottom: 4px;
+  border-top: 4px solid transparent;
   &:hover {
     background: @primary-color;
     border-bottom: 4px solid @primary-color;
+    border-top: 4px solid @primary-color;
     color: white;
     cursor: pointer;
+  }
+
+  :global(.anticon) {
+    color: white;
+    font-size: 18px;
   }
 }
 
@@ -48,6 +55,5 @@
 
 .menuWrapper {
   float: right;
-  padding-right: 20px;
   line-height: 0;
 }

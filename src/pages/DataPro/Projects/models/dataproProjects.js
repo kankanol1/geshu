@@ -14,9 +14,7 @@ export default {
     saveQueryResult(state, { payload }) {
       return {
         ...state,
-        data: {
-          ...payload,
-        },
+        data: payload,
       };
     },
   },
