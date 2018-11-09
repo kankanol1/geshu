@@ -18,6 +18,8 @@ export default [
     authority: [Privileges.LOGIN_USER],
     routes: [
       { path: '/', redirect: '/projects/list' },
+      { path: '/projects', redirect: '/projects/list' },
+      { path: '/users', redirect: '/users/list' },
       { path: '/self', redirect: '/self/basic' },
       {
         path: '/testm',
@@ -29,11 +31,19 @@ export default [
         path: '/projects',
         name: 'project',
         icon: 'bulb',
+        hideChildrenInMenu: true,
         routes: [
           {
             path: '/projects/list',
             name: 'list',
+            hideInMenu: true,
             component: './DataPro/Projects/ProjectList',
+          },
+          {
+            path: '/projects/show/:id',
+            name: 'show',
+            hideInMenu: true,
+            component: './DataPro/Projects/ProjectIndex',
           },
         ],
       },
@@ -42,6 +52,7 @@ export default [
         name: 'users',
         icon: 'contacts',
         authority: [Privileges.USER_VIEW],
+        hideChildrenInMenu: true,
         routes: [
           {
             path: 'list',

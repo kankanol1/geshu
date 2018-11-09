@@ -1,11 +1,13 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
+import { Link } from 'dva/router';
 import { Card, Avatar, Button, Icon, List, Form, Row, Col, Input, DatePicker } from 'antd';
 
 import Ellipsis from '@/components/Ellipsis';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import CardTable from '@/components/CardTable';
 
+import { hashCode } from '../../../utils/utils';
 import styles from './ProjectList.less';
 
 const { RangePicker } = DatePicker;
@@ -131,13 +133,17 @@ class ProjectList extends PureComponent {
           onChange={pagination => this.handleTableChange(pagination)}
           renderItem={item => (
             <List.Item key={item.id}>
-              <Card hoverable className={styles.card} actions={[<a>编辑</a>, <a>打开</a>]}>
+              <Card
+                hoverable
+                className={styles.card}
+                actions={[<a>编辑</a>, <Link to={`/projects/show/${item.id}`}>打开</Link>]}
+              >
                 <Card.Meta
                   avatar={
                     <Avatar
                       className={styles.cardAvatar}
                       style={{
-                        backgroundColor: `hsl(${item.name.charCodeAt(0) % 360}, 70%, 70%)`,
+                        backgroundColor: `hsl(${hashCode(item.name) % 360}, 70%, 70%)`,
                         verticalAlign: 'middle',
                       }}
                       size="large"

@@ -1,0 +1,53 @@
+@import '~antd/lib/style/themes/default.less';
+
+.topbar {
+  height: 40px;
+  width: 100%;
+  background: black;
+  color: white;
+  line-height: 40px;
+  padding: 0;
+}
+
+.home {
+  display: inline-block;
+  width: 40px;
+  text-align: center;
+  line-height: 40px;
+
+  &:hover {
+    background: @primary-color;
+    color: white;
+    cursor: pointer;
+  }
+}
+
+.menuBase {
+  margin: 0;
+  display: inline-block;
+  text-align: center;
+  line-height: 36px;
+  padding: 0 10px;
+  border-bottom: 4px;
+  &:hover {
+    background: @primary-color;
+    border-bottom: 4px solid @primary-color;
+    color: white;
+    cursor: pointer;
+  }
+}
+
+.menu {
+  .menuBase;
+}
+
+.menuSelected {
+  .menuBase;
+  border-bottom: 4px solid @primary-color;
+}
+
+.menuWrapper {
+  float: right;
+  padding-right: 20px;
+  line-height: 0;
+}

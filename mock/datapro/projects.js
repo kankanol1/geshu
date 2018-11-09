@@ -6,7 +6,7 @@ const projects = [];
 
 for (let i = 0; i < 66; i += 1) {
   projects.push({
-    name: `Project-${i}`,
+    name: `${faker.random.word()}-Project-${i}`,
     id: i,
     description: faker.hacker.phrase(),
     createdBy: i,

@@ -51,6 +51,8 @@ export default {
   // https://ant.design/docs/react/customize-theme-cn
   theme: {
     'primary-color': defaultSettings.primaryColor,
+    'border-radius-base': '2px',
+    // 'font-size-base': '13px',
   },
   externals: {
     // '@antv/data-set': 'DataSet',
