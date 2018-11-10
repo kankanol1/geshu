@@ -28,6 +28,12 @@ export default [
         component: './Test/TestMarkdown',
       },
       {
+        path: '/testme',
+        name: 'testme',
+        hideInMenu: true,
+        component: './Test/TestMarkdownEditor',
+      },
+      {
         path: '/projects',
         name: 'project',
         icon: 'bulb',

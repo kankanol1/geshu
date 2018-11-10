@@ -49,6 +49,7 @@
     "dva-loading": "^2.0.5",
     "enquire-js": "^0.2.1",
     "github-markdown-css": "^2.10.0",
+    "gl-simplemde": "^2.0.0",
     "hash.js": "^1.1.5",
     "identicon.js": "^2.3.3",
     "js-cookie": "^2.2.0",
