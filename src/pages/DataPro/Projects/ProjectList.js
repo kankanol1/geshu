@@ -6,8 +6,9 @@ import { Card, Avatar, Button, Icon, List, Form, Row, Col, Input, DatePicker } f
 import Ellipsis from '@/components/Ellipsis';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import CardTable from '@/components/CardTable';
+import XTagList from '@/components/XTagList';
 
-import { hashCode } from '../../../utils/utils';
+import { generateColorFor } from '../../../utils/utils';
 import styles from './ProjectList.less';
 
 const { RangePicker } = DatePicker;
@@ -143,7 +144,7 @@ class ProjectList extends PureComponent {
                     <Avatar
                       className={styles.cardAvatar}
                       style={{
-                        backgroundColor: `hsl(${hashCode(item.name) % 360}, 70%, 70%)`,
+                        backgroundColor: generateColorFor(item.name),
                         verticalAlign: 'middle',
                       }}
                       size="large"
@@ -158,6 +159,7 @@ class ProjectList extends PureComponent {
                     </Ellipsis>
                   }
                 />
+                <XTagList tags={item.labels.map(i => ({ color: generateColorFor(i), name: i }))} />
               </Card>
             </List.Item>
           )}

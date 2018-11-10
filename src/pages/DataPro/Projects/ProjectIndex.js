@@ -13,46 +13,41 @@ import Dataset from './Project/Dataset';
 import Pipeline from './Project/Pipeline';
 import { renderTopBar } from './Utils';
 
+import { generateColorFor } from '../../../utils/utils';
 import styles from './ProjectIndex.less';
 
 const getPaneConfig = project => {
   return {
     show: {
+      key: 'show',
       title: project.name,
-      content: (
-        <div>
-          <p>{project.description}</p>
-          <XTagList editable tags={[{ color: 'volcano', name: 'label' }]} />
-        </div>
-      ),
-      component: Index,
     },
     versions: {
+      key: 'versions',
       title: '修改历史',
-      component: Versions,
     },
     settings: {
+      key: 'settings',
       title: '项目设置',
-      component: Settings,
     },
     dashboard: {
+      key: 'dashboard',
       title: '看板',
-      component: Dashboard,
     },
     dataset: {
+      key: 'dataset',
       title: '数据集',
-      component: Dataset,
     },
     pipeline: {
+      key: 'pipeline',
       // title: '数据流程',
-      component: Pipeline,
     },
   };
 };
 
 @connect(({ dataproProject, loading }) => ({
-  dataproProject,
-  loading: loading.models.dataproProject,
+  project: dataproProject.project,
+  loading: loading.effects['dataproProjects/fetchProject'],
 }))
 class ProjectIndex extends PureComponent {
   componentDidMount() {
@@ -64,30 +59,63 @@ class ProjectIndex extends PureComponent {
     });
   }
 
+  renderChildren(pane) {
+    const { match } = this.props;
+    const props = { match };
+    switch (pane) {
+      case 'show':
+        return <Index {...props} />;
+      case 'versions':
+        return <Versions {...props} />;
+      case 'settings':
+        return <Settings {...props} />;
+      case 'dashboard':
+        return <Dashboard {...props} />;
+      case 'dataset':
+        return <Dataset {...props} />;
+      case 'pipeline':
+        return <Pipeline {...props} />;
+      default:
+        return <Redirect to="/exception/404" />;
+    }
+  }
+
+  renderContent(pane) {
+    const { project } = this.props;
+    switch (pane) {
+      case 'show':
+        return (
+          <div>
+            <p>{project.description}</p>
+            <XTagList
+              editable
+              tags={project.labels.map(i => ({ color: generateColorFor(i), name: i }))}
+            />
+          </div>
+        );
+      default:
+        return undefined;
+    }
+  }
+
   render() {
     const { loading } = this.props;
     const { pathname } = this.props.location;
     const { id, pane } = this.props.match.params;
 
-    if (loading) return <PageLoading />;
-    const { project } = this.props.dataproProject;
-
-    const renderConfig = getPaneConfig(project)[pane];
-
-    if (!renderConfig) {
-      // redirect to 403.
-      return <Redirect to="/exception/404" />;
-    }
+    const { project } = this.props;
+    if (loading || !project) return <PageLoading />;
+    const renderConfig = getPaneConfig(project)[pane] || {};
 
     return (
       <PageHeaderWrapper
         className={!renderConfig.title && !renderConfig.content && styles.noPadding}
         hiddenBreadcrumb
         title={renderConfig.title}
-        content={renderConfig.content}
+        content={this.renderContent(pane)}
         top={renderTopBar(id, project.name, pathname)}
       >
-        <renderConfig.component match={this.props.match} />
+        {this.renderChildren(pane)}
       </PageHeaderWrapper>
     );
   }

@@ -6,10 +6,19 @@ export async function queryAllProjects(params) {
 }
 
 export async function queryProjectById(id) {
-  return request(`/api/datapro/projects/get?${stringify({ id })}`);
+  return request(`/api/datapro/projects/p/info?${stringify({ id })}`);
+}
+
+export async function queryProjectCountsById(id) {
+  return request(`/api/datapro/projects/p/count?${stringify({ id })}`);
+}
+export async function queryProjectReadmeById(id) {
+  return request(`/api/datapro/projects/p/readme?${stringify({ id })}`);
 }
 
 export default {
   queryAllProjects,
   queryProjectById,
+  queryProjectCountsById,
+  queryProjectReadmeById,
 };

@@ -202,3 +202,7 @@ export function hashCode(str) {
   }
   return hash;
 }
+
+export function generateColorFor(str) {
+  return `hsl(${hashCode(str) % 360}, 70%, 70%)`;
+}

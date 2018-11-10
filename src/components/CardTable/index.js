@@ -20,16 +20,18 @@ class CardTable extends PureComponent {
           dataSource={list}
           renderItem={renderItem}
         />
-        <div className={styles.paginationWrapper}>
-          <Pagination
-            current={pagination.current}
-            total={pagination.total}
-            pageSize={pagination.pageSize}
-            onChange={(current, pageSize) => {
-              onChange({ current, pageSize });
-            }}
-          />
-        </div>
+        {loading || (
+          <div className={styles.paginationWrapper}>
+            <Pagination
+              current={pagination.current}
+              total={pagination.total}
+              pageSize={pagination.pageSize}
+              onChange={(current, pageSize) => {
+                onChange({ current, pageSize });
+              }}
+            />
+          </div>
+        )}
       </div>
     );
   }

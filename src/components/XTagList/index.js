@@ -22,7 +22,12 @@ export default class XTagList extends Component {
     return (
       <div>
         {tags.map(i => (
-          <Tag key={i.name} color={i.color} closable={editable && this.state.edit}>
+          <Tag
+            className={styles.tag}
+            key={i.name}
+            color={i.color}
+            closable={editable && this.state.edit}
+          >
             {i.name}
           </Tag>
         ))}
