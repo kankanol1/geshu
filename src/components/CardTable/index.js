@@ -16,8 +16,11 @@ class CardTable extends PureComponent {
     return (
       <div className={wrapperClassName}>
         <Spin spinning={loading}>
-          <div className={className}> {list.map(item => renderItem(item))} </div>
-          <div className={styles.paginationWrapper}>
+          <div key="list" className={className}>
+            {' '}
+            {list.map(item => renderItem(item))}{' '}
+          </div>
+          <div key="page" className={styles.paginationWrapper}>
             <Pagination
               current={pagination.current}
               total={pagination.total}

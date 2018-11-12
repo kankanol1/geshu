@@ -21,10 +21,10 @@ export default class XTagList extends Component {
     const { tags, editable, className } = this.props;
     return (
       <div className={className}>
-        {tags.map(i => (
+        {tags.map((i, k) => (
           <Tag
             className={styles.tag}
-            key={i.name}
+            key={k}
             color={i.color}
             closable={editable && this.state.edit}
           >

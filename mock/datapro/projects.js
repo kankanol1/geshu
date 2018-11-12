@@ -146,10 +146,26 @@ export function getProjectVersions(req, res) {
   res.json(result);
 }
 
+export function getAllLabels(req, res) {
+  const labels = [];
+  projects.forEach(p =>
+    p.labels.forEach(l => {
+      labels.push(l);
+    })
+  );
+  res.json(labels);
+}
+
 export default {
   'GET /api/datapro/projects/list/all': getProjectList,
+  'GET /api/datapro/projects/labels': getAllLabels,
   'GET /api/datapro/projects/p/info': getProjectById,
   'GET /api/datapro/projects/p/count': getProjectCount,
   'GET /api/datapro/projects/p/readme': getProjectMarkdown,
   'GET /api/datapro/projects/p/versions': getProjectVersions,
+  'POST /api/datapro/projects/create': {
+    success: true,
+    message: '创建成功',
+    id: 1,
+  },
 };

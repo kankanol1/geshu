@@ -46,6 +46,12 @@ export default [
             component: './DataPro/Projects/ProjectList',
           },
           {
+            path: '/projects/create',
+            name: 'create',
+            hideInMenu: true,
+            component: './DataPro/Projects/CreateProject',
+          },
+          {
             path: '/projects/p/:pane/:id',
             hideInMenu: true,
             component: './DataPro/Projects/ProjectIndex',

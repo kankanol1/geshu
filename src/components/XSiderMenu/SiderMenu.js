@@ -82,7 +82,7 @@ export default class SiderMenu extends SuperSiderMenu {
         <div className={styles.avatarWrapper}>
           {currentUser.userName ? (
             <Dropdown
-              trigger="click"
+              trigger={['click']}
               className={styles.dropdown}
               overlay={userMenu}
               placement="topRight"

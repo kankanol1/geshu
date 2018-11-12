@@ -2,13 +2,14 @@ import React, { PureComponent } from 'react';
 import { connect } from 'dva';
 import router from 'umi/router';
 import { Link } from 'dva/router';
-import { Card, Avatar, Button, Form, Row, Col, Input, DatePicker } from 'antd';
+import { Card, Avatar, Button, Form, Row, Col, Input, DatePicker, Icon, Spin } from 'antd';
 
 import Ellipsis from '@/components/Ellipsis';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import CardTable from '@/components/CardTable';
 import XTagList from '@/components/XTagList';
 
+import { buildTagSelect } from '../../../utils/uiUtils';
 import { generateColorFor } from '../../../utils/utils';
 import styles from './ProjectList.less';
 
@@ -30,6 +31,10 @@ class ProjectList extends PureComponent {
   };
 
   componentDidMount() {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'dataproProjects/fetchLabels',
+    });
     this.performQuery();
   }
 
@@ -42,8 +47,11 @@ class ProjectList extends PureComponent {
   handleSearch = e => {
     e.preventDefault();
     const { form } = this.props;
+    const { labels: allLabels } = this.props.dataproProjects;
     form.validateFields((err, fieldsValue) => {
       if (err) return;
+
+      const labels = fieldsValue.labels && fieldsValue.labels.map(l => allLabels[parseInt(l, 10)]);
 
       const updatedAt =
         fieldsValue.updatedAt && fieldsValue.updatedAt.map(m => m.format('YYYYMMDD')).join();
@@ -53,7 +61,7 @@ class ProjectList extends PureComponent {
 
       const values = {
         ...fieldsValue,
-        // labels: labels && labels.join(),
+        labels: labels && labels.join(),
         updatedAt,
         createdAt,
       };
@@ -79,28 +87,31 @@ class ProjectList extends PureComponent {
   }
 
   renderSimpleForm() {
+    const { labels } = this.props.dataproProjects;
     const { getFieldDecorator } = this.props.form;
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
-          <Col md={6} sm={24}>
-            <Form.Item label="编号">
-              {getFieldDecorator('id')(<Input placeholder="请输入" />)}
-            </Form.Item>
-          </Col>
-          <Col md={6} sm={24}>
+          <Col md={12} sm={24}>
             <Form.Item label="名称">
               {getFieldDecorator('name')(<Input placeholder="请输入" />)}
             </Form.Item>
           </Col>
-          <Col md={6} sm={24}>
+          <Col md={12} sm={24}>
             <Form.Item label="创建时间">
               {getFieldDecorator('createdAt')(
                 <RangePicker style={{ width: '100%' }} placeholder={['开始日期', '结束日期']} />
               )}
             </Form.Item>
           </Col>
-          <Col md={4} sm={24}>
+        </Row>
+        <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
+          <Col md={12} sm={24}>
+            <Form.Item label="标签">
+              {getFieldDecorator('labels')(buildTagSelect(labels || [], true, false))}
+            </Form.Item>
+          </Col>
+          <Col md={12} sm={24}>
             <span>
               <Button type="primary" htmlType="submit">
                 查询
@@ -119,26 +130,39 @@ class ProjectList extends PureComponent {
     const {
       dataproProjects: { data },
       loading,
-      dispatch,
     } = this.props;
 
     const content = (
-      <div className={`${styles.pageHeaderContent} ${styles.tableListForm}`}>
-        {this.renderSimpleForm()}
-      </div>
+      <Spin spinning={loading}>
+        <div className={`${styles.pageHeaderContent} ${styles.tableListForm}`}>
+          {this.renderSimpleForm()}
+        </div>
+      </Spin>
     );
 
     return (
-      <PageHeaderWrapper title="项目列表" content={content}>
+      <PageHeaderWrapper
+        title={
+          <React.Fragment>
+            项目列表
+            <Link to="/projects/create">
+              <Button className={styles.newBtn} type="primary">
+                <Icon type="plus" />
+                新建
+              </Button>
+            </Link>
+          </React.Fragment>
+        }
+        content={content}
+      >
         <CardTable
           className={styles.cardsWrapper}
           loading={loading}
           data={data}
           onChange={pagination => this.handleTableChange(pagination)}
           renderItem={item => (
-            <div className={styles.cardWrapper}>
+            <div className={styles.cardWrapper} key={item.id}>
               <Card
-                key={item.id}
                 onClick={() => {
                   router.push(`/projects/p/show/${item.id}`);
                 }}

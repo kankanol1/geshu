@@ -1,4 +1,8 @@
-import { queryAllProjects } from '../../../../services/datapro/projectsAPI';
+import {
+  queryAllProjects,
+  queryAllLabels,
+  createProject,
+} from '../../../../services/datapro/projectsAPI';
 
 export default {
   namespace: 'dataproProjects',
@@ -7,6 +11,7 @@ export default {
     data: {
       list: [],
       pagination: {},
+      labels: [],
     },
   },
 
@@ -16,6 +21,9 @@ export default {
         ...state,
         data: payload,
       };
+    },
+    saveLabels(state, { payload }) {
+      return { ...state, labels: payload };
     },
   },
 
@@ -27,6 +35,25 @@ export default {
           type: 'saveQueryResult',
           payload: response,
         });
+      }
+    },
+
+    *fetchLabels({ payload }, { call, put }) {
+      const response = yield call(queryAllLabels, payload);
+      if (response) {
+        yield put({
+          type: 'saveLabels',
+          payload: response,
+        });
+      }
+    },
+
+    *createProject({ payload, callback }, { call, put }) {
+      const response = yield call(createProject, payload);
+      if (response) {
+        if (callback) {
+          callback(response);
+        }
       }
     },
   },
