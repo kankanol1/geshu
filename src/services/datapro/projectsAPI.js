@@ -12,8 +12,13 @@ export async function queryProjectById(id) {
 export async function queryProjectCountsById(id) {
   return request(`/api/datapro/projects/p/count?${stringify({ id })}`);
 }
+
 export async function queryProjectReadmeById(id) {
   return request(`/api/datapro/projects/p/readme?${stringify({ id })}`);
+}
+
+export async function queryProjectVersionsById(params) {
+  return request(`/api/datapro/projects/p/versions?${stringify(params)}`);
 }
 
 export default {
@@ -21,4 +26,5 @@ export default {
   queryProjectById,
   queryProjectCountsById,
   queryProjectReadmeById,
+  queryProjectVersionsById,
 };

@@ -103,9 +103,51 @@ export function getProjectMarkdown(req, res) {
   });
 }
 
+export function getProjectVersions(req, res) {
+  const result = {
+    list: [
+      {
+        commitId: '8a83a73',
+        title: '更新项目说明',
+        details: ['更新项目说明'],
+        time: '2018-11-10 01:28:15',
+        author: {
+          id: 1,
+          userName: 'user',
+          email: 'user@user.com',
+          role: 4,
+          createdAt: '2018-10-26 19:02:37',
+          updatedAt: '2018-10-26 19:02:37',
+        },
+      },
+      {
+        commitId: '593274a',
+        title: '项目初始化',
+        details: ['项目初始化'],
+        time: '2018-11-07 15:14:41',
+        author: {
+          id: 1,
+          userName: 'user',
+          email: 'user@user.com',
+          role: 4,
+          createdAt: '2018-10-26 19:02:37',
+          updatedAt: '2018-10-26 19:02:37',
+        },
+      },
+    ],
+    pagination: {
+      current: 1,
+      pageSize: 10,
+      total: 2,
+    },
+  };
+  res.json(result);
+}
+
 export default {
   'GET /api/datapro/projects/list/all': getProjectList,
   'GET /api/datapro/projects/p/info': getProjectById,
   'GET /api/datapro/projects/p/count': getProjectCount,
   'GET /api/datapro/projects/p/readme': getProjectMarkdown,
+  'GET /api/datapro/projects/p/versions': getProjectVersions,
 };

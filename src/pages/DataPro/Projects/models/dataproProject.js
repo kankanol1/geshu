@@ -2,6 +2,7 @@ import {
   queryProjectById,
   queryProjectCountsById,
   queryProjectReadmeById,
+  queryProjectVersionsById,
 } from '../../../../services/datapro/projectsAPI';
 
 export default {
@@ -10,6 +11,7 @@ export default {
     project: {},
     counts: {},
     readme: {},
+    versions: [],
   },
 
   reducers: {
@@ -29,6 +31,12 @@ export default {
       return {
         ...state,
         readme: payload,
+      };
+    },
+    saveProjectVersions(state, { payload }) {
+      return {
+        ...state,
+        versions: payload,
       };
     },
   },
@@ -58,6 +66,15 @@ export default {
         yield put({
           type: 'saveProjectReadme',
           payload: response.md,
+        });
+      }
+    },
+    *fetchProjectVersions({ payload }, { call, put }) {
+      const response = yield call(queryProjectVersionsById, payload.id);
+      if (response) {
+        yield put({
+          type: 'saveProjectVersions',
+          payload: response,
         });
       }
     },

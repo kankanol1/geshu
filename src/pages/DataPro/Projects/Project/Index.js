@@ -36,7 +36,7 @@ class Index extends PureComponent {
         ) : (
           <Row span={24}>
             <Col span={6} className={styles.overviewItem}>
-              <Link to={`/projects/pipeline/${id}`} className={styles.overviewLink}>
+              <Link to={`/projects/p/pipeline/${id}`} className={styles.overviewLink}>
                 <div>
                   <Icon
                     className={counts.pipeline > 0 ? styles.iconOrange : styles.iconGrey}
@@ -53,7 +53,7 @@ class Index extends PureComponent {
               </Link>
             </Col>
             <Col span={6} className={styles.overviewItem}>
-              <Link to={`/projects/dataset/${id}`} className={styles.overviewLink}>
+              <Link to={`/projects/p/dataset/${id}`} className={styles.overviewLink}>
                 <div>
                   <Icon
                     className={counts.dataset > 0 ? styles.iconGreen : styles.iconGrey}
@@ -70,7 +70,7 @@ class Index extends PureComponent {
               </Link>
             </Col>
             <Col span={6} className={styles.overviewItem}>
-              <Link to={`/projects/dashboard/${id}`} className={styles.overviewLink}>
+              <Link to={`/projects/p/dashboard/${id}`} className={styles.overviewLink}>
                 <div>
                   <Icon
                     className={counts.dashboard > 0 ? styles.iconBlue : styles.iconGrey}
@@ -87,7 +87,7 @@ class Index extends PureComponent {
               </Link>
             </Col>
             <Col span={6} className={styles.overviewItem}>
-              <Link to={`/projects/versions/${id}`} className={styles.overviewLink}>
+              <Link to={`/projects/p/versions/${id}`} className={styles.overviewLink}>
                 <div>
                   <Icon
                     className={counts.commit > 0 ? styles.iconRed : styles.iconGrey}

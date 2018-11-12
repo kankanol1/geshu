@@ -89,7 +89,11 @@ class ProjectIndex extends PureComponent {
             <p>{project.description}</p>
             <XTagList
               editable
-              tags={project.labels.map(i => ({ color: generateColorFor(i), name: i }))}
+              tags={
+                project.labels
+                  ? project.labels.map(i => ({ color: generateColorFor(i), name: i }))
+                  : []
+              }
             />
           </div>
         );
