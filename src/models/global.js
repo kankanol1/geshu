@@ -98,5 +98,25 @@ export default {
     },
   },
 
-  subscriptions: {},
+  subscriptions: {
+    setup({ dispatch, history }) {
+      let lastPathname;
+      history.listen(({ pathname }) => {
+        if (pathname.startsWith('/projects/p')) {
+          if (!lastPathname || !lastPathname.startsWith('/projects/p')) {
+            dispatch({
+              type: 'changeFullScreen',
+              payload: true,
+            });
+          }
+        } else {
+          dispatch({
+            type: 'changeFullScreen',
+            payload: false,
+          });
+        }
+        lastPathname = pathname;
+      });
+    },
+  },
 };

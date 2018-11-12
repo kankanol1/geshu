@@ -11,7 +11,7 @@ import Settings from './Project/Settings';
 import Dashboard from './Project/Dashboard';
 import Dataset from './Project/Dataset';
 import Pipeline from './Project/Pipeline';
-import { renderTopBar } from './Utils';
+import TopBar from './TopBar';
 
 import { generateColorFor } from '../../../utils/utils';
 import styles from './ProjectIndex.less';
@@ -45,8 +45,9 @@ const getPaneConfig = project => {
   };
 };
 
-@connect(({ dataproProject, loading }) => ({
+@connect(({ global, dataproProject, loading }) => ({
   project: dataproProject.project,
+  global,
   loading: loading.effects['dataproProjects/fetchProject'],
 }))
 class ProjectIndex extends PureComponent {
@@ -56,6 +57,10 @@ class ProjectIndex extends PureComponent {
     dispatch({
       type: 'dataproProject/fetchProject',
       payload: { id },
+    });
+    dispatch({
+      type: 'global/changeFullScreen',
+      payload: true,
     });
   }
 
@@ -103,7 +108,7 @@ class ProjectIndex extends PureComponent {
   }
 
   render() {
-    const { loading } = this.props;
+    const { loading, dispatch } = this.props;
     const { pathname } = this.props.location;
     const { id, pane } = this.props.match.params;
 
@@ -111,13 +116,24 @@ class ProjectIndex extends PureComponent {
     if (loading || !project) return <PageLoading />;
     const renderConfig = getPaneConfig(project)[pane] || {};
 
+    const { currentUser, collapsed, fullScreen } = this.props.global;
+    const topBarProps = {
+      id,
+      title: project.name,
+      path: pathname,
+      dispatch,
+      currentUser,
+      collapsed,
+      fullScreen,
+    };
+
     return (
       <PageHeaderWrapper
         className={!renderConfig.title && !renderConfig.content && styles.noPadding}
         hiddenBreadcrumb
         title={renderConfig.title}
         content={this.renderContent(pane)}
-        top={renderTopBar(id, project.name, pathname)}
+        top={<TopBar {...topBarProps} />}
       >
         {this.renderChildren(pane)}
       </PageHeaderWrapper>
