@@ -18,9 +18,9 @@ export default class XTagList extends Component {
   };
 
   render() {
-    const { tags, editable } = this.props;
+    const { tags, editable, className } = this.props;
     return (
-      <div>
+      <div className={className}>
         {tags.map(i => (
           <Tag
             className={styles.tag}

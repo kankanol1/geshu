@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { List, Pagination } from 'antd';
+import { List, Pagination, Spin } from 'antd';
 
 import styles from './index.less';
 
@@ -10,10 +10,25 @@ class CardTable extends PureComponent {
       loading,
       renderItem,
       onChange,
+      className,
+      wrapperClassName,
     } = this.props;
     return (
-      <div>
-        <List
+      <div className={wrapperClassName}>
+        <Spin spinning={loading}>
+          <div className={className}> {list.map(item => renderItem(item))} </div>
+          <div className={styles.paginationWrapper}>
+            <Pagination
+              current={pagination.current}
+              total={pagination.total}
+              pageSize={pagination.pageSize}
+              onChange={(current, pageSize) => {
+                onChange({ current, pageSize });
+              }}
+            />
+          </div>
+        </Spin>
+        {/* <List
           rowKey="id"
           loading={loading}
           grid={{ gutter: 24, lg: 3, md: 2, sm: 1, xs: 1 }}
@@ -31,7 +46,7 @@ class CardTable extends PureComponent {
               }}
             />
           </div>
-        )}
+        )} */}
       </div>
     );
   }

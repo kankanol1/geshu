@@ -1,7 +1,24 @@
 @import '~antd/lib/style/themes/default.less';
 @import '~@/utils/utils.less';
 
+.cardsWrapper {
+  // column-count: 3; //waterfall
+  // column-gap: 0; //waterfall
+  display: flex; // equal-height
+  flex-wrap: wrap; // equal-height
+}
+
+.cardWrapper {
+  width: 33.3%; // equal-height
+  display: flex; // equal-height
+}
+
 .card {
+  width: 100%;
+  margin: 2.5% 1.5%;
+  // break-inside: avoid; // waterfall
+  display: flex; // equal-height
+  flex-direction: column; // equal-height
   :global {
     .ant-card-meta-title {
       margin-bottom: 12px;
@@ -20,7 +37,7 @@
       }
     }
     .ant-card-body {
-      height: 200px;
+      flex: 1 0 auto; // equal-height
     }
   }
 }
@@ -105,10 +122,16 @@
       margin-right: 16px;
     }
   }
+  .cardWrapper {
+    width: 50%;
+  }
 }
 @media screen and (max-width: @screen-md) {
   .extraImg {
     display: none;
+  }
+  .cardWrapper {
+    width: 100%;
   }
 }
 

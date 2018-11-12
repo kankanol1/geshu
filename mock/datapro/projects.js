@@ -3,6 +3,8 @@ import moment from 'moment';
 import fs from 'fs';
 import { getUrlParams } from '../utils';
 
+faker.locale = 'zh_CN';
+
 const projects = [];
 
 for (let i = 0; i < 66; i += 1) {

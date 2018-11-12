@@ -129,12 +129,14 @@ class ProjectList extends PureComponent {
     return (
       <PageHeaderWrapper title="项目列表" content={content}>
         <CardTable
+          className={styles.cardsWrapper}
           loading={loading}
           data={data}
           onChange={pagination => this.handleTableChange(pagination)}
           renderItem={item => (
-            <List.Item key={item.id}>
+            <div className={styles.cardWrapper}>
               <Card
+                key={item.id}
                 hoverable
                 className={styles.card}
                 actions={[<a>编辑</a>, <Link to={`/projects/p/show/${item.id}`}>打开</Link>]}
@@ -159,9 +161,13 @@ class ProjectList extends PureComponent {
                     </Ellipsis>
                   }
                 />
-                <XTagList tags={item.labels.map(i => ({ color: generateColorFor(i), name: i }))} />
+                <div className={styles.labels}>
+                  <XTagList
+                    tags={item.labels.map(i => ({ color: generateColorFor(i, '70%'), name: i }))}
+                  />
+                </div>
               </Card>
-            </List.Item>
+            </div>
           )}
         />
       </PageHeaderWrapper>

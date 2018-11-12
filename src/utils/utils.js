@@ -203,6 +203,6 @@ export function hashCode(str) {
   return hash;
 }
 
-export function generateColorFor(str) {
-  return `hsl(${hashCode(str) % 360}, 70%, 70%)`;
+export function generateColorFor(str, light = '60%') {
+  return `hsl(${hashCode(str) % 360}, 70%, ${light})`;
 }

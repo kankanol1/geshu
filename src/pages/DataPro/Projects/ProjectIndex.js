@@ -96,7 +96,7 @@ class ProjectIndex extends PureComponent {
               editable
               tags={
                 project.labels
-                  ? project.labels.map(i => ({ color: generateColorFor(i), name: i }))
+                  ? project.labels.map(i => ({ color: generateColorFor(i, '70%'), name: i }))
                   : []
               }
             />
