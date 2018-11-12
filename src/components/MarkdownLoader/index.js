@@ -24,21 +24,14 @@ export default class MarkdownLoader extends React.PureComponent {
     }
   }
 
-  renderLoading = () => {
-    return <Spin />;
-  };
-
-  renderMarkdown() {
-    const { markdown } = this.state;
-    return (
-      <div className="markdown-body">
-        <ReactMarkdown source={markdown} />
-      </div>
-    );
-  }
-
   render() {
-    const { loading } = this.state;
-    return loading ? this.renderLoading() : this.renderMarkdown();
+    const { loading, markdown } = this.state;
+    return (
+      <Spin spinning={loading}>
+        <div className="markdown-body">
+          <ReactMarkdown source={markdown} />
+        </div>
+      </Spin>
+    );
   }
 }

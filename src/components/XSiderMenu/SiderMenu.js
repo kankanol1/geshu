@@ -81,7 +81,12 @@ export default class SiderMenu extends SuperSiderMenu {
 
         <div className={styles.avatarWrapper}>
           {currentUser.userName ? (
-            <Dropdown className={styles.dropdown} overlay={userMenu} placement="topRight">
+            <Dropdown
+              trigger="click"
+              className={styles.dropdown}
+              overlay={userMenu}
+              placement="topRight"
+            >
               <span className={`${styles.action} ${styles.account}`}>
                 <Avatar size="normal" className={styles.avatar} src={displayAvatar} />
                 {collapsed ? null : <span className={styles.name}>{currentUser.userName}</span>}

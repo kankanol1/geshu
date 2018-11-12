@@ -1,7 +1,8 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
+import router from 'umi/router';
 import { Link } from 'dva/router';
-import { Card, Avatar, Button, Icon, List, Form, Row, Col, Input, DatePicker } from 'antd';
+import { Card, Avatar, Button, Form, Row, Col, Input, DatePicker } from 'antd';
 
 import Ellipsis from '@/components/Ellipsis';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
@@ -118,6 +119,7 @@ class ProjectList extends PureComponent {
     const {
       dataproProjects: { data },
       loading,
+      dispatch,
     } = this.props;
 
     const content = (
@@ -137,6 +139,9 @@ class ProjectList extends PureComponent {
             <div className={styles.cardWrapper}>
               <Card
                 key={item.id}
+                onClick={() => {
+                  router.push(`/projects/p/show/${item.id}`);
+                }}
                 hoverable
                 className={styles.card}
                 actions={[<a>编辑</a>, <Link to={`/projects/p/show/${item.id}`}>打开</Link>]}

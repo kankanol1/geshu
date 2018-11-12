@@ -70,7 +70,7 @@ export default {
       }
     },
     *fetchProjectVersions({ payload }, { call, put }) {
-      const response = yield call(queryProjectVersionsById, payload.id);
+      const response = yield call(queryProjectVersionsById, payload);
       if (response) {
         yield put({
           type: 'saveProjectVersions',

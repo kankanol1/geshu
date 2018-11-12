@@ -89,6 +89,7 @@ export default class TopBar extends React.PureComponent {
             content: (
               <Spin spinning={!userName}>
                 <Dropdown
+                  trigger="click"
                   overlay={
                     <Menu
                       selectedKeys={[]}

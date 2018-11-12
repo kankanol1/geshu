@@ -18,11 +18,11 @@ class Index extends PureComponent {
     const { id } = this.props.match.params;
     dispatch({
       type: 'dataproProject/fetchProjectCount',
-      payload: id,
+      payload: { id },
     });
     dispatch({
       type: 'dataproProject/fetchProjectReadme',
-      payload: id,
+      payload: { id },
     });
   }
 
@@ -118,7 +118,13 @@ class Index extends PureComponent {
         {this.renderOverviewCard(id)}
         <br />
         <Card title="项目说明">
-          {readmeLoading ? <XLoading /> : <MarkdownLoader markdown={readme} />}
+          {readmeLoading ? (
+            <XLoading />
+          ) : readme ? (
+            <MarkdownLoader markdown={readme} />
+          ) : (
+            <span style={{ color: 'grey' }}>暂无项目说明</span>
+          )}
         </Card>
       </React.Fragment>
     );
