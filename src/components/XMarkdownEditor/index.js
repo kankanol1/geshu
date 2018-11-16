@@ -1,7 +1,7 @@
 import React from 'react';
 import SimpleMDE from 'gl-simplemde';
 
-import 'simplemde/dist/simplemde.min.css';
+import 'gl-simplemde/dist/simplemde.min.css';
 
 export default class XMarkdownEditor extends React.PureComponent {
   mde = undefined;
