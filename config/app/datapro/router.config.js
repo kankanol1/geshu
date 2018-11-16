@@ -34,6 +34,12 @@ export default [
         component: './Test/TestMarkdownEditor',
       },
       {
+        path: '/testt',
+        name: 'testt',
+        hideInMenu: true,
+        component: './Test/TestHugeTable',
+      },
+      {
         path: '/projects',
         name: 'project',
         icon: 'bulb',

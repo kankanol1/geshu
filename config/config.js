@@ -56,6 +56,7 @@ export default {
   },
   externals: {
     // '@antv/data-set': 'DataSet',
+    // 'jquery': 'JQuery',
   },
   proxy: process.env.PROXY
     ? {
