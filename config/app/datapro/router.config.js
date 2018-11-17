@@ -40,6 +40,12 @@ export default [
         component: './Test/TestHugeTable',
       },
       {
+        path: '/demo',
+        name: 'demo',
+        hideInMenu: true,
+        component: './Test/TestDemoTable',
+      },
+      {
         path: '/projects',
         name: 'project',
         icon: 'bulb',

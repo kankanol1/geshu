@@ -4,6 +4,47 @@ import pageRoutes from './router.config';
 import webpackPlugin from './plugin.config';
 import defaultSettings from '../src/defaultSettings';
 
+const setupProxy = () => {
+  let proxy = {};
+  if (process.env.PROXY) {
+    proxy = {
+      ...proxy,
+      '/api': {
+        target: process.env.PROXY,
+        changeOrigin: true,
+        secure: false,
+        // pathRewrite: { '^/api': '' },
+      },
+    };
+  }
+  if (process.env.WSPROXY) {
+    proxy = {
+      ...proxy,
+      '/ws': {
+        target: process.env.WSPROXY,
+        pathRewrite: { '^/ws': '' },
+        ws: true,
+        secure: false,
+        logLevel: 'debug',
+      },
+    };
+  } else {
+    proxy = {
+      ...proxy,
+      '/ws': {
+        target: `ws://localhost:${getWSPort()}/`,
+        pathRewrite: { '^/ws': '' },
+        ws: true,
+        secure: false,
+        logLevel: 'debug',
+      },
+    };
+  }
+  return proxy;
+};
+
+const getWSPort = () => process.env.WSPORT || 8001;
+
 export default {
   // add for transfer to umi
   plugins: [
@@ -38,6 +79,7 @@ export default {
       },
     ],
     // ['./config/plugins/global-hook.js', {}],
+    ['./config/plugins/websocket-mock.js', { port: getWSPort() }],
   ],
   targets: {
     ie: 11,
@@ -58,16 +100,7 @@ export default {
     // '@antv/data-set': 'DataSet',
     // 'jquery': 'JQuery',
   },
-  proxy: process.env.PROXY
-    ? {
-        '/api': {
-          target: process.env.PROXY,
-          changeOrigin: true,
-          secure: false,
-          // pathRewrite: { '^/api': '' },
-        },
-      }
-    : undefined,
+  proxy: setupProxy(),
   ignoreMomentLocale: true,
   lessLoaderOptions: {
     javascriptEnabled: true,
