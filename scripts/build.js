@@ -46,6 +46,15 @@ if (buildOpt === '-' || buildOpt === 'graph') {
   shell.cp('-R', 'dist/*', 'dist-tmp/graph/');
 }
 
+if (buildOpt === '-' || buildOpt === 'datapro') {
+  // build graph part.
+  shell.exec('npm run setup:datapro');
+  shell.exec(`npm run ${isRelease ? 'build' : 'dev-build'}`);
+  // copy dist to tmp.
+  shell.mkdir('dist-tmp/datapro');
+  shell.cp('-R', 'dist/*', 'dist-tmp/datapro/');
+}
+
 // write to dist;
 shell.rm('-r', 'dist');
 shell.mv('dist-tmp', 'dist');
