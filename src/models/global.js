@@ -1,6 +1,7 @@
 import fetch from 'dva/fetch';
 import { routerRedux } from 'dva/router';
 import { message } from 'antd';
+import router from 'umi/router';
 import P from '../config/UserPrivileges';
 
 export default {
@@ -42,6 +43,8 @@ export default {
         .catch(e => {
           if (e.name === 401) {
             message.info('请先登录');
+            // redirect.
+            router.push('/user/login');
           } else {
             message.info(`服务器错误，状态:${e.name}`);
           }

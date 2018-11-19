@@ -46,6 +46,12 @@ export default [
         component: './Test/TestDemoTable',
       },
       {
+        path: '/demo1',
+        name: 'demo1',
+        hideInMenu: true,
+        component: './Demo/Demo1',
+      },
+      {
         path: '/projects',
         name: 'project',
         icon: 'bulb',
