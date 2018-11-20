@@ -12,7 +12,12 @@ export default function(api, { port }) {
   const errors = [];
   if (process.env.MOCK === 'none') {
     // no setup.
-    debug('will skip setting up another mock due to MOCK=none');
+    debug('will skip setting up websocket mock due to MOCK=none');
+    return;
+  }
+
+  if (process.env.NODE_ENV === 'production') {
+    debug('will skip setting up websocket mock due to production mode');
     return;
   }
 

@@ -289,7 +289,7 @@ export default {
   // =============================the aboves are from antd-pro======================
   // =============================the followings are for our project===============
   menu: '菜单',
-  'menu.project': '项目管理',
+  'menu.project': '项目',
   'menu.project.list': '项目列表',
   'menu.project.workspace': '工作区',
   'menu.models': '模型管理',
@@ -312,4 +312,5 @@ export default {
   'menu.users.list': '用户列表',
   'menu.users.create': '添加用户',
   'menu.self': '个人中心',
+  'menu.teams': '团队',
 };

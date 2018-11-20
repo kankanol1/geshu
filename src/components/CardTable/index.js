@@ -6,7 +6,8 @@ import styles from './index.less';
 class CardTable extends PureComponent {
   render() {
     const {
-      data: { list, pagination },
+      list,
+      pagination,
       loading,
       renderItem,
       onChange,
@@ -17,19 +18,20 @@ class CardTable extends PureComponent {
       <div className={wrapperClassName}>
         <Spin spinning={loading}>
           <div key="list" className={className}>
-            {' '}
-            {list.map(item => renderItem(item))}{' '}
+            {list.map(item => renderItem(item))}
           </div>
-          <div key="page" className={styles.paginationWrapper}>
-            <Pagination
-              current={pagination.current}
-              total={pagination.total}
-              pageSize={pagination.pageSize}
-              onChange={(current, pageSize) => {
-                onChange({ current, pageSize });
-              }}
-            />
-          </div>
+          {pagination && (
+            <div key="page" className={styles.paginationWrapper}>
+              <Pagination
+                current={pagination.current}
+                total={pagination.total}
+                pageSize={pagination.pageSize}
+                onChange={(current, pageSize) => {
+                  onChange({ current, pageSize });
+                }}
+              />
+            </div>
+          )}
         </Spin>
         {/* <List
           rowKey="id"

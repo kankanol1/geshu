@@ -158,7 +158,8 @@ class ProjectList extends PureComponent {
         <CardTable
           className={styles.cardsWrapper}
           loading={loading}
-          data={data}
+          list={data.list}
+          pagination={data.pagination}
           onChange={pagination => this.handleTableChange(pagination)}
           renderItem={item => (
             <div className={styles.cardWrapper} key={item.id}>
