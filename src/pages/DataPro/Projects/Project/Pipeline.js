@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
+import Workspace from './Pipeline/Workspace';
 
 @connect(({ dataproProject, loading }) => ({
   dataproProject,
@@ -9,7 +10,7 @@ class Pipeline extends PureComponent {
   render() {
     return (
       <React.Fragment>
-        <div>Pipeline</div>
+        <Workspace />
       </React.Fragment>
     );
   }

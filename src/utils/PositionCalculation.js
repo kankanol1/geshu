@@ -2,24 +2,24 @@ import { componentSize } from '@/pages/Project/Workspace/WorkCanvas/styles';
 
 const pointMargin = 10;
 
-const calculatePointCenter = (x, y, width, height, xIndex, yIndex) => {
+const calculatePointCenter = (x, y, width, height, xIndex, yIndex, extraWidth = 0) => {
   let px = 0;
   let py = 0;
 
   switch (xIndex) {
     case 0:
       // top
-      px = x + yIndex * width;
+      px = x + yIndex * width + extraWidth / 2;
       py = y - pointMargin;
       break;
     case 1:
       // right
-      px = x + width + pointMargin;
+      px = x + width + pointMargin + extraWidth;
       py = y + height * yIndex;
       break;
     case 2:
       // bottom
-      px = x + height * yIndex;
+      px = x + height * yIndex + extraWidth / 2;
       py = y + pointMargin;
       break;
     case 3:
@@ -86,12 +86,12 @@ const getComponentSize = () => {
   return componentSize;
 };
 
-const calculatePointPositionDict = component => {
+const calculatePointPositionDict = (component, extraWidth = 0) => {
   const pointDict = {};
   const { x, y } = component;
   const { width, height } = componentSize;
   const calculatePoint = point => {
-    const { px, py } = calculatePointCenter(x, y, width, height, point.x, point.y);
+    const { px, py } = calculatePointCenter(x, y, width, height, point.x, point.y, extraWidth);
     pointDict[point.id] = { x: px, y: py };
   };
   component.inputs.forEach(point => {
@@ -103,11 +103,11 @@ const calculatePointPositionDict = component => {
   return pointDict;
 };
 
-const updateCache = (components, offset) => {
+const updateCache = (components, offset, extraWidth = 0) => {
   const componentDict = {}; // store: componentid: {x, y}
   const componentPointPosition = {}; // store: componentid: {pointid: {x, y}}
   components.forEach(component => {
-    const { c, p } = updateCacheForComponent(component, offset);
+    const { c, p } = updateCacheForComponent(component, offset, extraWidth);
     componentDict[component.id] = c;
     componentPointPosition[component.id] = p;
   });
@@ -117,13 +117,13 @@ const updateCache = (components, offset) => {
   };
 };
 
-const updateCacheForComponent = (component, offset) => {
+const updateCacheForComponent = (component, offset, extraWidth = 0) => {
   const calculatedPosition = {
     x: component.x + offset.x,
     y: component.y + offset.y,
   };
   const c = calculatedPosition;
-  const p = calculatePointPositionDict({ ...component, ...calculatedPosition });
+  const p = calculatePointPositionDict({ ...component, ...calculatedPosition }, extraWidth);
   return { c, p };
 };
 

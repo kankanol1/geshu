@@ -234,6 +234,7 @@ class XBasicLayout extends React.PureComponent {
 
   shouldHeightFixed = path => {
     const prefix = [
+      '/projects/p/pipeline',
       '/project/workspace',
       '/graph/schema',
       '/graph/mapper',

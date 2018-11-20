@@ -1,28 +1,38 @@
 import Component from './Component';
 import Operation from './op/Operation';
 import UntrackedOperation from './op/UntrackedOperation';
-import { updateCache, updateCacheForComponent, getComponentSize } from '../../utils/PositionCalculation';
+import {
+  updateCache,
+  updateCacheForComponent,
+  getComponentSize,
+} from '../../utils/PositionCalculation';
 
 /* representing a pipline canvas. */
 
 const maxHistoryNum = 100;
 
 export default class Canvas {
+  // display dataset.
+  extraWidth = 0;
+
   /* ===== related with history management ==== */
   opHistory = [];
+
   currentOp = 0;
   /* ================================= */
 
   components = [];
+
   selection = [];
 
   componentPositionCache = {};
+
   componentSocketPositionCache = {};
 
   /**
    * for display.
    */
-  offset={ x: 0, y: 0 };
+  offset = { x: 0, y: 0 };
 
   scale = 0.8;
 
@@ -34,7 +44,9 @@ export default class Canvas {
     }
     if (!(op instanceof UntrackedOperation)) {
       this.opHistory = this.opHistory.slice(
-        Math.max(this.opHistory.length - maxHistoryNum - 1, 0), this.currentOp);
+        Math.max(this.opHistory.length - maxHistoryNum - 1, 0),
+        this.currentOp
+      );
       this.currentOp = Math.min(this.currentOp, this.opHistory.length);
       this.opHistory.push(op);
       this.currentOp++;
@@ -44,7 +56,7 @@ export default class Canvas {
   }
 
   notifyUpdate() {
-    this.updated = (new Date()).getTime();
+    this.updated = new Date().getTime();
   }
 
   undo() {
@@ -77,7 +89,7 @@ export default class Canvas {
     this.updated = true;
     this.components.push(component);
     // create cache.
-    const { c, p } = updateCacheForComponent(component, this.offset);
+    const { c, p } = updateCacheForComponent(component, this.offset, this.extraWidth);
     this.componentPositionCache[component.id] = c;
     this.componentSocketPositionCache[component.id] = p;
     this.notifyUpdate();
@@ -86,7 +98,7 @@ export default class Canvas {
   moveComponent(component, x, y) {
     component.move(x, y);
     // update cache.
-    const { c, p } = updateCacheForComponent(component, this.offset);
+    const { c, p } = updateCacheForComponent(component, this.offset, this.extraWidth);
     this.componentPositionCache[component.id] = c;
     this.componentSocketPositionCache[component.id] = p;
     this.notifyUpdate();
@@ -102,7 +114,7 @@ export default class Canvas {
     this.updated = true;
     this.offset = { x, y };
     // update cache.
-    const { componentDict, pointDict } = updateCache(this.components, this.offset);
+    const { componentDict, pointDict } = updateCache(this.components, this.offset, this.extraWidth);
     this.componentPositionCache = componentDict;
     this.componentSocketPositionCache = pointDict;
     // component update.
@@ -113,28 +125,31 @@ export default class Canvas {
   getSelectionInRange(xMin, yMin, xMax, yMax) {
     // first filter components in range.
     const componentSize = getComponentSize();
-    const selectedComponents = Object.entries(this.componentPositionCache).filter(
-      (entry) => {
-        const component = entry[1];
-        return component.x > xMin && component.y > yMin &&
-      component.x + componentSize.width < xMax &&
-      component.y + componentSize.height < yMax;
-      }
-    );
+    const selectedComponents = Object.entries(this.componentPositionCache).filter(entry => {
+      const component = entry[1];
+      return (
+        component.x > xMin &&
+        component.y > yMin &&
+        component.x + componentSize.width < xMax &&
+        component.y + componentSize.height < yMax
+      );
+    });
     const containedComponents = selectedComponents.map(c => c[0]);
     const newSelection = [];
-    this.components.filter(c => containedComponents.includes(c.id)).forEach(
-      (component) => {
-        component.connections.forEach(
-          (line) => {
-            // add this line.
-            newSelection.push({ type: 'line', from: line.from, to: line.to, target: component.id, source: line.component });
-          }
-        );
-        // add this component.
-        newSelection.push({ type: 'component', id: component.id });
-      }
-    );
+    this.components.filter(c => containedComponents.includes(c.id)).forEach(component => {
+      component.connections.forEach(line => {
+        // add this line.
+        newSelection.push({
+          type: 'line',
+          from: line.from,
+          to: line.to,
+          target: component.id,
+          source: line.component,
+        });
+      });
+      // add this component.
+      newSelection.push({ type: 'component', id: component.id });
+    });
     return newSelection;
   }
 
@@ -149,13 +164,14 @@ export default class Canvas {
     this.components.forEach(
       //   { type: 'line', from: 'o-1', to: 'i-1', source: 'input', target: 'preprocess-1' },
       // { type: 'component', id: 'input' },
-      (c) => {
+      c => {
         newSelection.push({
-          type: 'component', id: c.id,
+          type: 'component',
+          id: c.id,
         });
         // get line.
-        c.connections.forEach(
-          to => newSelection.push({
+        c.connections.forEach(to =>
+          newSelection.push({
             type: 'line',
             source: to.component,
             from: to.from,
@@ -171,7 +187,7 @@ export default class Canvas {
   isCurrentSelection(newSelection) {
     if (newSelection.length !== this.selection.length) return false;
     // to string.
-    const transform = i => (`${i.type}-${i.id}-${i.source}-${i.from}-${i.target}-${i.to}`);
+    const transform = i => `${i.type}-${i.id}-${i.source}-${i.from}-${i.target}-${i.to}`;
     const oldSelectionStr = this.selection.map(i => transform(i));
     const newSelectionStr = newSelection.map(i => transform(i));
     const result = newSelectionStr.filter(i => !oldSelectionStr.includes(i)).length === 0;
@@ -197,11 +213,20 @@ export default class Canvas {
     return this.components.map(c => c.toJson());
   }
 
-  static fromJson(json) {
+  static fromJson(json, x = 0, y = 0) {
     const canvas = new Canvas();
     canvas.components = json.map(i => Component.fromJson(i));
     // calculate cache.
-    canvas.setOffset(0, 0);
+    canvas.setOffset(x, y);
+    return canvas;
+  }
+
+  static fromJsonWithDataset(json, x = 0, y = 0, extraWidth = 100) {
+    const canvas = new Canvas();
+    canvas.extraWidth = extraWidth;
+    canvas.components = json.map(i => Component.fromJson(i));
+    // calculate cache.
+    canvas.setOffset(x, y);
     return canvas;
   }
 }

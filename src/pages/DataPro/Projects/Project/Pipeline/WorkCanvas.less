@@ -1,0 +1,32 @@
+.workCanvasWrapper {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  // overflow: hidden;
+}
+
+.toolbarContainer {
+  float: right;
+  width: 40px;
+  height: 100%;
+  position: relative;
+}
+
+.toolbar {
+  background: #eee;
+  position: absolute;
+  top: 40%;
+
+  & i {
+    font-size: 20px;
+    padding: 6px;
+    display: inline-block;
+  }
+  & i:hover {
+    color: white;
+    background: #666;
+    cursor: pointer;
+  }
+}

@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react';
+import { Icon, Layout } from 'antd';
 import { connect } from 'dva';
 import { Redirect } from 'react-router-dom';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
@@ -40,6 +41,7 @@ const getPaneConfig = project => {
     },
     pipeline: {
       key: 'pipeline',
+      fixedHeight: true,
       // title: '数据流程',
     },
   };
@@ -127,7 +129,12 @@ class ProjectIndex extends PureComponent {
       fullScreen,
     };
 
-    return (
+    return renderConfig.fixedHeight ? (
+      <Layout style={{ padding: '0', height: '100%', position: 'relative' }} theme="light">
+        <TopBar {...topBarProps} />
+        {this.renderChildren(pane)}
+      </Layout>
+    ) : (
       <PageHeaderWrapper
         className={!renderConfig.title && !renderConfig.content && styles.noPadding}
         hiddenBreadcrumb

@@ -1,6 +1,19 @@
 import SockJS from 'sockjs-client';
 import Stomp from 'stompjs';
 
+const enabledUrls = ['/demo'];
+
+const matchUrl = (url, urls) => {
+  const exactMatch = () => urls.filter(i => i === url).length > 0;
+  const fuzzyMatch = () =>
+    urls
+      .filter(i => i.endsWith('**'))
+      .map(i => i.substr(0, i.length - 2))
+      .filter(i => url.startsWith(i)).length > 0;
+  const result = exactMatch() || fuzzyMatch();
+  return result;
+};
+
 const websocketRegister = {
   // url => receiver mapping.
   '/user/datapro/recipes': 'demo/onWSReceived',
@@ -50,48 +63,43 @@ export default {
   },
 
   subscriptions: {
-    setup({ dispatch }) {
-      // console.log('setting up');
-      // const socket = new SockJS('/ws');
-      // const stompClient = Stomp.over(socket);
-      // stompClient.connect(
-      //   {},
-      //   frame => {
-      //     console.log('connected');
-
-      //     stompClient.subscribe('/topic/greetings', message => {
-      //       console.log('onmessage', message);
-      //     });
-      //     console.log('subscribe');
-      //     stompClient.send('/app/hello', {}, JSON.stringify({ name: 'sb.' }));
-      //   }
-      // );
-
-      socket = new SockJS('/ws');
-      stompClient = Stomp.over(socket);
-      stompClient.connect(
-        {},
-        frame => {
-          Object.keys(websocketRegister).forEach(k =>
-            stompClient.subscribe(k, message => {
+    setup({ dispatch, history }) {
+      // let lastPathname;
+      history.listen(({ pathname }) => {
+        if (matchUrl(pathname, enabledUrls) && !socket) {
+          socket = new SockJS('/ws');
+          stompClient = Stomp.over(socket);
+          stompClient.connect(
+            {},
+            frame => {
+              Object.keys(websocketRegister).forEach(k =>
+                stompClient.subscribe(k, message => {
+                  dispatch({
+                    type: websocketRegister[k],
+                    payload: message,
+                  });
+                })
+              );
+              // store ws.
               dispatch({
-                type: websocketRegister[k],
-                payload: message,
+                type: 'saveWS',
+                payload: stompClient,
               });
-            })
-          );
-          // store ws.
-          dispatch({
-            type: 'saveWS',
-            payload: stompClient,
-          });
 
-          // send blocked msg.
-          dispatch({
-            type: 'sendCached',
+              // send blocked msg.
+              dispatch({
+                type: 'sendCached',
+              });
+            }
+          );
+        } else if (socket && !matchUrl(pathname, enabledUrls)) {
+          stompClient.disconnect(() => {
+            console.log('disconnect finished, closing socket'); // eslint-disable-line
+            socket.close();
+            socket = undefined;
           });
         }
-      );
+      });
     },
   },
 };
