@@ -313,4 +313,9 @@ export default {
   'menu.users.create': '添加用户',
   'menu.self': '个人中心',
   'menu.teams': '团队',
+
+  // ==================== operators ==========================
+  'operator.FileDataSource': '文件源',
+  'operator.JdbcDataSource': 'JDBC源',
+  'operator.AvroDataSource': 'Avro源',
 };

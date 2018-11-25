@@ -8,6 +8,7 @@ import NodeLayer from './NodeLayer';
 import PointLayer from './PointLayer';
 import LineLayer from './LineLayer';
 import SelectionLayer from './SelectionLayer';
+import DraggingSelectionView from './DraggingSelectionView';
 // import ContextMenu from './ContextMenu';
 import styles from './WorkCanvas.less';
 // import DataInspector from './DataInspector';
@@ -62,7 +63,7 @@ class WorkCanvas extends React.Component {
     opMode: 'select',
   };
 
-  componentWillMount() {
+  componentDidMount() {
     const { dispatch } = this.props;
     // delete selection.
     key('delete, backspace', e => {
@@ -101,6 +102,9 @@ class WorkCanvas extends React.Component {
       if (event.keyCode === 32) {
         this.setState({ mode: 'move' });
       }
+    });
+    dispatch({
+      type: 'dataproPipeline/loadPipeline',
     });
   }
 
@@ -459,6 +463,10 @@ class WorkCanvas extends React.Component {
                 positionDict={componentSocketPositionCache}
                 componentDict={componentPositionCache}
               />
+            }
+            {
+              /* 6. dragging selection view */
+              <DraggingSelectionView draggingSelection={this.state.draggingSelection} />
             }
           </div>
         </DraggableCore>

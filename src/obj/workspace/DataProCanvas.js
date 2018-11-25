@@ -11,7 +11,7 @@ import {
 
 const maxHistoryNum = 100;
 
-export default class Canvas {
+export default class DataProCanvas {
   // display dataset.
   extraWidth = 0;
 
@@ -214,15 +214,15 @@ export default class Canvas {
   }
 
   static fromJson(json, x = 0, y = 0) {
-    const canvas = new Canvas();
+    const canvas = new DataProCanvas();
     canvas.components = json.map(i => Component.fromJson(i));
     // calculate cache.
     canvas.setOffset(x, y);
     return canvas;
   }
 
-  static fromJsonWithDataset(json, x = 0, y = 0, extraWidth = 100) {
-    const canvas = new Canvas();
+  static fromJsonWithDataset(json, x = 0, y = 0, extraWidth = 0) {
+    const canvas = new DataProCanvas();
     canvas.extraWidth = extraWidth;
     canvas.components = json.map(i => Component.fromJson(i));
     // calculate cache.

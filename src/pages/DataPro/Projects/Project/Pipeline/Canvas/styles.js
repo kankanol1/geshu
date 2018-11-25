@@ -43,6 +43,8 @@ export const getStylesForType = (str, code) => {
       return '#48d16b';
     case 'Transformer':
       return '#3B57FF';
+    case 'Dataset':
+      return 'grey';
     default:
       // eslint-disable-next-line
       console.warn('no color found for type: ', str);

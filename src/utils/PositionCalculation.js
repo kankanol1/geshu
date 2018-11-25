@@ -95,10 +95,11 @@ const calculatePointPositionDict = (component, extraWidth = 0) => {
     pointDict[point.id] = { x: px, y: py };
   };
   component.inputs.forEach(point => {
-    calculatePoint(point);
+    // deal with no
+    calculatePoint({ ...point, x: 3, y: 0.5 });
   });
   component.outputs.forEach(point => {
-    calculatePoint(point);
+    calculatePoint({ ...point, x: 1, y: 0.5 });
   });
   return pointDict;
 };

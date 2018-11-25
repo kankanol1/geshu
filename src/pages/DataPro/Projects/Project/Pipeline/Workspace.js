@@ -3,7 +3,8 @@ import ReactDOM from 'react-dom';
 import { connect } from 'dva';
 import { Layout, Button, Spin } from 'antd';
 
-import WorkCanvas from './WorkCanvas';
+import WorkCanvas from './Canvas/WorkCanvas';
+import SideMenu from './SideMenu';
 import styles from './Workspace.less';
 
 const { Content } = Layout;
@@ -38,6 +39,7 @@ class Workspace extends React.Component {
 
   render() {
     const isLoading = this.props.loading.effects['workcanvas/initProject'];
+    const { id } = this.props;
     return (
       <React.Fragment>
         <Content
@@ -46,6 +48,7 @@ class Workspace extends React.Component {
             this.canvasContent = e;
           }}
         >
+          <SideMenu id={id} />
           <WorkCanvas />
         </Content>
       </React.Fragment>

@@ -10,7 +10,7 @@ class Pipeline extends PureComponent {
   render() {
     return (
       <React.Fragment>
-        <Workspace />
+        <Workspace id={this.props.match.params.id} />
       </React.Fragment>
     );
   }

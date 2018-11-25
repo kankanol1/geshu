@@ -50,42 +50,6 @@ class SelectionLayer extends React.Component {
                 transform: `translate(${x + width - size}px, ${y + height - size}px)`,
               }}
             />
-            {
-              // hight light for dataset.
-            }
-
-            <div
-              className={styles.selectionDiv}
-              style={{
-                width: `${s}px`,
-                height: `${s}px`,
-                transform: `translate(${x - size + 200}px, ${y - size}px)`,
-              }}
-            />
-            <div
-              className={styles.selectionDiv}
-              style={{
-                width: `${s}px`,
-                height: `${s}px`,
-                transform: `translate(${x + width - size + 200}px, ${y - size}px)`,
-              }}
-            />
-            <div
-              className={styles.selectionDiv}
-              style={{
-                width: `${s}px`,
-                height: `${s}px`,
-                transform: `translate(${x - size + 200}px, ${y + height - size}px)`,
-              }}
-            />
-            <div
-              className={styles.selectionDiv}
-              style={{
-                width: `${s}px`,
-                height: `${s}px`,
-                transform: `translate(${x + width - size + 200}px, ${y + height - size}px)`,
-              }}
-            />
           </React.Fragment>
         );
       } else if (select.type === 'line') {

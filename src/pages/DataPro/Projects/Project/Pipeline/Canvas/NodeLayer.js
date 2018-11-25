@@ -213,19 +213,6 @@ class NodeLayer extends React.Component {
     const lineStr = calculateLineCurly(startX, startY, startX + 200, startY);
     return (
       <React.Fragment>
-        <svg
-          style={{
-            width: '100%',
-            height: '100%',
-            position: 'absolute',
-            top: '0',
-            left: '0',
-            pointerEvents: 'none',
-          }}
-          onClick={() => true}
-        >
-          <path d={lineStr} style={{ fill: 'none', stroke: '#391085', strokeWidth: 1 }} />
-        </svg>
         {errorDisplay ? (
           <div
             style={{
@@ -283,30 +270,6 @@ class NodeLayer extends React.Component {
           >
             <i className={`${icon} x-icon`} />
             {name}
-          </div>
-        </DraggableCore>
-        <DraggableCore
-          onStop={e => this.handleDragStop(e)}
-          onDrag={(e, draggableData) => this.handleDrag(e, draggableData)}
-          onStart={e => this.handleDragStart(e)}
-        >
-          <div
-            style={{
-              width: `${componentSize.width}px`,
-              height: `${componentSize.height}px`,
-              background: `${getStylesForType(type, code)}`,
-              transform: `translate(${x + 200}px, ${y}px)`,
-            }}
-            onContextMenu={e => this.handleContextMenu(e)}
-            className={styles.datasetDiv}
-            onDoubleClick={() => {
-              if (this.props.onNodeClicked) {
-                this.props.onNodeClicked(this.props.model, true);
-              }
-            }}
-          >
-            <i className={`${icon} x-icon`} />
-            数据集
           </div>
         </DraggableCore>
       </React.Fragment>
