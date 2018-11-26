@@ -75,6 +75,12 @@ export default [
             hideInMenu: true,
             component: './DataPro/Projects/ProjectIndex',
           },
+          {
+            path: '/projects/p/pipeline/add/:id/:pane',
+            hideInMenu: true,
+            component: './DataPro/Projects/Project/Pipeline/Operators/Add/Index',
+            // component: './DataPro/Projects/ProjectIndex',
+          },
         ],
       },
       {

@@ -17,3 +17,12 @@ export async function addOperator(params) {
     },
   });
 }
+
+export async function addSourceOperator(params) {
+  return request('/api/datapro/projects/pipeline/op/addsource', {
+    method: 'POST',
+    body: {
+      ...params,
+    },
+  });
+}

@@ -105,6 +105,9 @@ class WorkCanvas extends React.Component {
     });
     dispatch({
       type: 'dataproPipeline/loadPipeline',
+      payload: {
+        id: this.props.id,
+      },
     });
   }
 

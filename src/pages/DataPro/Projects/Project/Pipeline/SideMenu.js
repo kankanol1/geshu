@@ -85,18 +85,18 @@ const config = {
 class SideMenu extends React.PureComponent {
   state = {
     // for dialog display.
-    // addingComponent: undefined,
-    addingComponent: {
-      name: 'PrepareTransformer',
-      code: 'PrepareTransformer',
-    },
+    addingComponent: undefined,
+    // addingComponent: {
+    //   name: 'PrepareTransformer',
+    //   code: 'PrepareTransformer',
+    // },
   };
 
   handleOnClicked = (type, name, code) => {
     const { id } = this.props;
     if (type === 'source') {
       // redirect.
-      router.push(`/projects/p/op/add/${id}/${code}/`);
+      router.push(`/projects/p/pipeline/add/${id}/${code}`);
     } else {
       this.setState({ addingComponent: { name, code } });
     }
@@ -131,6 +131,7 @@ class SideMenu extends React.PureComponent {
       const Widget = renderConfig[addingComponent.code];
       displayAdding = (
         <Widget
+          id={this.props.id}
           title={`添加组件 ${formatMessage({
             id: `operator.${addingComponent.name}`,
             defaultMessage: addingComponent.name,
@@ -140,6 +141,9 @@ class SideMenu extends React.PureComponent {
           onOk={v => {
             this.props.dispatch({
               type: 'dataproPipeline/loadPipeline',
+              payload: {
+                id: this.props.id,
+              },
               callback: () => this.setState({ addingComponent: undefined }),
             });
           }}

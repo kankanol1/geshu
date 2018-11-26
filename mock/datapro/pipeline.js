@@ -180,7 +180,7 @@ export function addOperator(req, res) {
     id: opId,
     name: '新增组件',
     code: type,
-    inputs: input.map((v, i) => ({ id: `i${i + 1}`, connects: ['Dataset'] })),
+    inputs: input ? input.map((v, i) => ({ id: `i${i + 1}`, connects: ['Dataset'] })) : [],
     outputs: output.map((v, i) => ({ id: `o${i + 1}`, type: 'Dataset' })),
     connectFrom: input.map((v, i) => ({ component: v, from: 'o1', to: `i${i + 1}` })),
   };
@@ -227,4 +227,5 @@ export default {
   'GET /api/datapro/projects/pipeline/get': getPipeline,
   'GET /api/datapro/projects/pipeline/datasets': getAllDatasets,
   'POST /api/datapro/projects/pipeline/op/add': addOperator,
+  'POST /api/datapro/projects/pipeline/op/addsource': addOperator,
 };

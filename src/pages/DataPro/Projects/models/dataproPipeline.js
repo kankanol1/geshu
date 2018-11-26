@@ -40,7 +40,7 @@ export default {
 
   effects: {
     *loadPipeline({ payload, callback }, { call, put }) {
-      const response = yield call(getPipeline);
+      const response = yield call(getPipeline, payload);
       if (response) {
         yield put({
           type: 'savePipeline',

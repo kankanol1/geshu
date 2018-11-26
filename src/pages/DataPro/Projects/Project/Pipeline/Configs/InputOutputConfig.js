@@ -15,7 +15,7 @@ class InputOutputConfig extends React.Component {
   };
 
   componentDidMount() {
-    queryAllDatasets().then(response => {
+    queryAllDatasets({ id: this.props.id }).then(response => {
       this.setState({ loading: false, datasets: response || [] });
     });
   }
@@ -26,9 +26,11 @@ class InputOutputConfig extends React.Component {
       if (!err) {
         this.setState({ adding: true });
         // send request.
-        addOperator({ ...values, type: this.props.type }).then(response => {
-          this.setState({ adding: false }, callback(response.delta));
-        });
+        addOperator({ ...values, type: this.props.type, projectId: this.props.id }).then(
+          response => {
+            this.setState({ adding: false }, callback(response.delta));
+          }
+        );
       }
     });
   }

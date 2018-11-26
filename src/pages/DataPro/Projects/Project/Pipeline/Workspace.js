@@ -49,7 +49,7 @@ class Workspace extends React.Component {
           }}
         >
           <SideMenu id={id} />
-          <WorkCanvas />
+          <WorkCanvas id={id} />
         </Content>
       </React.Fragment>
     );
