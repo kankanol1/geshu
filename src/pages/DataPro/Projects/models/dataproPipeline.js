@@ -7,13 +7,21 @@ import ComponentDelete from '@/obj/workspace/op/ComponentDelete';
 import ConnectionDelete from '@/obj/workspace/op/ConnectionDelete';
 import BatchOperation from '@/obj/workspace/op/BatchOperation';
 
-import { getPipeline } from '@/services/datapro/pipelineAPI';
+import { getPipeline, deleteOperator } from '@/services/datapro/pipelineAPI';
 
 export default {
   namespace: 'dataproPipeline',
   state: {
     // pipeline canvas.
     canvas: undefined,
+    contextmenu: {
+      show: false,
+      component: null,
+      x: 0,
+      y: 0,
+      offsetX: 0,
+      offsetY: 40,
+    },
   },
 
   reducers: {
@@ -36,6 +44,31 @@ export default {
       }
       return state;
     },
+
+    openContextMenu(state, { component, x, y }) {
+      // change selection to this component.
+      state.canvas.apply(new SelectionChange([{ type: 'component', id: component.id }]));
+      return {
+        ...state,
+        contextmenu: {
+          ...state.contextmenu,
+          show: true,
+          component,
+          x,
+          y,
+        },
+      };
+    },
+
+    hideContextMenu(state) {
+      return {
+        ...state,
+        contextmenu: {
+          ...state.contextmenu,
+          show: false,
+        },
+      };
+    },
   },
 
   effects: {
@@ -49,6 +82,18 @@ export default {
         if (callback) {
           callback();
         }
+      }
+    },
+
+    *deleteOp({ payload }, { call, put }) {
+      const response = yield call(deleteOperator, payload);
+      yield put({
+        type: 'hideContextMenu',
+      });
+      if (response && response.success) {
+        yield put({
+          type: 'loadPipeline',
+        });
       }
     },
   },

@@ -223,9 +223,37 @@ export function addOperator(req, res) {
   res.json(done);
 }
 
+export function deleteOperator(req, res) {
+  const { body } = req;
+  const { id } = body;
+  const deleteIds = [];
+  deleteIds.push(id);
+  // get all following ids.
+  let added = true;
+  while (added) {
+    added = false;
+    // eslint-disable-next-line
+    pipeline.components.forEach(c => {
+      c.connectFrom.forEach(f => {
+        if (deleteIds.includes(f.component) && !deleteIds.includes(c.id)) {
+          deleteIds.push(c.id);
+          added = true;
+        }
+      });
+    });
+  }
+  pipeline.components = pipeline.components.filter(i => !deleteIds.includes(i.id));
+  const done = {
+    success: true,
+    message: '删除成功',
+  };
+  res.json(done);
+}
+
 export default {
   'GET /api/datapro/projects/pipeline/get': getPipeline,
   'GET /api/datapro/projects/pipeline/datasets': getAllDatasets,
   'POST /api/datapro/projects/pipeline/op/add': addOperator,
+  'POST /api/datapro/projects/pipeline/op/delete': deleteOperator,
   'POST /api/datapro/projects/pipeline/op/addsource': addOperator,
 };

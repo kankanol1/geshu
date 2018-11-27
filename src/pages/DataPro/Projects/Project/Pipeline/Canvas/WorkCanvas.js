@@ -9,7 +9,7 @@ import PointLayer from './PointLayer';
 import LineLayer from './LineLayer';
 import SelectionLayer from './SelectionLayer';
 import DraggingSelectionView from './DraggingSelectionView';
-// import ContextMenu from './ContextMenu';
+import ContextMenu from './ContextMenu';
 import styles from './WorkCanvas.less';
 // import DataInspector from './DataInspector';
 // import DraggingLineView from './DraggingLineView';
@@ -250,6 +250,16 @@ class WorkCanvas extends React.Component {
     }
   }
 
+  handleDeleteClicked(component) {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'dataproPipeline/deleteOp',
+      payload: {
+        id: component.id,
+      },
+    });
+  }
+
   handleCanvasMouseWheel(e) {
     if (key.isPressed('space')) {
       const { deltaX, deltaY } = e;
@@ -342,24 +352,25 @@ class WorkCanvas extends React.Component {
       // state: { projectId },
       canvas,
       // validation,
-      // contextmenu,
+      contextmenu,
       // jobTips,
     } = this.props.dataproPipeline;
     const { mode, opMode } = this.state;
     if (canvas === undefined) return null;
     const { componentPositionCache, componentSocketPositionCache } = canvas;
-    const contextMenuView = null;
-    // if (contextmenu.show) {
-    //   const { component } = contextmenu;
-    //   contextMenuView = (
-    //     <ContextMenu
-    //       {...contextmenu}
-    //       onSettingsClicked={() => this.handleSettingsClicked(component, true)}
-    //       onInspectClicked={() => this.handleInspectClicked(component)}
-    //       onRunToThisClicked={() => this.handleRunToThisClicked(component)}
-    //     />
-    //   );
-    // }
+    let contextMenuView = null;
+    if (contextmenu.show) {
+      const { component } = contextmenu;
+      contextMenuView = (
+        <ContextMenu
+          {...contextmenu}
+          onSettingsClicked={() => this.handleSettingsClicked(component, true)}
+          onInspectClicked={() => this.handleInspectClicked(component)}
+          onRunToThisClicked={() => this.handleRunToThisClicked(component)}
+          onDeleteClicked={() => this.handleDeleteClicked(component)}
+        />
+      );
+    }
 
     // calculate viewpoint.
     const displaySize = (1 / canvas.scale) * 100;
@@ -473,6 +484,7 @@ class WorkCanvas extends React.Component {
             }
           </div>
         </DraggableCore>
+        {contextMenuView}
         {this.renderToolbarView()}
       </div>
     );

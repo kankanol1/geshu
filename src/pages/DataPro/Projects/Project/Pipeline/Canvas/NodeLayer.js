@@ -151,7 +151,7 @@ class NodeLayer extends React.Component {
     e.preventDefault();
     if (this.props.dispatch) {
       this.props.dispatch({
-        type: 'workcanvas/openContextMenu',
+        type: 'dataproPipeline/openContextMenu',
         component: this.props.model,
         x: e.clientX,
         y: e.clientY,

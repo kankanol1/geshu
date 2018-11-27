@@ -7,7 +7,7 @@ const style = {
 
 class ContextMenu extends React.PureComponent {
   handleClick({ item, key, keyPath }) {
-    const { onInspectClicked, onSettingsClicked, onRunToThisClicked } = this.props;
+    const { onInspectClicked, onSettingsClicked, onRunToThisClicked, onDeleteClicked } = this.props;
     switch (key) {
       case 'settings':
         if (onSettingsClicked) {
@@ -24,13 +24,50 @@ class ContextMenu extends React.PureComponent {
           onRunToThisClicked();
         }
         break;
+      case 'delete':
+        if (onDeleteClicked) {
+          onDeleteClicked();
+        }
+        break;
       default:
         break;
     }
   }
 
+  renderDatasetMenu() {
+    return (
+      <Menu style={{ width: 140 }} mode="vertical" theme="light" onClick={v => this.handleClick(v)}>
+        <Menu.Item key="settings" style={style}>
+          预览数据
+        </Menu.Item>
+        <Menu.Item key="runtothis" style={style}>
+          清除数据
+        </Menu.Item>
+      </Menu>
+    );
+  }
+
+  renderOpMenu() {
+    return (
+      <Menu style={{ width: 140 }} mode="vertical" theme="light" onClick={v => this.handleClick(v)}>
+        <Menu.Item key="io" style={style}>
+          修改连接
+        </Menu.Item>
+        <Menu.Item key="settings" style={style}>
+          修改设置
+        </Menu.Item>
+        <Menu.Item key="runtothis" style={style}>
+          执行到此处
+        </Menu.Item>
+        <Menu.Item key="delete" style={style}>
+          删除
+        </Menu.Item>
+      </Menu>
+    );
+  }
+
   render() {
-    const { x, y, offsetY, offsetX } = this.props;
+    const { x, y, offsetY, offsetX, component } = this.props;
     const left = x - offsetX;
     const top = y - offsetY;
     return (
@@ -42,25 +79,7 @@ class ContextMenu extends React.PureComponent {
           left: `${left}px`,
         }}
       >
-        <Menu
-          style={{ width: 140 }}
-          mode="vertical"
-          theme="light"
-          onClick={v => this.handleClick(v)}
-        >
-          <Menu.Item key="settings" style={style}>
-            查看设置
-          </Menu.Item>
-          <Menu.Item key="runtothis" style={style}>
-            执行到此处
-          </Menu.Item>
-          {/* <Menu.Item key="2" style={style}>
-            从此处开始执行
-          </Menu.Item> */}
-          <Menu.Item key="inspect" style={style}>
-            数据预览
-          </Menu.Item>
-        </Menu>
+        {component.type === 'Dataset' ? this.renderDatasetMenu() : this.renderOpMenu()}
       </div>
     );
   }

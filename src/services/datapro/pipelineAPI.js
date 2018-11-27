@@ -26,3 +26,12 @@ export async function addSourceOperator(params) {
     },
   });
 }
+
+export async function deleteOperator(params) {
+  return request('/api/datapro/projects/pipeline/op/delete', {
+    method: 'POST',
+    body: {
+      ...params,
+    },
+  });
+}
