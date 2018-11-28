@@ -38,7 +38,7 @@ class SideMenu extends React.PureComponent {
 
   handleOnClicked = (type, name, code) => {
     const { id } = this.props;
-    if (type === 'source') {
+    if (type === 'DataSource') {
       // redirect.
       router.push(`/projects/p/pipeline/add/${id}/${code}`);
     } else {
@@ -74,15 +74,17 @@ class SideMenu extends React.PureComponent {
     let displayAdding = null;
     if (addingComponent) {
       const Widget = renderConfig[addingComponent.code];
+      const name = formatMessage({
+        id: `operator.${addingComponent.name}`,
+        defaultMessage: addingComponent.name,
+      });
       displayAdding = (
         <Widget
           id={this.props.id}
-          title={`添加组件 ${formatMessage({
-            id: `operator.${addingComponent.name}`,
-            defaultMessage: addingComponent.name,
-          })}`}
+          name={name}
+          title={`添加组件 ${name}`}
           // type.
-          type={addingComponent.code}
+          code={addingComponent.code}
           onOk={v => {
             this.props.dispatch({
               type: 'dataproPipeline/loadPipeline',

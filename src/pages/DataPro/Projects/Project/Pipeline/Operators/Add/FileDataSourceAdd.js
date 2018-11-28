@@ -20,7 +20,8 @@ class FileDataSourceAdd extends React.Component {
     count++;
     addSourceOperator({
       projectId: this.props.id,
-      type: 'FileDataSource',
+      code: 'FileDataSource',
+      name: 'newSource',
       input: [],
       output: [`name${count}`],
     }).then(response => {

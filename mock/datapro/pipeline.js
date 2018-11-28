@@ -154,7 +154,7 @@ export function getAllDatasets(req, res) {
 
 export function addOperator(req, res) {
   const { body } = req;
-  const { type, input, output } = body;
+  const { code, input, output, name } = body;
   const pos = pipeline.components
     .filter(i => i.type === 'Dataset' && input.includes(i.id))
     .map(i => ({ x: i.x, y: i.y }));
@@ -172,8 +172,9 @@ export function addOperator(req, res) {
   const newComponent = {
     ...newPos,
     id: opId,
-    name: '新增组件',
-    code: type,
+    name,
+    code,
+    type: 'Transformer',
     inputs: input ? input.map((v, i) => ({ id: `i${i + 1}`, connects: ['Dataset'] })) : [],
     outputs: output.map((v, i) => ({ id: `o${i + 1}`, type: 'Dataset' })),
     connectFrom: input.map((v, i) => ({ component: v, from: 'o1', to: `i${i + 1}` })),

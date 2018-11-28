@@ -26,7 +26,7 @@ class InputOutputConfig extends React.Component {
       if (!err) {
         this.setState({ adding: true });
         // send request.
-        addOperator({ ...values, type: this.props.type, projectId: this.props.id }).then(
+        addOperator({ ...values, code: this.props.code, projectId: this.props.id }).then(
           response => {
             this.setState({ adding: false }, callback(response.delta));
           }
@@ -81,8 +81,10 @@ class InputOutputConfig extends React.Component {
   };
 
   render() {
-    const { title, onOk, onCancel, inputs, outputs } = this.props;
+    const { title, name, onOk, onCancel, inputs, outputs } = this.props;
+    const { getFieldDecorator } = this.props.form;
     const { loading, datasets, adding } = this.state;
+
     return (
       <Modal
         title={title}
@@ -97,6 +99,12 @@ class InputOutputConfig extends React.Component {
       >
         <Spin spinning={loading}>
           <Form>
+            <FormItem labelCol={{ span: 4 }} wrapperCol={{ span: 20 }} key="name" label="组件名称">
+              {getFieldDecorator('name', {
+                initialValue: name,
+                rules: [{ required: true, message: '请输入' }],
+              })(<Input placeholder="组件名称" />)}
+            </FormItem>
             <Row>
               <Col span={12}>
                 <Card title="输入数据集">{this.renderInputs(inputs, datasets)}</Card>
