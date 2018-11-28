@@ -201,6 +201,9 @@ class WorkCanvas extends React.Component {
           stopY: 0,
         },
       });
+    } else {
+      const { canvas } = this.props.dataproPipeline;
+      this.handleUpdateFinished(canvas);
     }
     // cancel context menu if event caught.
     this.props.dispatch({
@@ -276,13 +279,20 @@ class WorkCanvas extends React.Component {
     if (newScale > 1.1) newScale = 1.1;
     if (newScale < 0.5) newScale = 0.5;
     canvas.apply(new ScaleChange(newScale));
-    this.triggerUpdate(canvas);
+    this.handleUpdateFinished(canvas);
   }
 
   triggerUpdate(canvas) {
     this.props.dispatch({
       type: 'dataproPipeline/triggerCanvasUpdate',
       payload: { canvas },
+    });
+  }
+
+  handleUpdateFinished(canvas) {
+    this.props.dispatch({
+      type: 'dataproPipeline/updateCanvas',
+      payload: { canvas, projectId: this.props.id },
     });
   }
 
@@ -422,6 +432,7 @@ class WorkCanvas extends React.Component {
                     positionDict={componentSocketPositionCache}
                     componentDict={componentPositionCache}
                     onCanvasUpdated={c => this.triggerUpdate(c)}
+                    onCanvasUpdateFinished={c => this.handleUpdateFinished(c)}
                     onNodeClicked={(c, flag) => this.handleOperatorClicked(c, flag)}
                     // selection={selection}
                     projectId={projectId}

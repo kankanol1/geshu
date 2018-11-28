@@ -114,6 +114,7 @@ class NodeLayer extends React.Component {
       canvas.apply(move);
       this.setState({ componentCache: [] });
       this.props.onCanvasUpdated(canvas);
+      this.props.onCanvasUpdateFinished(canvas);
     }
     // hide context menu if possible.
     this.props.dispatch({

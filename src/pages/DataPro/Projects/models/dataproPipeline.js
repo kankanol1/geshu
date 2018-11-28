@@ -1,4 +1,3 @@
-import { message } from 'antd';
 import DataProCanvas from '@/obj/workspace/DataProCanvas';
 import ComponentAdd from '@/obj/workspace/op/ComponentAdd';
 import Component from '@/obj/workspace/Component';
@@ -26,8 +25,8 @@ export default {
 
   reducers: {
     savePipeline(state, { payload }) {
-      const { components } = payload;
-      return { ...state, canvas: DataProCanvas.fromJsonWithDataset(components) };
+      const { components, offset, scale } = payload;
+      return { ...state, canvas: DataProCanvas.fromJson(components, offset.x, offset.y, scale) };
     },
 
     triggerCanvasUpdate(state, { payload }) {
@@ -98,6 +97,27 @@ export default {
           },
         });
       }
+    },
+
+    *updateCanvas({ payload }, { put }) {
+      yield put({
+        type: 'triggerCanvasUpdate',
+        payload,
+      });
+      // only update positions
+      const { canvas } = payload;
+
+      const components = canvas.components.map(i => ({ id: i.id, x: i.x, y: i.y }));
+      const { offset, scale } = canvas;
+      // send websocket.
+      yield put({
+        type: 'ws/send',
+        payload: {
+          topic: '/app/datapro/pipeline/update',
+          header: {},
+          body: JSON.stringify({ components, offset, scale, projectId: payload.projectId }),
+        },
+      });
     },
   },
 

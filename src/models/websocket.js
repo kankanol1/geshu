@@ -1,7 +1,7 @@
 import SockJS from 'sockjs-client';
 import Stomp from 'stompjs';
 
-const enabledUrls = ['/demo'];
+const enabledUrls = ['/demo', '/projects/p/pipeline/**'];
 
 const matchUrl = (url, urls) => {
   const exactMatch = () => urls.filter(i => i === url).length > 0;

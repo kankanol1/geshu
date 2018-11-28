@@ -141,6 +141,11 @@ const pipeline = {
       ],
     },
   ],
+  offset: {
+    x: 0,
+    y: 0,
+  },
+  scale: 0.8,
 };
 
 export function getPipeline(req, res) {

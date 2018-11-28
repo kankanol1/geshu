@@ -213,19 +213,11 @@ export default class DataProCanvas {
     return this.components.map(c => c.toJson());
   }
 
-  static fromJson(json, x = 0, y = 0) {
+  static fromJson(json, x = 0, y = 0, scale = 0.8) {
     const canvas = new DataProCanvas();
     canvas.components = json.map(i => Component.fromJson(i));
     // calculate cache.
-    canvas.setOffset(x, y);
-    return canvas;
-  }
-
-  static fromJsonWithDataset(json, x = 0, y = 0, extraWidth = 0) {
-    const canvas = new DataProCanvas();
-    canvas.extraWidth = extraWidth;
-    canvas.components = json.map(i => Component.fromJson(i));
-    // calculate cache.
+    canvas.setScale(scale);
     canvas.setOffset(x, y);
     return canvas;
   }
