@@ -93,6 +93,9 @@ export default {
       if (response && response.success) {
         yield put({
           type: 'loadPipeline',
+          payload: {
+            id: payload.projectId,
+          },
         });
       }
     },

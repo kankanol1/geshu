@@ -256,6 +256,7 @@ class WorkCanvas extends React.Component {
       type: 'dataproPipeline/deleteOp',
       payload: {
         id: component.id,
+        projectId: this.props.id,
       },
     });
   }
