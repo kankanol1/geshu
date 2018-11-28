@@ -1,5 +1,5 @@
 import React from 'react';
-import { Collapse, Modal } from 'antd';
+import { Collapse, Spin } from 'antd';
 import { formatMessage } from 'umi/locale';
 import router from 'umi/router';
 import { connect } from 'dva';
@@ -16,72 +16,10 @@ const renderConfig = {
   PrepareTransformer: Input1Output1Config,
 };
 
-const config = {
-  source: {
-    name: '数据源',
-    items: [
-      {
-        name: 'FileDataSource',
-        code: 'FileDataSource',
-      },
-      {
-        name: 'JdbcDataSource',
-        code: 'JdbcDataSource',
-      },
-      {
-        name: 'AvroDataSource',
-        code: 'AvroDataSource',
-      },
-    ],
-  },
-  process: {
-    name: '数据处理',
-    items: [
-      {
-        name: 'AddLiteralColumnTransformer',
-        code: 'AddLiteralColumnTransformer',
-      },
-      {
-        name: 'RandomSplitTransformer',
-        code: 'RandomSplitTransformer',
-      },
-      {
-        name: 'UnionTransformer',
-        code: 'UnionTransformer',
-      },
-      {
-        name: 'ColumnSplitTransformer',
-        code: 'ColumnSplitTransformer',
-      },
-      {
-        name: 'AggregateTransformer',
-        code: 'AggregateTransformer',
-      },
-      {
-        name: 'FilterTransformer',
-        code: 'FilterTransformer',
-      },
-      {
-        name: 'ProjectTransformer',
-        code: 'ProjectTransformer',
-      },
-      {
-        name: 'JoinTransformer',
-        code: 'JoinTransformer',
-      },
-      {
-        name: 'PrepareTransformer',
-        code: 'PrepareTransformer',
-      },
-    ],
-  },
-  sink: {
-    name: '数据存储',
-    items: [],
-  },
-};
-
-@connect(() => ({}))
+@connect(({ dataproConfig, loading }) => ({
+  config: dataproConfig.components,
+  loading: loading.effects['dataproConfig/fetchConfig'],
+}))
 class SideMenu extends React.PureComponent {
   state = {
     // for dialog display.
@@ -91,6 +29,12 @@ class SideMenu extends React.PureComponent {
     //   code: 'PrepareTransformer',
     // },
   };
+
+  componentDidMount() {
+    this.props.dispatch({
+      type: 'dataproConfig/fetchConfig',
+    });
+  }
 
   handleOnClicked = (type, name, code) => {
     const { id } = this.props;
@@ -125,6 +69,7 @@ class SideMenu extends React.PureComponent {
   };
 
   render() {
+    const { config, loading } = this.props;
     const { addingComponent } = this.state;
     let displayAdding = null;
     if (addingComponent) {
@@ -153,17 +98,25 @@ class SideMenu extends React.PureComponent {
     }
     return (
       <div className={styles.menuWrapper}>
-        <Collapse bordered={false} defaultActiveKey={Object.keys(config)}>
-          {Object.keys(config).map(i => (
-            <Panel header={config[i].name} key={i}>
-              {config[i].items.map(item => this.renderComponent(i, item.name, item.code))}
-            </Panel>
-          ))}
-        </Collapse>
-        {
-          // render dialog if needed.
-          displayAdding
-        }
+        <Spin spinning={loading}>
+          <Collapse bordered={false} activeKey={Object.keys(config)}>
+            {Object.keys(config).map(i => (
+              <Panel
+                header={formatMessage({
+                  id: `operatortype.${i}`,
+                  defaultMessage: i,
+                })}
+                key={i}
+              >
+                {config[i].map(item => this.renderComponent(i, item.name, item.code))}
+              </Panel>
+            ))}
+          </Collapse>
+          {
+            // render dialog if needed.
+            displayAdding
+          }
+        </Spin>
       </div>
     );
   }

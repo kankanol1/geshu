@@ -1,148 +1,142 @@
 const pipeline = {
   components: [
     {
-      x: 755,
-      y: 414,
-      id: '分词15315274966',
-      name: '分词',
-      code: 'TokenizerStage',
-      type: 'OP',
-      inputs: [
-        {
-          id: 'i1',
-          label: 'all',
-          connects: ['Model', 'Dataset'],
-        },
-      ],
-      outputs: [
-        {
-          hint: 'Model',
-          id: 'o1',
-          label: 'model',
-          type: 'Model',
-        },
-      ],
-      connectFrom: [],
-    },
-    {
-      x: 761.5,
-      y: 224.5,
-      id: '分词1531527496608',
-      name: '分词',
-      code: 'TokenizerStage',
-      type: 'OP',
-      inputs: [
-        {
-          hint: 'all',
-          id: 'i1',
-          label: 'all',
-          connects: ['Model', 'Dataset'],
-        },
-      ],
-      outputs: [
-        {
-          hint: 'Model',
-          id: 'o1',
-          label: 'model',
-          type: 'Model',
-        },
-      ],
-      connectFrom: [
-        {
-          component: 'dataset1',
-          from: 'o1',
-          to: 'i1',
-        },
-      ],
-    },
-    {
-      x: 429,
-      y: 196,
-      id: '文件读取1531527496607',
-      name: '文件读取',
+      x: 600,
+      y: 200,
+      id: '0136ee04-d9d8-4c90-9b5c-1f2152da564d',
+      name: 'FileDataSource1',
       code: 'FileDataSource',
       type: 'DataSource',
       inputs: [],
       outputs: [
         {
-          hint: 'Dataset',
           id: 'o1',
-          label: 'data',
-          type: 'Dataset',
         },
       ],
       connectFrom: [],
     },
     {
-      x: 629,
-      y: 196,
-      id: 'dataset1',
-      name: 'Dataset',
+      x: 900,
+      y: 200,
+      id: 'name1',
+      name: 'name1',
       code: 'Dataset',
       type: 'Dataset',
       inputs: [
         {
-          hint: 'dataset',
           id: 'i1',
-          label: 'data',
-          type: 'dataset',
         },
       ],
       outputs: [
         {
-          hint: 'dataset',
           id: 'o1',
-          label: 'data',
-          type: 'dataset',
         },
       ],
       connectFrom: [
         {
-          component: '文件读取1531527496607',
+          component: '0136ee04-d9d8-4c90-9b5c-1f2152da564d',
           from: 'o1',
           to: 'i1',
         },
       ],
     },
     {
-      x: 674,
-      y: 303,
-      id: 'Join1532467809093',
-      name: 'Join',
-      code: 'JoinTransformer',
-      type: 'OP',
+      x: 1200,
+      y: 200,
+      id: '3e8e9b3d-479a-4e29-98f8-b1828dc32ee7',
+      name: 'trans1',
+      code: 'AddLiteralColumnTransformer',
+      type: 'Transformer',
       inputs: [
         {
-          hint: 'left',
           id: 'i1',
-          label: 'left',
-          connects: ['Dataset'],
-        },
-        {
-          hint: 'right',
-          id: 'i2',
-          label: 'right',
-          connects: ['Dataset'],
         },
       ],
       outputs: [
         {
-          hint: 'Dataset',
           id: 'o1',
-          label: 'data',
-          type: 'Dataset',
         },
       ],
       connectFrom: [
         {
-          component: 'dataset1',
+          component: 'name1',
           from: 'o1',
           to: 'i1',
         },
+      ],
+    },
+    {
+      x: 1500,
+      y: 200,
+      id: 'nu8',
+      name: 'nu8',
+      code: 'Dataset',
+      type: 'Dataset',
+      inputs: [
         {
-          component: 'dataset1',
+          id: 'i1',
+        },
+      ],
+      outputs: [
+        {
+          id: 'o1',
+        },
+      ],
+      connectFrom: [
+        {
+          component: '3e8e9b3d-479a-4e29-98f8-b1828dc32ee7',
           from: 'o1',
-          to: 'i2',
+          to: 'i1',
+        },
+      ],
+    },
+    {
+      x: 1800,
+      y: 200,
+      id: '618ee91e-1562-4f7d-8f12-14dc51b727dc',
+      name: 'Trans',
+      code: 'AddLiteralColumnTransformer',
+      type: 'Transformer',
+      inputs: [
+        {
+          id: 'i1',
+        },
+      ],
+      outputs: [
+        {
+          id: 'o1',
+        },
+      ],
+      connectFrom: [
+        {
+          component: 'nu8',
+          from: 'o1',
+          to: 'i1',
+        },
+      ],
+    },
+    {
+      x: 2100,
+      y: 200,
+      id: 'gg9',
+      name: 'gg9',
+      code: 'Dataset',
+      type: 'Dataset',
+      inputs: [
+        {
+          id: 'i1',
+        },
+      ],
+      outputs: [
+        {
+          id: 'o1',
+        },
+      ],
+      connectFrom: [
+        {
+          component: '618ee91e-1562-4f7d-8f12-14dc51b727dc',
+          from: 'o1',
+          to: 'i1',
         },
       ],
     },

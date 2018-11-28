@@ -261,14 +261,18 @@ class NodeLayer extends React.Component {
               transform: `translate(${x}px, ${y}px)`,
             }}
             onContextMenu={e => this.handleContextMenu(e)}
-            className={nodeClassName}
+            className={`${type === 'Dataset' && styles.datasetDiv} ${nodeClassName}`}
             onDoubleClick={() => {
               if (this.props.onNodeClicked) {
                 this.props.onNodeClicked(this.props.model, true);
               }
             }}
           >
-            <i className={`${icon} x-icon`} />
+            {type === 'Dataset' ? (
+              <Icon type="table" className={`${styles.antdIcon} x-icon`} />
+            ) : (
+              <i className={`${icon} x-icon`} />
+            )}
             {name}
           </div>
         </DraggableCore>
