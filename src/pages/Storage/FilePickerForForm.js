@@ -9,6 +9,11 @@ export default class FilePickerForForm extends React.PureComponent {
     folderOnly: false,
     allowSelectFolder: true,
     value: undefined,
+    enableMkdir: false,
+    enableUpload: false,
+    mode: 'all',
+    folderType: undefined,
+    view: undefined,
   };
 
   state = {
@@ -39,6 +44,11 @@ export default class FilePickerForForm extends React.PureComponent {
         onChange={this.onChange}
         folderOnly={this.props.folderOnly}
         allowSelectFolder={this.props.allowSelectFolder}
+        enableUpload={this.props.enableUpload}
+        enableMkdir={this.props.enableMkdir}
+        mode={this.props.mode}
+        type={this.props.folderType}
+        view={this.props.view}
       />
     );
   }
@@ -68,6 +78,11 @@ export default class FilePickerForForm extends React.PureComponent {
             folderOnly={this.props.folderOnly}
             onChange={v => this.setState({ candidate: v })}
             allowSelectFolder={this.props.allowSelectFolder}
+            enableUpload={this.props.enableUpload}
+            enableMkdir={this.props.enableMkdir}
+            mode={this.props.mode}
+            type={this.props.folderType}
+            view={this.props.view}
           />
         </Modal>
       </React.Fragment>
@@ -101,4 +116,9 @@ FilePickerForForm.propTypes = {
   folderOnly: PropTypes.bool,
   allowSelectFolder: PropTypes.bool,
   value: PropTypes.object,
+  enableMkdir: PropTypes.bool,
+  enableUpload: PropTypes.bool,
+  mode: PropTypes.string,
+  folderType: PropTypes.string,
+  view: PropTypes.string,
 };

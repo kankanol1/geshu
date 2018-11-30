@@ -314,8 +314,24 @@ export default {
   'menu.self': '个人中心',
   'menu.teams': '团队',
 
+  // =============== operator types =============
+  'operatortype.DataSource': '数据源',
+  'operatortype.DataSink': '数据存储',
+  'operatortype.Transformer': '数据处理',
+
   // ==================== operators ==========================
+  // sources
   'operator.FileDataSource': '文件源',
   'operator.JdbcDataSource': 'JDBC源',
   'operator.AvroDataSource': 'Avro源',
+  // transformers
+  'operator.AddLiteralColumnTransformer': '增加列',
+  'operator.RandomSplitTransformer': '随机分割',
+  'operator.UnionTransformer': '并',
+  'operator.ColumnSplitTransformer': '列分割',
+  'operator.AggregateTransformer': '聚集函数',
+  'operator.FilterTransformer': '条件过滤',
+  'operator.ProjectTransformer': '列选择',
+  'operator.JoinTransformer': '连接',
+  'operator.PrepareTransformer': '数据转换',
 };

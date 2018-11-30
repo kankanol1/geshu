@@ -1,0 +1,220 @@
+import React from 'react';
+import { Form, Input, Select, Checkbox, Button, Card, Steps, Progress, Spin } from 'antd';
+import router from 'umi/router';
+
+import {
+  addSourceOperator,
+  getSchemaFromFile,
+  configOperator,
+} from '@/services/datapro/pipelineAPI';
+import DefineSchemaWidget from '@/components/JsonSchemaForm/Widgets/Schema/DefineSchemaWidget';
+import CSVDatasetForm from './Templates/CSVDatasetForm';
+
+import styles from '../Index.less';
+
+const formRegistry = {
+  CSV: CSVDatasetForm,
+};
+
+const FormItem = Form.Item;
+const { TextArea } = Input;
+const { Step } = Steps;
+
+@Form.create()
+class FileDataSourceAdd extends React.Component {
+  state = {
+    current: 0,
+    // fileId: -1,
+    formValues: undefined,
+
+    schemaResponse: undefined,
+    loading: false,
+  };
+
+  handleFormSubmit(e) {
+    e.preventDefault();
+    const { form } = this.props;
+    form.validateFields((err, fieldsValue) => {
+      if (!err) {
+        // dispatch({
+        //   type: 'dataset/getSchema',
+        //   payload: fieldsValue,
+        //   callback: () => this.setState({ current: 1, formValues: fieldsValue }),
+        // });
+        // TODO: fetch schema.
+        this.setState({ loading: true });
+        getSchemaFromFile(fieldsValue).then(response => {
+          this.setState({
+            current: 1,
+            formValues: fieldsValue,
+            schemaResponse: response,
+            loading: false,
+          });
+        });
+      }
+    });
+  }
+
+  renderUpload = () => {
+    const { form } = this.props;
+    const { loading } = this.state;
+    const type = this.state.formValues ? this.state.formValues.type : 'CSV';
+
+    const ExtraItems = formRegistry[type];
+    const formItemProps = {
+      labelCol: { span: 5 },
+      wrapperCol: { span: 15 },
+    };
+    const currentRecord = this.state.formValues;
+    return (
+      <Form onSubmit={e => this.handleFormSubmit(e)} style={{ padding: '20px' }}>
+        <FormItem {...formItemProps} label="数据集类型">
+          {form.getFieldDecorator('type', {
+            rules: [{ required: true, message: '数据集类型不能为空' }],
+            initialValue: type,
+          })(
+            <Select>
+              <Select.Option value="CSV">CSV</Select.Option>
+            </Select>
+          )}
+        </FormItem>
+        <ExtraItems form={form} currentRecord={currentRecord} formItemProps={formItemProps} />
+        <div>
+          <div className={styles.rightFloatWrapper}>
+            <Button type="primary" htmlType="submit" loading={loading}>
+              下一步&nbsp;&gt;
+            </Button>
+          </div>
+        </div>
+      </Form>
+    );
+  };
+
+  handleSchemaDone(e) {
+    e.preventDefault();
+    const { formValues, schema } = this.state;
+    const newValue = { ...formValues, schema: schema || this.state.schemaResponse.schema };
+    if (this.state.id) {
+      // modify
+      // this.props.dispatch({
+      //   type: 'dataset/updateDataset',
+      //   payload: { ...newValue, id: this.state.id },
+      //   callback: () => this.setState({ current: 2 }),
+      // });
+      // TODO add modify logic.
+    } else {
+      // create.
+      // this.props.dispatch({
+      //   type: 'dataset/createDataset',
+      //   payload: newValue,
+      //   callback: () => this.setState({ current: 2 }),
+      // });
+
+      const { id, opId } = this.props;
+      configOperator({
+        projectId: id,
+        config: newValue,
+        id: opId,
+      }).then(response => {
+        // router.push(`/projects/p/pipeline/${id}`);
+        this.setState({ current: 2, result: response });
+      });
+    }
+  }
+
+  renderSuccessForm = message => {
+    return (
+      <div style={{ textAlign: 'center', padding: '30px' }}>
+        <Progress type="circle" percent={100} />
+        <div style={{ padding: '10px' }}>
+          <span>{message}</span>
+        </div>
+        <div style={{ padding: '20px' }}>
+          <Button
+            type="primary"
+            onClick={() => {
+              router.push(`/projects/p/pipeline/${this.props.id}`);
+            }}
+          >
+            返回
+          </Button>
+        </div>
+      </div>
+    );
+  };
+
+  renderFailForm = message => {
+    return (
+      <div style={{ textAlign: 'center', padding: '30px' }}>
+        <Progress type="circle" percent={100} status="exception" />
+        <div style={{ padding: '10px' }}>
+          <span>{message}</span>
+        </div>
+        <div style={{ padding: '20px' }}>
+          <Button
+            onClick={() => {
+              this.setState({ current: 1 });
+            }}
+          >
+            返回修改
+          </Button>
+        </div>
+      </div>
+    );
+  };
+
+  renderResultForm = () => {
+    const { result } = this.state;
+    return result.success
+      ? this.renderSuccessForm(result.message)
+      : this.renderFailForm(result.message);
+  };
+
+  renderSchema() {
+    const { success, message, schema } = this.state.schemaResponse;
+    const { loading } = this.state;
+    return (
+      <div style={{ padding: '20px' }}>
+        {success ? (
+          <DefineSchemaWidget
+            formData={this.state.schema || schema}
+            onChange={v => this.setState({ schema: v })}
+          />
+        ) : (
+          <div style={{ textAlign: 'center', padding: '20px' }}>
+            <span style={{ color: 'red' }}>{message}</span>
+          </div>
+        )}
+        <div>
+          <Button onClick={() => this.setState({ current: 0 })}>&lt;&nbsp;返回上一步</Button>
+          {success ? (
+            <div className={styles.rightFloatWrapper}>
+              <Button type="primary" onClick={e => this.handleSchemaDone(e)} loading={loading}>
+                下一步&nbsp;&gt;
+              </Button>
+            </div>
+          ) : null}
+        </div>
+      </div>
+    );
+  }
+
+  render() {
+    return (
+      <React.Fragment>
+        <Card>
+          <Steps progressDot current={this.state.current} size="small">
+            <Step title="选择文件" />
+            <Step title="核对字段" />
+            <Step title="完成" />
+          </Steps>
+          {this.state.current === 0 && this.renderUpload()}
+          {this.state.current === 1 && this.renderSchema()}
+          {this.state.current === 2 && this.renderResultForm()}
+        </Card>
+      </React.Fragment>
+    );
+  }
+}
+
+export default FileDataSourceAdd;

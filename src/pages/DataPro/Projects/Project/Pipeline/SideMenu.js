@@ -4,7 +4,8 @@ import { formatMessage } from 'umi/locale';
 import router from 'umi/router';
 import { connect } from 'dva';
 
-import Input1Output1Config from './Configs/Input1Output1Config';
+import Input1Output1Config from './Configs/IO/Input1Output1Config';
+import Output1Config from './Configs/IO/Output1Config';
 import styles from './SideMenu.less';
 import { getIconNameForComponent } from './Canvas/styles';
 
@@ -14,6 +15,8 @@ const { Panel } = Collapse;
 const renderConfig = {
   AddLiteralColumnTransformer: Input1Output1Config,
   PrepareTransformer: Input1Output1Config,
+  FilterTransformer: Input1Output1Config,
+  FileDataSource: Output1Config,
 };
 
 @connect(({ dataproConfig, loading }) => ({
@@ -38,12 +41,12 @@ class SideMenu extends React.PureComponent {
 
   handleOnClicked = (type, name, code) => {
     const { id } = this.props;
-    if (type === 'DataSource') {
-      // redirect.
-      router.push(`/projects/p/pipeline/add/${id}/${code}`);
-    } else {
-      this.setState({ addingComponent: { name, code } });
-    }
+    // if (type === 'DataSource') {
+    //   // redirect.
+    //   router.push(`/projects/p/pipeline/add/${id}/${code}`);
+    // } else {
+    this.setState({ addingComponent: { name, code } });
+    // }
   };
 
   renderComponent = (type, name, code) => {
@@ -69,7 +72,7 @@ class SideMenu extends React.PureComponent {
   };
 
   render() {
-    const { config, loading } = this.props;
+    const { config, loading, id } = this.props;
     const { addingComponent } = this.state;
     let displayAdding = null;
     if (addingComponent) {
@@ -85,14 +88,9 @@ class SideMenu extends React.PureComponent {
           title={`添加组件 ${name}`}
           // type.
           code={addingComponent.code}
-          onOk={v => {
-            this.props.dispatch({
-              type: 'dataproPipeline/loadPipeline',
-              payload: {
-                id: this.props.id,
-              },
-              callback: () => this.setState({ addingComponent: undefined }),
-            });
+          onOk={operatorId => {
+            this.setState({ addingComponent: undefined });
+            router.push(`/projects/p/pipeline/${id}/conf/${operatorId}`);
           }}
           onCancel={() => this.setState({ addingComponent: undefined })}
         />

@@ -1,3 +1,5 @@
+import { getUrlParams } from '../utils';
+
 const pipeline = {
   components: [
     {
@@ -159,7 +161,8 @@ export function getAllDatasets(req, res) {
 
 export function addOperator(req, res) {
   const { body } = req;
-  const { code, input, output, name } = body;
+  const { code, input: oinput, output, name } = body;
+  const input = oinput || [];
   const pos = pipeline.components
     .filter(i => i.type === 'Dataset' && input.includes(i.id))
     .map(i => ({ x: i.x, y: i.y }));
@@ -173,13 +176,13 @@ export function addOperator(req, res) {
   });
   newPos.x += 300;
   newPos.y /= pos.length;
-  const opId = `op${new Date().getTime()}`;
+  const opId = `${code}-${new Date().getTime()}`;
   const newComponent = {
     ...newPos,
     id: opId,
     name,
     code,
-    type: 'Transformer',
+    type: oinput ? 'Transformer' : 'DataSource',
     inputs: input ? input.map((v, i) => ({ id: `i${i + 1}`, connects: ['Dataset'] })) : [],
     outputs: output.map((v, i) => ({ id: `o${i + 1}`, type: 'Dataset' })),
     connectFrom: input.map((v, i) => ({ component: v, from: 'o1', to: `i${i + 1}` })),
@@ -218,7 +221,7 @@ export function addOperator(req, res) {
   const done = {
     success: true,
     message: '添加成功',
-    delta: [newComponent, ...datasets],
+    data: opId,
   };
   res.json(done);
 }
@@ -250,9 +253,41 @@ export function deleteOperator(req, res) {
   res.json(done);
 }
 
+export function getPipelineOperator(req, res) {
+  const params = getUrlParams(req.url);
+  const arr = params.opId.split('-');
+  const result = {
+    id: params.opId,
+    type: arr[0],
+    name: '名称',
+  };
+  res.json(result);
+}
+
+export function getOperatorConfig(req, res) {
+  const params = getUrlParams(req.url);
+  const result = {
+    config: {},
+    id: params.id,
+    projectId: params.projectId,
+  };
+  res.json(result);
+}
+
+export function updateOperatorConfig(req, res) {
+  const result = {
+    success: true,
+    message: '更新成功',
+  };
+  res.json(result);
+}
+
 export default {
   'GET /api/datapro/projects/pipeline/get': getPipeline,
+  'GET /api/datapro/projects/pipeline/getop': getPipelineOperator,
   'GET /api/datapro/projects/pipeline/datasets': getAllDatasets,
+  'GET /api/datapro/projects/pipeline/op/config': getOperatorConfig,
+  'POST /api/datapro/projects/pipeline/op/config': updateOperatorConfig,
   'POST /api/datapro/projects/pipeline/op/add': addOperator,
   'POST /api/datapro/projects/pipeline/op/delete': deleteOperator,
   'POST /api/datapro/projects/pipeline/op/addsource': addOperator,

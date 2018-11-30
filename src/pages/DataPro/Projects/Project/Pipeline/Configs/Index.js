@@ -1,12 +1,19 @@
 import React from 'react';
-import { Icon, Layout, Card } from 'antd';
+import { Icon, Layout, Card, Spin } from 'antd';
 import { connect } from 'dva';
 import Link from 'umi/link';
 import PageLoading from '@/components/PageLoading';
 
-import FileDataSource from './FileDataSourceAdd';
-import TopBar from '../../../../TopBar';
+import { getOperatorInPipeline } from '@/services/datapro/pipelineAPI';
+import FileDataSource from './DataSource/FileDataSourceAdd';
+import FilterTransformer from './Transformer/FilterTransformer';
+import TopBar from '../../../TopBar';
 import styles from './Index.less';
+
+const registered = {
+  FileDataSource: FileDataSource, // eslint-disable-line
+  FilterTransformer: FilterTransformer, // eslint-disable-line
+};
 
 @connect(({ global, dataproProject, loading }) => ({
   project: dataproProject.project,
@@ -14,32 +21,41 @@ import styles from './Index.less';
   loading: loading.effects['dataproProjects/fetchProject'],
 }))
 class Index extends React.Component {
+  state = {
+    loading: true,
+    operator: undefined,
+  };
+
   componentDidMount() {
     const { dispatch } = this.props;
-    const { id } = this.props.match.params;
+    const { id, op } = this.props.match.params;
     dispatch({
       type: 'dataproProject/fetchProject',
       payload: { id },
     });
+    getOperatorInPipeline({ id, opId: op }).then(response => {
+      this.setState({ loading: false, operator: response });
+    });
   }
 
-  renderChildren = (pane, id) => {
-    switch (pane) {
-      case 'FileDataSource':
-        return <FileDataSource id={id} />;
-      default:
-        return <div>404</div>;
+  renderChildren = (code, id, opId) => {
+    const Pane = registered[code];
+    if (Pane) {
+      return <Pane id={id} code={code} opId={opId} />;
+    } else {
+      return <div>404</div>;
     }
   };
 
   render() {
     const { loading, dispatch } = this.props;
-    const { id, pane } = this.props.match.params;
+    const { id } = this.props.match.params;
 
     const { project } = this.props;
-    if (loading || !project) return <PageLoading />;
+    if (loading || !project || this.state.loading) return <PageLoading />;
 
     const { currentUser, collapsed, fullScreen } = this.props.global;
+    const { operator } = this.state;
     const topBarProps = {
       id,
       title: project.name,
@@ -58,10 +74,13 @@ class Index extends React.Component {
               &lt;&nbsp;返回
             </Link>
             <div className={styles.titleContent}>
-              <span className={styles.title}>新建</span>
+              <span className={styles.title}>配置组件: {operator.name}</span>
+              <span style={{ color: 'grey', display: 'inline-block', float: 'right' }}>
+                ID: {operator.id}
+              </span>
             </div>
           </div>
-          {this.renderChildren(pane, id)}
+          {this.renderChildren(operator.type, id, operator.id)}
         </div>
       </Layout>
     );
