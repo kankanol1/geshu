@@ -5,10 +5,6 @@ export async function getPipeline(params) {
   return request(`/api/datapro/projects/pipeline/get?${stringify(params)}`);
 }
 
-export async function getOperatorInPipeline(params) {
-  return request(`/api/datapro/projects/pipeline/getop?${stringify(params)}`);
-}
-
 export async function queryAllDatasets(params) {
   return request(`/api/datapro/projects/pipeline/datasets?${stringify(params)}`);
 }
@@ -32,6 +28,10 @@ export async function configOperator(params) {
     method: 'POST',
     body: params,
   });
+}
+
+export async function getOperatorInPipeline(params) {
+  return request(`/api/datapro/projects/pipeline/op/get?${stringify(params)}`);
 }
 
 export async function getOperatorConfig(params) {

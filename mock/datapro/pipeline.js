@@ -284,11 +284,10 @@ export function updateOperatorConfig(req, res) {
 
 export default {
   'GET /api/datapro/projects/pipeline/get': getPipeline,
-  'GET /api/datapro/projects/pipeline/getop': getPipelineOperator,
   'GET /api/datapro/projects/pipeline/datasets': getAllDatasets,
   'GET /api/datapro/projects/pipeline/op/config': getOperatorConfig,
   'POST /api/datapro/projects/pipeline/op/config': updateOperatorConfig,
   'POST /api/datapro/projects/pipeline/op/add': addOperator,
   'POST /api/datapro/projects/pipeline/op/delete': deleteOperator,
-  'POST /api/datapro/projects/pipeline/op/addsource': addOperator,
+  'GET /api/datapro/projects/pipeline/op/get': getPipelineOperator,
 };

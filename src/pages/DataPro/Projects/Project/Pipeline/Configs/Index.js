@@ -80,7 +80,7 @@ class Index extends React.Component {
               </span>
             </div>
           </div>
-          {this.renderChildren(operator.type, id, operator.id)}
+          {this.renderChildren(operator.code, id, operator.id)}
         </div>
       </Layout>
     );
