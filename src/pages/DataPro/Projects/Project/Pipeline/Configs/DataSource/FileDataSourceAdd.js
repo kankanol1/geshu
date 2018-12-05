@@ -13,19 +13,25 @@ import CSVDatasetForm from './Templates/CSVDatasetForm';
 import styles from '../Index.less';
 
 const formRegistry = {
-  CSV: CSVDatasetForm,
+  'com.gldata.gaia.pipeline.api.dataset.formats.CsvFormat': CSVDatasetForm,
 };
 
 const FormItem = Form.Item;
 const { TextArea } = Input;
 const { Step } = Steps;
 
+const formats = {
+  'com.gldata.gaia.pipeline.api.dataset.formats.CsvFormat': 'CSV',
+};
+
 @Form.create()
 class FileDataSourceAdd extends React.Component {
   state = {
     current: 0,
     // fileId: -1,
-    formValues: undefined,
+    formValues: {
+      sourceClass: 'com.gldata.gaia.pipeline.api.dataset.sources.FileSystemSource',
+    },
 
     schemaResponse: undefined,
     loading: false,
@@ -43,10 +49,11 @@ class FileDataSourceAdd extends React.Component {
         // });
         // TODO: fetch schema.
         this.setState({ loading: true });
-        getSchemaFromFile(fieldsValue).then(response => {
+        const newValues = { ...this.state.formValues, ...fieldsValue };
+        getSchemaFromFile(newValues).then(response => {
           this.setState({
             current: 1,
-            formValues: fieldsValue,
+            formValues: newValues,
             schemaResponse: response,
             loading: false,
           });
@@ -58,7 +65,9 @@ class FileDataSourceAdd extends React.Component {
   renderUpload = () => {
     const { form } = this.props;
     const { loading } = this.state;
-    const type = this.state.formValues ? this.state.formValues.type : 'CSV';
+    const type =
+      (this.state.formValues && this.state.formValues.type) ||
+      'com.gldata.gaia.pipeline.api.dataset.formats.CsvFormat';
 
     const ExtraItems = formRegistry[type];
     const formItemProps = {
@@ -69,16 +78,24 @@ class FileDataSourceAdd extends React.Component {
     return (
       <Form onSubmit={e => this.handleFormSubmit(e)} style={{ padding: '20px' }}>
         <FormItem {...formItemProps} label="数据集类型">
-          {form.getFieldDecorator('type', {
+          {form.getFieldDecorator('formatClass', {
             rules: [{ required: true, message: '数据集类型不能为空' }],
             initialValue: type,
           })(
             <Select>
-              <Select.Option value="CSV">CSV</Select.Option>
+              <Select.Option value="com.gldata.gaia.pipeline.api.dataset.formats.CsvFormat">
+                CSV
+              </Select.Option>
             </Select>
           )}
         </FormItem>
-        <ExtraItems form={form} currentRecord={currentRecord} formItemProps={formItemProps} />
+        <ExtraItems
+          form={form}
+          currentRecord={currentRecord}
+          formItemProps={formItemProps}
+          id={this.props.id}
+          name={this.props.name}
+        />
         <div>
           <div className={styles.rightFloatWrapper}>
             <Button type="primary" htmlType="submit" loading={loading}>

@@ -84,7 +84,7 @@ class InputOutputConfig extends React.Component {
     return (
       <Row>
         <Col span={12}>
-          <Card title="输出数据集">{this.renderInputs(inputs, datasets)}</Card>
+          <Card title="输入数据集">{this.renderInputs(inputs, datasets)}</Card>
         </Col>
         <Col span={12}>
           <Card title="输出数据集">{this.renderOutputs(outputs)}</Card>

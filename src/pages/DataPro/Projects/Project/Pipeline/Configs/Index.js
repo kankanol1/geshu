@@ -38,10 +38,10 @@ class Index extends React.Component {
     });
   }
 
-  renderChildren = (code, id, opId) => {
+  renderChildren = (code, id, opId, name) => {
     const Pane = registered[code];
     if (Pane) {
-      return <Pane id={id} code={code} opId={opId} />;
+      return <Pane id={id} code={code} opId={opId} name={name} />;
     } else {
       return <div>404</div>;
     }
@@ -80,7 +80,7 @@ class Index extends React.Component {
               </span>
             </div>
           </div>
-          {this.renderChildren(operator.code, id, operator.id)}
+          {this.renderChildren(operator.code, id, operator.id, operator.name)}
         </div>
       </Layout>
     );

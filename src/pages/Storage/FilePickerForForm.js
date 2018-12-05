@@ -14,6 +14,7 @@ export default class FilePickerForForm extends React.PureComponent {
     mode: 'all',
     folderType: undefined,
     view: undefined,
+    project: undefined,
   };
 
   state = {
@@ -49,6 +50,7 @@ export default class FilePickerForForm extends React.PureComponent {
         mode={this.props.mode}
         type={this.props.folderType}
         view={this.props.view}
+        project={this.props.project}
       />
     );
   }
@@ -83,6 +85,7 @@ export default class FilePickerForForm extends React.PureComponent {
             mode={this.props.mode}
             type={this.props.folderType}
             view={this.props.view}
+            project={this.props.project}
           />
         </Modal>
       </React.Fragment>
@@ -121,4 +124,5 @@ FilePickerForForm.propTypes = {
   mode: PropTypes.string,
   folderType: PropTypes.string,
   view: PropTypes.string,
+  project: PropTypes.object,
 };

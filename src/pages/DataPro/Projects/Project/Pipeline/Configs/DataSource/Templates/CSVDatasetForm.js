@@ -6,19 +6,25 @@ const FormItem = Form.Item;
 
 const CSVDatasetForm = props => {
   const { form, currentRecord, formItemProps } = props;
-  const properties = currentRecord ? currentRecord.properties : undefined;
+  const format = currentRecord && currentRecord.format;
+  const source = currentRecord && currentRecord.source;
   return (
     <React.Fragment>
       <FormItem {...formItemProps} label="包含文件头">
-        {form.getFieldDecorator('properties.header', {
-          initialValue: properties ? properties.header || false : false,
+        {form.getFieldDecorator('format.ignoreFirstLine', {
+          initialValue: format ? format.ignoreFirstLine || false : false,
           valuePropName: 'checked',
         })(<Checkbox />)}
       </FormItem>
+      <FormItem {...formItemProps} label="分隔符">
+        {form.getFieldDecorator('format.fieldDelimiter', {
+          initialValue: (format && format.fieldDelimiter) || ',',
+        })(<Input />)}
+      </FormItem>
       <FormItem {...formItemProps} label="文件路径">
-        {form.getFieldDecorator('properties.path', {
+        {form.getFieldDecorator('source.path', {
           rules: [{ required: true, message: '文件路径不能为空' }],
-          initialValue: properties ? properties.path || '' : '',
+          initialValue: source ? source.path || '' : '',
         })(
           <FilePickerForForm
             type="inline"
@@ -28,6 +34,10 @@ const CSVDatasetForm = props => {
             mode="project"
             view="file"
             folderType="pipeline"
+            project={{
+              id: props.id,
+              name: props.name,
+            }}
           />
         )}
       </FormItem>
