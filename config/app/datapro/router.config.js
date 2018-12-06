@@ -76,10 +76,14 @@ export default [
             component: './DataPro/Projects/ProjectIndex',
           },
           {
+            path: '/projects/p/pipeline/:id/new/:op',
+            hideInMenu: true,
+            component: './DataPro/Projects/Project/Pipeline/Configs/Index',
+          },
+          {
             path: '/projects/p/pipeline/:id/conf/:op',
             hideInMenu: true,
             component: './DataPro/Projects/Project/Pipeline/Configs/Index',
-            // component: './DataPro/Projects/ProjectIndex',
           },
         ],
       },

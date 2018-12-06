@@ -1,4 +1,5 @@
 import React from 'react';
+import router from 'umi/router';
 import { Menu } from 'antd';
 
 const style = {
@@ -6,41 +7,62 @@ const style = {
 };
 
 class ContextMenu extends React.PureComponent {
-  handleClick({ item, key, keyPath }) {
-    const { onInspectClicked, onSettingsClicked, onRunToThisClicked, onDeleteClicked } = this.props;
+  handleComponentClick({ item, key, keyPath }) {
+    const { dispatch, component, projectId } = this.props;
+    const { id: operatorId } = component;
     switch (key) {
+      case 'io':
+        this.props.dispatch({
+          type: 'dataproPipeline/modifyComponent',
+          payload: {
+            component,
+          },
+        });
+        break;
       case 'settings':
-        if (onSettingsClicked) {
-          onSettingsClicked();
-        }
+        router.push(`/projects/p/pipeline/${projectId}/conf/${operatorId}`);
         break;
       case 'inspect':
-        if (onInspectClicked) {
-          onInspectClicked();
-        }
         break;
       case 'runtothis':
-        if (onRunToThisClicked) {
-          onRunToThisClicked();
-        }
         break;
       case 'delete':
-        if (onDeleteClicked) {
-          onDeleteClicked();
-        }
+        dispatch({
+          type: 'dataproPipeline/deleteOp',
+          payload: {
+            id: operatorId,
+            projectId,
+          },
+        });
         break;
       default:
         break;
     }
+    dispatch({
+      type: 'dataproPipeline/hideContextMenu',
+    });
+  }
+
+  handleDatasetClick() {
+    const { dispatch } = this.props;
+
+    dispatch({
+      type: 'dataproPipeline/hideContextMenu',
+    });
   }
 
   renderDatasetMenu() {
     return (
-      <Menu style={{ width: 140 }} mode="vertical" theme="light" onClick={v => this.handleClick(v)}>
+      <Menu
+        style={{ width: 140 }}
+        mode="vertical"
+        theme="light"
+        onClick={v => this.handleDatasetClick(v)}
+      >
         <Menu.Item key="settings" style={style}>
           预览数据
         </Menu.Item>
-        <Menu.Item key="runtothis" style={style}>
+        <Menu.Item key="cleardata" style={style}>
           清除数据
         </Menu.Item>
       </Menu>
@@ -49,7 +71,12 @@ class ContextMenu extends React.PureComponent {
 
   renderOpMenu() {
     return (
-      <Menu style={{ width: 140 }} mode="vertical" theme="light" onClick={v => this.handleClick(v)}>
+      <Menu
+        style={{ width: 140 }}
+        mode="vertical"
+        theme="light"
+        onClick={v => this.handleComponentClick(v)}
+      >
         <Menu.Item key="io" style={style}>
           修改连接
         </Menu.Item>

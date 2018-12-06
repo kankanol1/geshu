@@ -7,12 +7,14 @@ import PageLoading from '@/components/PageLoading';
 import { getOperatorInPipeline } from '@/services/datapro/pipelineAPI';
 import FileDataSource from './DataSource/FileDataSourceAdd';
 import FilterTransformer from './Transformer/FilterTransformer';
+import PrepareTransformer from './Transformer/PrepareTransformer';
 import TopBar from '../../../TopBar';
 import styles from './Index.less';
 
 const registered = {
   FileDataSource: FileDataSource, // eslint-disable-line
   FilterTransformer: FilterTransformer, // eslint-disable-line
+  PrepareTransformer: PrepareTransformer, // eslint-disable-line
 };
 
 @connect(({ global, dataproProject, loading }) => ({

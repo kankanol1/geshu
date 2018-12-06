@@ -1,7 +1,7 @@
 import React from 'react';
 import { Row, Col, Card, Form, Input, Modal, Select, Spin } from 'antd';
 
-import { queryAllDatasets, addOperator } from '@/services/datapro/pipelineAPI';
+import { queryAllDatasets, addOperator, updateOperator } from '@/services/datapro/pipelineAPI';
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -22,30 +22,40 @@ class InputOutputConfig extends React.Component {
 
   handleOk(e, callback) {
     e.preventDefault();
+    const { type } = this.props;
     this.props.form.validateFields((err, values) => {
       if (!err) {
         this.setState({ adding: true });
+        const { projectId, code, componentId: id } = this.props;
         // send request.
-        addOperator({ ...values, code: this.props.code, projectId: this.props.id }).then(
-          response => {
+        if (type === 'new') {
+          addOperator({ ...values, code, projectId }).then(response => {
             this.setState({ adding: false }, callback(response.data));
-          }
-        );
+          });
+        } else if (type === 'modify') {
+          // TODO update.
+          updateOperator({ ...values, id, code, projectId }).then(response => {
+            this.setState({ adding: false }, callback(response.data));
+          });
+        } else {
+          console.error('no type specified! expected `new` or `modify`'); // eslint-disable-line
+        }
       }
     });
   }
 
-  renderInputs = (inputs, data) => {
+  renderInputs = (inputs, data, initInputs) => {
     const { getFieldDecorator } = this.props.form;
     // inputs: {labelCol, wrapperCol, label, }
     return (
       <React.Fragment>
         {inputs.map(i => {
-          const { name, ...rest } = i;
+          const { order, name, ...rest } = i;
           return (
             <FormItem {...rest} key={name}>
               {getFieldDecorator(name, {
                 rules: [{ required: true, message: '请选择' }],
+                initialValue: initInputs[order],
               })(
                 <Select placeholder="请选择输入数据集">
                   {data.map(d => (
@@ -62,16 +72,17 @@ class InputOutputConfig extends React.Component {
     );
   };
 
-  renderOutputs = outputs => {
+  renderOutputs = (outputs, initOutputs) => {
     const { getFieldDecorator } = this.props.form;
     return (
       <React.Fragment>
         {outputs.map(i => {
-          const { name, ...rest } = i;
+          const { order, name, ...rest } = i;
           return (
             <FormItem {...rest} key={name}>
               {getFieldDecorator(name, {
                 rules: [{ required: true, message: '请输入' }],
+                initialValue: initOutputs[order],
               })(<Input placeholder="请输入输出数据集名称" />)}
             </FormItem>
           );
@@ -80,21 +91,31 @@ class InputOutputConfig extends React.Component {
     );
   };
 
-  renderCardView = (inputs, outputs, datasets) => {
+  renderCardView = (inputs, outputs, datasets, initInputs, initOutputs) => {
     return (
       <Row>
         <Col span={12}>
-          <Card title="输入数据集">{this.renderInputs(inputs, datasets)}</Card>
+          <Card title="输入数据集">{this.renderInputs(inputs, datasets, initInputs)}</Card>
         </Col>
         <Col span={12}>
-          <Card title="输出数据集">{this.renderOutputs(outputs)}</Card>
+          <Card title="输出数据集">{this.renderOutputs(outputs, initOutputs)}</Card>
         </Col>
       </Row>
     );
   };
 
   render() {
-    const { title, name, onOk, onCancel, inputs, outputs } = this.props;
+    const {
+      title,
+      name,
+      onOk,
+      onCancel,
+      inputs,
+      outputs,
+      initInputs,
+      initOutputs,
+      type,
+    } = this.props;
     const { getFieldDecorator } = this.props.form;
     const { loading, datasets, adding } = this.state;
     let col = 0;
@@ -122,9 +143,9 @@ class InputOutputConfig extends React.Component {
               })(<Input placeholder="组件名称" />)}
             </FormItem>
             <Row>
-              {col === 2 && this.renderCardView(inputs, outputs, datasets)}
-              {col === 1 && inputs && this.renderInputs(inputs, datasets)}
-              {col === 1 && outputs && this.renderOutputs(outputs)}
+              {col === 2 && this.renderCardView(inputs, outputs, datasets, initInputs, initOutputs)}
+              {col === 1 && inputs && this.renderInputs(inputs, datasets, initInputs)}
+              {col === 1 && outputs && this.renderOutputs(outputs, initOutputs)}
             </Row>
           </Form>
         </Spin>

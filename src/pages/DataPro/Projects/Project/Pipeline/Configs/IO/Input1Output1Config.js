@@ -9,8 +9,8 @@ export default class Input1Output1Config extends React.Component {
     return (
       <InputOutputConfig
         {...this.props}
-        inputs={[{ label: undefined, ...layout, name: 'input.0' }]}
-        outputs={[{ label: undefined, ...layout, name: 'output.0' }]}
+        inputs={[{ label: undefined, ...layout, name: 'input.0', order: 0 }]}
+        outputs={[{ label: undefined, ...layout, name: 'output.0', order: 0 }]}
       />
     );
   }

@@ -18,6 +18,7 @@ import CanvasDraggingMove from '@/obj/workspace/op/CanvasDraggingMove';
 import { addEvent } from '@/utils/utils';
 import SelectionChange from '@/obj/workspace/op/SelectionChange';
 import ScaleChange from '@/obj/workspace/op/ScaleChange';
+import IOConfig from '../Configs/IO/Index';
 
 const keyUpListener = [];
 const keyDownLisener = [];
@@ -253,17 +254,6 @@ class WorkCanvas extends React.Component {
     }
   }
 
-  handleDeleteClicked(component) {
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'dataproPipeline/deleteOp',
-      payload: {
-        id: component.id,
-        projectId: this.props.id,
-      },
-    });
-  }
-
   handleCanvasMouseWheel(e) {
     if (key.isPressed('space')) {
       const { deltaX, deltaY } = e;
@@ -355,15 +345,71 @@ class WorkCanvas extends React.Component {
     );
   }
 
+  renderModifyingComponent = component => {
+    const { canvas } = this.props.dataproPipeline;
+    // get output dataset names
+    const datasetIdNames = {};
+    canvas.components.forEach(i => {
+      datasetIdNames[i.id] = i.name;
+    });
+    const newInputs = [];
+    // get input.
+    component.connections.forEach(i => {
+      newInputs.push(datasetIdNames[i.component]);
+    });
+    // only one output.
+    const newOutputs = [];
+    canvas.components.forEach(i => {
+      if (
+        i.connections &&
+        i.connections.length === 1 &&
+        i.connections[0].component === component.id
+      ) {
+        newOutputs.push(datasetIdNames[i.id]);
+      }
+    });
+    return (
+      <IOConfig
+        type="modify"
+        id={this.props.id}
+        title={`修改组件：${component.name}`}
+        component={{ ...component, inputs: newInputs, outputs: newOutputs }}
+        onOk={() => {
+          this.props.dispatch({
+            type: 'dataproPipeline/loadPipeline',
+            payload: {
+              id: this.props.id,
+            },
+          });
+          this.props.dispatch({
+            type: 'dataproPipeline/modifyComponent',
+            payload: {
+              component: undefined,
+            },
+          });
+        }}
+        onCancel={() =>
+          this.props.dispatch({
+            type: 'dataproPipeline/modifyComponent',
+            payload: {
+              component: undefined,
+            },
+          })
+        }
+      />
+    );
+  };
+
   render() {
-    const projectId = 1;
     const validation = {};
     const jobTips = {};
+    const { id: projectId } = this.props;
     const {
       // state: { projectId },
       canvas,
       // validation,
       contextmenu,
+      modifyingComponent,
       // jobTips,
     } = this.props.dataproPipeline;
     const { mode, opMode } = this.state;
@@ -371,15 +417,8 @@ class WorkCanvas extends React.Component {
     const { componentPositionCache, componentSocketPositionCache } = canvas;
     let contextMenuView = null;
     if (contextmenu.show) {
-      const { component } = contextmenu;
       contextMenuView = (
-        <ContextMenu
-          {...contextmenu}
-          onSettingsClicked={() => this.handleSettingsClicked(component, true)}
-          onInspectClicked={() => this.handleInspectClicked(component)}
-          onRunToThisClicked={() => this.handleRunToThisClicked(component)}
-          onDeleteClicked={() => this.handleDeleteClicked(component)}
-        />
+        <ContextMenu dispatch={this.props.dispatch} {...contextmenu} projectId={projectId} />
       );
     }
 
@@ -498,6 +537,7 @@ class WorkCanvas extends React.Component {
         </DraggableCore>
         {contextMenuView}
         {this.renderToolbarView()}
+        {modifyingComponent && this.renderModifyingComponent(modifyingComponent)}
       </div>
     );
   }

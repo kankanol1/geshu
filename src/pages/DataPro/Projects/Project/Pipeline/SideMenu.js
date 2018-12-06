@@ -4,20 +4,11 @@ import { formatMessage } from 'umi/locale';
 import router from 'umi/router';
 import { connect } from 'dva';
 
-import Input1Output1Config from './Configs/IO/Input1Output1Config';
-import Output1Config from './Configs/IO/Output1Config';
+import IOConfig from './Configs/IO/Index';
 import styles from './SideMenu.less';
 import { getIconNameForComponent } from './Canvas/styles';
 
 const { Panel } = Collapse;
-
-// render config for other components.
-const renderConfig = {
-  AddLiteralColumnTransformer: Input1Output1Config,
-  PrepareTransformer: Input1Output1Config,
-  FilterTransformer: Input1Output1Config,
-  FileDataSource: Output1Config,
-};
 
 @connect(({ dataproConfig, loading }) => ({
   config: dataproConfig.components,
@@ -45,7 +36,8 @@ class SideMenu extends React.PureComponent {
     //   // redirect.
     //   router.push(`/projects/p/pipeline/add/${id}/${code}`);
     // } else {
-    this.setState({ addingComponent: { name, code } });
+    // only add code here.
+    this.setState({ addingComponent: { code } });
     // }
   };
 
@@ -74,28 +66,6 @@ class SideMenu extends React.PureComponent {
   render() {
     const { config, loading, id } = this.props;
     const { addingComponent } = this.state;
-    let displayAdding = null;
-    if (addingComponent) {
-      const Widget = renderConfig[addingComponent.code];
-      const name = formatMessage({
-        id: `operator.${addingComponent.name}`,
-        defaultMessage: addingComponent.name,
-      });
-      displayAdding = (
-        <Widget
-          id={this.props.id}
-          name={name}
-          title={`添加组件 ${name}`}
-          // type.
-          code={addingComponent.code}
-          onOk={operatorId => {
-            this.setState({ addingComponent: undefined });
-            router.push(`/projects/p/pipeline/${id}/conf/${operatorId}`);
-          }}
-          onCancel={() => this.setState({ addingComponent: undefined })}
-        />
-      );
-    }
     return (
       <div className={styles.menuWrapper}>
         <Spin spinning={loading}>
@@ -112,10 +82,23 @@ class SideMenu extends React.PureComponent {
               </Panel>
             ))}
           </Collapse>
-          {
-            // render dialog if needed.
-            displayAdding
-          }
+          {// render dialog if needed.
+          addingComponent && (
+            <IOConfig
+              type="new"
+              id={this.props.id}
+              title={`添加组件 ${formatMessage({
+                id: `operator.${addingComponent.name}`,
+                defaultMessage: addingComponent.name,
+              })}`}
+              component={addingComponent}
+              onOk={operatorId => {
+                this.setState({ addingComponent: undefined });
+                router.push(`/projects/p/pipeline/${id}/new/${operatorId}`);
+              }}
+              onCancel={() => this.setState({ addingComponent: undefined })}
+            />
+          )}
         </Spin>
       </div>
     );

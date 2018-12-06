@@ -21,6 +21,7 @@ export default {
       offsetX: 0,
       offsetY: 40,
     },
+    modifyingComponent: undefined,
   },
 
   reducers: {
@@ -67,6 +68,10 @@ export default {
           show: false,
         },
       };
+    },
+
+    modifyComponent(state, { payload }) {
+      return { ...state, modifyingComponent: payload.component };
     },
   },
 

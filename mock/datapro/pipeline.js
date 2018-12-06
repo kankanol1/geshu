@@ -192,7 +192,7 @@ export function addOperator(req, res) {
   const datasets = output.map((v, i) => ({
     x: newPos.x + 200,
     y: baseY + 200 * (i + 1),
-    id: v,
+    id: `Dataset-${new Date().getTime()}`,
     name: v,
     code: 'Dataset',
     type: 'Dataset',
@@ -259,6 +259,7 @@ export function getPipelineOperator(req, res) {
   const result = {
     id: params.opId,
     type: arr[0],
+    code: arr[0],
     name: '名称',
   };
   res.json(result);
@@ -282,12 +283,36 @@ export function updateOperatorConfig(req, res) {
   res.json(result);
 }
 
+export function updateOperator(req, res) {
+  // update the connection.
+
+  const { body } = req;
+  const { code, input: oinput, output, name, id } = body;
+  const input = oinput || [];
+  const component = pipeline.components.filter(i => i.id === id)[0];
+  component.name = name;
+  // get output.
+  component.outputs.forEach((v, i) => {
+    // eslint-disable-next-line
+    v.name = output[i].name;
+  });
+  // update input.
+  component.connectFrom = input.map((v, i) => ({ component: v, from: 'o1', to: `i${i + 1}` }));
+  pipeline.components = pipeline.components.map(i => (i.id === id ? component : i)); // eslint-disable-line
+  const done = {
+    success: true,
+    message: '修改成功',
+  };
+  res.json(done);
+}
+
 export default {
   'GET /api/datapro/projects/pipeline/get': getPipeline,
   'GET /api/datapro/projects/pipeline/datasets': getAllDatasets,
   'GET /api/datapro/projects/pipeline/op/config': getOperatorConfig,
   'POST /api/datapro/projects/pipeline/op/config': updateOperatorConfig,
   'POST /api/datapro/projects/pipeline/op/add': addOperator,
+  'POST /api/datapro/projects/pipeline/op/update': updateOperator,
   'POST /api/datapro/projects/pipeline/op/delete': deleteOperator,
   'GET /api/datapro/projects/pipeline/op/get': getPipelineOperator,
 };

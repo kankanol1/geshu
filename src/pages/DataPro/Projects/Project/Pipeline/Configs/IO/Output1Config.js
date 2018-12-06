@@ -9,7 +9,7 @@ export default class Output1Config extends React.Component {
     return (
       <InputOutputConfig
         {...this.props}
-        outputs={[{ label: '输出数据集', ...layout, name: 'output.0' }]}
+        outputs={[{ label: '输出数据集', ...layout, name: 'output.0', order: 0 }]}
       />
     );
   }

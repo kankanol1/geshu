@@ -1,0 +1,70 @@
+@import '~antd/lib/style/themes/default.less';
+
+.menuWrapper {
+  z-index: 100;
+  width: 100px;
+  position: absolute;
+  left: 840px;
+  top: 120px;
+  background: #fafafa;
+  padding: 5px;
+  box-shadow: 1px 2px #bfbfbf;
+
+  & > .menuItem:hover {
+    background: @primary-color;
+    color: white;
+  }
+
+  & > .menuItem {
+    cursor: pointer;
+    padding: 5px;
+    height: 30px;
+    line-height: 20px;
+    border-bottom: 1px solid #bfbfbf;
+  }
+
+  // no border on last one
+  & > .menuItem:last-child {
+    border-bottom: 0;
+  }
+}
+
+.historyTitle {
+  font-weight: 800;
+  padding: 10px;
+}
+
+// .historyList {
+// }
+
+.historyItem {
+  padding: 10px;
+  margin: 10px;
+  background: white;
+
+  &:hover {
+    box-shadow: 2px 2px #bfbfbf;
+
+    & > .operations {
+      display: block;
+    }
+  }
+
+  & > .title {
+    font-weight: 500;
+    color: @primary-color;
+  }
+  & > .description {
+    color: grey;
+  }
+  & > .operations {
+    float: right;
+    display: none;
+    :global(.anticon) {
+      color: @primary-color;
+      font-size: 15px;
+      padding: 5px;
+      cursor: pointer;
+    }
+  }
+}
