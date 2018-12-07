@@ -7,7 +7,7 @@ import PageLoading from '@/components/PageLoading';
 import { getOperatorInPipeline } from '@/services/datapro/pipelineAPI';
 import FileDataSource from './DataSource/FileDataSourceAdd';
 import FilterTransformer from './Transformer/FilterTransformer';
-import PrepareTransformer from './Transformer/PrepareTransformer';
+import PrepareTransformer from './Transformer/PrepareTransformerShit';
 import TopBar from '../../../TopBar';
 import styles from './Index.less';
 

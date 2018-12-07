@@ -401,8 +401,6 @@ class WorkCanvas extends React.Component {
   };
 
   render() {
-    const validation = {};
-    const jobTips = {};
     const { id: projectId } = this.props;
     const {
       // state: { projectId },
@@ -410,7 +408,7 @@ class WorkCanvas extends React.Component {
       // validation,
       contextmenu,
       modifyingComponent,
-      // jobTips,
+      status,
     } = this.props.dataproPipeline;
     const { mode, opMode } = this.state;
     if (canvas === undefined) return null;
@@ -476,36 +474,9 @@ class WorkCanvas extends React.Component {
                     // selection={selection}
                     projectId={projectId}
                     // offset={offset}
-                    validation={validation[component.id]}
+                    status={status[component.id]}
                     canvas={canvas}
                     isMoveMode={this.state.mode === 'move'}
-                    jobTips={jobTips[component.id]}
-                    // handle job clicked.
-                    onJobStatusClicked={job => {
-                      if (job.status === 'finished') {
-                        // add pane.
-                        this.props.dispatch({
-                          type: 'outputview/addPane',
-                          payload: {
-                            id: job.id,
-                            type: 'job',
-                            title: `作业详细[${job.id}]`,
-                          },
-                        });
-                      } else {
-                        // go to job list.
-                        this.props.dispatch({
-                          type: 'outputview/activePane',
-                          payload: {
-                            title: 'default',
-                          },
-                        });
-                      }
-                      // redirect.
-                      this.props.dispatch(
-                        routerRedux.push(`/project/workspace/output/${projectId}`)
-                      );
-                    }}
                   />
                   {/* 3. point layer */}
                   <PointLayer

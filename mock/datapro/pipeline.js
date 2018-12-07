@@ -1,12 +1,35 @@
 import { getUrlParams } from '../utils';
 
+// op status: ERROR, READY, RUNNING.
+// dataset status: EMPTY, CALCULATING, CALCULATED.
+
 const pipeline = {
+  status: {
+    '0136ee04-d9d8-4c90-9b5c-1f2152da564d': {
+      status: 'READY',
+    },
+    name1: {
+      status: 'CALCULATED',
+    },
+    '3e8e9b3d-479a-4e29-98f8-b1828dc32ee7': {
+      status: 'RUNNING',
+    },
+    nu8: {
+      status: 'CALCULATING',
+    },
+    '618ee91e-1562-4f7d-8f12-14dc51b727dc': {
+      status: 'ERROR',
+    },
+    gg9: {
+      status: 'EMPTY',
+    },
+  },
   components: [
     {
       x: 600,
       y: 200,
       id: '0136ee04-d9d8-4c90-9b5c-1f2152da564d',
-      name: 'FileDataSource1',
+      name: '文件读取',
       code: 'FileDataSource',
       type: 'DataSource',
       inputs: [],
@@ -18,10 +41,10 @@ const pipeline = {
       connectFrom: [],
     },
     {
-      x: 900,
+      x: 800,
       y: 200,
       id: 'name1',
-      name: 'name1',
+      name: '输入数据集',
       code: 'Dataset',
       type: 'Dataset',
       inputs: [
@@ -43,11 +66,11 @@ const pipeline = {
       ],
     },
     {
-      x: 1200,
+      x: 1000,
       y: 200,
       id: '3e8e9b3d-479a-4e29-98f8-b1828dc32ee7',
-      name: 'trans1',
-      code: 'AddLiteralColumnTransformer',
+      name: '条件过滤',
+      code: 'FilterTransformer',
       type: 'Transformer',
       inputs: [
         {
@@ -68,10 +91,10 @@ const pipeline = {
       ],
     },
     {
-      x: 1500,
+      x: 1200,
       y: 200,
       id: 'nu8',
-      name: 'nu8',
+      name: '过滤后数据集',
       code: 'Dataset',
       type: 'Dataset',
       inputs: [
@@ -93,10 +116,10 @@ const pipeline = {
       ],
     },
     {
-      x: 1800,
+      x: 1400,
       y: 200,
       id: '618ee91e-1562-4f7d-8f12-14dc51b727dc',
-      name: 'Trans',
+      name: '数据转换',
       code: 'AddLiteralColumnTransformer',
       type: 'Transformer',
       inputs: [
@@ -118,10 +141,10 @@ const pipeline = {
       ],
     },
     {
-      x: 2100,
+      x: 1600,
       y: 200,
       id: 'gg9',
-      name: 'gg9',
+      name: '转换后数据集',
       code: 'Dataset',
       type: 'Dataset',
       inputs: [
@@ -260,7 +283,7 @@ export function getPipelineOperator(req, res) {
     id: params.opId,
     type: arr[0],
     code: arr[0],
-    name: '名称',
+    name: arr[0] === 'PrepareTransformer' ? '数据转换' : '名称',
   };
   res.json(result);
 }

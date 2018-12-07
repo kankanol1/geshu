@@ -13,6 +13,7 @@ export default {
   state: {
     // pipeline canvas.
     canvas: undefined,
+    status: undefined,
     contextmenu: {
       show: false,
       component: null,
@@ -26,8 +27,12 @@ export default {
 
   reducers: {
     savePipeline(state, { payload }) {
-      const { components, offset, scale } = payload;
-      return { ...state, canvas: DataProCanvas.fromJson(components, offset.x, offset.y, scale) };
+      const { components, offset, scale, status } = payload;
+      return {
+        ...state,
+        canvas: DataProCanvas.fromJson(components, offset.x, offset.y, scale),
+        status,
+      };
     },
 
     triggerCanvasUpdate(state, { payload }) {

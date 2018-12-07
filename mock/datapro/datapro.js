@@ -51,7 +51,16 @@ const components = {
       code: 'PrepareTransformer',
     },
   ],
-  DataSink: [],
+  DataSink: [
+    {
+      name: 'HiveDataSink',
+      code: 'HiveDataSink',
+    },
+    {
+      name: 'FileDataSink',
+      code: 'FileDataSink',
+    },
+  ],
 };
 
 export default {

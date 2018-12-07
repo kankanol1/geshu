@@ -200,21 +200,27 @@ class NodeLayer extends React.Component {
     const { x, y } =
       this.props.componentDict === undefined ? this.props.model : this.props.componentDict[id];
     const icon = getIconNameForComponent(code);
-    const { validation, jobTips } = this.props;
-    let errorDisplay;
-    if (validation) {
-      errorDisplay = validation.errors ? 'error' : 'warn';
+    const {
+      status: { status },
+    } = this.props;
+    const nodeClassName = status === 'ERROR' ? styles.nodeDivError : styles.nodeDiv;
+    let extraStyle = null;
+    if (type === 'Dataset') {
+      switch (status) {
+        case 'CALCULATED':
+          extraStyle = styles.datasetDiv;
+          break;
+        case 'EMPTY':
+        case 'CALCULATING':
+          extraStyle = styles.datasetEmptyDiv;
+          break;
+        default:
+          break;
+      }
     }
-    let nodeClassName = styles.nodeDiv;
-    if (errorDisplay) {
-      nodeClassName = errorDisplay === 'error' ? styles.nodeDivError : styles.nodeDivWarn;
-    }
-    const startX = x + componentSize.width;
-    const startY = y + componentSize.height / 2;
-    const lineStr = calculateLineCurly(startX, startY, startX + 200, startY);
     return (
       <React.Fragment>
-        {errorDisplay ? (
+        {status !== 'READY' && (
           <div
             style={{
               width: '0px',
@@ -222,33 +228,20 @@ class NodeLayer extends React.Component {
               transform: `translate(${x + componentSize.width + 4}px, ${y}px)`,
             }}
           >
-            <Icon
-              type="warning"
-              className={errorDisplay === 'error' ? styles.errorTip : styles.warnTip}
-              onClick={() => this.renderValidation(validation)}
-            />
+            {// render error
+            status === 'ERROR' && (
+              <Tooltip title="配置项错误，点击修改">
+                <Icon type="warning" className={styles.errorTip} />
+              </Tooltip>
+            )}
+            {// render running.
+            status === 'RUNNING' && (
+              <Tooltip title="作业运行中">
+                <Icon type="loading" className={styles.taskRunningTip} />
+              </Tooltip>
+            )}
           </div>
-        ) : null}
-        <div
-          style={{
-            width: '0px',
-            height: '0px',
-            transform: `translate(${x + componentSize.width + 8}px, ${y +
-              componentSize.height -
-              20}px)`,
-          }}
-        >
-          {// first running.
-          jobTips &&
-            jobTips
-              .filter(i => i.status !== 'finished' && i.status !== 'failed')
-              .map((j, i) => this.renderJobTips(j, `r${i}`))}
-          {// then finished & failed.
-          jobTips &&
-            jobTips
-              .filter(i => i.status === 'finished' || i.status === 'failed')
-              .map((j, i) => this.renderJobTips(j, `f${i}`))}
-        </div>
+        )}
         <DraggableCore
           onStop={e => this.handleDragStop(e)}
           onDrag={(e, draggableData) => this.handleDrag(e, draggableData)}
@@ -262,7 +255,7 @@ class NodeLayer extends React.Component {
               transform: `translate(${x}px, ${y}px)`,
             }}
             onContextMenu={e => this.handleContextMenu(e)}
-            className={`${type === 'Dataset' && styles.datasetDiv} ${nodeClassName}`}
+            className={`${extraStyle} ${nodeClassName}`}
             onDoubleClick={() => {
               if (this.props.onNodeClicked) {
                 this.props.onNodeClicked(this.props.model, true);
