@@ -337,4 +337,24 @@ export default {
   // dataSinks
   'operator.HiveDataSink': 'Hive存储',
   'operator.FileDataSink': '文件存储',
+
+  // dummy things.
+  'operator.CSVFileDataSource': 'CSV源',
+  'operator.JSONFileDataSource': 'JSON源',
+  'operator.ParquetFileDataSource': 'Parquet源',
+  'operator.TxtFileDataSource': '文本文件源',
+  'operator.HiveDataSource': 'Hive数据源',
+  'operator.KafkaDataSource': 'Kafka数据源',
+
+  'operator.JDBCDataSink': 'JDBC连接存储',
+  'operator.CSVFileDataSink': 'CSV存储',
+  'operator.AvroFileDataSink': 'Avro存储',
+  'operator.ParquetFileDataSink': 'Parquet存储',
+  'operator.JSONFileDataSink': 'JSON存储',
+
+  'operator.TopNColumnTransformer': 'Top-N',
+  'operator.WindowTransformer': '应用窗口',
+  'operator.DistinctColumnTransformer': '去重',
+  'operator.SortTransformer': '排序',
+  'operator.PivotTransformer': '行列转置',
 };

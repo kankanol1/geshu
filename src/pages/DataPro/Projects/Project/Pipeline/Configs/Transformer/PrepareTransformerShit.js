@@ -112,7 +112,13 @@ for (const l of lines) {
   const arr = CSVtoArray(l);
   const obj = {};
   for (let i = 0; i < columns.length; i++) {
-    obj[columns[i]] = arr[i];
+    let value = arr[i];
+    if (arr[i] === 'male') {
+      value = '男性';
+    } else if (arr[i] === 'female') {
+      value = '女性';
+    }
+    obj[columns[i]] = value;
   }
   converted.push(obj);
 }
@@ -198,8 +204,24 @@ class PrepareTransformer extends React.Component {
         });
       }
     }
+    const eleStyle = {
+      margin: '4px',
+    };
     return (
       <React.Fragment>
+        <div style={{ padding: '5px' }}>
+          <Button style={eleStyle}>列重命名</Button>
+          <Button style={eleStyle}>值映射</Button>
+          <Button style={eleStyle}>合并列</Button>
+          <Button style={eleStyle}>修改列类型</Button>
+          <Button style={eleStyle}>增加列</Button>
+          <Button style={eleStyle}>列拆分</Button>
+          <Button style={eleStyle}>列选择</Button>
+          <Button style={eleStyle}>条件处理</Button>
+          <Button style={eleStyle}>格式化</Button>
+          <Button style={eleStyle}>数据提取</Button>
+          <Button style={eleStyle}>数学公式</Button>
+        </div>
         <ReactTable data={converted} columns={nc} />
       </React.Fragment>
     );
@@ -228,8 +250,11 @@ class PrepareTransformer extends React.Component {
   renderContext = () => {
     return (
       <div className={styles.menuWrapper}>
-        <div className={styles.menuItem}>列拆分</div>
-        <div className={styles.menuItem}>应用变换</div>
+        <div className={styles.menuItem}>重命名</div>
+        <div className={styles.menuItem}>值映射</div>
+        <div className={styles.menuItem}>修改类型</div>
+        <div className={styles.menuItem}>拆分</div>
+        <div className={styles.menuItem}>数据提取</div>
       </div>
     );
   };
@@ -241,7 +266,7 @@ class PrepareTransformer extends React.Component {
           <Col span={6}>{this.renderHistory()}</Col>
           <Col span={18}>{this.renderTable()}</Col>
         </Row>
-        {/* {this.renderContext()} */}
+        {this.renderContext()}
       </React.Fragment>
     );
   }

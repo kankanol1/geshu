@@ -160,60 +160,24 @@ class NodeLayer extends React.Component {
     }
   }
 
-  renderValidation = validation => {
-    if (validation.errors) {
-      Modal.error({
-        title: '错误提示',
-        content: [
-          validation.errors.map((e, i) => <span key={`e-${i}`}>{e}</span>),
-          validation.warns && validation.warns.map((e, i) => <span key={`w-${i}`}>{e}</span>),
-        ],
-      });
-    } else {
-      Modal.warning({
-        title: '警告',
-        content: [validation.warns.map((e, i) => <span key={`w-${i}`}>{e}</span>)],
-      });
-    }
-  };
-
-  renderJobTips = (job, k) => {
-    const title = jobTipDescription[job.status];
-    return (
-      <Tooltip title={title || ''} key={k}>
-        <Icon
-          type={jobTipIcons[job.status]}
-          className={jobTipStyle[job.status]}
-          onClick={e => {
-            e.preventDefault();
-            e.stopPropagation();
-            if (this.props.onJobStatusClicked) this.props.onJobStatusClicked(job);
-          }}
-        />
-      </Tooltip>
-    );
-  };
-
   render() {
     const { name, id, code, type } = this.props.model;
     // console.log('model', this.props.model);
     const { x, y } =
       this.props.componentDict === undefined ? this.props.model : this.props.componentDict[id];
     const icon = getIconNameForComponent(code);
-    const {
-      status: { status },
-    } = this.props;
+    const { status: rawStatus } = this.props;
+    const status = rawStatus && rawStatus.status;
     const nodeClassName = status === 'ERROR' ? styles.nodeDivError : styles.nodeDiv;
     let extraStyle = null;
     if (type === 'Dataset') {
+      extraStyle = styles.datasetDiv;
       switch (status) {
-        case 'CALCULATED':
-          extraStyle = styles.datasetDiv;
-          break;
         case 'EMPTY':
         case 'CALCULATING':
           extraStyle = styles.datasetEmptyDiv;
           break;
+        case 'CALCULATED':
         default:
           break;
       }

@@ -1,11 +1,31 @@
 const components = {
   DataSource: [
     {
-      name: 'FileDataSource',
+      name: 'CSVFileDataSource',
+      code: 'FileDataSource',
+    },
+    {
+      name: 'JSONFileDataSource',
+      code: 'FileDataSource',
+    },
+    {
+      name: 'ParquetFileDataSource',
+      code: 'FileDataSource',
+    },
+    {
+      name: 'TxtFileDataSource',
       code: 'FileDataSource',
     },
     {
       name: 'JdbcDataSource',
+      code: 'JdbcDataSource',
+    },
+    {
+      name: 'HiveDataSource',
+      code: 'JdbcDataSource',
+    },
+    {
+      name: 'KafkaDataSource',
       code: 'JdbcDataSource',
     },
     {
@@ -15,7 +35,27 @@ const components = {
   ],
   Transformer: [
     {
-      name: 'AddLiteralColumnTransformer',
+      name: 'PrepareTransformer',
+      code: 'PrepareTransformer',
+    },
+    {
+      name: 'TopNColumnTransformer',
+      code: 'PrepareTransformer',
+    },
+    {
+      name: 'WindowTransformer',
+      code: 'RandomSplitTransformer',
+    },
+    {
+      name: 'DistinctColumnTransformer',
+      code: 'PrepareTransformer',
+    },
+    {
+      name: 'SortTransformer',
+      code: 'FilterTransformer',
+    },
+    {
+      name: 'PivotTransformer',
       code: 'AddLiteralColumnTransformer',
     },
     {
@@ -46,10 +86,6 @@ const components = {
       name: 'JoinTransformer',
       code: 'JoinTransformer',
     },
-    {
-      name: 'PrepareTransformer',
-      code: 'PrepareTransformer',
-    },
   ],
   DataSink: [
     {
@@ -57,7 +93,27 @@ const components = {
       code: 'HiveDataSink',
     },
     {
+      name: 'JDBCDataSink',
+      code: 'HiveDataSink',
+    },
+    {
+      name: 'CSVFileDataSink',
+      code: 'FileDataSink',
+    },
+    {
       name: 'FileDataSink',
+      code: 'FileDataSink',
+    },
+    {
+      name: 'AvroFileDataSink',
+      code: 'FileDataSink',
+    },
+    {
+      name: 'ParquetFileDataSink',
+      code: 'FileDataSink',
+    },
+    {
+      name: 'JSONFileDataSink',
       code: 'FileDataSink',
     },
   ],
