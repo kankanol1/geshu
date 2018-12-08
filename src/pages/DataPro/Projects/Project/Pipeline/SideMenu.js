@@ -37,7 +37,7 @@ class SideMenu extends React.PureComponent {
     //   router.push(`/projects/p/pipeline/add/${id}/${code}`);
     // } else {
     // only add code here.
-    this.setState({ addingComponent: { code } });
+    this.setState({ addingComponent: { code, name } });
     // }
   };
 

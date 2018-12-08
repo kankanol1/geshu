@@ -178,7 +178,7 @@ export function getPipeline(req, res) {
 }
 
 export function getAllDatasets(req, res) {
-  const datasets = pipeline.components.filter(i => i.type === 'Dataset').map(i => i.id);
+  const datasets = pipeline.components.filter(i => i.type === 'Dataset').map(i => i.name);
   res.json(datasets);
 }
 
@@ -187,7 +187,7 @@ export function addOperator(req, res) {
   const { code, input: oinput, output, name } = body;
   const input = oinput || [];
   const pos = pipeline.components
-    .filter(i => i.type === 'Dataset' && input.includes(i.id))
+    .filter(i => i.type === 'Dataset' && input.includes(i.name))
     .map(i => ({ x: i.x, y: i.y }));
 
   const newPos = { x: 0, y: 0 };
@@ -284,6 +284,15 @@ export function getPipelineOperator(req, res) {
     type: arr[0],
     code: arr[0],
     name: arr[0] === 'PrepareTransformer' ? '数据转换' : '名称',
+    configs: {
+      format: {
+        ignoreFirstLine: true,
+        fieldDelimiter: ',',
+      },
+    },
+    errors: {
+      'format.ignoreFirstLine': '无需选中',
+    },
   };
   res.json(result);
 }

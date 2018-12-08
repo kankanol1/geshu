@@ -2,13 +2,10 @@ import React from 'react';
 import { Form, Input, Select, Checkbox, Button, Card, Steps, Progress, Spin } from 'antd';
 import router from 'umi/router';
 
-import {
-  addSourceOperator,
-  getSchemaFromFile,
-  configOperator,
-} from '@/services/datapro/pipelineAPI';
+import { getSchemaFromFile, configOperator } from '@/services/datapro/pipelineAPI';
 import DefineSchemaWidget from '@/components/JsonSchemaForm/Widgets/Schema/DefineSchemaWidget';
 import CSVDatasetForm from './Templates/CSVDatasetForm';
+import { formItemWithError } from '../Utils';
 
 import styles from '../Index.less';
 
@@ -24,17 +21,23 @@ const formats = {
   'com.gldata.gaia.pipeline.api.dataset.formats.CsvFormat': 'CSV',
 };
 
-@Form.create()
-class FileDataSourceAdd extends React.Component {
-  state = {
-    current: 0,
-    // fileId: -1,
-    formValues: {
-      sourceClass: 'com.gldata.gaia.pipeline.api.dataset.sources.FileSystemSource',
-    },
+class FileDataSourceConfig extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      current: 0,
+      formValues: {
+        ...props.configs,
+      },
 
-    schemaResponse: undefined,
-    loading: false,
+      schemaResponse: undefined,
+      loading: false,
+      changed: false,
+    };
+  }
+
+  handleChange = () => {
+    this.setState({ changed: true });
   };
 
   handleFormSubmit(e) {
@@ -42,29 +45,45 @@ class FileDataSourceAdd extends React.Component {
     const { form } = this.props;
     form.validateFields((err, fieldsValue) => {
       if (!err) {
-        // dispatch({
-        //   type: 'dataset/getSchema',
-        //   payload: fieldsValue,
-        //   callback: () => this.setState({ current: 1, formValues: fieldsValue }),
-        // });
         // TODO: fetch schema.
         this.setState({ loading: true });
         const newValues = { ...this.state.formValues, ...fieldsValue };
-        getSchemaFromFile(newValues).then(response => {
+        const { id, opId } = this.props;
+        getSchemaFromFile({
+          projectId: id,
+          config: newValues,
+          id: opId,
+        }).then(response => {
           this.setState({
             current: 1,
             formValues: newValues,
             schemaResponse: response,
             loading: false,
+            changed: false,
           });
         });
       }
     });
   }
 
+  handleSchemaDone(e) {
+    e.preventDefault();
+    const { formValues, schema } = this.state;
+    const newValue = { ...formValues, schema: schema || this.state.schemaResponse.schema };
+    const { id, opId } = this.props;
+    configOperator({
+      projectId: id,
+      config: newValue,
+      id: opId,
+    }).then(response => {
+      this.setState({ current: 2, result: response });
+    });
+  }
+
   renderUpload = () => {
-    const { form } = this.props;
-    const { loading } = this.state;
+    const { form, errors: givenErorrs } = this.props;
+    const { loading, changed } = this.state;
+    const errors = changed ? {} : givenErorrs;
     const type =
       (this.state.formValues && this.state.formValues.type) ||
       'com.gldata.gaia.pipeline.api.dataset.formats.CsvFormat';
@@ -77,24 +96,31 @@ class FileDataSourceAdd extends React.Component {
     const currentRecord = this.state.formValues;
     return (
       <Form onSubmit={e => this.handleFormSubmit(e)} style={{ padding: '20px' }}>
-        <FormItem {...formItemProps} label="数据集类型">
-          {form.getFieldDecorator('formatClass', {
+        {formItemWithError(
+          form,
+          formItemProps,
+          {
             rules: [{ required: true, message: '数据集类型不能为空' }],
-            initialValue: type,
-          })(
-            <Select>
-              <Select.Option value="com.gldata.gaia.pipeline.api.dataset.formats.CsvFormat">
-                CSV
-              </Select.Option>
-            </Select>
-          )}
-        </FormItem>
+          },
+          errors,
+          currentRecord,
+          'formatClass',
+          type,
+          '文件类型',
+          <Select onChange={() => this.handleChange()}>
+            <Select.Option value="com.gldata.gaia.pipeline.api.dataset.formats.CsvFormat">
+              CSV
+            </Select.Option>
+          </Select>
+        )}
         <ExtraItems
           form={form}
           currentRecord={currentRecord}
           formItemProps={formItemProps}
           id={this.props.id}
           name={this.props.name}
+          errors={errors}
+          onChange={() => this.handleChange()}
         />
         <div>
           <div className={styles.rightFloatWrapper}>
@@ -106,38 +132,6 @@ class FileDataSourceAdd extends React.Component {
       </Form>
     );
   };
-
-  handleSchemaDone(e) {
-    e.preventDefault();
-    const { formValues, schema } = this.state;
-    const newValue = { ...formValues, schema: schema || this.state.schemaResponse.schema };
-    if (this.state.id) {
-      // modify
-      // this.props.dispatch({
-      //   type: 'dataset/updateDataset',
-      //   payload: { ...newValue, id: this.state.id },
-      //   callback: () => this.setState({ current: 2 }),
-      // });
-      // TODO add modify logic.
-    } else {
-      // create.
-      // this.props.dispatch({
-      //   type: 'dataset/createDataset',
-      //   payload: newValue,
-      //   callback: () => this.setState({ current: 2 }),
-      // });
-
-      const { id, opId } = this.props;
-      configOperator({
-        projectId: id,
-        config: newValue,
-        id: opId,
-      }).then(response => {
-        // router.push(`/projects/p/pipeline/${id}`);
-        this.setState({ current: 2, result: response });
-      });
-    }
-  }
 
   renderSuccessForm = message => {
     return (
@@ -234,4 +228,4 @@ class FileDataSourceAdd extends React.Component {
   }
 }
 
-export default FileDataSourceAdd;
+export default Form.create({})(FileDataSourceConfig);

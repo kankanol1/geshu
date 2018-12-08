@@ -46,7 +46,7 @@ export default {
     },
 
     clearCache(state) {
-      return { ...state, waitingRequests: undefined };
+      return { ...state, waitingRequests: [] };
     },
   },
 

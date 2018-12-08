@@ -40,10 +40,17 @@ class Index extends React.Component {
     });
   }
 
-  renderChildren = (code, id, opId, name) => {
+  renderChildren = (id, operator) => {
+    const { code, id: opId, name, type, configs, errors } = operator;
     const Pane = registered[code];
     if (Pane) {
-      return <Pane id={id} code={code} opId={opId} name={name} />;
+      if (type === 'new' && Object.keys(configs) === 0) {
+        return <Pane id={id} code={code} opId={opId} name={name} />;
+      } else {
+        return (
+          <Pane id={id} code={code} opId={opId} name={name} configs={configs} errors={errors} />
+        );
+      }
     } else {
       return <div>404</div>;
     }
@@ -51,7 +58,7 @@ class Index extends React.Component {
 
   render() {
     const { loading, dispatch } = this.props;
-    const { id } = this.props.match.params;
+    const { id, type } = this.props.match.params;
 
     const { project } = this.props;
     if (loading || !project || this.state.loading) return <PageLoading />;
@@ -82,7 +89,7 @@ class Index extends React.Component {
               </span>
             </div>
           </div>
-          {this.renderChildren(operator.code, id, operator.id, operator.name)}
+          {this.renderChildren(id, operator)}
         </div>
       </Layout>
     );

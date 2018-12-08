@@ -17,11 +17,12 @@ export default class Index extends React.Component {
     const { component, type, title, id, onOk, onCancel } = this.props;
     const Widget = renderConfig[component.code];
     const name =
-      component.name ||
-      formatMessage({
-        id: `operator.${component.name}`,
-        defaultMessage: component.name,
-      });
+      type === 'new'
+        ? formatMessage({
+            id: `operator.${component.name}`,
+            defaultMessage: component.name,
+          })
+        : component.name;
     return (
       <Widget
         projectId={id}
