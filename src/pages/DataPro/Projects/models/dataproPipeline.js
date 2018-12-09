@@ -19,6 +19,7 @@ export default {
       offsetY: 40,
     },
     modifyingComponent: undefined,
+    inspecting: undefined,
   },
 
   reducers: {
@@ -79,6 +80,11 @@ export default {
       const responseStr = payload.body;
       const response = JSON.parse(responseStr);
       return { ...state, ...response };
+    },
+
+    setInspectingComponent(state, { payload }) {
+      const { component } = payload;
+      return { ...state, inspecting: component };
     },
   },
 

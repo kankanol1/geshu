@@ -59,6 +59,14 @@ export async function runToOperator(params) {
   });
 }
 
+export async function inspectDataset(params) {
+  return request('/api/datapro/projects/pipeline/op/inspect', {
+    method: 'POST',
+    body: {
+      ...params,
+    },
+  });
+}
 // operator configs
 export async function getSchemaFromFile(params) {
   return request('/api/datapro/projects/pipeline/conf/getschema', {

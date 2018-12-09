@@ -63,6 +63,14 @@ class ContextMenu extends React.PureComponent {
           },
         });
         break;
+      case 'inspect':
+        dispatch({
+          type: 'dataproPipeline/setInspectingComponent',
+          payload: {
+            component,
+          },
+        });
+        break;
       default:
         break;
     }
@@ -80,7 +88,7 @@ class ContextMenu extends React.PureComponent {
         theme="light"
         onClick={v => this.handleDatasetClick(v)}
       >
-        <Menu.Item key="settings" style={style}>
+        <Menu.Item key="inspect" style={style}>
           预览数据
         </Menu.Item>
         <Menu.Item key="cleardata" style={style}>

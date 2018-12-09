@@ -19,6 +19,7 @@ import { addEvent } from '@/utils/utils';
 import SelectionChange from '@/obj/workspace/op/SelectionChange';
 import ScaleChange from '@/obj/workspace/op/ScaleChange';
 import IOConfig from '../Configs/IO/Index';
+import DataInspector from './DataInspector';
 
 const keyUpListener = [];
 const keyDownLisener = [];
@@ -405,7 +406,7 @@ class WorkCanvas extends React.Component {
     const {
       // state: { projectId },
       canvas,
-      // validation,
+      inspecting,
       contextmenu,
       modifyingComponent,
       status,
@@ -514,6 +515,22 @@ class WorkCanvas extends React.Component {
         {contextMenuView}
         {this.renderToolbarView()}
         {modifyingComponent && this.renderModifyingComponent(modifyingComponent)}
+
+        {inspecting ? (
+          <DataInspector
+            visible={inspecting && true}
+            component={inspecting}
+            projectId={projectId}
+            onClose={e =>
+              this.props.dispatch({
+                type: 'dataproPipeline/setInspectingComponent',
+                payload: {
+                  component: undefined,
+                },
+              })
+            }
+          />
+        ) : null}
       </div>
     );
   }
