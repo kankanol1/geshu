@@ -27,6 +27,7 @@ export default {
 
   state: {
     waitingRequests: [],
+    waitingSubscribes: [],
     ws: undefined,
   },
 
@@ -41,6 +42,16 @@ export default {
       return state;
     },
 
+    subscribe(state, { payload }) {
+      if (!state.ws) {
+        // /
+        return { ...state, waitingSubscribes: [...state.waitingSubscribes, payload] };
+      }
+      const { topic, callback } = payload;
+      state.ws.subscribe(topic, callback);
+      return state;
+    },
+
     saveWS(state, { payload }) {
       return { ...state, ws: payload };
     },
@@ -52,7 +63,11 @@ export default {
 
   effects: {
     *sendCached({ payload }, { select, put }) {
-      const { ws, waitingRequests } = yield select(state => state.ws);
+      const { ws, waitingRequests, waitingSubscribes } = yield select(state => state.ws);
+      waitingSubscribes.forEach(i => {
+        ws.subscribe(i.topic, i.callback);
+        console.log('subscribe', i.topic); // eslint-disable-line
+      });
       waitingRequests.forEach(i => {
         ws.send(i.topic, i.header, i.body);
       });
@@ -80,6 +95,7 @@ export default {
                   });
                 })
               );
+
               // store ws.
               dispatch({
                 type: 'saveWS',

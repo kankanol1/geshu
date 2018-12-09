@@ -5,24 +5,24 @@ import { getUrlParams } from '../utils';
 
 const pipeline = {
   status: {
-    // '0136ee04-d9d8-4c90-9b5c-1f2152da564d': {
-    //   status: 'READY',
-    // },
-    // name1: {
-    //   status: 'CALCULATED',
-    // },
-    // '3e8e9b3d-479a-4e29-98f8-b1828dc32ee7': {
-    //   status: 'RUNNING',
-    // },
-    // nu8: {
-    //   status: 'CALCULATING',
-    // },
-    // '618ee91e-1562-4f7d-8f12-14dc51b727dc': {
-    //   status: 'ERROR',
-    // },
-    // gg9: {
-    //   status: 'EMPTY',
-    // },
+    '0136ee04-d9d8-4c90-9b5c-1f2152da564d': {
+      status: 'READY',
+    },
+    name1: {
+      status: 'CALCULATED',
+    },
+    '3e8e9b3d-479a-4e29-98f8-b1828dc32ee7': {
+      status: 'RUNNING',
+    },
+    nu8: {
+      status: 'CALCULATING',
+    },
+    '618ee91e-1562-4f7d-8f12-14dc51b727dc': {
+      status: 'ERROR',
+    },
+    gg9: {
+      status: 'EMPTY',
+    },
   },
   components: [
     {
@@ -338,6 +338,14 @@ export function updateOperator(req, res) {
   res.json(done);
 }
 
+export function runOperator(req, res) {
+  const { body } = req;
+  res.json({
+    success: true,
+    message: '提交运行中',
+  });
+}
+
 export default {
   'GET /api/datapro/projects/pipeline/get': getPipeline,
   'GET /api/datapro/projects/pipeline/datasets': getAllDatasets,
@@ -347,4 +355,5 @@ export default {
   'POST /api/datapro/projects/pipeline/op/update': updateOperator,
   'POST /api/datapro/projects/pipeline/op/delete': deleteOperator,
   'GET /api/datapro/projects/pipeline/op/get': getPipelineOperator,
+  'POST /api/datapro/projects/pipeline/op/run': runOperator,
 };

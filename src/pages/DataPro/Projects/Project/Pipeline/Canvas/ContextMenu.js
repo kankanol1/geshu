@@ -25,6 +25,13 @@ class ContextMenu extends React.PureComponent {
       case 'inspect':
         break;
       case 'runtothis':
+        dispatch({
+          type: 'dataproPipeline/runToOp',
+          payload: {
+            id: operatorId,
+            projectId,
+          },
+        });
         break;
       case 'delete':
         dispatch({
@@ -43,15 +50,29 @@ class ContextMenu extends React.PureComponent {
     });
   }
 
-  handleDatasetClick() {
-    const { dispatch } = this.props;
+  handleDatasetClick({ item, key, keyPath }) {
+    const { dispatch, component, projectId } = this.props;
+    const { id: operatorId } = component;
+    switch (key) {
+      case 'runtothis':
+        dispatch({
+          type: 'dataproPipeline/runToOp',
+          payload: {
+            id: operatorId,
+            projectId,
+          },
+        });
+        break;
+      default:
+        break;
+    }
 
     dispatch({
       type: 'dataproPipeline/hideContextMenu',
     });
   }
 
-  renderDatasetMenu() {
+  renderCalculatedDatasetMenu = () => {
     return (
       <Menu
         style={{ width: 140 }}
@@ -65,8 +86,37 @@ class ContextMenu extends React.PureComponent {
         <Menu.Item key="cleardata" style={style}>
           清除数据
         </Menu.Item>
+        <Menu.Item key="runtothis" style={style}>
+          重新计算
+        </Menu.Item>
       </Menu>
     );
+  };
+
+  renderEmpotyDatasetMenu = () => {
+    return (
+      <Menu
+        style={{ width: 140 }}
+        mode="vertical"
+        theme="light"
+        onClick={v => this.handleDatasetClick(v)}
+      >
+        <Menu.Item key="runtothis" style={style}>
+          计算数据集
+        </Menu.Item>
+      </Menu>
+    );
+  };
+
+  renderDatasetMenu() {
+    const { status, component } = this.props;
+    const componentStatus = status && status[component.id] && status[component.id].status;
+    if (componentStatus === 'CALCULATED') {
+      return this.renderCalculatedDatasetMenu();
+    } else if (componentStatus === 'EMPTY') {
+      return this.renderEmpotyDatasetMenu();
+    }
+    return null;
   }
 
   renderOpMenu() {

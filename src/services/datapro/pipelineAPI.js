@@ -52,6 +52,13 @@ export async function deleteOperator(params) {
   });
 }
 
+export async function runToOperator(params) {
+  return request('/api/datapro/projects/pipeline/op/run', {
+    method: 'POST',
+    body: params,
+  });
+}
+
 // operator configs
 export async function getSchemaFromFile(params) {
   return request('/api/datapro/projects/pipeline/conf/getschema', {

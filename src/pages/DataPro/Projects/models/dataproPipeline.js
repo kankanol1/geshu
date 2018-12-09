@@ -1,12 +1,8 @@
 import DataProCanvas from '@/obj/workspace/DataProCanvas';
-import ComponentAdd from '@/obj/workspace/op/ComponentAdd';
-import Component from '@/obj/workspace/Component';
 import SelectionChange from '@/obj/workspace/op/SelectionChange';
-import ComponentDelete from '@/obj/workspace/op/ComponentDelete';
-import ConnectionDelete from '@/obj/workspace/op/ConnectionDelete';
-import BatchOperation from '@/obj/workspace/op/BatchOperation';
+import { message } from 'antd';
 
-import { getPipeline, deleteOperator } from '@/services/datapro/pipelineAPI';
+import { getPipeline, deleteOperator, runToOperator } from '@/services/datapro/pipelineAPI';
 
 export default {
   namespace: 'dataproPipeline',
@@ -78,6 +74,12 @@ export default {
     modifyComponent(state, { payload }) {
       return { ...state, modifyingComponent: payload.component };
     },
+
+    onStatusUpdated(state, { payload }) {
+      const responseStr = payload.body;
+      const response = JSON.parse(responseStr);
+      return { ...state, ...response };
+    },
   },
 
   effects: {
@@ -129,9 +131,47 @@ export default {
         },
       });
     },
+
+    *runToOp({ payload }, { put, call }) {
+      const response = yield call(runToOperator, payload);
+      if (response && response.success) {
+        message.info(response.message);
+      } else {
+        message.error('ERROR');
+      }
+    },
   },
 
   subscriptions: {
-    setup() {},
+    setup({ dispatch, history }) {
+      let subscribed = false;
+      history.listen(({ pathname }) => {
+        if (!subscribed && pathname.startsWith('/projects/p/pipeline/')) {
+          const pathArr = pathname.split('/projects/p/pipeline/');
+          if (pathArr.length === 2) {
+            const projectId = parseInt(pathArr[1], 10);
+            dispatch({
+              type: 'ws/subscribe',
+              payload: {
+                topic: `/datapro/pipeline/status/${projectId}`,
+                callback: response => {
+                  dispatch({
+                    type: 'onStatusUpdated',
+                    payload: response,
+                  });
+                },
+              },
+            });
+            subscribed = true;
+            console.log('subscribed', projectId); // eslint-disable-line
+          }
+          // subscribed = true;
+        } else if (subscribed && !pathname.startsWith('/projects/p/pipeline')) {
+          // unsubscribe.
+          subscribed = false;
+          // TODO/.
+        }
+      });
+    },
   },
 };

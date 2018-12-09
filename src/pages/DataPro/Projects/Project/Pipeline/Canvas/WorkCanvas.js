@@ -416,7 +416,12 @@ class WorkCanvas extends React.Component {
     let contextMenuView = null;
     if (contextmenu.show) {
       contextMenuView = (
-        <ContextMenu dispatch={this.props.dispatch} {...contextmenu} projectId={projectId} />
+        <ContextMenu
+          dispatch={this.props.dispatch}
+          {...contextmenu}
+          projectId={projectId}
+          status={status}
+        />
       );
     }
 
