@@ -81,9 +81,9 @@ class FileDataSourceConfig extends React.Component {
   }
 
   renderUpload = () => {
-    const { form, errors: givenErorrs } = this.props;
+    const { form, errors: givenErrors } = this.props;
     const { loading, changed } = this.state;
-    const errors = changed ? {} : givenErorrs;
+    const errors = changed ? {} : givenErrors;
     const type =
       (this.state.formValues && this.state.formValues.type) ||
       'com.gldata.gaia.pipeline.api.dataset.formats.CsvFormat';

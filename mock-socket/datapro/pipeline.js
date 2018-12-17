@@ -35,7 +35,7 @@ export default {
           },
         };
         const result = { status };
-        server.send('/user/datapro/pipeline/status/0', {}, JSON.stringify(result));
+        server.send('/datapro/pipeline/status/0', {}, JSON.stringify(result));
       }, 10000);
     },
   },

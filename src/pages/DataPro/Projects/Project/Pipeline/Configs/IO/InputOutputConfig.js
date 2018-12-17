@@ -15,7 +15,7 @@ class InputOutputConfig extends React.Component {
   };
 
   componentDidMount() {
-    queryAllDatasets({ id: this.props.id }).then(response => {
+    queryAllDatasets({ id: this.props.projectId }).then(response => {
       this.setState({ loading: false, datasets: response || [] });
     });
   }

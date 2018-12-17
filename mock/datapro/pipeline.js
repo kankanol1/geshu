@@ -165,6 +165,103 @@ const pipeline = {
         },
       ],
     },
+    {
+      x: 600,
+      y: 400,
+      id: 'FileDataSource-1544977506208',
+      name: '文件源',
+      code: 'FileDataSource',
+      type: 'DataSource',
+      inputs: [],
+      outputs: [
+        {
+          id: 'o1',
+          type: 'Dataset',
+        },
+      ],
+      connectFrom: [],
+    },
+    {
+      x: 800,
+      y: 400,
+      id: 'Dataset-1544977506208',
+      name: 'dddd',
+      code: 'Dataset',
+      type: 'Dataset',
+      inputs: [
+        {
+          id: 'i1',
+          connects: ['Dataset'],
+        },
+      ],
+      outputs: [
+        {
+          id: 'o1',
+          connects: ['Dataset'],
+        },
+      ],
+      connectFrom: [
+        {
+          component: 'FileDataSource-1544977506208',
+          from: 'o1',
+          to: 'i1',
+        },
+      ],
+    },
+    {
+      x: 1100,
+      y: 400,
+      id: 'FilterTransformer-1544977551420',
+      name: '条件过滤',
+      code: 'FilterTransformer',
+      type: 'Transformer',
+      inputs: [
+        {
+          id: 'i1',
+          connects: ['Dataset'],
+        },
+      ],
+      outputs: [
+        {
+          id: 'o1',
+          type: 'Dataset',
+        },
+      ],
+      connectFrom: [
+        {
+          component: 'Dataset-1544977506208',
+          from: 'o1',
+          to: 'i1',
+        },
+      ],
+    },
+    {
+      x: 1300,
+      y: 400,
+      id: 'Dataset-1544977551420',
+      name: 'ttt',
+      code: 'Dataset',
+      type: 'Dataset',
+      inputs: [
+        {
+          id: 'i1',
+          connects: ['Dataset'],
+        },
+      ],
+      outputs: [
+        {
+          id: 'o1',
+          connects: ['Dataset'],
+        },
+      ],
+      connectFrom: [
+        {
+          component: 'FilterTransformer-1544977551420',
+          from: 'o1',
+          to: 'i1',
+        },
+      ],
+    },
   ],
   offset: {
     x: 0,
@@ -190,6 +287,12 @@ export function addOperator(req, res) {
     .filter(i => i.type === 'Dataset' && input.includes(i.name))
     .map(i => ({ x: i.x, y: i.y }));
 
+  // get dataset id.
+  const nameToIds = {};
+  pipeline.components.forEach(i => {
+    nameToIds[i.name] = i.id;
+  });
+
   const newPos = { x: 0, y: 0 };
   pos.forEach(({ x, y }) => {
     if (x > newPos.x) {
@@ -198,7 +301,7 @@ export function addOperator(req, res) {
     newPos.y += y;
   });
   newPos.x += 300;
-  newPos.y /= pos.length;
+  newPos.y /= pos.length + 1;
   const opId = `${code}-${new Date().getTime()}`;
   const newComponent = {
     ...newPos,
@@ -208,7 +311,7 @@ export function addOperator(req, res) {
     type: oinput ? 'Transformer' : 'DataSource',
     inputs: input ? input.map((v, i) => ({ id: `i${i + 1}`, connects: ['Dataset'] })) : [],
     outputs: output.map((v, i) => ({ id: `o${i + 1}`, type: 'Dataset' })),
-    connectFrom: input.map((v, i) => ({ component: v, from: 'o1', to: `i${i + 1}` })),
+    connectFrom: input.map((v, i) => ({ component: nameToIds[v], from: 'o1', to: `i${i + 1}` })),
   };
   const offset = output.length * 200;
   const baseY = newPos.y - offset / 2;
@@ -346,7 +449,7 @@ export function runOperator(req, res) {
   });
 }
 
-export function inspectData(req, res, u, b) {
+export function inspectData(req, res) {
   const response = {
     schema: [
       { name: 'a1', type: 'String', nullable: false },
@@ -629,6 +732,34 @@ export function inspectData(req, res, u, b) {
   }
 }
 
+export function getOperatorSchema(req, res) {
+  const fakeSchema = [
+    {
+      nullable: true,
+      name: 'id',
+      type: 'string',
+    },
+    {
+      nullable: true,
+      name: 'text',
+      type: 'string',
+    },
+    {
+      nullable: true,
+      name: 'label',
+      type: 'integer',
+    },
+  ];
+  res.json({
+    success: true,
+    message: 'success',
+    data: {
+      i1: fakeSchema,
+      i2: fakeSchema,
+    },
+  });
+}
+
 export default {
   'GET /api/datapro/projects/pipeline/get': getPipeline,
   'GET /api/datapro/projects/pipeline/datasets': getAllDatasets,
@@ -640,4 +771,5 @@ export default {
   'GET /api/datapro/projects/pipeline/op/get': getPipelineOperator,
   'POST /api/datapro/projects/pipeline/op/run': runOperator,
   'POST /api/datapro/projects/pipeline/op/inspect': inspectData,
+  'POST /api/datapro/projects/pipeline/op/schema': getOperatorSchema,
 };
