@@ -71,6 +71,15 @@ class ContextMenu extends React.PureComponent {
           },
         });
         break;
+      case 'invalid':
+        dispatch({
+          type: 'dataproPipeline/invalidOp',
+          payload: {
+            id: operatorId,
+            projectId,
+          },
+        });
+        break;
       default:
         break;
     }
@@ -91,7 +100,7 @@ class ContextMenu extends React.PureComponent {
         <Menu.Item key="inspect" style={style}>
           预览数据
         </Menu.Item>
-        <Menu.Item key="cleardata" style={style}>
+        <Menu.Item key="invalid" style={style}>
           清除数据
         </Menu.Item>
         <Menu.Item key="runtothis" style={style}>

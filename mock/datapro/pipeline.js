@@ -760,6 +760,17 @@ export function getOperatorSchema(req, res) {
   });
 }
 
+export function invalidOperator(req, res) {
+  const { body } = req;
+  const { projectId, id } = body;
+  pipeline.status[id] = 'EMPTY';
+  console.log('emptyed', id); // eslint-disable-line
+  res.json({
+    success: true,
+    message: 'success',
+  });
+}
+
 export default {
   'GET /api/datapro/projects/pipeline/get': getPipeline,
   'GET /api/datapro/projects/pipeline/datasets': getAllDatasets,
@@ -772,4 +783,5 @@ export default {
   'POST /api/datapro/projects/pipeline/op/run': runOperator,
   'POST /api/datapro/projects/pipeline/op/inspect': inspectData,
   'POST /api/datapro/projects/pipeline/op/schema': getOperatorSchema,
+  'POST /api/datapro/projects/pipeline/op/invalid': invalidOperator,
 };

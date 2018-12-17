@@ -70,6 +70,13 @@ export default {
         if (redirect) {
           yield put(routerRedux.push(redirect));
         }
+      } else {
+        yield put({
+          type: 'saveCurrentUser',
+          payload: {
+            loadingUser: false,
+          },
+        });
       }
     },
   },

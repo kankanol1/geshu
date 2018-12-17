@@ -2,7 +2,12 @@ import DataProCanvas from '@/obj/workspace/DataProCanvas';
 import SelectionChange from '@/obj/workspace/op/SelectionChange';
 import { message } from 'antd';
 
-import { getPipeline, deleteOperator, runToOperator } from '@/services/datapro/pipelineAPI';
+import {
+  getPipeline,
+  deleteOperator,
+  runToOperator,
+  invalidOperator,
+} from '@/services/datapro/pipelineAPI';
 
 export default {
   namespace: 'dataproPipeline',
@@ -140,6 +145,15 @@ export default {
 
     *runToOp({ payload }, { put, call }) {
       const response = yield call(runToOperator, payload);
+      if (response && response.success) {
+        message.info(response.message);
+      } else {
+        message.error('ERROR');
+      }
+    },
+
+    *invalidOp({ payload }, { put, call }) {
+      const response = yield call(invalidOperator, payload);
       if (response && response.success) {
         message.info(response.message);
       } else {

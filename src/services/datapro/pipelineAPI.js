@@ -80,3 +80,10 @@ export async function getSchemaFromFile(params) {
     body: params,
   });
 }
+
+export async function invalidOperator(params) {
+  return request('/api/datapro/projects/pipeline/op/invalid', {
+    method: 'POST',
+    body: params,
+  });
+}
