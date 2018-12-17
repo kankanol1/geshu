@@ -89,6 +89,8 @@ class ProjectIndex extends PureComponent {
 
   renderContent(pane) {
     const { project } = this.props;
+    const { id } = this.props.match.params;
+    const labels = project.labels || [];
     switch (pane) {
       case 'show':
         return (
@@ -96,11 +98,18 @@ class ProjectIndex extends PureComponent {
             <p>{project.description}</p>
             <XTagList
               editable
-              tags={
-                project.labels
-                  ? project.labels.map(i => ({ color: generateColorFor(i, '70%'), name: i }))
-                  : []
-              }
+              tags={labels.map(i => ({ color: generateColorFor(i, '70%'), name: i }))}
+              distinct
+              onAdd={text => ({ color: generateColorFor(text, '70%'), name: text })}
+              onChanged={newTags => {
+                this.props.dispatch({
+                  type: 'dataproProject/updateProjectLabels',
+                  payload: {
+                    id,
+                    labels: newTags.map(i => i.name),
+                  },
+                });
+              }}
             />
           </div>
         );

@@ -1,8 +1,10 @@
+import { message } from 'antd';
 import {
   queryProjectById,
   queryProjectCountsById,
   queryProjectReadmeById,
   queryProjectVersionsById,
+  updateProjectLabelsById,
 } from '../../../../services/datapro/projectsAPI';
 
 export default {
@@ -38,6 +40,9 @@ export default {
         ...state,
         versions: payload,
       };
+    },
+    saveProjectLabels(state, { payload }) {
+      return { ...state, project: { ...state.project, labels: payload } };
     },
   },
 
@@ -76,6 +81,20 @@ export default {
           type: 'saveProjectVersions',
           payload: response,
         });
+      }
+    },
+    *updateProjectLabels({ payload }, { call, put }) {
+      const response = yield call(updateProjectLabelsById, payload);
+      if (response) {
+        if (response.success) {
+          message.info('更新成功');
+          yield put({
+            type: 'saveProjectLabels',
+            payload: response.data,
+          });
+        } else {
+          message.error('更新失败，请重试');
+        }
       }
     },
   },

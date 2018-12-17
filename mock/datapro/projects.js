@@ -156,6 +156,21 @@ export function getAllLabels(req, res) {
   res.json(labels);
 }
 
+export function updateProjectLabels(req, res) {
+  const { body } = req;
+  const { id, labels } = body;
+  projects.forEach(i => {
+    if (i.id === id) {
+      i.labels = labels; // eslint-disable-line
+    }
+  });
+  res.json({
+    message: 'success',
+    success: true,
+    data: labels,
+  });
+}
+
 export default {
   'GET /api/datapro/projects/list/all': getProjectList,
   'GET /api/datapro/projects/labels': getAllLabels,
@@ -163,6 +178,7 @@ export default {
   'GET /api/datapro/projects/p/count': getProjectCount,
   'GET /api/datapro/projects/p/readme': getProjectMarkdown,
   'GET /api/datapro/projects/p/versions': getProjectVersions,
+  'POST /api/datapro/projects/p/labels': updateProjectLabels,
   'POST /api/datapro/projects/create': {
     success: true,
     message: '创建成功',

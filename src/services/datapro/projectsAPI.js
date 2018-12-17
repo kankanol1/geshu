@@ -12,9 +12,7 @@ export async function queryAllLabels() {
 export async function createProject(params) {
   return request('/api/datapro/projects/create', {
     method: 'POST',
-    body: {
-      ...params,
-    },
+    body: params,
   });
 }
 
@@ -32,6 +30,13 @@ export async function queryProjectReadmeById(id) {
 
 export async function queryProjectVersionsById(params) {
   return request(`/api/datapro/projects/p/versions?${stringify(params)}`);
+}
+
+export async function updateProjectLabelsById(params) {
+  return request('/api/datapro/projects/p/labels', {
+    method: 'POST',
+    body: params,
+  });
 }
 
 export default {

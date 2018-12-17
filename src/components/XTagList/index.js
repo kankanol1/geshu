@@ -1,24 +1,37 @@
 import React, { Component } from 'react';
-import { Tag, Icon, Input } from 'antd';
+import { Tag, Icon, Input, Button } from 'antd';
 
 import styles from './index.less';
 
 export default class XTagList extends Component {
-  state = {
-    edit: false,
-    inputValue: undefined,
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      edit: false,
+      inputValue: undefined,
+      tags: [...props.tags],
+    };
+  }
 
-  handleInputConfirm = props => {
-    const { onAdd } = this.props;
-    if (onAdd) {
-      onAdd(this.state.inputValue);
+  componentWillReceiveProps(props) {
+    this.setState({ tags: [...props.tags] });
+  }
+
+  handleInputConfirm = (props, callback) => {
+    const { onAdd, distinct } = this.props;
+    const newTags = this.state.tags;
+    if (this.state.inputValue && onAdd) {
+      const newItem = onAdd(this.state.inputValue);
+      if (!distinct || !this.props.tags.map(i => i.name).includes(newItem.name)) {
+        newTags.push(newItem);
+      }
     }
-    this.setState({ inputValue: undefined, ...props });
+    this.setState({ inputValue: undefined, tags: newTags, ...props }, callback && callback());
   };
 
   render() {
-    const { tags, editable, className } = this.props;
+    const { editable, className } = this.props;
+    const { tags } = this.state;
     return (
       <div className={className}>
         {tags.map((i, k) => (
@@ -27,6 +40,7 @@ export default class XTagList extends Component {
             key={k}
             color={i.color}
             closable={editable && this.state.edit}
+            afterClose={() => this.setState({ tags: tags.filter(tag => tag.name !== i.name) })}
           >
             {i.name}
           </Tag>
@@ -48,9 +62,37 @@ export default class XTagList extends Component {
               style={{ width: 78 }}
               value={this.state.inputValue}
               onChange={v => this.setState({ inputValue: v.target.value })}
-              onBlur={() => this.handleInputConfirm({ edit: false })}
+              // onBlur={() => this.handleInputConfirm({ edit: false })}
               onPressEnter={() => this.handleInputConfirm()}
             />
+          )}
+        {editable &&
+          this.state.edit && (
+            <Button
+              type="primary"
+              style={{ marginLeft: '4px' }}
+              size="small"
+              onClick={() => {
+                this.handleInputConfirm({ edit: false }, () => {
+                  if (this.props.onChanged) this.props.onChanged(this.state.tags);
+                });
+              }}
+            >
+              保存
+            </Button>
+          )}
+        {editable &&
+          this.state.edit && (
+            <Button
+              type="dashed"
+              style={{ marginLeft: '4px' }}
+              size="small"
+              onClick={() => {
+                this.setState({ tags: this.props.tags, edit: false });
+              }}
+            >
+              取消
+            </Button>
           )}
       </div>
     );

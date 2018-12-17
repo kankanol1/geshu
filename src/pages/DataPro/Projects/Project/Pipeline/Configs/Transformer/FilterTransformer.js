@@ -86,7 +86,7 @@ class FilterTransformer extends React.Component {
           '过滤列',
           <Select onChange={e => this.handleChange()}>
             {schema.i1.map(i => (
-              <Option value={i.name}>
+              <Option value={i.name} key={i.name}>
                 {i.name}({i.type})
               </Option>
             ))}
