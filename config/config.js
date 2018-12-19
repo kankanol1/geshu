@@ -147,4 +147,5 @@ export default {
   cssnano: {
     mergeRules: false,
   },
+  history: 'hash',
 };
