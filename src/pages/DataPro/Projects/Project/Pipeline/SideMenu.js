@@ -18,6 +18,7 @@ class SideMenu extends React.PureComponent {
   state = {
     // for dialog display.
     addingComponent: undefined,
+    activeKeys: [],
     // addingComponent: {
     //   name: 'PrepareTransformer',
     //   code: 'PrepareTransformer',
@@ -28,6 +29,14 @@ class SideMenu extends React.PureComponent {
     this.props.dispatch({
       type: 'dataproConfig/fetchConfig',
     });
+  }
+
+  componentWillReceiveProps(props) {
+    if (this.state.activeKeys.length === 0) {
+      this.setState({
+        activeKeys: Object.keys(props.config),
+      });
+    }
   }
 
   handleOnClicked = (type, name, code) => {
@@ -69,7 +78,13 @@ class SideMenu extends React.PureComponent {
     return (
       <div className={styles.menuWrapper}>
         <Spin spinning={loading}>
-          <Collapse bordered={false} activeKey={Object.keys(config)}>
+          <Collapse
+            bordered={false}
+            activeKey={this.state.activeKeys}
+            onChange={key => {
+              this.setState({ activeKeys: key });
+            }}
+          >
             {Object.keys(config).map(i => (
               <Panel
                 header={formatMessage({

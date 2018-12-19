@@ -65,7 +65,7 @@ const componentIconDict = {
   CommonPredictor: 'icon-prediction-common',
   LogisticRegressionStage: 'icon-classifier-logistic-regression',
   ConsoleDataSink: 'icon-datasink-avro', //
-  JdbcDataSource: 'icon-datasource-db',
+  JDBCDataSource: 'icon-datasource-db',
 
   AddLiteralColumnTransformer: 'icon-preparation-add-column',
   RandomSplitTransformer: 'icon-preparation-random-split',

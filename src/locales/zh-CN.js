@@ -322,7 +322,7 @@ export default {
   // ==================== operators ==========================
   // sources
   'operator.FileDataSource': '文件源',
-  'operator.JdbcDataSource': 'JDBC源',
+  'operator.JDBCDataSource': 'JDBC源',
   'operator.AvroDataSource': 'Avro源',
   // transformers
   'operator.AddLiteralColumnTransformer': '增加列',

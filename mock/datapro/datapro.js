@@ -126,8 +126,8 @@ const components = {
       code: 'FileDataSource',
     },
     {
-      name: 'JdbcDataSource',
-      code: 'JdbcDataSource',
+      name: 'JDBCDataSource',
+      code: 'JDBCDataSource',
     },
     {
       name: 'AvroDataSource',
