@@ -20,9 +20,9 @@ export default class XMarkdownEditor extends React.PureComponent {
         italic: '_',
       },
       forceSync: true,
-      hideIcons: ['guide', 'side-by-side', 'fullscreen'],
+      hideIcons: ['guide', 'side-by-side', 'fullscreen', 'image'],
       indentWithTabs: false,
-      initialValue: 'Hello world!',
+      initialValue: undefined,
       lineWrapping: false,
       parsingConfig: {
         allowAtxHeaderWithoutSpace: true,
@@ -46,6 +46,15 @@ export default class XMarkdownEditor extends React.PureComponent {
       tabSize: 4,
     });
     this.mde = mde;
+    mde.value(this.props.initValue);
+    const { onChange, onLoad } = this.props;
+    mde.codemirror.on('change', () => onChange && onChange(mde.value()));
+    if (onLoad) onLoad(mde);
+  }
+
+  componentWillReceiveProps(props) {
+    const { value } = props;
+    this.mde.value(value);
   }
 
   componentWillUnmount() {

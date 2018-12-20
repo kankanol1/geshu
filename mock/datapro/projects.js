@@ -171,12 +171,31 @@ export function updateProjectLabels(req, res) {
   });
 }
 
+export function updateProjectById(req, res) {
+  const { body } = req;
+  const { id, name, description, labels } = body;
+  projects.forEach(i => {
+    if (i.id === id) {
+      i.name = name; // eslint-disable-line
+      i.description = description; // eslint-disable-line
+    }
+  });
+  res.json({
+    message: 'success',
+    success: true,
+  });
+}
+
 export default {
   'GET /api/datapro/projects/list/all': getProjectList,
   'GET /api/datapro/projects/labels': getAllLabels,
   'GET /api/datapro/projects/p/info': getProjectById,
   'GET /api/datapro/projects/p/count': getProjectCount,
   'GET /api/datapro/projects/p/readme': getProjectMarkdown,
+  'POST /api/datapro/projects/p/readme': {
+    success: true,
+    message: '更新成功',
+  },
   'GET /api/datapro/projects/p/versions': getProjectVersions,
   'POST /api/datapro/projects/p/labels': updateProjectLabels,
   'POST /api/datapro/projects/create': {
@@ -184,4 +203,5 @@ export default {
     message: '创建成功',
     id: 1,
   },
+  'POST /api/datapro/projects/update': updateProjectById,
 };

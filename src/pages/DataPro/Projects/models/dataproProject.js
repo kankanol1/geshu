@@ -5,6 +5,8 @@ import {
   queryProjectReadmeById,
   queryProjectVersionsById,
   updateProjectLabelsById,
+  updateProjectById,
+  updateProjectReadmeById,
 } from '../../../../services/datapro/projectsAPI';
 
 export default {
@@ -12,7 +14,7 @@ export default {
   state: {
     project: {},
     counts: {},
-    readme: {},
+    readme: undefined,
     versions: [],
   },
 
@@ -94,6 +96,34 @@ export default {
           });
         } else {
           message.error('更新失败，请重试');
+        }
+      }
+    },
+    *updateProject({ payload }, { call, put }) {
+      const response = yield call(updateProjectById, payload);
+      if (response) {
+        if (response.success) {
+          message.info('更新成功');
+          yield put({
+            type: 'fetchProject',
+            payload,
+          });
+        } else {
+          message.error('更新失败，请重试');
+        }
+      }
+    },
+    *updateProjectReadme({ payload }, { call, put }) {
+      const response = yield call(updateProjectReadmeById, payload);
+      if (response) {
+        if (response.success) {
+          message.info('更新成功');
+          yield put({
+            type: 'fetchProjectReadme',
+            payload: { id: payload.id },
+          });
+        } else {
+          message.error(response.message);
         }
       }
     },

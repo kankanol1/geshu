@@ -22,7 +22,7 @@ class ProjectSettings extends React.PureComponent {
   };
 
   render() {
-    const { project } = this.props.dataproProject;
+    const { id } = this.props.match.params;
 
     return (
       <Card>
@@ -36,7 +36,7 @@ class ProjectSettings extends React.PureComponent {
             }
             key="basic"
           >
-            <BasicSettings />
+            <BasicSettings id={id} />
           </TabPane>
           <TabPane
             tab={
@@ -47,7 +47,7 @@ class ProjectSettings extends React.PureComponent {
             }
             key="markdown"
           >
-            <MarkdownSettings />
+            <MarkdownSettings id={id} />
           </TabPane>
           <TabPane
             tab={
@@ -58,7 +58,7 @@ class ProjectSettings extends React.PureComponent {
             }
             key="members"
           >
-            <MemberSettings />
+            <MemberSettings id={id} />
           </TabPane>
         </Tabs>
       </Card>

@@ -16,6 +16,13 @@ export async function createProject(params) {
   });
 }
 
+export async function updateProjectById(params) {
+  return request('/api/datapro/projects/update', {
+    method: 'POST',
+    body: params,
+  });
+}
+
 export async function queryProjectById(id) {
   return request(`/api/datapro/projects/p/info?${stringify({ id })}`);
 }
@@ -39,6 +46,13 @@ export async function updateProjectLabelsById(params) {
   });
 }
 
+export async function updateProjectReadmeById(params) {
+  return request('/api/datapro/projects/p/readme', {
+    method: 'POST',
+    body: params,
+  });
+}
+
 export default {
   queryAllProjects,
   queryProjectById,
@@ -47,4 +61,5 @@ export default {
   queryProjectVersionsById,
   queryAllLabels,
   createProject,
+  updateProjectById,
 };

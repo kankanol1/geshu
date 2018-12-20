@@ -11,8 +11,8 @@ export default {
     data: {
       list: [],
       pagination: {},
-      labels: [],
     },
+    labels: [],
   },
 
   reducers: {
