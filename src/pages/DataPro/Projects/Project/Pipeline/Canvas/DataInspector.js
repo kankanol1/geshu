@@ -4,15 +4,6 @@ import { connect } from 'dva';
 import styles from './DataInspector.less';
 
 class DataInspector extends React.Component {
-  constructor(props) {
-    super(props);
-    const { outputs } = this.props.component;
-    const defaultOut = outputs.length === 0 ? undefined : outputs[0].id;
-    this.state = {
-      output: defaultOut,
-    };
-  }
-
   componentWillMount() {
     this.performQuery();
   }
@@ -29,7 +20,6 @@ class DataInspector extends React.Component {
       payload: {
         id: this.props.projectId,
         component: this.props.component.id,
-        tag: this.state.output,
         limit: 100,
       },
     });
@@ -42,7 +32,7 @@ class DataInspector extends React.Component {
         this.props.onClose();
       }
     };
-    const { outputs, name } = this.props.component;
+    const { name } = this.props.component;
     const { result } = this.props.dataproInspector;
     const { success, message, data } = result;
     let table = null;
@@ -75,42 +65,6 @@ class DataInspector extends React.Component {
         width={1000}
         footer={null}
       >
-        {outputs.length === 0 ? (
-          <span>该组件无输出节点，无法查看</span>
-        ) : (
-          <Row>
-            <Col span={4}>
-              <span>查看输出点</span>
-            </Col>
-            <Col span={4}>
-              <Select
-                value={this.state.output}
-                style={{ width: '100%' }}
-                onChange={e => this.setState({ output: e })}
-              >
-                {outputs &&
-                  outputs.map(i => (
-                    <Select.Option key={i.id} value={i.id}>
-                      {i.id}
-                    </Select.Option>
-                  ))}
-              </Select>
-            </Col>
-            <Col span={2} />
-            <Col span={14}>
-              <Button
-                type="primary"
-                onClick={e => {
-                  e.preventDefault();
-                  this.performQuery();
-                }}
-              >
-                查看
-              </Button>
-            </Col>
-          </Row>
-        )}
-
         <div className={styles.tableWrapper}>
           {loading ? (
             <Spin className={styles.notTable} />
