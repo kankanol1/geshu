@@ -104,7 +104,7 @@ class FileDataSourceConfig extends React.Component {
           },
           errors,
           currentRecord,
-          'formatClass',
+          'format.formatClass',
           type,
           '文件类型',
           <Select onChange={() => this.handleChange()}>
