@@ -382,17 +382,36 @@ export function deleteOperator(req, res) {
 export function getPipelineOperator(req, res) {
   const params = getUrlParams(req.url);
   const arr = params.opId.split('-');
+  let configs = {
+    format: {
+      ignoreFirstLine: true,
+      fieldDelimiter: ',',
+    },
+  };
+  if (params.opId.includes('PrepareTransformer')) {
+    configs = [
+      {
+        type: 'SelectTransformation',
+        config: {
+          columns: ['a1'],
+        },
+      },
+      {
+        type: 'SplitTransformation',
+        config: {
+          columns: ['a1'],
+          condition: [','],
+          output: ['ac1', 'ac2'],
+        },
+      },
+    ];
+  }
   const result = {
     id: params.opId,
     type: arr[0],
     code: arr[0],
     name: arr[0] === 'PrepareTransformer' ? '数据转换' : '名称',
-    configs: {
-      format: {
-        ignoreFirstLine: true,
-        fieldDelimiter: ',',
-      },
-    },
+    configs,
     errors: {
       'format.ignoreFirstLine': '无需选中',
     },
@@ -771,10 +790,92 @@ export function invalidOperator(req, res) {
   });
 }
 
+export function getTransformationSchema(req, res) {
+  const fakeSchema = [
+    {
+      nullable: true,
+      name: 'id',
+      type: 'string',
+    },
+    {
+      nullable: true,
+      name: 'text',
+      type: 'string',
+    },
+    {
+      nullable: true,
+      name: 'label',
+      type: 'integer',
+    },
+  ];
+  res.json({
+    success: true,
+    message: 'success',
+    data: fakeSchema,
+  });
+}
+
+export function addTransformation(req, res) {
+  // always append.
+  res.json({
+    success: true,
+    message: 'done',
+  });
+}
+
+export function previewPreOp(req, res) {
+  const params = getUrlParams(req.url);
+  const { page, size } = params;
+  const data = [];
+  for (let i = 0; i < size; i++) {
+    data.push({
+      a1: `v1-p-${page}-i-${i}`,
+      a2: `v2-p-${page}-i-${i}`,
+      a3: `v3-p-${page}-i-${i}`,
+      a4: `v4-p-${page}-i-${i}`,
+      a5: `v5-p-${page}-i-${i}`,
+      a6: `v6-p-${page}-i-${i}`,
+      a7: `v7-p-${page}-i-${i}`,
+      a8: `v8-p-${page}-i-${i}`,
+      a9: `v9-p-${page}-i-${i}`,
+      a10: `v10-p-${page}-i-${i}`,
+      a11: `v11-p-${page}-i-${i}`,
+      a12: `v12-p-${page}-i-${i}`,
+    });
+  }
+  const response = {
+    schema: [
+      { name: 'a1', type: 'String', nullable: false },
+      { name: 'a2', type: 'String', nullable: false },
+      { name: 'a3', type: 'String', nullable: false },
+      { name: 'a4', type: 'String', nullable: false },
+      { name: 'a5', type: 'String', nullable: false },
+      { name: 'a6', type: 'String', nullable: false },
+      { name: 'a7', type: 'String', nullable: false },
+      { name: 'a8', type: 'String', nullable: false },
+      { name: 'a9', type: 'String', nullable: false },
+      { name: 'a10', type: 'String', nullable: false },
+      { name: 'a11', type: 'String', nullable: false },
+      { name: 'a12', type: 'String', nullable: false },
+    ],
+    data,
+  };
+  const result = {
+    success: true,
+    message: 'ok',
+    data: response,
+  };
+  if (res && res.json) {
+    res.json(result);
+  } else {
+    return result;
+  }
+}
+
 export default {
   'GET /api/datapro/projects/pipeline/get': getPipeline,
   'GET /api/datapro/projects/pipeline/datasets': getAllDatasets,
-  'GET /api/datapro/projects/pipeline/op/config': getOperatorConfig,
+  // 'GET /api/datapro/projects/pipeline/op/config': getOperatorConfig,
   'POST /api/datapro/projects/pipeline/op/config': updateOperatorConfig,
   'POST /api/datapro/projects/pipeline/op/add': addOperator,
   'POST /api/datapro/projects/pipeline/op/update': updateOperator,
@@ -784,4 +885,8 @@ export default {
   'POST /api/datapro/projects/pipeline/op/inspect': inspectData,
   'POST /api/datapro/projects/pipeline/op/schema': getOperatorSchema,
   'POST /api/datapro/projects/pipeline/op/invalid': invalidOperator,
+  // get schema for transformation in prepare op.
+  'POST /api/datapro/projects/pipeline/op/trans/schema': getTransformationSchema,
+  'POST /api/datapro/projects/pipeline/op/trans/add': addTransformation,
+  'GET /api/datapro/projects/pipeline/op/trans/preview': previewPreOp,
 };

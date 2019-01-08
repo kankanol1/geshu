@@ -35,8 +35,8 @@ class Versions extends PureComponent {
             <Timeline>
               {versions &&
                 versions.list &&
-                versions.list.map(i => (
-                  <Timeline.Item key={i.time}>
+                versions.list.map((i, x) => (
+                  <Timeline.Item key={x}>
                     <div>
                       <span className={styles.time}>{i.time}</span>
                       <span className={styles.title}>{i.title}</span>

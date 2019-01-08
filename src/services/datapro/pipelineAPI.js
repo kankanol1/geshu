@@ -87,3 +87,22 @@ export async function invalidOperator(params) {
     body: params,
   });
 }
+
+// transformation.
+export async function getTransformationSchema(params) {
+  return request('/api/datapro/projects/pipeline/op/trans/schema', {
+    method: 'POST',
+    body: params,
+  });
+}
+
+export async function addTransformation(params) {
+  return request('/api/datapro/projects/pipeline/op/trans/add', {
+    method: 'POST',
+    body: params,
+  });
+}
+
+export async function previewTransformationResult(params) {
+  return request(`/api/datapro/projects/pipeline/op/trans/preview?${stringify(params)}`);
+}

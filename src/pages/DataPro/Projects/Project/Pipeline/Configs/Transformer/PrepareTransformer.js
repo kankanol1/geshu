@@ -3,108 +3,148 @@ import { connect } from 'dva';
 import { Input, Row, Col, Button, Icon } from 'antd';
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
+import { transformationTitle, transformationDescription } from './PrepareTransformer/Utils';
+import SelectTransformation from './PrepareTransformer/SelectTransformer';
 
 import styles from './PrepareTransformer.less';
 
-const history = [
-  {
-    id: 1,
-    name: 'select',
-    params: {
-      columns: ['name1', 'name2', 'name3'],
-    },
-  },
-  {
-    id: 2,
-    name: 'split',
-    params: {
-      column: 'name1',
-      output: ['name4', 'name5'],
-      splitBy: '-',
-    },
-  },
-];
-
-const names = {
-  select: '列选择',
-  split: '列拆分',
+const TransformationMapping = {
+  SelectTransformation,
 };
 
-@connect(({ demo1 }) => ({ demo1 }))
+@connect(({ dataproPreviewTable, loading }) => ({
+  dataproPreviewTable,
+  loading: loading.models.dataproPreviewTable,
+}))
 class PrepareTransformer extends React.Component {
   state = {
-    field: undefined,
-    value: undefined,
+    addingComponent: undefined,
+    page: {
+      size: 100,
+      page: 0,
+    },
   };
 
   componentDidMount() {
+    // init.
+    const { id, opId, configs } = this.props;
     this.props.dispatch({
-      type: 'demo1/fetchData',
+      type: 'dataproPreviewTable/preview',
       payload: {
-        ...this.state,
+        id,
+        component: opId,
+        ...this.state.page,
       },
     });
   }
 
-  // handleClick(e) {
-  //   e.preventDefault();
-  //   console.log('e', e.clientX, e.clientY);
-  // }
-
-  describeHistory = item => {
-    if (item.name === 'select') {
-      return `${item.params.columns}`;
-    } else if (item.name === 'split') {
-      return `name1 => name2, name4`;
-    }
-  };
+  renderTransformationComponent() {
+    const { addingComponent } = this.state;
+    if (!addingComponent) return;
+    const Comp = TransformationMapping[addingComponent];
+    const { id, opId, configs } = this.props;
+    return (
+      <Comp
+        id={id}
+        opId={opId}
+        configs={configs}
+        onCancel={() => {
+          this.setState({ addingComponent: undefined });
+        }}
+        onOk={() => {
+          this.setState({ addingComponent: undefined });
+          // refresh configs.
+          this.props.refresh();
+        }}
+      />
+    );
+  }
 
   renderTable = () => {
-    const { table, tableName } = this.props.demo1;
-    const columns = [];
+    const { result } = this.props.dataproPreviewTable;
+    const { success, message, data: table } = result;
+    const nc = [];
     if (table) {
-      for (const v of table.columns) {
-        columns.push({
-          id: v.accessor,
-          Header: props => <span onClick={e => this.handleClick(e)}> {v.accessor}</span>,
-          accessor: v.accessor,
+      const { schema, data } = table;
+      for (let i = 0; i < schema.length; i++) {
+        const v = schema[i];
+        nc.push({
+          id: v.name,
+          Header: props => (
+            <div>
+              <span style={{ color: 'black', display: 'block', fontWeight: '500' }}>{v.name}</span>
+              <span style={{ display: 'block', fontSize: '12px' }}> {v.type}</span>
+              {/* <span style={{ display: 'block', fontSize: '12px', color: '#1abc9c' }}>
+                {secondTypes[i]}
+              </span> */}
+            </div>
+          ),
+          accessor: v.name,
           sortable: false,
         });
       }
+      const eleStyle = {
+        margin: '4px',
+      };
+      return (
+        <React.Fragment>
+          <div style={{ padding: '5px' }}>
+            {/* <Button style={eleStyle}>列重命名</Button>
+            <Button style={eleStyle}>值映射</Button>
+            <Button style={eleStyle}>合并列</Button>
+            <Button style={eleStyle}>修改列类型</Button>
+            <Button style={eleStyle}>增加列</Button>
+            <Button style={eleStyle}>列拆分</Button>
+            <Button style={eleStyle}>条件处理</Button>
+            <Button style={eleStyle}>格式化</Button>
+            <Button style={eleStyle}>数据提取</Button>
+            <Button style={eleStyle}>数学公式</Button> */}
+            <Button
+              style={eleStyle}
+              onClick={() => {
+                this.setState({ addingComponent: 'SelectTransformation' });
+              }}
+            >
+              列选择
+            </Button>
+          </div>
+          <ReactTable data={data} columns={nc} />
+        </React.Fragment>
+      );
+    } else {
+      // TODO error handling etc.
+      return <div>loading...</div>;
     }
-    return (
-      <React.Fragment>
-        <ReactTable data={table ? table.data : []} columns={columns} />
-      </React.Fragment>
-    );
   };
 
   renderHistory = () => {
+    const { configs } = this.props;
     return (
       <React.Fragment>
-        <div className={styles.historyTitle}>历史操作</div>
+        <div className={styles.historyTitle}>
+          操作列表
+          <div className={styles.historyOp}>
+            <Button type="primary">
+              <Icon type="caret-right" />
+              运行
+            </Button>
+          </div>
+        </div>
         <div className={styles.historyList}>
-          {history.map(i => (
-            <div className={styles.historyItem}>
+          {configs.map((i, index) => (
+            <div className={styles.historyItem} key={index}>
               <div className={styles.operations}>
                 <Icon type="delete" style={{ color: 'red' }} />
-                <Icon type="edit" />
+                {/* <Icon type="edit" /> */}
               </div>
-              <div className={styles.title}>{names[i.name]}</div>
-              <span className={styles.description}>{this.describeHistory(i)}</span>
+              <div className={styles.title}>{transformationTitle(i.type)}</div>
+              <span className={styles.description}>
+                {transformationDescription(i.type, i.config)}
+              </span>
             </div>
           ))}
         </div>
       </React.Fragment>
-    );
-  };
-
-  renderContext = () => {
-    return (
-      <div className={styles.menuWrapper}>
-        <div className={styles.menuItem}>列拆分</div>
-        <div className={styles.menuItem}>应用变换</div>
-      </div>
     );
   };
 
@@ -115,7 +155,7 @@ class PrepareTransformer extends React.Component {
           <Col span={6}>{this.renderHistory()}</Col>
           <Col span={18}>{this.renderTable()}</Col>
         </Row>
-        {this.renderContext()}
+        {this.renderTransformationComponent()}
       </React.Fragment>
     );
   }

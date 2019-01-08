@@ -7,7 +7,7 @@ import PageLoading from '@/components/PageLoading';
 import { getOperatorInPipeline } from '@/services/datapro/pipelineAPI';
 import FileDataSource from './DataSource/FileDataSourceAdd';
 import FilterTransformer from './Transformer/FilterTransformer';
-import PrepareTransformer from './Transformer/PrepareTransformerShit';
+import PrepareTransformer from './Transformer/PrepareTransformer';
 import TopBar from '../../../TopBar';
 import styles from './Index.less';
 
@@ -35,6 +35,11 @@ class Index extends React.Component {
       type: 'dataproProject/fetchProject',
       payload: { id },
     });
+    this.loadOperator();
+  }
+
+  loadOperator() {
+    const { id, op } = this.props.match.params;
     getOperatorInPipeline({ id, opId: op }).then(response => {
       this.setState({ loading: false, operator: response });
     });
@@ -45,10 +50,20 @@ class Index extends React.Component {
     const Pane = registered[code];
     if (Pane) {
       if (type === 'new' && Object.keys(configs) === 0) {
-        return <Pane id={id} code={code} opId={opId} name={name} />;
+        return (
+          <Pane id={id} code={code} opId={opId} name={name} refresh={() => this.loadOperator()} />
+        );
       } else {
         return (
-          <Pane id={id} code={code} opId={opId} name={name} configs={configs} errors={errors} />
+          <Pane
+            id={id}
+            code={code}
+            opId={opId}
+            name={name}
+            configs={configs}
+            errors={errors}
+            refresh={() => this.loadOperator()}
+          />
         );
       }
     } else {
