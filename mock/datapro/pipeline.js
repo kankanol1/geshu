@@ -270,6 +270,23 @@ const pipeline = {
   scale: 0.8,
 };
 
+let prepareOpConfig = [
+  {
+    type: 'SelectTransformation',
+    config: {
+      columns: ['a1'],
+    },
+  },
+  {
+    type: 'SplitTransformation',
+    config: {
+      columns: ['a1'],
+      condition: [','],
+      output: ['ac1', 'ac2'],
+    },
+  },
+];
+
 export function getPipeline(req, res) {
   res.json(pipeline);
 }
@@ -389,22 +406,7 @@ export function getPipelineOperator(req, res) {
     },
   };
   if (params.opId.includes('PrepareTransformer')) {
-    configs = [
-      {
-        type: 'SelectTransformation',
-        config: {
-          columns: ['a1'],
-        },
-      },
-      {
-        type: 'SplitTransformation',
-        config: {
-          columns: ['a1'],
-          condition: [','],
-          output: ['ac1', 'ac2'],
-        },
-      },
-    ];
+    configs = prepareOpConfig;
   }
   const result = {
     id: params.opId,
@@ -816,7 +818,21 @@ export function getTransformationSchema(req, res) {
 }
 
 export function addTransformation(req, res) {
+  const { body } = req;
+  const { config, id, projectId } = body;
+  const { config: nc, type } = config;
+  prepareOpConfig.push({ type, config: nc });
   // always append.
+  res.json({
+    success: true,
+    message: 'done',
+  });
+}
+
+export function deleteTransformation(req, res) {
+  const { body } = req;
+  const { projectId, id, index } = body;
+  prepareOpConfig = prepareOpConfig.filter((v, i) => i < index);
   res.json({
     success: true,
     message: 'done',
@@ -888,5 +904,6 @@ export default {
   // get schema for transformation in prepare op.
   'POST /api/datapro/projects/pipeline/op/trans/schema': getTransformationSchema,
   'POST /api/datapro/projects/pipeline/op/trans/add': addTransformation,
+  'POST /api/datapro/projects/pipeline/op/trans/delete': deleteTransformation,
   'GET /api/datapro/projects/pipeline/op/trans/preview': previewPreOp,
 };

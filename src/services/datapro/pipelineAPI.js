@@ -103,6 +103,13 @@ export async function addTransformation(params) {
   });
 }
 
+export async function deleteTransformation(params) {
+  return request('/api/datapro/projects/pipeline/op/trans/delete', {
+    method: 'POST',
+    body: params,
+  });
+}
+
 export async function previewTransformationResult(params) {
   return request(`/api/datapro/projects/pipeline/op/trans/preview?${stringify(params)}`);
 }

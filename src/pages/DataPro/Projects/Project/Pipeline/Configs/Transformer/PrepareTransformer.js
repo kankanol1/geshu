@@ -1,15 +1,18 @@
 import React from 'react';
 import { connect } from 'dva';
-import { Input, Row, Col, Button, Icon } from 'antd';
+import { message, Row, Col, Button, Icon } from 'antd';
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
 import { transformationTitle, transformationDescription } from './PrepareTransformer/Utils';
-import SelectTransformation from './PrepareTransformer/SelectTransformer';
+import SelectTransformation from './PrepareTransformer/SelectTransformation';
+import RenameTransformation from './PrepareTransformer/RenameTransformation';
+import { deleteTransformation } from '@/services/datapro/pipelineAPI';
 
 import styles from './PrepareTransformer.less';
 
 const TransformationMapping = {
   SelectTransformation,
+  RenameTransformation,
 };
 
 @connect(({ dataproPreviewTable, loading }) => ({
@@ -38,6 +41,28 @@ class PrepareTransformer extends React.Component {
     });
   }
 
+  handleTransformationDelete = ({ value, index }) => {
+    const { id, opId, configs } = this.props;
+    deleteTransformation({
+      projectId: id,
+      id: opId,
+      index,
+    }).then(response => {
+      if (response) {
+        if (response.success) {
+          // do nothing.
+        } else {
+          message.error('删除出错');
+        }
+      }
+      this.props.refresh();
+    });
+  };
+
+  showAddComponent(comp) {
+    this.setState({ addingComponent: comp });
+  }
+
   renderTransformationComponent() {
     const { addingComponent } = this.state;
     if (!addingComponent) return;
@@ -62,7 +87,7 @@ class PrepareTransformer extends React.Component {
 
   renderTable = () => {
     const { result } = this.props.dataproPreviewTable;
-    const { success, message, data: table } = result;
+    const { success, message: msg, data: table } = result;
     const nc = [];
     if (table) {
       const { schema, data } = table;
@@ -86,6 +111,7 @@ class PrepareTransformer extends React.Component {
       const eleStyle = {
         margin: '4px',
       };
+
       return (
         <React.Fragment>
           <div style={{ padding: '5px' }}>
@@ -99,13 +125,11 @@ class PrepareTransformer extends React.Component {
             <Button style={eleStyle}>格式化</Button>
             <Button style={eleStyle}>数据提取</Button>
             <Button style={eleStyle}>数学公式</Button> */}
-            <Button
-              style={eleStyle}
-              onClick={() => {
-                this.setState({ addingComponent: 'SelectTransformation' });
-              }}
-            >
+            <Button style={eleStyle} onClick={() => this.showAddComponent('SelectTransformation')}>
               列选择
+            </Button>
+            <Button style={eleStyle} onClick={() => this.showAddComponent('RenameTransformation')}>
+              列重命名
             </Button>
           </div>
           <ReactTable data={data} columns={nc} />
@@ -119,6 +143,7 @@ class PrepareTransformer extends React.Component {
 
   renderHistory = () => {
     const { configs } = this.props;
+    const renderConfig = configs.map((i, index) => ({ value: i, index }));
     return (
       <React.Fragment>
         <div className={styles.historyTitle}>
@@ -131,15 +156,19 @@ class PrepareTransformer extends React.Component {
           </div>
         </div>
         <div className={styles.historyList}>
-          {configs.map((i, index) => (
-            <div className={styles.historyItem} key={index}>
+          {renderConfig.reverse().map(item => (
+            <div className={styles.historyItem} key={item.index}>
               <div className={styles.operations}>
-                <Icon type="delete" style={{ color: 'red' }} />
+                <Icon
+                  type="delete"
+                  style={{ color: 'red' }}
+                  onClick={() => this.handleTransformationDelete(item)}
+                />
                 {/* <Icon type="edit" /> */}
               </div>
-              <div className={styles.title}>{transformationTitle(i.type)}</div>
+              <div className={styles.title}>{transformationTitle(item.value.type)}</div>
               <span className={styles.description}>
-                {transformationDescription(i.type, i.config)}
+                {transformationDescription(item.value.type, item.value.config)}
               </span>
             </div>
           ))}
