@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'dva';
-import { message, Row, Col, Button, Icon } from 'antd';
+import { message, Row, Col, Button, Icon, Spin } from 'antd';
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
 import { transformationTitle, transformationDescription } from './PrepareTransformer/Utils';
@@ -22,6 +22,7 @@ const TransformationMapping = {
 class PrepareTransformer extends React.Component {
   state = {
     addingComponent: undefined,
+    deleting: false,
     page: {
       size: 100,
       page: 0,
@@ -43,6 +44,7 @@ class PrepareTransformer extends React.Component {
 
   handleTransformationDelete = ({ value, index }) => {
     const { id, opId, configs } = this.props;
+    this.setState({ deleting: true });
     deleteTransformation({
       projectId: id,
       id: opId,
@@ -56,6 +58,7 @@ class PrepareTransformer extends React.Component {
         }
       }
       this.props.refresh();
+      this.setState({ deleting: false });
     });
   };
 
@@ -132,7 +135,7 @@ class PrepareTransformer extends React.Component {
               列重命名
             </Button>
           </div>
-          <ReactTable data={data} columns={nc} />
+          {/* <ReactTable data={data} columns={nc} /> */}
         </React.Fragment>
       );
     } else {
@@ -146,33 +149,35 @@ class PrepareTransformer extends React.Component {
     const renderConfig = configs.map((i, index) => ({ value: i, index }));
     return (
       <React.Fragment>
-        <div className={styles.historyTitle}>
-          操作列表
-          <div className={styles.historyOp}>
-            <Button type="primary">
-              <Icon type="caret-right" />
-              运行
-            </Button>
-          </div>
-        </div>
-        <div className={styles.historyList}>
-          {renderConfig.reverse().map(item => (
-            <div className={styles.historyItem} key={item.index}>
-              <div className={styles.operations}>
-                <Icon
-                  type="delete"
-                  style={{ color: 'red' }}
-                  onClick={() => this.handleTransformationDelete(item)}
-                />
-                {/* <Icon type="edit" /> */}
-              </div>
-              <div className={styles.title}>{transformationTitle(item.value.type)}</div>
-              <span className={styles.description}>
-                {transformationDescription(item.value.type, item.value.config)}
-              </span>
+        <Spin spinning={this.state.deleting}>
+          <div className={styles.historyTitle}>
+            操作列表
+            <div className={styles.historyOp}>
+              <Button type="primary">
+                <Icon type="caret-right" />
+                运行
+              </Button>
             </div>
-          ))}
-        </div>
+          </div>
+          <div className={styles.historyList}>
+            {renderConfig.reverse().map(item => (
+              <div className={styles.historyItem} key={item.index}>
+                <div className={styles.operations}>
+                  <Icon
+                    type="delete"
+                    style={{ color: 'red' }}
+                    onClick={() => this.handleTransformationDelete(item)}
+                  />
+                  {/* <Icon type="edit" /> */}
+                </div>
+                <div className={styles.title}>{transformationTitle(item.value.type)}</div>
+                <span className={styles.description}>
+                  {transformationDescription(item.value.type, item.value.config)}
+                </span>
+              </div>
+            ))}
+          </div>
+        </Spin>
       </React.Fragment>
     );
   };

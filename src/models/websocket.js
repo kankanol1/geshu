@@ -116,7 +116,7 @@ export default {
           const connect = () => {
             stompClient.connect(
               {},
-              connectedCallback,
+              frame => connectedCallback(frame),
               error => {
                 // reconnect.
                 connect();
@@ -125,6 +125,9 @@ export default {
           };
           connect();
         } else if (socket && !matchUrl(pathname, enabledUrls)) {
+          // if (socket.readyState === SockJS.CONNECTING) {
+          //   // close after established.
+          // }
           stompClient.disconnect(() => {
             console.log('disconnect finished, closing socket'); // eslint-disable-line
             socket.close();

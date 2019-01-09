@@ -23,9 +23,9 @@ class CardTable extends PureComponent {
           {pagination && (
             <div key="page" className={styles.paginationWrapper}>
               <Pagination
-                current={pagination.current}
-                total={pagination.total}
-                pageSize={pagination.pageSize}
+                current={pagination.current || 0}
+                total={pagination.total || 0}
+                pageSize={pagination.pageSize || 0}
                 onChange={(current, pageSize) => {
                   onChange({ current, pageSize });
                 }}

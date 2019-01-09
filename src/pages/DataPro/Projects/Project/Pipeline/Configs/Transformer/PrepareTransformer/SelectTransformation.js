@@ -19,7 +19,7 @@ class SelectTransformation extends React.PureComponent {
     addTransformation({
       projectId: id,
       id: opId,
-      config: { type: 'SelectTransformation', config: { columns: this.state.formData } },
+      config: { type: 'SelectTransformation', config: { fields: this.state.formData } },
     }).then(response => {
       if (response) {
         if (response.success) {

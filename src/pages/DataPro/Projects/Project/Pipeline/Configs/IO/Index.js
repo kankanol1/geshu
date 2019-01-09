@@ -1,4 +1,5 @@
 import React from 'react';
+import { Modal } from 'antd';
 
 import { formatMessage } from 'umi/locale';
 import Input1Output1Config from './Input1Output1Config';
@@ -16,6 +17,13 @@ export default class Index extends React.Component {
   render() {
     const { component, type, title, id, onOk, onCancel } = this.props;
     const Widget = renderConfig[component.code];
+    if (!Widget) {
+      return (
+        <Modal title={title} visible onOk={onCancel} onCancel={onCancel}>
+          Not implemented.
+        </Modal>
+      );
+    }
     const name =
       type === 'new'
         ? formatMessage({

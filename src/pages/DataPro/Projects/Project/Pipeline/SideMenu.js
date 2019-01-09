@@ -108,8 +108,9 @@ class SideMenu extends React.PureComponent {
               })}`}
               component={addingComponent}
               onOk={operatorId => {
-                this.setState({ addingComponent: undefined });
-                router.push(`/projects/p/pipeline/${id}/new/${operatorId}`);
+                this.setState({ addingComponent: undefined }, () => {
+                  router.push(`/projects/p/pipeline/${id}/new/${operatorId}`);
+                });
               }}
               onCancel={() => this.setState({ addingComponent: undefined })}
             />

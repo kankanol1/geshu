@@ -13,7 +13,7 @@ export default class WithSchema extends React.PureComponent {
     getTransformationSchema({
       projectId: id,
       id: opId,
-      pos: configs.length,
+      index: configs.length,
     }).then(response => {
       if (response) {
         if (response.success) {

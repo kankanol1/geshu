@@ -12,7 +12,7 @@ export function transformationTitle(type) {
 export function transformationDescription(type, configs) {
   switch (type) {
     case 'SelectTransformation':
-      return configs.columns.join(',');
+      return configs.fields.join(',');
     case 'RenameTransformation':
       return 'Not translated';
     default:
