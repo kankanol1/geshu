@@ -182,14 +182,19 @@ export default {
                 },
               },
             });
-            subscribed = true;
+            subscribed = projectId;
             console.log('subscribed', projectId); // eslint-disable-line
           }
           // subscribed = true;
         } else if (subscribed && !pathname.startsWith('/projects/p/pipeline')) {
           // unsubscribe.
+          dispatch({
+            type: 'ws/unsubscribe',
+            payload: {
+              topic: `/datapro/pipeline/status/${subscribed}`,
+            },
+          });
           subscribed = false;
-          // TODO/.
         }
       });
     },

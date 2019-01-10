@@ -55,6 +55,14 @@ export default {
       return state;
     },
 
+    unsubscribe(state, { payload }) {
+      if (state.ws) {
+        const { topic } = payload;
+        state.ws.subscribe(topic, {});
+      }
+      return state;
+    },
+
     saveWS(state, { payload }) {
       return { ...state, ws: payload };
     },
@@ -90,7 +98,10 @@ export default {
         if (matchUrl(pathname, enabledUrls) && !socket) {
           socket = new SockJS('/ws');
           stompClient = Stomp.over(socket);
-          connectingTip = message.loading('与服务器连接中...', 0);
+          // set timout to prevent warning: "triggering nested component updates from render is not allowed."
+          setTimeout(() => {
+            connectingTip = message.loading('与服务器连接中...', 0);
+          }, 0);
           const connectedCallback = frame => {
             Object.keys(websocketRegister).forEach(k =>
               stompClient.subscribe(k, msg => {

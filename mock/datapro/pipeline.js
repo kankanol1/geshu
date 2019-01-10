@@ -274,7 +274,7 @@ let prepareOpConfig = [
   {
     type: 'SelectTransformation',
     config: {
-      columns: ['a1'],
+      fields: ['a1'],
     },
   },
   {
