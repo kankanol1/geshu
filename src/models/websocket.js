@@ -1,5 +1,5 @@
 import SockJS from 'sockjs-client';
-import Stomp from 'stompjs';
+import Stomp from 'stompjs-websocket';
 import { message } from 'antd';
 
 const enabledUrls = ['/demo', '/projects/p/pipeline/**'];
@@ -103,6 +103,19 @@ export default {
             connectingTip = message.loading('与服务器连接中...', 0);
           }, 0);
           const connectedCallback = frame => {
+            // check url.
+            if (!matchUrl(history.location.pathname, enabledUrls)) {
+              // disconnect.
+              stompClient.disconnect(() => {
+                console.log('connected, but url changed. disconnect finished, closing socket'); // eslint-disable-line
+                socket.close();
+                socket = undefined;
+                stompClient = undefined;
+              });
+              // end of story.
+              connectingTip(); // disable connection
+              return;
+            }
             Object.keys(websocketRegister).forEach(k =>
               stompClient.subscribe(k, msg => {
                 dispatch({
@@ -139,11 +152,20 @@ export default {
           // if (socket.readyState === SockJS.CONNECTING) {
           //   // close after established.
           // }
-          stompClient.disconnect(() => {
-            console.log('disconnect finished, closing socket'); // eslint-disable-line
-            socket.close();
-            socket = undefined;
-          });
+          if (stompClient.connected) {
+            stompClient.disconnect(() => {
+              console.log('disconnect finished, closing socket'); // eslint-disable-line
+              socket.close();
+              socket = undefined;
+              stompClient = undefined;
+            });
+          } else {
+            // TODO: set delay or what ever.
+            // eslint-disable-next-line
+            console.warn(
+              'stomp client is not initialized, the connection may be established latter.'
+            );
+          }
         }
       });
     },
