@@ -71,14 +71,22 @@ export default [
             component: './DataPro/Projects/CreateProject',
           },
           {
-            path: '/projects/p/:pane/:id',
+            // all the sub-pages indices
+            path: '/projects/p/:pane(show|pipeline|dataset|dashboard|versions|settings)/:id',
             hideInMenu: true,
             component: './DataPro/Projects/ProjectIndex',
           },
           {
+            // for configure operation.
             path: '/projects/p/pipeline/:id/:type(new|conf)/:op',
             hideInMenu: true,
             component: './DataPro/Projects/Project/Pipeline/Configs/Index',
+          },
+          {
+            // for dataset details page.
+            path: '/projects/p/dataset/:id/:datasetId',
+            hideInMenu: true,
+            component: './DataPro/Projects/Project/Dataset/Index',
           },
         ],
       },

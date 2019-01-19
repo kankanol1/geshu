@@ -41,6 +41,9 @@ const getPaneConfig = project => {
     },
     pipeline: {
       key: 'pipeline',
+      // FIXME: 修改代码结构解决如下扩展问题：
+      // 若无标题，需使用fixHeight，把标题栏的空余空间略去，同时需在XBasicLayout中注册相应fixedHeight的地址
+      // fixedHeight 用于解决使用PageHeaderWrapper之后，显示会出现24px的空白条。
       fixedHeight: true,
       // title: '数据流程',
     },
