@@ -88,6 +88,12 @@ export default [
             hideInMenu: true,
             component: './DataPro/Projects/Project/Dataset/Index',
           },
+          {
+            // for dashboard details page.
+            path: '/projects/p/dashboard/:id/:dashboardId',
+            hideInMenu: true,
+            component: './DataPro/Projects/Project/Dashboard/Index',
+          },
         ],
       },
       {

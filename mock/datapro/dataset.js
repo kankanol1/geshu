@@ -1,6 +1,5 @@
 import faker from 'faker';
 import moment from 'moment';
-import fs from 'fs';
 import { getUrlParams } from '../utils';
 
 faker.locale = 'zh_CN';
