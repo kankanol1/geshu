@@ -6,22 +6,14 @@ import hash from 'object-hash';
 import {
   Avatar,
   Popconfirm,
-  Tag,
   Row,
   Col,
   Card,
   Form,
   Input,
-  Select,
   Icon,
   Button,
-  Dropdown,
-  Menu,
-  InputNumber,
   DatePicker,
-  Modal,
-  message,
-  Badge,
   Divider,
 } from 'antd';
 import StandardTable from '../../components/StandardTable';
@@ -29,7 +21,6 @@ import PageHeaderWrapper from '../../components/PageHeaderWrapper';
 import styles from './UserList.less';
 
 const FormItem = Form.Item;
-const { Option } = Select;
 const { RangePicker } = DatePicker;
 
 const getValue = obj =>
@@ -350,15 +341,7 @@ class UserList extends PureComponent {
       users: { data },
       loading,
     } = this.props;
-    const { selectedRows, modalVisible, currentRecord } = this.state;
-
-    const parentMethods = {
-      data,
-      handleAdd: this.handleAdd,
-      handleModalVisible: this.handleModalVisible,
-      currentRecord,
-      handleUpdate: this.handleUpdate,
-    };
+    const { selectedRows } = this.state;
 
     return (
       <PageHeaderWrapper>

@@ -1,13 +1,13 @@
 import React from 'react';
-import { Tabs } from 'antd';
+import { Tabs, Icon, Tooltip } from 'antd';
 import { connect } from 'dva';
-import Link from 'umi/link';
 import PageLoading from '@/components/PageLoading';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 
 import { getDatasetInfoForId } from '@/services/datapro/datasetAPI';
 import DetailOverview from './DetailOverview';
 import DetailTable from './DetailTable';
+import EditDatasetModal from './EditDatasetModal';
 import TopBar from '../../TopBar';
 import styles from './Index.less';
 
@@ -22,15 +22,21 @@ class Index extends React.Component {
   state = {
     dataset: undefined,
     loading: true,
+    editing: false,
   };
 
   componentDidMount() {
     const { dispatch } = this.props;
-    const { id, datasetId } = this.props.match.params;
+    const { id } = this.props.match.params;
     dispatch({
       type: 'dataproProject/fetchProject',
       payload: { id },
     });
+    this.loadDatasetInfo();
+  }
+
+  loadDatasetInfo() {
+    const { datasetId } = this.props.match.params;
     // fetch dataset info.
     getDatasetInfoForId({ id: datasetId }).then(response => {
       if (response) {
@@ -60,7 +66,17 @@ class Index extends React.Component {
     return (
       <PageHeaderWrapper
         // hiddenBreadcrumb
-        title={`查看数据集：${dataset.name}[${dataset.id}]`}
+        title={`数据集：${dataset.name}[${dataset.id}]`}
+        content={<div>{dataset.description}</div>}
+        action={
+          <Tooltip title="修改">
+            <Icon
+              className={styles.editIcon}
+              type="edit"
+              onClick={() => this.setState({ editing: true })}
+            />
+          </Tooltip>
+        }
         breadcrumbList={[
           {
             name: '项目详细',
@@ -89,6 +105,16 @@ class Index extends React.Component {
             </TabPane>
           </Tabs>
         </div>
+        {this.state.editing && (
+          <EditDatasetModal
+            dataset={dataset}
+            onOk={() => {
+              this.setState({ editing: false });
+              this.loadDatasetInfo();
+            }}
+            onCancel={() => this.setState({ editing: false })}
+          />
+        )}
       </PageHeaderWrapper>
     );
   }
