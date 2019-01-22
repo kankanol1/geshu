@@ -179,89 +179,75 @@ export default class DetailOverview extends PureComponent {
     );
   };
 
+  renderLoading = loadingMessage => (
+    <div style={{ textAlign: 'center' }}>
+      <div style={{ textAlign: 'center', marginBottom: '20px' }}>
+        <Spin />
+      </div>
+      <span>{loadingMessage}</span>
+    </div>
+  );
+
   renderStatistics = () => {
     const { statistics, loading, dataLoading, loadingMessage } = this.state;
-    if (loading) {
-      return <Spin />;
+    if (loading || dataLoading) {
+      return this.renderLoading(loadingMessage || '加载中');
     }
-    const loadingDisplay = (
-      <div style={{ textAlign: 'center' }}>
-        <div style={{ textAlign: 'center', marginBottom: '20px' }}>
-          <Spin />
-        </div>
-        <span>{loadingMessage}</span>
-      </div>
-    );
     return (
-      <Card title="列统计">
-        {dataLoading && loadingDisplay}
-        {!dataLoading && (
-          <Row>
-            {statistics.map((item, i) => (
-              <Col span={12} key={i}>
-                <Card
-                  style={{ width: '100%', padding: '0' }}
-                  bodyStyle={{ padding: '20px' }}
-                  title={item.name}
-                >
-                  {/* <div className={styles.statisticsTitle}>
-                      {item.name}
-                    </div> */}
-                  <div className={styles.statisticsProcess}>
-                    <div
-                      className={styles.statisticsProcessChart}
-                      style={{
-                        width: `${(
-                          ((item.statisticsData.count - item.statisticsData.nullNum) /
-                            item.statisticsData.count) *
-                          100
-                        ).toFixed(2)}%`,
-                      }}
-                    />
+      <Row>
+        {statistics.map((item, i) => (
+          <Col span={12} key={i}>
+            <Card
+              style={{ width: '100%', padding: '0' }}
+              bodyStyle={{ padding: '20px' }}
+              title={item.name}
+            >
+              {/* <div className={styles.statisticsTitle}>
+                  {item.name}
+                </div> */}
+              <div className={styles.statisticsProcess}>
+                <div
+                  className={styles.statisticsProcessChart}
+                  style={{
+                    width: `${(
+                      ((item.statisticsData.count - item.statisticsData.nullNum) /
+                        item.statisticsData.count) *
+                      100
+                    ).toFixed(2)}%`,
+                  }}
+                />
+              </div>
+              <div className={styles.statisticsProcessBox}>
+                <div className={styles.statisticsProcessItem}>
+                  <div className={styles.statisticsProcessLabel}>总条数</div>
+                  <div className={styles.statisticsProcessCount}>
+                    <span className={styles.fontBlue}>{item.statisticsData.count}</span>
                   </div>
-                  <div className={styles.statisticsProcessBox}>
-                    <div className={styles.statisticsProcessItem}>
-                      <div className={styles.statisticsProcessLabel}>总条数</div>
-                      <div className={styles.statisticsProcessCount}>
-                        <span className={styles.fontBlue}>{item.statisticsData.count}</span>
-                      </div>
-                    </div>
-                    <div className={styles.statisticsProcessItem}>
-                      <div className={styles.statisticsProcessLabel}>空值</div>
-                      <div className={styles.statisticsProcessCount}>
-                        <span className={styles.fontBlack}>{item.statisticsData.nullNum}</span>
-                      </div>
-                    </div>
+                </div>
+                <div className={styles.statisticsProcessItem}>
+                  <div className={styles.statisticsProcessLabel}>空值</div>
+                  <div className={styles.statisticsProcessCount}>
+                    <span className={styles.fontBlack}>{item.statisticsData.nullNum}</span>
                   </div>
-                  <div>
-                    {item.type === 'numeric'
-                      ? this.renderNumberChart(item.statisticsData, item.histogramsData)
-                      : this.renderStringChart(item.histogramsData)}
-                  </div>
-                </Card>
-              </Col>
-            ))}
-          </Row>
-        )}
-      </Card>
+                </div>
+              </div>
+              <div>
+                {item.type === 'numeric'
+                  ? this.renderNumberChart(item.statisticsData, item.histogramsData)
+                  : this.renderStringChart(item.histogramsData)}
+              </div>
+            </Card>
+          </Col>
+        ))}
+      </Row>
     );
   };
 
   renderHeatmap = () => {
     const { heatmap, loading, dataLoading, loadingMessage } = this.state;
     const { data, cols } = heatmap;
-    if (loading) {
-      return <Spin />;
-    }
-    if (dataLoading) {
-      return (
-        <div style={{ textAlign: 'center' }}>
-          <div style={{ textAlign: 'center', marginBottom: '20px' }}>
-            <Spin />
-          </div>
-          <span>{loadingMessage}</span>
-        </div>
-      );
+    if (loading || dataLoading) {
+      return this.renderLoading(loadingMessage || '加载中');
     }
     return (
       <Chart
@@ -348,7 +334,9 @@ export default class DetailOverview extends PureComponent {
     return (
       <div>
         <Row>
-          <Col span={24}>{this.renderStatistics()}</Col>
+          <Col span={24}>
+            <Card title="列统计">{this.renderStatistics()}</Card>
+          </Col>
           <Col span={24}>
             <Card title="列相关性表格">{this.renderHeatmap()}</Card>
           </Col>
