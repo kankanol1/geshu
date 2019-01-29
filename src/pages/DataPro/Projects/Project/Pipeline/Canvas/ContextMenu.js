@@ -80,6 +80,14 @@ class ContextMenu extends React.PureComponent {
           },
         });
         break;
+      case 'saveas':
+        dispatch({
+          type: 'dataproPipeline/updateSavingDataset',
+          payload: {
+            dataset: component,
+          },
+        });
+        break;
       default:
         break;
     }
@@ -97,6 +105,9 @@ class ContextMenu extends React.PureComponent {
         theme="light"
         onClick={v => this.handleDatasetClick(v)}
       >
+        <Menu.Item key="saveas" style={style}>
+          存储为数据集
+        </Menu.Item>
         <Menu.Item key="inspect" style={style}>
           预览数据
         </Menu.Item>

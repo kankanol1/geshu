@@ -110,7 +110,12 @@ export function updateDataset(req, res) {
   });
 }
 
-export function createDataset() {}
+export function createDataset(req, res) {
+  res.json({
+    message: 'success',
+    success: true,
+  });
+}
 
 export function getDatasetInfoForId(req, res) {
   const params = getUrlParams(req.url);

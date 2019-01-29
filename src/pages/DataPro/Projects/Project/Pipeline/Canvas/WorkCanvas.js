@@ -1,9 +1,7 @@
 import React from 'react';
-import { Spin, Modal } from 'antd';
 import { connect } from 'dva';
 import { DraggableCore } from 'react-draggable';
 import key from 'keymaster';
-import { routerRedux } from 'dva/router';
 import NodeLayer from './NodeLayer';
 import PointLayer from './PointLayer';
 import LineLayer from './LineLayer';
@@ -20,6 +18,7 @@ import SelectionChange from '@/obj/workspace/op/SelectionChange';
 import ScaleChange from '@/obj/workspace/op/ScaleChange';
 import IOConfig from '../Configs/IO/Index';
 import DataInspector from './DataInspector';
+import SaveDataset from './SaveDataset';
 
 const keyUpListener = [];
 const keyDownLisener = [];
@@ -42,18 +41,6 @@ addEvent(document, 'keydown', event => {
 }))
 class WorkCanvas extends React.Component {
   state = {
-    // inspectData: false,
-    // component: {
-    //   name: '组件测试',
-    //   outputs: [
-    //     {
-    //       id: 'o1',
-    //     },
-    //     {
-    //       id: '02',
-    //     },
-    //   ],
-    // },
     draggingSelection: {
       dragging: false,
       startX: 0,
@@ -227,7 +214,7 @@ class WorkCanvas extends React.Component {
     }
   }
 
-  handleOperatorClicked(component, showSettings = false) {
+  handleOperatorClicked(component) {
     const {
       dispatch,
       dataproPipeline: { canvas },
@@ -410,6 +397,7 @@ class WorkCanvas extends React.Component {
       contextmenu,
       modifyingComponent,
       status,
+      savingDataset,
     } = this.props.dataproPipeline;
     const { mode, opMode } = this.state;
     if (canvas === undefined) return null;
@@ -516,7 +504,7 @@ class WorkCanvas extends React.Component {
         {this.renderToolbarView()}
         {modifyingComponent && this.renderModifyingComponent(modifyingComponent)}
 
-        {inspecting ? (
+        {inspecting && (
           <DataInspector
             visible={inspecting && true}
             component={inspecting}
@@ -530,7 +518,21 @@ class WorkCanvas extends React.Component {
               })
             }
           />
-        ) : null}
+        )}
+        {// saving dataset.
+        savingDataset && (
+          <SaveDataset
+            dataset={savingDataset}
+            onDismiss={() =>
+              this.props.dispatch({
+                type: 'dataproPipeline/updateSavingDataset',
+                payload: {
+                  dataset: undefined,
+                },
+              })
+            }
+          />
+        )}
       </div>
     );
   }

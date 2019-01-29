@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, Button, Col, Row, Select, Table, Spin } from 'antd';
+import { Modal, Button, Icon, Table, Spin } from 'antd';
 import { connect } from 'dva';
 import styles from './DataInspector.less';
 
@@ -41,6 +41,7 @@ class DataInspector extends React.Component {
       table = (
         <Table
           className={styles.table}
+          rowKey={(r, i) => i}
           style={{ marginTop: '10px' }}
           columns={
             schema &&
@@ -55,9 +56,33 @@ class DataInspector extends React.Component {
         />
       );
     }
+
+    // title of the modal.
+    const title = (
+      <div>
+        数据预览:[
+        {name}]
+        <Button
+          style={{ marginRight: '20px', float: 'right' }}
+          type="primary"
+          onClick={() => {
+            this.props.dispatch({
+              type: 'dataproPipeline/updateSavingDataset',
+              payload: {
+                dataset: this.props.component,
+              },
+            });
+          }}
+        >
+          <Icon type="save" />
+          存储为...
+        </Button>
+      </div>
+    );
+
     return (
       <Modal
-        title={`数据预览:[${name}]`}
+        title={title}
         visible={this.props.visible}
         closable
         destroyOnClose

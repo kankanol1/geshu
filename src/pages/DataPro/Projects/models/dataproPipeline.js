@@ -25,6 +25,7 @@ export default {
     },
     modifyingComponent: undefined,
     inspecting: undefined,
+    savingDataset: undefined,
   },
 
   reducers: {
@@ -90,6 +91,11 @@ export default {
     setInspectingComponent(state, { payload }) {
       const { component } = payload;
       return { ...state, inspecting: component };
+    },
+
+    updateSavingDataset(state, { payload }) {
+      const { dataset } = payload;
+      return { ...state, savingDataset: dataset };
     },
   },
 
