@@ -23,6 +23,13 @@ export async function updateProjectById(params) {
   });
 }
 
+export async function deleteProjectById(params) {
+  return request('/api/datapro/projects/delete', {
+    method: 'POST',
+    body: params,
+  });
+}
+
 export async function queryProjectById(id) {
   return request(`/api/datapro/projects/p/info?${stringify({ id })}`);
 }

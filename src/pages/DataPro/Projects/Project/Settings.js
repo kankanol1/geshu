@@ -5,6 +5,7 @@ import { Tabs, Card, Icon } from 'antd';
 import BasicSettings from './Settings/BasicSettings';
 import MarkdownSettings from './Settings/MarkdownSettings';
 import MemberSettings from './Settings/MemberSettings';
+import ProjectSettings from './Settings/ProjectSettings';
 
 const { TabPane } = Tabs;
 
@@ -12,7 +13,7 @@ const { TabPane } = Tabs;
   dataproProject,
   loading: loading.models.dataproProject,
 }))
-class ProjectSettings extends React.PureComponent {
+class Settings extends React.PureComponent {
   state = {
     key: 'basic',
   };
@@ -60,10 +61,21 @@ class ProjectSettings extends React.PureComponent {
           >
             <MemberSettings id={id} />
           </TabPane>
+          <TabPane
+            tab={
+              <span>
+                <Icon type="project" />
+                项目管理
+              </span>
+            }
+            key="projects"
+          >
+            <ProjectSettings id={id} />
+          </TabPane>
         </Tabs>
       </Card>
     );
   }
 }
 
-export default ProjectSettings;
+export default Settings;

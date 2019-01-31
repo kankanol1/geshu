@@ -1,6 +1,8 @@
 import React from 'react';
 import router from 'umi/router';
-import { Menu } from 'antd';
+import { Menu, Modal } from 'antd';
+
+const { confirm } = Modal;
 
 const style = {
   borderBottom: '1px solid #eee',
@@ -34,12 +36,21 @@ class ContextMenu extends React.PureComponent {
         });
         break;
       case 'delete':
-        dispatch({
-          type: 'dataproPipeline/deleteOp',
-          payload: {
-            id: operatorId,
-            projectId,
+        confirm({
+          title: '确认删除?',
+          content: '删除该组件将会同时删除后续组件，确认继续?',
+          onOk() {
+            dispatch({
+              type: 'dataproPipeline/deleteOp',
+              payload: {
+                id: operatorId,
+                projectId,
+              },
+            });
           },
+          onCancel() {},
+          okText: '确认',
+          cancelText: '取消',
         });
         break;
       default:

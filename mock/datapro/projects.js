@@ -5,7 +5,7 @@ import { getUrlParams } from '../utils';
 
 faker.locale = 'zh_CN';
 
-const projects = [];
+let projects = [];
 
 for (let i = 0; i < 66; i += 1) {
   projects.push({
@@ -186,6 +186,16 @@ export function updateProjectById(req, res) {
   });
 }
 
+export function deleteProjectById(req, res) {
+  const { body } = req;
+  const { id } = body;
+  projects = projects.filter(i => i.id !== parseInt(id, 10));
+  res.json({
+    message: 'done',
+    success: true,
+  });
+}
+
 export default {
   'GET /api/datapro/projects/list/all': getProjectList,
   'GET /api/datapro/projects/labels': getAllLabels,
@@ -204,4 +214,5 @@ export default {
     id: 1,
   },
   'POST /api/datapro/projects/update': updateProjectById,
+  'POST /api/datapro/projects/delete': deleteProjectById,
 };
