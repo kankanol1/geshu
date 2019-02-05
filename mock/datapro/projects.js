@@ -94,7 +94,7 @@ export function getProjectCount(req, res) {
   res.json({
     pipeline: 0,
     dataset: 0,
-    dashboard: 0,
+    files: 2,
     commit: 2,
   });
 }

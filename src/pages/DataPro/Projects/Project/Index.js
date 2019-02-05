@@ -70,16 +70,16 @@ class Index extends PureComponent {
               </Link>
             </Col>
             <Col span={6} className={styles.overviewItem}>
-              <Link to={`/projects/p/dashboard/${id}`} className={styles.overviewLink}>
+              <Link to={`/projects/p/files/${id}`} className={styles.overviewLink}>
                 <div>
                   <Icon
-                    className={counts.dashboard > 0 ? styles.iconBlue : styles.iconGrey}
+                    className={counts.files > 0 ? styles.iconBlue : styles.iconGrey}
                     type="fund"
                   />
                   <span>
-                    数据看板{' '}
-                    <strong className={counts.dashboard > 0 ? styles.iconBlue : styles.iconGrey}>
-                      {counts.dashboard}
+                    项目文件{' '}
+                    <strong className={counts.files > 0 ? styles.iconBlue : styles.iconGrey}>
+                      {counts.files}
                     </strong>{' '}
                     个
                   </span>
