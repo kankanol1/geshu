@@ -15,6 +15,7 @@ export default class FilePickerForForm extends React.PureComponent {
     folderType: undefined,
     view: undefined,
     project: undefined,
+    descriptionHidePrefix: true,
   };
 
   state = {
@@ -30,6 +31,9 @@ export default class FilePickerForForm extends React.PureComponent {
   };
 
   generateDescription = selected => {
+    if (this.props.descriptionHidePrefix) {
+      return selected.path;
+    }
     if (selected.type !== 'project') {
       return `[${selected.type === 'private' ? '个人文件' : '公开文件'}] ${selected.path}`;
     } else {
@@ -125,4 +129,5 @@ FilePickerForForm.propTypes = {
   folderType: PropTypes.string,
   view: PropTypes.string,
   project: PropTypes.object,
+  descriptionHidePrefix: PropTypes.bool,
 };

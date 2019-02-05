@@ -22,9 +22,6 @@ const websocketRegister = {
 
 let connectingTip;
 
-let socket;
-let stompClient;
-
 export default {
   namespace: 'ws',
 
@@ -90,6 +87,8 @@ export default {
 
   subscriptions: {
     setup({ dispatch, history }) {
+      let socket;
+      let stompClient;
       // let lastPathname;
       history.listen(({ pathname }) => {
         if (connectingTip) {
@@ -114,6 +113,11 @@ export default {
               });
               // end of story.
               connectingTip(); // disable connection
+
+              dispatch({
+                type: 'saveWS',
+                payload: undefined,
+              });
               return;
             }
             Object.keys(websocketRegister).forEach(k =>
@@ -158,6 +162,11 @@ export default {
               socket.close();
               socket = undefined;
               stompClient = undefined;
+              // store ws.
+              dispatch({
+                type: 'saveWS',
+                payload: undefined,
+              });
             });
           } else {
             // TODO: set delay or what ever.

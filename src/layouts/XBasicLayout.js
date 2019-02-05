@@ -277,6 +277,40 @@ class XBasicLayout extends React.PureComponent {
     );
   }
 
+  renderWebSocket() {
+    if (process.env.NODE_ENV === 'production') {
+      // do not render in production.
+      return null;
+    }
+    let message = 'WS:';
+    const { ws } = this.props;
+    let color = 'grey';
+    if (ws.ws) {
+      message += 'connected';
+      color = '#6ECF7F';
+      if (!ws.ws.connected) {
+        message += '(Error!)';
+        color = '#CFAB6E';
+      }
+    } else {
+      message += 'Not Connected';
+      color = '#AC4139';
+    }
+    return (
+      <div
+        style={{
+          position: 'absolute',
+          right: '40px',
+          bottom: '20px',
+          background: color,
+          zIndex: 200,
+        }}
+      >
+        {message}
+      </div>
+    );
+  }
+
   render() {
     const {
       navTheme,
@@ -328,15 +362,17 @@ class XBasicLayout extends React.PureComponent {
           </ContainerQuery>
         </DocumentTitle>
         {this.renderSettingDrawer()}
+        {this.renderWebSocket()}
       </React.Fragment>
     );
   }
 }
 
-export default connect(({ global, setting }) => ({
+export default connect(({ ws, global, setting }) => ({
   collapsed: global.collapsed,
   currentUser: global.currentUser,
   fullScreen: global.fullScreen,
   layout: setting.layout,
+  ws,
   ...setting,
 }))(XBasicLayout);

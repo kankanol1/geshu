@@ -523,6 +523,7 @@ class WorkCanvas extends React.Component {
         savingDataset && (
           <SaveDataset
             dataset={savingDataset}
+            projectId={projectId}
             onDismiss={() =>
               this.props.dispatch({
                 type: 'dataproPipeline/updateSavingDataset',
