@@ -299,7 +299,7 @@ class XBasicLayout extends React.PureComponent {
     return (
       <div
         style={{
-          position: 'absolute',
+          position: 'fixed',
           right: '40px',
           bottom: '20px',
           background: color,

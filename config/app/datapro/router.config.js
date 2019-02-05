@@ -72,7 +72,7 @@ export default [
           },
           {
             // all the sub-pages indices
-            path: '/projects/p/:pane(show|pipeline|dataset|dashboard|versions|settings)/:id',
+            path: '/projects/p/:pane(show|pipeline|dataset|files|versions|settings)/:id',
             hideInMenu: true,
             component: './DataPro/Projects/ProjectIndex',
           },

@@ -9,7 +9,7 @@ import XTagList from '@/components/XTagList';
 import Index from './Project/Index';
 import Versions from './Project/Versions';
 import Settings from './Project/Settings';
-import Dashboard from './Project/Dashboard';
+import Files from './Project/Files';
 import Dataset from './Project/Dataset';
 import Pipeline from './Project/Pipeline';
 import TopBar from './TopBar';
@@ -31,9 +31,9 @@ const getPaneConfig = project => {
       key: 'settings',
       title: '项目设置',
     },
-    dashboard: {
-      key: 'dashboard',
-      title: '看板',
+    files: {
+      key: 'files',
+      title: '项目文件',
     },
     dataset: {
       key: 'dataset',
@@ -79,10 +79,12 @@ class ProjectIndex extends PureComponent {
         return <Versions {...props} />;
       case 'settings':
         return <Settings {...props} />;
-      case 'dashboard':
-        return <Dashboard {...props} />;
+      // case 'dashboard':
+      //   return <Dashboard {...props} />;
       case 'dataset':
         return <Dataset {...props} />;
+      case 'files':
+        return <Files {...props} />;
       case 'pipeline':
         return <Pipeline {...props} />;
       default:
