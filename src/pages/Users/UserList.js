@@ -94,7 +94,7 @@ class UserList extends PureComponent {
           <Divider type="vertical" />
           <span>
             <Popconfirm title="确认删除吗?" onConfirm={() => this.handleRecordDelete(record)}>
-              <a>删除</a>
+              <a style={{ color: 'red' }}>删除</a>
             </Popconfirm>
           </span>
         </Fragment>
@@ -353,7 +353,7 @@ class UserList extends PureComponent {
                 新建
               </Button>
               <Popconfirm title="确认删除吗?" onConfirm={() => this.handleMultiDelete()}>
-                {selectedRows.length > 0 && <Button>批量删除</Button>}
+                {selectedRows.length > 0 && <Button type="danger">批量删除</Button>}
               </Popconfirm>
             </div>
           </div>

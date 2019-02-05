@@ -50,7 +50,7 @@ class Settings extends React.PureComponent {
           >
             <MarkdownSettings id={id} />
           </TabPane>
-          <TabPane
+          {/* <TabPane
             tab={
               <span>
                 <Icon type="team" />
@@ -60,7 +60,7 @@ class Settings extends React.PureComponent {
             key="members"
           >
             <MemberSettings id={id} />
-          </TabPane>
+          </TabPane> */}
           <TabPane
             tab={
               <span>

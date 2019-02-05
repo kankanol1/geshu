@@ -20,7 +20,7 @@ export default [
       { path: '/', redirect: '/projects/list' },
       { path: '/projects', redirect: '/projects/list' },
       { path: '/users', redirect: '/users/list' },
-      { path: '/teams', redirect: '/teams/list' },
+      // { path: '/teams', redirect: '/teams/list' },
       { path: '/self', redirect: '/self/basic' },
       {
         path: '/testm',
@@ -88,27 +88,27 @@ export default [
             hideInMenu: true,
             component: './DataPro/Projects/Project/Dataset/Index',
           },
-          {
-            // for dashboard details page.
-            path: '/projects/p/dashboard/:id/:dashboardId',
-            hideInMenu: true,
-            component: './DataPro/Projects/Project/Dashboard/Index',
-          },
+          // {
+          //   // for dashboard details page.
+          //   path: '/projects/p/dashboard/:id/:dashboardId',
+          //   hideInMenu: true,
+          //   component: './DataPro/Projects/Project/Dashboard/Index',
+          // },
         ],
       },
-      {
-        path: 'teams',
-        name: 'teams',
-        icon: 'team',
-        hideChildrenInMenu: true,
-        routes: [
-          {
-            path: 'list',
-            name: 'list',
-            component: './Teams/TeamsList',
-          },
-        ],
-      },
+      // {
+      //   path: 'teams',
+      //   name: 'teams',
+      //   icon: 'team',
+      //   hideChildrenInMenu: true,
+      //   routes: [
+      //     {
+      //       path: 'list',
+      //       name: 'list',
+      //       component: './Teams/TeamsList',
+      //     },
+      //   ],
+      // },
       {
         path: 'users',
         name: 'users',
