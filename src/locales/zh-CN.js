@@ -292,6 +292,8 @@ export default {
   'menu.project': '项目',
   'menu.project.list': '项目列表',
   'menu.project.workspace': '工作区',
+  'menu.tasks': '任务列表',
+  'menu.tasks.list': '任务列表',
   'menu.models': '模型管理',
   'menu.models.candidates': '待选模型库',
   'menu.models.list': '模型库',
