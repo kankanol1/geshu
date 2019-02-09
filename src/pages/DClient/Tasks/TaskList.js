@@ -55,12 +55,12 @@ class TaskList extends React.Component {
             <Button
               type="primary"
               size="small"
-              onClick={() => router.push(`/projects/p/dashboard/${id}/${record.id}`)}
+              onClick={() => router.push(`/tasks/t/show/${record.id}`)}
             >
               打开
             </Button>
             <Divider type="vertical" />
-            <a onClick={() => this.handleUpdate(record)}> 编辑</a>
+            <a onClick={() => router.push(`/tasks/t/edit/${record.id}`)}> 编辑</a>
             <Divider type="vertical" />
             <span>
               <Popconfirm title="确认删除吗?" onConfirm={() => this.handleRecordDelete(record)}>
@@ -145,7 +145,7 @@ class TaskList extends React.Component {
         <Card>
           <div className={styles.tableList}>
             <div className={styles.tableListOperator}>
-              <Button icon="plus" type="primary" onClick={() => this.handleAdd()}>
+              <Button icon="plus" type="primary" onClick={() => router.push(`/tasks/t/new`)}>
                 新建
               </Button>
               <Popconfirm title="确认删除吗?" onConfirm={() => this.handleMultiDelete()}>
