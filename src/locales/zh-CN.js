@@ -316,6 +316,8 @@ export default {
   'menu.self': '个人中心',
   'menu.teams': '团队',
 
+  'menu.files': '文件管理',
+
   // =============== operator types =============
   'operatortype.DataSource': '数据源',
   'operatortype.DataSink': '数据存储',

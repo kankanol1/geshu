@@ -5,12 +5,12 @@ import { getUrlParams } from '../utils';
 
 faker.locale = 'zh_CN';
 
-let tasks = [];
+let jobs = [];
 
 for (let i = 0; i < 66; i += 1) {
   const rad1 = Math.random() * 10;
-  tasks.push({
-    name: `${faker.random.word()}-Task-${i}`,
+  jobs.push({
+    name: `${faker.random.word()}-Job-${i}`,
     id: i,
     description: faker.hacker.phrase(),
     createdBy: i,
@@ -21,10 +21,10 @@ for (let i = 0; i < 66; i += 1) {
   });
 }
 
-function getTaskList(req, res) {
+function getJobList(req, res) {
   const params = getUrlParams(req.url);
 
-  let datasource = [...tasks];
+  let datasource = [...jobs];
 
   let pageSize = 10;
   if (params.pageSize) {
@@ -86,16 +86,16 @@ function getTaskList(req, res) {
   }
 }
 
-export function getTaskById(req, res) {
+export function getJobById(req, res) {
   const params = getUrlParams(req.url);
-  const p = tasks.filter(i => `${i.id}` === `${params.id}`);
+  const p = jobs.filter(i => `${i.id}` === `${params.id}`);
   res.json(p[0]);
 }
 
-export function updateTaskById(req, res) {
+export function updateJobById(req, res) {
   const { body } = req;
   const { id, name, description, labels } = body;
-  tasks.forEach(i => {
+  jobs.forEach(i => {
     if (i.id === id) {
       i.name = name; // eslint-disable-line
       i.description = description; // eslint-disable-line
@@ -107,10 +107,10 @@ export function updateTaskById(req, res) {
   });
 }
 
-export function deleteTaskById(req, res) {
+export function deleteJobById(req, res) {
   const { body } = req;
   const { ids } = body;
-  tasks = tasks.filter(i => !ids.includes(i.id));
+  jobs = jobs.filter(i => !ids.includes(i.id));
   res.json({
     message: 'done',
     success: true,
@@ -118,13 +118,13 @@ export function deleteTaskById(req, res) {
 }
 
 export default {
-  'GET /api/datapro/client/tasks/list': getTaskList,
-  'GET /api/datapro/client/tasks/get': getTaskById,
-  'POST /api/datapro/client/tasks/create': {
+  'GET /api/datapro/client/jobs/list': getJobList,
+  'GET /api/datapro/client/jobs/get': getJobById,
+  'POST /api/datapro/client/jobs/create': {
     success: true,
     message: '创建成功',
     id: 1,
   },
-  'POST /api/datapro/client/tasks/update': updateTaskById,
-  'POST /api/datapro/client/tasks/delete': deleteTaskById,
+  'POST /api/datapro/client/jobs/update': updateJobById,
+  'POST /api/datapro/client/jobs/delete': deleteJobById,
 };

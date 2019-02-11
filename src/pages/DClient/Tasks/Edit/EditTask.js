@@ -1,10 +1,12 @@
 import React from 'react';
-import { Steps, Card } from 'antd';
+import { Steps, Card, Button } from 'antd';
+import Link from 'umi/link';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import EditTaskStepDataSource from './EditTaskStepDataSource';
 import EditTaskStepDataSourceCheck from './EditTaskStepDataSourceCheck';
 import EditTaskStepDataSink from './EditTaskStepDataSink';
 import EditTaskStepDone from './EditTaskStepDone';
+import styles from './EditTask.less';
 
 const { Step } = Steps;
 
@@ -33,7 +35,11 @@ class EditTask extends React.Component {
         }
       >
         <Card>
-          hi
+          <div className={styles.topBtns}>
+            <Link to={`/tasks/t/show/${id}`}>
+              <Button> &lt;&nbsp; 返回</Button>
+            </Link>
+          </div>
           <StepComp mode={mode} id={id} pane={activePane} />
         </Card>
       </PageHeaderWrapper>

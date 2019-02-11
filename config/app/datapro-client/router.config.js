@@ -51,6 +51,12 @@ export default [
         ],
       },
       {
+        path: '/files',
+        icon: 'database',
+        name: 'files',
+        component: './DClient/Files/StorageList',
+      },
+      {
         path: 'users',
         name: 'users',
         icon: 'contacts',

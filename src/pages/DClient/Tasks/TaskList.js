@@ -1,10 +1,11 @@
 import React, { PureComponent, Fragment } from 'react';
 import moment from 'moment';
 import { connect } from 'dva';
-import { Popconfirm, Card, Button, Divider } from 'antd';
+import { Popconfirm, Card, Button, Divider, Tag } from 'antd';
 import router from 'umi/router';
 import StandardTable from '@/components/StandardTable';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
+import { status } from '@/utils/translationUtils';
 import styles from './TaskList.less';
 
 @connect(({ tasks, loading }) => ({
@@ -36,6 +37,11 @@ class TaskList extends React.Component {
       //   title: '描述',
       //   dataIndex: 'description',
       // },
+      {
+        title: '状态',
+        dataIndex: 'status',
+        render: val => <Tag color={status.types[val]}>{status.names[val]}</Tag>,
+      },
       {
         title: '更新时间',
         dataIndex: 'updatedAt',

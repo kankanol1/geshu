@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'dva';
 import router from 'umi/router';
 import { Card, Form, Input, Button, message } from 'antd';
-import { Link } from 'dva/router';
+import Link from 'umi/link';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import XLoading from '@/components/XLoading';
 
