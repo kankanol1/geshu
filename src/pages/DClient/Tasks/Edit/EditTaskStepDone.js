@@ -1,11 +1,31 @@
 import React from 'react';
-import { Button } from 'antd';
+import { Button, Modal, message } from 'antd';
 import router from 'umi/router';
 import Link from 'umi/link';
 import Result from '@/components/Result';
+import { runTaskById } from '@/services/dclient/taskAPI';
 import styles from './EditTask.less';
 
-class EditTaskStepDataSinkCheck extends React.Component {
+class EditTaskStepDataSinkCheck extends React.PureComponent {
+  runTask() {
+    const { id } = this.props;
+    Modal.confirm({
+      title: '确认提交',
+      content: '是否确认提交运行？',
+      okText: '确认',
+      cancelTest: '取消',
+      onOk: () => {
+        runTaskById({ id }).then(response => {
+          if (response && response.success) {
+            message.info('已提交运行');
+          } else {
+            message.error(response.message || '提交失败，请重试');
+          }
+        });
+      },
+    });
+  }
+
   render() {
     const { mode, id, pane } = this.props;
     return (
@@ -17,7 +37,9 @@ class EditTaskStepDataSinkCheck extends React.Component {
           // extra={extra}
           actions={
             <div>
-              <Button type="primary">提交运行</Button>
+              <Button type="primary" onClick={() => this.runTask()}>
+                提交运行
+              </Button>
               <Link to={`/tasks/t/show/${id}`}>
                 <Button>查看任务</Button>
               </Link>

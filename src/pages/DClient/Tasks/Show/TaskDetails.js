@@ -4,6 +4,7 @@ import { connect } from 'dva';
 import { Tag, Button, Icon, Modal, message } from 'antd';
 import router from 'umi/router';
 import { status } from '@/utils/translationUtils';
+import { runTaskById } from '@/services/dclient/taskAPI';
 import styles from './TaskDetails.less';
 
 @connect(({ task, loading }) => ({
@@ -33,6 +34,30 @@ class TaskDetails extends React.Component {
     });
   }
 
+  runTask() {
+    const { id } = this.props;
+    Modal.confirm({
+      title: '确认提交',
+      content: '是否确认提交运行？',
+      okText: '确认',
+      cancelTest: '取消',
+      onOk: () => {
+        runTaskById({ id }).then(response => {
+          if (response && response.success) {
+            message.info('已提交运行');
+          } else {
+            message.error(response.message || '提交失败，请重试');
+          }
+        });
+      },
+    });
+  }
+
+  jumpToConfig() {
+    const { id } = this.props;
+    router.push(`/tasks/t/edit/${id}`);
+  }
+
   renderItems = list => {
     return (
       <div className={styles.listContainer}>
@@ -60,9 +85,21 @@ class TaskDetails extends React.Component {
         value: (
           <React.Fragment>
             <Tag color={status.types[task.status]}>{status.names[task.status]}</Tag>
-            {task.status === 'READY' && <Button {...btnProps}>提交运行</Button>}
-            {task.status === 'NOT_READY' && <Button {...btnProps}>配置</Button>}
-            {task.status === 'DONE' && <Button {...btnProps}>重新执行</Button>}
+            {task.status === 'READY' && (
+              <Button onClick={() => this.runTask()} {...btnProps}>
+                提交运行
+              </Button>
+            )}
+            {task.status === 'NOT_READY' && (
+              <Button onClick={() => this.jumpToConfig()} {...btnProps}>
+                配置
+              </Button>
+            )}
+            {task.status === 'DONE' && (
+              <Button onClick={() => this.runTask()} {...btnProps}>
+                重新执行
+              </Button>
+            )}
           </React.Fragment>
         ),
       },

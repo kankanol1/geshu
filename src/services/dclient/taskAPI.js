@@ -29,3 +29,38 @@ export async function deleteTaskById(params) {
     body: params,
   });
 }
+
+export async function runTaskById(params) {
+  return request('/api/datapro/client/tasks/run', {
+    method: 'POST',
+    body: params,
+  });
+}
+
+export async function configTaskSource(params) {
+  return request('/api/datapro/client/tasks/conf/source', {
+    method: 'POST',
+    body: params,
+  });
+}
+
+export async function configTaskSink(params) {
+  return request('/api/datapro/client/tasks/conf/sink', {
+    method: 'POST',
+    body: params,
+  });
+}
+
+export async function validateTaskSource(params) {
+  return request('/api/datapro/client/tasks/conf/validate/source', {
+    method: 'POST',
+    body: params,
+  });
+}
+
+export async function validateTaskSink(params) {
+  return request('/api/datapro/client/tasks/conf/validate/source', {
+    method: 'POST',
+    body: params,
+  });
+}

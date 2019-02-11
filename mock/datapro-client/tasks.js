@@ -117,6 +117,37 @@ export function deleteTaskById(req, res) {
   });
 }
 
+export function configTaskSource(req, res) {
+  const success = Math.random() * 10 > 5;
+  if (success) {
+    res.json({
+      message: 'done',
+      success: true,
+    });
+  } else {
+    res.json({
+      message: '配置存储出错，请重试',
+      success: false,
+    });
+  }
+}
+
+export function validateTaskSource(req, res) {
+  // const success = Math.random() * 10 > 5;
+  const success = true;
+  if (success) {
+    res.json({
+      message: 'done',
+      success: true,
+    });
+  } else {
+    res.json({
+      message: '验证失败，请返回配置',
+      success: false,
+    });
+  }
+}
+
 export default {
   'GET /api/datapro/client/tasks/list': getTaskList,
   'GET /api/datapro/client/tasks/get': getTaskById,
@@ -127,4 +158,12 @@ export default {
   },
   'POST /api/datapro/client/tasks/update': updateTaskById,
   'POST /api/datapro/client/tasks/delete': deleteTaskById,
+  'POST /api/datapro/client/tasks/run': {
+    success: true,
+    msessage: '已启动运行',
+  },
+  'POST /api/datapro/client/tasks/conf/source': configTaskSource,
+  'POST /api/datapro/client/tasks/conf/sink': configTaskSource,
+  'POST /api/datapro/client/tasks/conf/validate/source': validateTaskSource,
+  'POST /api/datapro/client/tasks/conf/validate/sink': validateTaskSource,
 };

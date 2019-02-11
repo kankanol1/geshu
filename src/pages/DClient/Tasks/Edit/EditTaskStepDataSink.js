@@ -1,9 +1,10 @@
 import React from 'react';
-import { Button, Radio, Form } from 'antd';
+import { Button, Radio, message, Form } from 'antd';
 import router from 'umi/router';
 import CSVDataSink from './Sink/CSVDataSink';
 import JDBCDataSink from './Sink/JDBCDataSink';
 import styles from './EditTask.less';
+import { configTaskSink } from '@/services/dclient/taskAPI';
 
 const sinks = {
   CSV: CSVDataSink,
@@ -16,7 +17,7 @@ const displaySinks = {
 };
 
 @Form.create()
-class EditTaskStepDataSink extends React.Component {
+class EditTaskStepDataSink extends React.PureComponent {
   state = {
     type: 'CSV',
     formValues: {},
@@ -28,7 +29,17 @@ class EditTaskStepDataSink extends React.Component {
     const { mode, id, pane, form } = this.props;
     form.validateFields((err, fieldsValue) => {
       if (err) return;
-      router.push(`/tasks/t/${mode}/${id}/${pane + 1}`);
+      configTaskSink({
+        id,
+        type: this.state.type,
+        ...fieldsValue,
+      }).then(response => {
+        if (response && response.success) {
+          router.push(`/tasks/t/${mode}/${id}/${pane + 1}`);
+        } else {
+          message.error(response.message || '保存失败，请重试');
+        }
+      });
     });
   }
 
@@ -46,7 +57,7 @@ class EditTaskStepDataSink extends React.Component {
 
     return (
       <React.Fragment>
-        <div className={styles.middleWrapper}>
+        <div className={`${styles.middleWrapper} ${styles.switchWrapper}`}>
           <Radio.Group value={type} onChange={v => this.setState({ type: v.target.value })}>
             {Object.keys(displaySinks).map(key => (
               <Radio.Button value={key} key={key}>
