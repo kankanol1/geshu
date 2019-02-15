@@ -4,15 +4,21 @@ import { message, Row, Col, Button, Icon, Spin } from 'antd';
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
 import { transformationTitle, transformationDescription } from './PrepareTransformer/Utils';
+import { deleteTransformation } from '@/services/datapro/pipelineAPI';
 import SelectTransformation from './PrepareTransformer/SelectTransformation';
 import RenameTransformation from './PrepareTransformer/RenameTransformation';
-import { deleteTransformation } from '@/services/datapro/pipelineAPI';
+import Rename1Transformation from './PrepareTransformer/Rename1Transformation';
+import Rename3Transformation from './PrepareTransformer/Rename3Transformation';
+import MergeTransformation from './PrepareTransformer/MergeTransformation';
 
 import styles from './PrepareTransformer.less';
 
 const TransformationMapping = {
   SelectTransformation,
   RenameTransformation,
+  Rename1Transformation,
+  Rename3Transformation,
+  MergeTransformation,
 };
 
 @connect(({ dataproPreviewTable, loading }) => ({
@@ -110,66 +116,63 @@ class PrepareTransformer extends React.Component {
           sortable: false,
         });
       }
+
+      const eleStyle = {
+        margin: '4px',
+      };
+
+      return (
+        <React.Fragment>
+          <div style={{ padding: '5px' }}>
+            {/* <Button style={eleStyle}>列重命名</Button>
+            <Button style={eleStyle}>值映射</Button>
+            <Button style={eleStyle}>合并列</Button>
+            <Button style={eleStyle}>修改列类型</Button>
+            <Button style={eleStyle}>增加列</Button>
+            <Button style={eleStyle}>列拆分</Button>
+            <Button style={eleStyle}>条件处理</Button>
+            <Button style={eleStyle}>格式化</Button>
+            <Button style={eleStyle}>数据提取</Button>
+            <Button style={eleStyle}>数学公式</Button> */}
+            <Button style={eleStyle} onClick={() => this.showAddComponent('SelectTransformation')}>
+              列选择
+            </Button>
+            <Button style={eleStyle} onClick={() => this.showAddComponent('RenameTransformation')}>
+              列重命名
+            </Button>
+            <Button
+              style={eleStyle}
+              onClick={() => {
+                this.setState({ addingComponent: 'Rename1Transformation' });
+              }}
+            >
+              列重命名(前后缀)
+            </Button>
+            <Button
+              style={eleStyle}
+              onClick={() => {
+                this.setState({ addingComponent: 'Rename3Transformation' });
+              }}
+            >
+              列重命名(模式替换)
+            </Button>
+            <Button
+              style={eleStyle}
+              onClick={() => {
+                this.setState({ addingComponent: 'MergeTransformation' });
+              }}
+            >
+              多列连接
+            </Button>
+          </div>
+          <ReactTable data={data} columns={nc} />
+        </React.Fragment>
+      );
+    } else {
+      // TODO error handling etc.
+      return <div>loading...</div>;
     }
-
-    const eleStyle = {
-      margin: '4px',
-    };
-    return (
-      <React.Fragment>
-        <div style={{ padding: '5px' }}>
-          {/* <Button style={eleStyle}>列重命名</Button>
-          <Button style={eleStyle}>值映射</Button>
-          <Button style={eleStyle}>合并列</Button>
-          <Button style={eleStyle}>修改列类型</Button>
-          <Button style={eleStyle}>增加列</Button>
-          <Button style={eleStyle}>列拆分</Button>
-          <Button style={eleStyle}>条件处理</Button>
-          <Button style={eleStyle}>格式化</Button>
-          <Button style={eleStyle}>数据提取</Button>
-          <Button style={eleStyle}>数学公式</Button> */}
-          <Button style={eleStyle} onClick={() => this.showAddComponent('SelectTransformation')}>
-            列选择
-          </Button>
-          <Button style={eleStyle} onClick={() => this.showAddComponent('RenameTransformation')}>
-            列重命名
-          </Button>
-        </div>
-        {
-          // TODO fetch data from server with pagination.
-        }
-        <ReactTable
-          style={{ minHeight: '600px' }}
-          // pages={pagination.total}
-          // manual
-          // onFetchData={(state, instance) => {
-          //   const { id, opId, configs } = this.props;
-          //   this.props.dispatch({
-          //     type: 'dataproPreviewTable/fetchData',
-          //     payload: {
-          //       id,
-          //       component: opId,
-          //       ...this.state.page,
-          //     },
-          //   });
-          // }}
-          loading={loading}
-          loadingText={msg || '初始化预览中...'}
-          data={data}
-          columns={nc}
-          previousText="上一页"
-          nextText="下一页"
-          noDataText="无数据"
-          pageText="页"
-          ofText="总页数："
-          rowsText="行"
-          pageJumpText="跳至"
-          rowsSelectorText="每页行数"
-        />
-      </React.Fragment>
-    );
-  };
-
+      
   renderHistory = () => {
     const { configs } = this.props;
     const renderConfig = configs.map((i, index) => ({ value: i, index }));

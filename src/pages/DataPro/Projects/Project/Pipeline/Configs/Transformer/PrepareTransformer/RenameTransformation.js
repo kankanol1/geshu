@@ -19,7 +19,7 @@ export default class RenameTransformation extends React.PureComponent {
     addTransformation({
       projectId: id,
       id: opId,
-      config: { type: 'RenameTransformation', configs: this.state.formData },
+      config: { type: 'RenameTransformation', config: { columns: this.state.formData } },
     }).then(response => {
       if (response) {
         if (response.success) {
