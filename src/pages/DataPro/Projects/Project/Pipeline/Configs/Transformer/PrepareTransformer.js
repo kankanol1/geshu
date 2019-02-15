@@ -21,6 +21,14 @@ const TransformationMapping = {
   MergeTransformation,
 };
 
+const transformationList = [
+  { name: '列选择', value: 'SelectTransformation' },
+  { name: '列重命名', value: 'RenameTransformation' },
+  { name: '列重命名（前后缀）', value: 'Rename1Transformation' },
+  { name: '列重命名（模式替换）', value: 'Rename3Transformation' },
+  { name: '列合并', value: 'MergeTransformation' },
+];
+
 @connect(({ dataproPreviewTable, loading }) => ({
   dataproPreviewTable,
   loading: loading.models.dataproPreviewTable,
@@ -134,36 +142,11 @@ class PrepareTransformer extends React.Component {
             <Button style={eleStyle}>格式化</Button>
             <Button style={eleStyle}>数据提取</Button>
             <Button style={eleStyle}>数学公式</Button> */}
-            <Button style={eleStyle} onClick={() => this.showAddComponent('SelectTransformation')}>
-              列选择
-            </Button>
-            <Button style={eleStyle} onClick={() => this.showAddComponent('RenameTransformation')}>
-              列重命名
-            </Button>
-            <Button
-              style={eleStyle}
-              onClick={() => {
-                this.setState({ addingComponent: 'Rename1Transformation' });
-              }}
-            >
-              列重命名(前后缀)
-            </Button>
-            <Button
-              style={eleStyle}
-              onClick={() => {
-                this.setState({ addingComponent: 'Rename3Transformation' });
-              }}
-            >
-              列重命名(模式替换)
-            </Button>
-            <Button
-              style={eleStyle}
-              onClick={() => {
-                this.setState({ addingComponent: 'MergeTransformation' });
-              }}
-            >
-              多列连接
-            </Button>
+            {transformationList.map((v, index) => (
+              <Button key={index} style={eleStyle} onClick={() => this.showAddComponent(v.value)}>
+                {v.name}
+              </Button>
+            ))}
           </div>
           <ReactTable data={data} columns={nc} />
         </React.Fragment>
@@ -172,7 +155,8 @@ class PrepareTransformer extends React.Component {
       // TODO error handling etc.
       return <div>loading...</div>;
     }
-      
+  };
+
   renderHistory = () => {
     const { configs } = this.props;
     const renderConfig = configs.map((i, index) => ({ value: i, index }));
