@@ -20,7 +20,9 @@ const TransformationMapping = {
   Rename3Transformation,
   MergeTransformation,
 };
-
+/*
+值映射,修改列类型,增加列,列拆分,条件处理,格式化,数据提取,数学公式
+*/
 const transformationList = [
   { name: '列选择', value: 'SelectTransformation' },
   { name: '列重命名', value: 'RenameTransformation' },
@@ -106,6 +108,8 @@ class PrepareTransformer extends React.Component {
     const { pagination, table, loading, message: msg } = this.props.dataproPreviewTable;
     const nc = [];
     const { schema, data } = table;
+    // set columns, etc.
+    let contentRender;
     if (table && table.schema) {
       for (let i = 0; i < schema.length; i++) {
         const v = schema[i];
@@ -124,37 +128,62 @@ class PrepareTransformer extends React.Component {
           sortable: false,
         });
       }
-
-      const eleStyle = {
-        margin: '4px',
-      };
-
-      return (
-        <React.Fragment>
-          <div style={{ padding: '5px' }}>
-            {/* <Button style={eleStyle}>列重命名</Button>
-            <Button style={eleStyle}>值映射</Button>
-            <Button style={eleStyle}>合并列</Button>
-            <Button style={eleStyle}>修改列类型</Button>
-            <Button style={eleStyle}>增加列</Button>
-            <Button style={eleStyle}>列拆分</Button>
-            <Button style={eleStyle}>条件处理</Button>
-            <Button style={eleStyle}>格式化</Button>
-            <Button style={eleStyle}>数据提取</Button>
-            <Button style={eleStyle}>数学公式</Button> */}
-            {transformationList.map((v, index) => (
-              <Button key={index} style={eleStyle} onClick={() => this.showAddComponent(v.value)}>
-                {v.name}
-              </Button>
-            ))}
-          </div>
-          <ReactTable data={data} columns={nc} />
-        </React.Fragment>
+      // render table.
+      contentRender = (
+        <ReactTable
+          style={{ minHeight: '600px' }}
+          // pages={pagination.total}
+          // manual
+          // onFetchData={(state, instance) => {
+          //   const { id, opId, configs } = this.props;
+          //   this.props.dispatch({
+          //     type: 'dataproPreviewTable/fetchData',
+          //     payload: {
+          //       id,
+          //       component: opId,
+          //       ...this.state.page,
+          //     },
+          //   });
+          // }}
+          loading={loading}
+          loadingText={msg || '初始化预览中...'}
+          data={data || []}
+          columns={nc}
+          previousText="上一页"
+          nextText="下一页"
+          noDataText="无数据"
+          pageText="页"
+          ofText="总页数："
+          rowsText="行"
+          pageJumpText="跳至"
+          rowsSelectorText="每页行数"
+        />
       );
     } else {
-      // TODO error handling etc.
-      return <div>loading...</div>;
+      contentRender = (
+        <div style={{ height: '400px', textAlign: 'center', paddingTop: '200px' }}>
+          {' '}
+          <Spin />
+        </div>
+      );
     }
+
+    const eleStyle = {
+      margin: '4px',
+    };
+
+    return (
+      <React.Fragment>
+        <div style={{ padding: '5px' }}>
+          {transformationList.map((v, index) => (
+            <Button key={index} style={eleStyle} onClick={() => this.showAddComponent(v.value)}>
+              {v.name}
+            </Button>
+          ))}
+        </div>
+        {contentRender}
+      </React.Fragment>
+    );
   };
 
   renderHistory = () => {

@@ -329,6 +329,7 @@ export default {
   'operator.JDBCDataSource': 'JDBC源',
   'operator.AvroDataSource': 'Avro源',
   // transformers
+  'operator.SplitTransformer': '数据分割',
   'operator.AddLiteralColumnTransformer': '增加列',
   'operator.RandomSplitTransformer': '随机分割',
   'operator.UnionTransformer': '并',

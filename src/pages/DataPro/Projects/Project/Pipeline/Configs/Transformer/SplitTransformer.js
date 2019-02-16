@@ -10,7 +10,7 @@ const FormItem = Form.Item;
 const { Option } = Select;
 
 @Form.create()
-class FilterTransformer extends React.Component {
+class SplitTransformer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -82,7 +82,7 @@ class FilterTransformer extends React.Component {
           {},
           errors,
           formValues,
-          'expression.mode',
+          'criteria.mode',
           'AND',
           '模式',
           <Select onChange={e => this.handleChange()}>
@@ -96,7 +96,7 @@ class FilterTransformer extends React.Component {
           {},
           errors,
           formValues,
-          'expression.conditions',
+          'criteria.conditions',
           [],
           '过滤表达式',
           <ExpressionWidget onChange={e => this.handleChange()} />
@@ -111,4 +111,4 @@ class FilterTransformer extends React.Component {
   }
 }
 
-export default FilterTransformer;
+export default SplitTransformer;

@@ -140,6 +140,10 @@ const components = {
       code: 'AddLiteralColumnTransformer',
     },
     {
+      name: 'SplitTransformer',
+      code: 'SplitTransformer',
+    },
+    {
       name: 'RandomSplitTransformer',
       code: 'RandomSplitTransformer',
     },

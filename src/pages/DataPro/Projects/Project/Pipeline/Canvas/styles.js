@@ -68,6 +68,7 @@ const componentIconDict = {
   JDBCDataSource: 'icon-datasource-db',
 
   AddLiteralColumnTransformer: 'icon-preparation-add-column',
+  SplitTransformer: 'icon-preparation-random-split',
   RandomSplitTransformer: 'icon-preparation-random-split',
   UnionTransformer: 'icon-preparation-union',
   ColumnSplitTransformer: 'icon-preparation-split-column',

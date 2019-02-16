@@ -16,7 +16,7 @@ class ProjectSettings extends React.PureComponent {
             okText: '确认',
             cancelText: '取消',
             onOk() {
-              deleteProjectById({ id }).then(response => {
+              deleteProjectById({ ids: [id] }).then(response => {
                 if (response && response.success) {
                   message.info('删除完毕');
                   // redirect to projects list.

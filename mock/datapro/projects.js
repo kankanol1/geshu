@@ -188,8 +188,9 @@ export function updateProjectById(req, res) {
 
 export function deleteProjectById(req, res) {
   const { body } = req;
-  const { id } = body;
-  projects = projects.filter(i => i.id !== parseInt(id, 10));
+  const { ids } = body;
+  const intIds = ids.map(i => parseInt(i, 10));
+  projects = projects.filter(i => !intIds.includes(i.id));
   res.json({
     message: 'done',
     success: true,
