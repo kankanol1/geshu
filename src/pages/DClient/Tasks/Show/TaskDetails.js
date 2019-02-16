@@ -46,7 +46,7 @@ class TaskDetails extends React.Component {
           if (response && response.success) {
             message.info('已提交运行');
           } else {
-            message.error(response.message || '提交失败，请重试');
+            message.error((response && response.message) || '提交失败，请重试');
           }
         });
       },

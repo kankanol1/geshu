@@ -49,7 +49,7 @@ class ExpressionWidget extends React.PureComponent {
           },
           {
             name: 'comparisonSymbol',
-            title: '右表达式',
+            title: '运算符',
             render: (v, item, onChange) => (
               <Select placeholder="请选择" onChange={e => onChange(e)} value={v}>
                 {operatorList.map(i => (

@@ -26,7 +26,7 @@ class CreateTask extends React.Component {
             message.info('创建完毕，开始配置');
             router.push(`/tasks/t/create/${response.id}`);
           } else {
-            message.info(response.message || '创建失败');
+            message.info((response && response.message) || '创建失败');
           }
         });
       });

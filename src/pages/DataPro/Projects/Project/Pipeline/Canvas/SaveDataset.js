@@ -27,7 +27,7 @@ class SaveDataset extends React.Component {
             message.info('添加成功');
             onDismiss();
           } else {
-            message.error(response.message || '添加失败');
+            message.error((response && response.message) || '添加失败');
           }
         });
       }

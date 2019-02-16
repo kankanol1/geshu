@@ -37,7 +37,7 @@ class EditTaskStepDataSink extends React.PureComponent {
         if (response && response.success) {
           router.push(`/tasks/t/${mode}/${id}/${pane + 1}`);
         } else {
-          message.error(response.message || '保存失败，请重试');
+          message.error((response && response.message) || '保存失败，请重试');
         }
       });
     });
