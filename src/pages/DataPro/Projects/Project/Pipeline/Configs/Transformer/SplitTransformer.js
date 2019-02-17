@@ -1,6 +1,7 @@
 import React from 'react';
 import { Form, Button, Input, Select, message } from 'antd';
 import PageLoading from '@/components/PageLoading';
+import router from 'umi/router';
 
 import { getOperatorSchema, configOperator } from '@/services/datapro/pipelineAPI';
 import { formItemWithError } from '../Utils';
@@ -54,6 +55,8 @@ class SplitTransformer extends React.Component {
         }).then(response => {
           if (response.success) {
             message.info(response.message);
+            // back to pipeline.
+            router.push(`/projects/p/pipeline/${id}`);
           } else {
             message.error(response.message);
           }

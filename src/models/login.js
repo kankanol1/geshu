@@ -15,7 +15,7 @@ export default {
         payload: response,
       });
       // Login successfully
-      if (response.status === 'ok') {
+      if (response && response.status === 'ok') {
         yield put({
           type: 'global/resetLoading',
         });
@@ -60,7 +60,7 @@ export default {
     changeLoginStatus(state, { payload }) {
       return {
         ...state,
-        status: payload.status,
+        status: payload && payload.status,
       };
     },
   },
