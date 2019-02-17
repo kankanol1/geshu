@@ -62,7 +62,7 @@ class ExpressionWidget extends React.PureComponent {
             span: 4,
           },
           {
-            name: 'right',
+            name: 'rightExpression',
             title: '右表达式',
             render: (v, item, onChange) => (
               <Input defaultValue={v} value={v} onChange={e => onChange(e.target.value)} />
