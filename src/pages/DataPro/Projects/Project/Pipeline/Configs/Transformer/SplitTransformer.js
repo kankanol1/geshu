@@ -28,7 +28,7 @@ class SplitTransformer extends React.Component {
       projectId: id,
       id: opId,
     }).then(response => {
-      if (response.success) {
+      if (response && response.success) {
         this.setState({ schema: response.data, loading: false });
       } else {
         // eslint-disable-next-line
@@ -53,7 +53,7 @@ class SplitTransformer extends React.Component {
           config: fieldsValue,
           id: opId,
         }).then(response => {
-          if (response.success) {
+          if (response && response.success) {
             message.info(response.message);
             // back to pipeline.
             router.push(`/projects/p/pipeline/${id}`);

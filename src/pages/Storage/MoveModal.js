@@ -60,7 +60,7 @@ class MoveModal extends PureComponent {
           }
         })
         .then(response => {
-          if (response.success) {
+          if (response && response.success) {
             this.setState({
               loading: false,
             });
@@ -72,7 +72,7 @@ class MoveModal extends PureComponent {
             this.setState({
               loading: false,
             });
-            message.error(`操作失败, 失败详情: ${response.message}`);
+            message.error(`操作失败, 失败详情: ${response && response.message}`);
           }
         })
         .catch(e => {

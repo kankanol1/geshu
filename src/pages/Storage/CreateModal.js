@@ -55,7 +55,7 @@ class CreateModal extends PureComponent {
           }
         })
         .then(response => {
-          if (response.success) {
+          if (response && response.success) {
             this.setState({
               loading: false,
             });
@@ -67,7 +67,7 @@ class CreateModal extends PureComponent {
             this.setState({
               loading: false,
             });
-            message.error(`创建失败, 失败详情: ${response.message}`);
+            message.error(`创建失败, 失败详情: ${response && response.message}`);
           }
         })
         .catch(e => {

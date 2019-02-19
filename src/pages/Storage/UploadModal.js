@@ -59,7 +59,7 @@ class UploadModal extends PureComponent {
           }
         })
         .then(response => {
-          if (response.success) {
+          if (response && response.success) {
             this.setState({
               uploading: false,
             });
@@ -71,7 +71,7 @@ class UploadModal extends PureComponent {
             this.setState({
               uploading: false,
             });
-            message.error(`上传失败!请重试, 失败详情: ${response.message}`);
+            message.error(`上传失败!请重试, 失败详情: ${response && response.message}`);
           }
         })
         .catch(e => {

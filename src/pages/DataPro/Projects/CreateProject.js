@@ -47,11 +47,11 @@ class CreateProject extends React.PureComponent {
           labels: newLabels && newLabels.join(),
         },
         callback: response => {
-          if (response.success) {
+          if (response && response.success) {
             message.info(response.message);
             router.push(`/projects/p/show/${response.id}`);
           } else {
-            message.error(response.message);
+            message.error((response && response.message) || 'error');
           }
         },
       });
