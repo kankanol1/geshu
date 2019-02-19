@@ -67,15 +67,15 @@ export default {
         dynamicImport: {
           loadingComponent: './components/PageLoading/index',
         },
-        ...(!process.env.TEST && os.platform() === 'darwin'
-          ? {
-              dll: {
-                include: ['dva', 'dva/router', 'dva/saga', 'dva/fetch'],
-                exclude: ['@babel/runtime'],
-              },
-              hardSource: true,
-            }
-          : {}),
+        // ...(!process.env.TEST && os.platform() === 'darwin'
+        //   ? {
+        //       dll: {
+        //         include: ['dva', 'dva/router', 'dva/saga', 'dva/fetch'],
+        //         exclude: ['@babel/runtime'],
+        //       },
+        //       hardSource: false,
+        //     }
+        //   : {}),
       },
     ],
     // ['./config/plugins/global-hook.js', {}],
