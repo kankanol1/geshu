@@ -22,7 +22,7 @@ export default class DetailTable extends React.Component {
   mounted = false;
 
   componentWillMount() {
-    const { datasetId } = this.props;
+    const { datasetId, projectId } = this.props;
     this.setState({ loading: true });
     let finishCount = 1;
     const handleLoading = () => {
@@ -34,13 +34,15 @@ export default class DetailTable extends React.Component {
     let apis = {};
     apis = { queryData: queryDatasetData, queryHistogram: queryDatasetHistogram };
     const { queryData, queryHistogram } = apis;
-    queryData({ id: datasetId, pageSize: this.state.pageSize, currentPage: 1 }).then(response => {
-      if (response) {
-        this.setState({ tableData: response });
-        handleLoading();
+    queryData({ id: datasetId, projectId, pageSize: this.state.pageSize, currentPage: 1 }).then(
+      response => {
+        if (response) {
+          this.setState({ tableData: response });
+          handleLoading();
+        }
       }
-    });
-    queryHistogram({ id: datasetId }).then(response => {
+    );
+    queryHistogram({ id: datasetId, projectId }).then(response => {
       if (response) {
         const { data, loading, message } = response;
         this.setState({ histogram: data, histgoramLoading: loading, loadingMessage: message });

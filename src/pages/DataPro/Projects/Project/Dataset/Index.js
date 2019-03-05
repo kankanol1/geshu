@@ -98,10 +98,10 @@ class Index extends React.Component {
         <div className={styles.wrapper}>
           <Tabs defaultActiveKey="1">
             <TabPane tab="概览" key="1">
-              <DetailOverview datasetId={datasetId} />
+              <DetailOverview datasetId={datasetId} projectId={id} />
             </TabPane>
             <TabPane tab="数据" key="2">
-              <DetailTable datasetId={datasetId} />
+              <DetailTable datasetId={datasetId} projectId={id} />
             </TabPane>
           </Tabs>
         </div>

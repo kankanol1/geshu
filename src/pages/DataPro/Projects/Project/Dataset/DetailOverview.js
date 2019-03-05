@@ -96,7 +96,7 @@ export default class DetailOverview extends PureComponent {
 
   fetchIfStillLoading = () => {
     const queryAPI = queryDatasetStatistics;
-    queryAPI({ id: this.props.datasetId }).then(response => {
+    queryAPI({ id: this.props.datasetId, projectId: this.props.projectId }).then(response => {
       if (response) {
         const { data, loading, message } = response;
         if (loading) {
