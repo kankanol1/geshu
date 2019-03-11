@@ -47,14 +47,13 @@ class PrepareTransformer extends React.Component {
 
   componentDidMount() {
     // init.
-    const { id, opId, configs } = this.props;
+    this.refreshTable();
+  }
+
+  componentWillUnmount() {
+    // clear table.
     this.props.dispatch({
-      type: 'dataproPreviewTable/preview',
-      payload: {
-        projectId: id,
-        id: opId,
-        ...this.state.page,
-      },
+      type: 'dataproPreviewTable/clear',
     });
   }
 
@@ -77,6 +76,18 @@ class PrepareTransformer extends React.Component {
       this.setState({ deleting: false });
     });
   };
+
+  refreshTable() {
+    const { id, opId, configs } = this.props;
+    this.props.dispatch({
+      type: 'dataproPreviewTable/preview',
+      payload: {
+        projectId: id,
+        id: opId,
+        ...this.state.page,
+      },
+    });
+  }
 
   showAddComponent(comp) {
     this.setState({ addingComponent: comp });
@@ -195,9 +206,9 @@ class PrepareTransformer extends React.Component {
           <div className={styles.historyTitle}>
             操作列表
             <div className={styles.historyOp}>
-              <Button type="primary">
-                <Icon type="caret-right" />
-                运行
+              <Button type="primary" onClick={() => this.refreshTable()}>
+                <Icon type="sync" />
+                刷新
               </Button>
             </div>
           </div>

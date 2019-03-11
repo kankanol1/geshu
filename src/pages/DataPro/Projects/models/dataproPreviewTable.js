@@ -20,6 +20,9 @@ export default {
       const { status, message } = payload;
       return { ...state, loading: status === 'CALCULATING', message };
     },
+    clear(state, { payload }) {
+      return { loading: true, message: undefined, pagination: {}, table: {} };
+    },
   },
 
   effects: {
