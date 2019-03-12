@@ -64,23 +64,40 @@ export default {
   subscriptions: {
     setup({ dispatch, history }) {
       let subscribed = false;
+      const unsubscribeFunc = () => {
+        dispatch({
+          type: 'ws/unsubscribe',
+          payload: {
+            topic: `/datapro/pipeline/status/${subscribed.projectId}/${subscribed.componentId}`,
+          },
+        });
+        subscribed = false;
+      };
       history.listen(({ pathname }) => {
         if (
-          !subscribed &&
           pathname.startsWith('/projects/p/pipeline/') &&
           (pathname.includes('/new/') || pathname.includes('/conf/'))
         ) {
           const pathArr = pathname.split('/projects/p/pipeline/');
-          if (pathArr.length === 2) {
-            const rest = pathArr[1];
-            let arr = [];
-            if (rest.includes('new')) {
-              arr = rest.split('/new/');
-            } else if (rest.includes('conf')) {
-              arr = rest.split('/conf/');
-            }
-            const projectId = parseInt(arr[0], 10);
-            const componentId = arr[1];
+          // assert length = 2
+          if (pathArr.length !== 2) return;
+          const rest = pathArr[1];
+          let arr = [];
+          if (rest.includes('new')) {
+            arr = rest.split('/new/');
+          } else if (rest.includes('conf')) {
+            arr = rest.split('/conf/');
+          }
+          const projectId = parseInt(arr[0], 10);
+          const componentId = arr[1];
+
+          if (
+            subscribed &&
+            (subscribed.projectId !== projectId || subscribed.componentId !== componentId)
+          ) {
+            // unsubscribe.
+            unsubscribeFunc();
+          } else if (!subscribed) {
             dispatch({
               type: 'ws/subscribe',
               payload: {
@@ -97,15 +114,9 @@ export default {
             console.log('subscribed', subscribed); // eslint-disable-line
           }
           // subscribed = true;
-        } else if (subscribed && !pathname.startsWith('/projects/p/pipeline')) {
+        } else if (subscribed) {
           // unsubscribe.
-          dispatch({
-            type: 'ws/unsubscribe',
-            payload: {
-              topic: `/datapro/pipeline/status/${subscribed.projectId}/${subscribed.componentId}`,
-            },
-          });
-          subscribed = false;
+          unsubscribeFunc();
         }
       });
     },
