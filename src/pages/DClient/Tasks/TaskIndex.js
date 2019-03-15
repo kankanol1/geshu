@@ -5,6 +5,7 @@ import { connect } from 'dva';
 import router from 'umi/router';
 import TaskDetails from './Show/TaskDetails';
 import TaskJobs from './Show/TaskJobs';
+import UpdateTaskInfo from './Edit/UpdateTaskInfo';
 
 const { TabPane } = Tabs;
 const { SubMenu, ItemGroup: MenuItemGroup } = Menu;
@@ -14,7 +15,15 @@ const { SubMenu, ItemGroup: MenuItemGroup } = Menu;
   loading: loading.models.task,
 }))
 class TaskIndex extends React.Component {
+  state = {
+    updating: false,
+  };
+
   componentDidMount() {
+    this.reload();
+  }
+
+  reload() {
     const { id } = this.props.match.params;
     this.props.dispatch({
       type: 'task/fetchTask',
@@ -38,9 +47,17 @@ class TaskIndex extends React.Component {
           <React.Fragment>
             <Button
               type="primary"
-              style={{ float: 'right' }}
+              style={{ float: 'right', marginLeft: '20px' }}
               onClick={() => {
                 router.push(`/tasks/t/edit/${id}`);
+              }}
+            >
+              <Icon type="setting" /> 配置
+            </Button>
+            <Button
+              style={{ float: 'right' }}
+              onClick={() => {
+                this.setState({ updating: true });
               }}
             >
               <Icon type="edit" /> 编辑
@@ -59,6 +76,16 @@ class TaskIndex extends React.Component {
           {activePane === 'details' && <TaskDetails id={id} />}
           {activePane === 'jobs' && <TaskJobs id={id} />}
         </Card>
+        {this.state.updating && (
+          <UpdateTaskInfo
+            task={this.props.task}
+            onCancel={() => this.setState({ updating: false })}
+            onOk={() => {
+              this.reload();
+              this.setState({ updating: false });
+            }}
+          />
+        )}
       </PageHeaderWrapper>
     );
   }
