@@ -19,6 +19,7 @@ class SideMenu extends React.PureComponent {
     // for dialog display.
     addingComponent: undefined,
     activeKeys: [],
+    collapse: false,
     // addingComponent: {
     //   name: 'PrepareTransformer',
     //   code: 'PrepareTransformer',
@@ -74,9 +75,9 @@ class SideMenu extends React.PureComponent {
 
   render() {
     const { config, loading, id } = this.props;
-    const { addingComponent } = this.state;
+    const { addingComponent, collapse } = this.state;
     return (
-      <div className={styles.menuWrapper}>
+      <div className={styles.menuWrapper} style={{ left: collapse ? '-380px' : '0' }}>
         <Spin spinning={loading}>
           <Collapse
             bordered={false}
@@ -116,6 +117,10 @@ class SideMenu extends React.PureComponent {
             />
           )}
         </Spin>
+        <div
+          className={styles.collapseBar}
+          onClick={() => this.setState({ collapse: !collapse })}
+        />
       </div>
     );
   }

@@ -3,12 +3,27 @@
 .menuWrapper {
   position: absolute;
   top: 0;
-  left: 0;
+  // left: 0;
   bottom: 0;
   width: 400px;
   background: white;
   z-index: 900;
   box-shadow: 2px 2px 3px grey;
+  -webkit-transition: 0.5s; /* Safari */
+  transition: 0.5s;
+}
+
+.collapseBar {
+  width: 12px;
+  height: 50px;
+  background: #999;
+  position: absolute;
+  right: 0;
+  top: 40%;
+  cursor: pointer;
+  &:hover {
+    background: @primary-color;
+  }
 }
 
 .component {
