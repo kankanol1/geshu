@@ -31,7 +31,7 @@ export function formItemWithError(
       {...formItemProps}
       label={label}
       help={errorMessage}
-      validateStatus={hasError && 'error'}
+      validateStatus={(hasError && 'error') || ''}
     >
       {form.getFieldDecorator(accessor, {
         initialValue: initValue || defaultValue,

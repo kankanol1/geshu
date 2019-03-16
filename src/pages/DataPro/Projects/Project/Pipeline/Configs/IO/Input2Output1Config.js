@@ -1,0 +1,20 @@
+import React from 'react';
+
+import InputOutputConfig from './InputOutputConfig';
+
+const layout = { labelCol: { span: 4 }, wrapperCol: { span: 20 } };
+
+export default class Input2Output1Config extends React.Component {
+  render() {
+    return (
+      <InputOutputConfig
+        {...this.props}
+        inputs={[
+          { label: '输入1', ...layout, name: 'input.0', order: 0 },
+          { label: '输入2', ...layout, name: 'input.1', order: 0 },
+        ]}
+        outputs={[{ label: undefined, ...layout, name: 'output.0', order: 0 }]}
+      />
+    );
+  }
+}

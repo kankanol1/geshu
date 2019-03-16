@@ -9,6 +9,7 @@ import FileDataSource from './DataSource/FileDataSourceAdd';
 import FilterTransformer from './Transformer/FilterTransformer';
 import PrepareTransformer from './Transformer/PrepareTransformer';
 import SplitTransformer from './Transformer/SplitTransformer';
+import JoinTransformer from './Transformer/JoinTransformer';
 import TopBar from '../../../TopBar';
 import styles from './Index.less';
 
@@ -17,6 +18,7 @@ const registered = {
   FilterTransformer: FilterTransformer, // eslint-disable-line
   PrepareTransformer: PrepareTransformer, // eslint-disable-line
   SplitTransformer,
+  JoinTransformer,
 };
 
 @connect(({ global, dataproProject, loading }) => ({
