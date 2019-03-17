@@ -1,5 +1,5 @@
 import React from 'react';
-import { Layout, Form, Input } from 'antd';
+import { Layout, Form, Button } from 'antd';
 import { connect } from 'dva';
 import { Link } from 'dva/router';
 import PageLoading from '@/components/PageLoading';
@@ -59,6 +59,19 @@ class PublishIndex extends React.PureComponent {
     );
   }
 
+  renderError = id => {
+    return (
+      <div className={styles.resultWrapper}>
+        <div className={styles.loadingText}>无数据源或数据存储组件，无法发布！</div>
+        <div className={styles.btnWrapper}>
+          <Link to={`/projects/p/pipeline/${id}`}>
+            <Button type="primary">返回</Button>
+          </Link>
+        </div>
+      </div>
+    );
+  };
+
   render() {
     const { projectLoading, dispatch, project } = this.props;
     const { id } = this.props.match.params;
@@ -76,6 +89,8 @@ class PublishIndex extends React.PureComponent {
       collapsed,
       fullScreen,
     };
+    const { inputs, outputs } = this.state.info;
+    const canPublish = inputs.length > 0 && outputs.length > 0;
     return (
       <Layout style={{ padding: '0', height: '100%', position: 'relative' }} theme="light">
         <TopBar {...topBarProps} />
@@ -89,7 +104,7 @@ class PublishIndex extends React.PureComponent {
               <span className={styles.title}>发布为模版 </span>
             </div>
           </div>
-          {this.renderChildren(id)}
+          {canPublish ? this.renderChildren(id) : this.renderError(id)}
         </div>
       </Layout>
     );

@@ -28,7 +28,6 @@ class PublishResult extends React.PureComponent {
         <div className={styles.loadingText}>{response.message}</div>
         {response.success && (
           <Link to={`/projects/p/pipeline/${id}`}>
-            {' '}
             <Button type="primary">完成</Button>
           </Link>
         )}

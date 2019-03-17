@@ -1,4 +1,4 @@
-import { notification } from 'antd';
+import { notification, Modal } from 'antd';
 import { routerRedux } from 'dva/router';
 import fetch from 'dva/fetch';
 import Cookie from 'js-cookie';
@@ -124,7 +124,13 @@ export default function request(url, options = {}) {
         return;
       }
       if (status <= 504 && status >= 500) {
-        dispatch(routerRedux.push('/exception/500'));
+        // dispatch(routerRedux.push('/exception/500'));
+        Modal.error({
+          title: '服务器错误!',
+          content: `服务器错误(错误码:${status})，请重试。若此错误频繁出现，请联系管理人员`,
+          okText: '确定',
+          onOk: () => window.location.reload(),
+        });
         return;
       }
       if (status >= 404 && status < 422 && !url.startsWith('/api')) {
