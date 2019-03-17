@@ -83,6 +83,12 @@ export default [
             component: './DataPro/Projects/Project/Pipeline/Configs/Index',
           },
           {
+            // for publish pipeline
+            path: '/projects/p/pipeline/:id/publish',
+            hideInMenu: true,
+            component: './DataPro/Projects/Project/Pipeline/Publish/PublishIndex',
+          },
+          {
             // for dataset details page.
             path: '/projects/p/dataset/:id/:datasetId',
             hideInMenu: true,

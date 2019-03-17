@@ -113,3 +113,14 @@ export async function deleteTransformation(params) {
 export async function previewTransformationResult(params) {
   return request(`/api/datapro/projects/pipeline/op/trans/preview?${stringify(params)}`);
 }
+
+export async function publishPipeline(params) {
+  return request('/api/datapro/projects/pipeline/publish', {
+    method: 'POST',
+    body: params,
+  });
+}
+
+export async function queryPipelinePublishMeta(params) {
+  return request(`/api/datapro/projects/pipeline/publish?${stringify(params)}`);
+}

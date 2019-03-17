@@ -888,6 +888,30 @@ export function previewPreOp(req, res) {
   }
 }
 
+export function getPublishMeta(req, res) {
+  const result = {
+    inputs: [{ name: 'd1', id: 'xxx1' }, { name: 'd2', id: 'xxxx1' }],
+    outputs: [{ name: 'output' }],
+  };
+  if (res && res.json) {
+    res.json(result);
+  } else {
+    return result;
+  }
+}
+
+export function publishPipeline(req, res) {
+  const result = {
+    success: true,
+    message: 'ok',
+  };
+  if (res && res.json) {
+    res.json(result);
+  } else {
+    return result;
+  }
+}
+
 export default {
   'GET /api/datapro/projects/pipeline/get': getPipeline,
   'GET /api/datapro/projects/pipeline/datasets': getAllDatasets,
@@ -906,4 +930,6 @@ export default {
   'POST /api/datapro/projects/pipeline/op/trans/add': addTransformation,
   'POST /api/datapro/projects/pipeline/op/trans/delete': deleteTransformation,
   'GET /api/datapro/projects/pipeline/op/trans/preview': previewPreOp,
+  'GET /api/datapro/projects/pipeline/publish': getPublishMeta,
+  'POST /api/datapro/projects/pipeline/publish': publishPipeline,
 };

@@ -5,6 +5,7 @@ import { Layout, Button, Spin } from 'antd';
 
 import WorkCanvas from './Canvas/WorkCanvas';
 import SideMenu from './SideMenu';
+import FloatingMenu from './FloatingMenu';
 import styles from './Workspace.less';
 
 const { Content } = Layout;
@@ -50,6 +51,7 @@ class Workspace extends React.Component {
         >
           <SideMenu id={id} />
           <WorkCanvas id={id} />
+          <FloatingMenu id={id} />
         </Content>
       </React.Fragment>
     );

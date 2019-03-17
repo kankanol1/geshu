@@ -118,12 +118,13 @@ class XBasicLayout extends React.PureComponent {
   componentDidUpdate(preProps) {
     // After changing to phone mode,
     // if collapsed is true, you need to click twice to display
-    this.breadcrumbNameMap = this.getBreadcrumbNameMap();
-    const { isMobile } = this.state;
-    const { collapsed } = this.props;
-    if (isMobile && !preProps.isMobile && !collapsed) {
-      this.handleMenuCollapse(false);
-    }
+    // FIXME: enable the following would cause page crush when changing the browser width.
+    // this.breadcrumbNameMap = this.getBreadcrumbNameMap();
+    // const { isMobile } = this.state;
+    // const { collapsed } = this.props;
+    // if (isMobile && !preProps.isMobile && !collapsed) {
+    //   this.handleMenuCollapse(false);
+    // }
   }
 
   componentWillUnmount() {
