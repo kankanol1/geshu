@@ -1,10 +1,12 @@
 import React from 'react';
 import { Form, Button, Input, Select, message } from 'antd';
+import TextArea from 'antd/lib/input/TextArea';
 import PageLoading from '@/components/PageLoading';
 import router from 'umi/router';
 
 import { getOperatorSchema, configOperator } from '@/services/datapro/pipelineAPI';
-import SelectColumnWidget from '@/components/Widgets/SelectColumnWidget';
+import JoinColumnSelector from '@/components/Widgets/JoinColumnSelector';
+import ExpressionWidget from '@/components/Widgets/ExpressionWidget';
 import { formItemWithError } from '../Utils';
 
 const FormItem = Form.Item;
@@ -86,14 +88,13 @@ class JoinTransformer extends React.Component {
           errors,
           formValues,
           'joinType',
-          'CROSS',
+          'OUTER',
           '连接模式(Join Type)',
           <Select onChange={e => this.handleChange()}>
             <Option value="INNER">内连接（INNER JOIN）</Option>
             <Option value="LEFT">左外连接（LEFT OUTER JOIN）</Option>
             <Option value="RIGHT">右外连接（RIGHT OUTER JOIN）</Option>
             <Option value="OUTER">全连接（FULL OUTER JOIN）</Option>
-            <Option value="CROSS">笛卡尔积（CROSS PRODUCT）</Option>
           </Select>
         )}
         {formItemWithError(
@@ -102,10 +103,13 @@ class JoinTransformer extends React.Component {
           {},
           errors,
           formValues,
-          'lcolumn',
-          undefined,
-          '左列',
-          <SelectColumnWidget onChange={e => this.handleChange()} schema={schema.i1} />
+          'columns',
+          [],
+          '选择列',
+          <JoinColumnSelector
+            onChange={e => this.handleChange()}
+            schemas={{ L: schema.i1, R: schema.i2 }}
+          />
         )}
         {formItemWithError(
           form,
@@ -113,36 +117,39 @@ class JoinTransformer extends React.Component {
           {},
           errors,
           formValues,
-          'rcolumn',
-          undefined,
-          '右列',
-          <SelectColumnWidget onChange={e => this.handleChange()} schema={schema.i2} />
-        )}
-        {/* {formItemWithError(
-          form,
-          formItemProps,
-          {},
-          errors,
-          formValues,
-          'expression.mode',
+          'criteria.mode',
           'AND',
           '模式',
-          <Select onChange={e => this.handleChange()}>
+          <Select onChange={e => this.handleModeChange(e)}>
             <Option value="AND">AND（与）</Option>
             <Option value="OR">OR（或）</Option>
+            <Option value="NONE">自定义</Option>
           </Select>
         )}
-        {formItemWithError(
-          form,
-          formItemProps,
-          {},
-          errors,
-          formValues,
-          'expression.conditions',
-          [],
-          '过滤表达式',
-          <ExpressionWidget onChange={e => this.handleChange()} />
-        )} */}
+        {this.state.diying &&
+          formItemWithError(
+            form,
+            formItemProps,
+            {},
+            errors,
+            formValues,
+            'criteria.ude',
+            '',
+            '自定义过滤表达式',
+            <TextArea rows={5} onChange={e => this.handleChange()} />
+          )}
+        {!this.state.diying &&
+          formItemWithError(
+            form,
+            formItemProps,
+            {},
+            errors,
+            formValues,
+            'criteria.conditions',
+            [],
+            '过滤表达式',
+            <ExpressionWidget onChange={e => this.handleChange()} />
+          )}
         <div style={{ textAlign: 'center' }}>
           <Button type="primary" htmlType="submit" loading={false}>
             完成

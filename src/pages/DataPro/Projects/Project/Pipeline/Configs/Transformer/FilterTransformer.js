@@ -95,13 +95,13 @@ class FilterTransformer extends React.Component {
           {},
           errors,
           formValues,
-          'expression.mode',
+          'criteria.mode',
           'AND',
           '模式',
           <Select onChange={e => this.handleModeChange(e)}>
             <Option value="AND">AND（与）</Option>
             <Option value="OR">OR（或）</Option>
-            <Option value="NULL">自定义</Option>
+            <Option value="NONE">自定义</Option>
           </Select>
         )}
         {this.state.diying &&
@@ -111,9 +111,9 @@ class FilterTransformer extends React.Component {
             {},
             errors,
             formValues,
-            'expression.dcondition',
-            [],
-            '过滤表达式',
+            'criteria.ude',
+            '',
+            '自定义过滤表达式',
             <TextArea rows={5} onChange={e => this.handleChange()} />
           )}
         {!this.state.diying &&
@@ -123,7 +123,7 @@ class FilterTransformer extends React.Component {
             {},
             errors,
             formValues,
-            'expression.conditions',
+            'criteria.conditions',
             [],
             '过滤表达式',
             <ExpressionWidget onChange={e => this.handleChange()} />
