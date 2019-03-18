@@ -15,6 +15,15 @@ for (let i = 0; i < 66; i += 1) {
     createdAt: moment(faker.date.past()),
     updatedAt: moment(faker.date.past()),
     labels: faker.random.words(parseInt(Math.random() * 10 + 1, 10)).split(' '),
+    definition: {
+      inputs: {
+        id1: { name: '输入1', description: '这里应该是输入1' },
+        id2: { name: '输入2', description: '这里应该是输入2' },
+      },
+      outputs: {
+        output: { name: '输出', description: '输出信息' },
+      },
+    },
   });
 }
 

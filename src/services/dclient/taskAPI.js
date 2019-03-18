@@ -37,6 +37,13 @@ export async function runTaskById(params) {
   });
 }
 
+export async function configTemplate(params) {
+  return request('/api/datapro/client/tasks/conf/template', {
+    method: 'POST',
+    body: params,
+  });
+}
+
 export async function configTaskSource(params) {
   return request('/api/datapro/client/tasks/conf/source', {
     method: 'POST',

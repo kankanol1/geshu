@@ -2,6 +2,9 @@ import React from 'react';
 import { Steps, Card, Button } from 'antd';
 import Link from 'umi/link';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
+import { queryTaskById } from '@/services/dclient/taskAPI';
+import { getTemplateById } from '@/services/dclient/templateAPI';
+
 import EditTaskStepDataSource from './EditTaskStepDataSource';
 import EditTaskStepDataSourceCheck from './EditTaskStepDataSourceCheck';
 import EditTaskStepDataSink from './EditTaskStepDataSink';
@@ -19,11 +22,37 @@ const stepsRender = [
   EditTaskStepDone,
 ];
 
-class EditTask extends React.Component {
+class EditTask extends React.PureComponent {
+  state = {
+    templateInfo: undefined,
+  };
+
+  componentDidMount() {
+    this.loadTemplateInfo(this.props);
+  }
+
+  componentWillReceiveProps(props) {
+    this.loadTemplateInfo(props);
+  }
+
+  loadTemplateInfo(props) {
+    const { id, pane } = props.match.params;
+    queryTaskById({ id }).then(response => {
+      if (response && response.templateId) {
+        getTemplateById({ id: response.templateId }).then(res2 => {
+          if (res2) {
+            this.setState({ templateInfo: res2 });
+          }
+        });
+      }
+    });
+  }
+
   render() {
     const { id, mode, pane } = this.props.match.params;
     const activePane = pane ? parseInt(pane, 10) : 0;
     const StepComp = stepsRender[activePane];
+    const { templateInfo } = this.state;
     return (
       <PageHeaderWrapper
         title="配置任务"
@@ -39,11 +68,17 @@ class EditTask extends React.Component {
       >
         <Card>
           <div className={styles.topBtns}>
-            <Link to={`/tasks/t/show/${id}`}>
+            <Link
+              to={
+                activePane === 0
+                  ? `/tasks/t/show/${id}`
+                  : `/tasks/t/${mode}/${id}/${activePane - 1}`
+              }
+            >
               <Button> &lt;&nbsp; 返回</Button>
             </Link>
           </div>
-          <StepComp mode={mode} id={id} pane={activePane} />
+          <StepComp mode={mode} id={id} pane={activePane} templateInfo={templateInfo} />
         </Card>
       </PageHeaderWrapper>
     );

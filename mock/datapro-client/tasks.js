@@ -18,6 +18,7 @@ for (let i = 0; i < 66; i += 1) {
     updatedAt: moment(faker.date.past()),
     labels: faker.random.words(parseInt(Math.random() * 10 + 1, 10)).split(' '),
     status: rad1 < 3 ? 'RUNNING' : rad1 > 7 ? 'DONE' : rad1 < 5 ? 'READY' : 'NOT_READY',
+    templateId: 1,
   });
 }
 
@@ -148,6 +149,13 @@ export function validateTaskSource(req, res) {
   }
 }
 
+export function configTemplate(req, res) {
+  res.json({
+    message: 'done',
+    success: true,
+  });
+}
+
 export default {
   'GET /api/datapro/client/tasks/list': getTaskList,
   'GET /api/datapro/client/tasks/get': getTaskById,
@@ -162,6 +170,7 @@ export default {
     success: true,
     msessage: '已启动运行',
   },
+  'POST /api/datapro/client/tasks/conf/template': configTemplate,
   'POST /api/datapro/client/tasks/conf/source': configTaskSource,
   'POST /api/datapro/client/tasks/conf/sink': configTaskSource,
   'POST /api/datapro/client/tasks/conf/validate/source': validateTaskSource,

@@ -3,6 +3,8 @@ import { connect } from 'dva';
 import { Form, Button, Radio, message } from 'antd';
 import router from 'umi/router';
 import CardTable from '@/components/CardTable';
+
+import { configTemplate } from '@/services/dclient/taskAPI';
 import styles from './EditTask.less';
 
 const defaultParams = {
@@ -18,6 +20,7 @@ class EditTaskStepChooseTemplate extends React.PureComponent {
   state = {
     queryParams: defaultParams,
     selected: undefined,
+    loading: false,
   };
 
   componentDidMount() {
@@ -27,7 +30,13 @@ class EditTaskStepChooseTemplate extends React.PureComponent {
   handleSubmit = e => {
     e.preventDefault();
     const { mode, id, pane } = this.props;
-    router.push(`/tasks/t/${mode}/${id}/${pane + 1}`);
+    const { selected } = this.state;
+    this.setState({ loading: true });
+    configTemplate({ id, templateId: selected }).then(response => {
+      this.setState({ loading: false }, () => {
+        router.push(`/tasks/t/${mode}/${id}/${pane + 1}`);
+      });
+    });
   };
 
   handleTableChange(pagination) {
@@ -83,6 +92,7 @@ class EditTaskStepChooseTemplate extends React.PureComponent {
   }
 
   render() {
+    const { loading, selected } = this.state;
     return (
       <React.Fragment>
         {this.renderTemplates()}
@@ -91,7 +101,8 @@ class EditTaskStepChooseTemplate extends React.PureComponent {
           <Button
             className={styles.rightBtn}
             type="primary"
-            loading={false}
+            loading={loading}
+            disabled={!selected}
             onClick={e => this.handleSubmit(e)}
           >
             下一步 &gt;

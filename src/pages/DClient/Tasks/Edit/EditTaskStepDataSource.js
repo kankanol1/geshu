@@ -1,25 +1,13 @@
 import React from 'react';
-import { Form, Button, Radio, message } from 'antd';
+import { Form, Button, Radio, message, Spin, Row, Col } from 'antd';
 import router from 'umi/router';
-import CSVDataSource from './Source/CSVDataSource';
-import JDBCDataSource from './Source/JDBCDataSource';
+import SourceUnit from './Source/SourceUnit';
 import styles from './EditTask.less';
 import { configTaskSource } from '@/services/dclient/taskAPI';
-
-const sources = {
-  CSV: CSVDataSource,
-  JDBC: JDBCDataSource,
-};
-
-const displaySources = {
-  CSV: 'CSV文件',
-  JDBC: '数据库',
-};
 
 @Form.create()
 class EditTaskStepDataSource extends React.PureComponent {
   state = {
-    type: 'CSV',
     formValues: {},
     submitting: false,
   };
@@ -44,43 +32,43 @@ class EditTaskStepDataSource extends React.PureComponent {
   }
 
   renderConfiguration = () => {
-    const { type } = this.state;
-    const Comp = sources[type];
-    const { form } = this.props;
-    const errors = {};
+    const { form, templateInfo } = this.props;
+    const {
+      definition: { inputs },
+    } = templateInfo;
 
-    const formItemProps = {
-      labelCol: { span: 5 },
-      wrapperCol: { span: 15 },
-    };
     const currentRecord = this.state.formValues;
 
     return (
       <React.Fragment>
-        <div className={`${styles.middleWrapper} ${styles.switchWrapper}`}>
-          <Radio.Group value={type} onChange={v => this.setState({ type: v.target.value })}>
-            {Object.keys(displaySources).map(key => (
-              <Radio.Button value={key} key={key}>
-                {displaySources[key]}
-              </Radio.Button>
-            ))}
-          </Radio.Group>
-        </div>
-        <Comp
-          errors={errors}
-          form={form}
-          currentRecord={currentRecord}
-          formItemProps={formItemProps}
-        />
+        {Object.keys(inputs).map((k, i) => (
+          <SourceUnit
+            currentRecord={currentRecord[k] || {}}
+            key={i}
+            id={k}
+            info={inputs[k]}
+            form={form}
+          />
+        ))}
       </React.Fragment>
+    );
+  };
+
+  renderLoading = () => {
+    return (
+      <div>
+        <Spin />
+      </div>
     );
   };
 
   render() {
     const { submitting } = this.state;
+    const { templateInfo } = this.props;
     return (
       <div>
-        {this.renderConfiguration()}
+        {templateInfo && this.renderConfiguration()}
+        {!templateInfo && this.renderLoading()}
         <div className={styles.bottomBtns}>
           <Button
             className={styles.rightBtn}

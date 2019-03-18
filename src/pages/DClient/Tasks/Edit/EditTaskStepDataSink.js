@@ -1,20 +1,9 @@
 import React from 'react';
-import { Button, Radio, message, Form } from 'antd';
+import { Button, Spin, message, Form } from 'antd';
 import router from 'umi/router';
-import CSVDataSink from './Sink/CSVDataSink';
-import JDBCDataSink from './Sink/JDBCDataSink';
 import styles from './EditTask.less';
 import { configTaskSink } from '@/services/dclient/taskAPI';
-
-const sinks = {
-  CSV: CSVDataSink,
-  JDBC: JDBCDataSink,
-};
-
-const displaySinks = {
-  CSV: 'CSV文件',
-  JDBC: '数据库',
-};
+import SinkUnit from './Sink/SinkUnit';
 
 @Form.create()
 class EditTaskStepDataSink extends React.PureComponent {
@@ -44,43 +33,42 @@ class EditTaskStepDataSink extends React.PureComponent {
   }
 
   renderConfiguration = () => {
-    const { type } = this.state;
-    const Comp = sinks[type];
-    const { form } = this.props;
-    const errors = {};
+    const { form, templateInfo } = this.props;
+    const {
+      definition: { outputs },
+    } = templateInfo;
 
-    const formItemProps = {
-      labelCol: { span: 5 },
-      wrapperCol: { span: 15 },
-    };
     const currentRecord = this.state.formValues;
 
     return (
       <React.Fragment>
-        <div className={`${styles.middleWrapper} ${styles.switchWrapper}`}>
-          <Radio.Group value={type} onChange={v => this.setState({ type: v.target.value })}>
-            {Object.keys(displaySinks).map(key => (
-              <Radio.Button value={key} key={key}>
-                {displaySinks[key]}
-              </Radio.Button>
-            ))}
-          </Radio.Group>
-        </div>
-        <Comp
-          errors={errors}
-          form={form}
-          currentRecord={currentRecord}
-          formItemProps={formItemProps}
-        />
+        {Object.keys(outputs).map((k, i) => (
+          <SinkUnit
+            currentRecord={currentRecord[k] || {}}
+            key={i}
+            id={k}
+            info={outputs[k]}
+            form={form}
+          />
+        ))}
       </React.Fragment>
     );
   };
 
-  render() {
-    const { mode, id, pane } = this.props;
+  renderLoading = () => {
     return (
       <div>
-        {this.renderConfiguration()}
+        <Spin />
+      </div>
+    );
+  };
+
+  render() {
+    const { mode, id, pane, templateInfo } = this.props;
+    return (
+      <div>
+        {templateInfo && this.renderConfiguration()}
+        {!templateInfo && this.renderLoading()}
         <div className={styles.bottomBtns}>
           <Button
             type="primary"

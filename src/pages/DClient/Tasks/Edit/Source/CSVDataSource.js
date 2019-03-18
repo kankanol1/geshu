@@ -4,7 +4,7 @@ import FilePickerForForm from '@/pages/Storage/FilePickerForForm';
 import { formItemWithError } from '../Utils';
 
 const CSVDataSource = props => {
-  const { form, currentRecord, formItemProps, errors, onChange } = props;
+  const { form, currentRecord, formItemProps, errors, onChange, prefix } = props;
   return (
     <React.Fragment>
       {formItemWithError(
@@ -13,7 +13,7 @@ const CSVDataSource = props => {
         { valuePropName: 'checked' },
         errors,
         currentRecord,
-        'format.ignoreFirstLine',
+        `${prefix}.format.ignoreFirstLine`,
         false,
         '包含文件头',
         <Checkbox onChange={onChange} />
@@ -24,7 +24,7 @@ const CSVDataSource = props => {
         {},
         errors,
         currentRecord,
-        'format.fieldDelimiter',
+        `${prefix}.format.fieldDelimiter`,
         ',',
         '分隔符',
         <Input onChange={onChange} />
@@ -37,7 +37,7 @@ const CSVDataSource = props => {
         },
         errors,
         currentRecord,
-        'source.path',
+        `${prefix}.source.path`,
         '',
         '文件路径',
         <FilePickerForForm
