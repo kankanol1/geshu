@@ -11,9 +11,9 @@ class FloatingMenu extends React.Component {
     return (
       <div className={styles.menuWrapper}>
         <ButtonGroup>
-          <Button>
+          {/* <Button>
             <Icon type="play-circle" /> 全部运行
-          </Button>
+          </Button> */}
           <Link to={`/projects/p/pipeline/${id}/publish`}>
             <Button>
               <Icon type="upload" /> 发布

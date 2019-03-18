@@ -1,5 +1,6 @@
 import React from 'react';
 import { Form, Button, Input, Select, message } from 'antd';
+import TextArea from 'antd/lib/input/TextArea';
 import PageLoading from '@/components/PageLoading';
 import { formatMessage } from 'umi/locale';
 import router from 'umi/router';
@@ -20,6 +21,7 @@ class FilterTransformer extends React.Component {
       formValues: { ...props.configs },
       schema: undefined,
       loading: true,
+      diying: props.configs && props.configs.expression && props.configs.expression.mode === 'NULL',
     };
   }
 
@@ -40,6 +42,13 @@ class FilterTransformer extends React.Component {
 
   handleChange = () => {
     this.setState({ changed: true });
+  };
+
+  handleModeChange = v => {
+    if (v === 'NULL') {
+      this.setState({ diying: true });
+    }
+    this.handleChange();
   };
 
   handleFormSubmit = e => {
@@ -89,22 +98,36 @@ class FilterTransformer extends React.Component {
           'expression.mode',
           'AND',
           '模式',
-          <Select onChange={e => this.handleChange()}>
+          <Select onChange={e => this.handleModeChange(e)}>
             <Option value="AND">AND（与）</Option>
             <Option value="OR">OR（或）</Option>
+            <Option value="NULL">自定义</Option>
           </Select>
         )}
-        {formItemWithError(
-          form,
-          formItemProps,
-          {},
-          errors,
-          formValues,
-          'expression.conditions',
-          [],
-          '过滤表达式',
-          <ExpressionWidget onChange={e => this.handleChange()} />
-        )}
+        {this.state.diying &&
+          formItemWithError(
+            form,
+            formItemProps,
+            {},
+            errors,
+            formValues,
+            'expression.dcondition',
+            [],
+            '过滤表达式',
+            <TextArea rows={5} onChange={e => this.handleChange()} />
+          )}
+        {!this.state.diying &&
+          formItemWithError(
+            form,
+            formItemProps,
+            {},
+            errors,
+            formValues,
+            'expression.conditions',
+            [],
+            '过滤表达式',
+            <ExpressionWidget onChange={e => this.handleChange()} />
+          )}
         <div style={{ textAlign: 'center' }}>
           <Button type="primary" htmlType="submit" loading={false}>
             完成
