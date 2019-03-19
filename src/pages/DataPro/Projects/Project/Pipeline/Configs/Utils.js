@@ -6,7 +6,7 @@ const FormItem = Form.Item;
 
 function filterErrorsWithPrefix(errors, prefix) {
   if (!errors || Object.keys(errors) === 0) return [];
-  const newKeys = Object.keys(errors).filter(i => i.startsWith(prefix));
+  const newKeys = Object.keys(errors).filter(i => i.startsWith(prefix) || prefix.startsWith(i));
   const result = newKeys.map(i => errors[i]);
   return result;
 }
