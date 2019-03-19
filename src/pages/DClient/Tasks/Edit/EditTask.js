@@ -25,6 +25,7 @@ const stepsRender = [
 class EditTask extends React.PureComponent {
   state = {
     templateInfo: undefined,
+    templateId: undefined,
   };
 
   componentDidMount() {
@@ -41,7 +42,7 @@ class EditTask extends React.PureComponent {
       if (response && response.templateId) {
         getTemplateById({ id: response.templateId }).then(res2 => {
           if (res2) {
-            this.setState({ templateInfo: res2 });
+            this.setState({ templateInfo: res2, templateId: response.templateId });
           }
         });
       }
@@ -52,7 +53,7 @@ class EditTask extends React.PureComponent {
     const { id, mode, pane } = this.props.match.params;
     const activePane = pane ? parseInt(pane, 10) : 0;
     const StepComp = stepsRender[activePane];
-    const { templateInfo } = this.state;
+    const { templateInfo, templateId } = this.state;
     return (
       <PageHeaderWrapper
         title="配置任务"
@@ -78,7 +79,13 @@ class EditTask extends React.PureComponent {
               <Button> &lt;&nbsp; 返回</Button>
             </Link>
           </div>
-          <StepComp mode={mode} id={id} pane={activePane} templateInfo={templateInfo} />
+          <StepComp
+            templateId={templateId}
+            mode={mode}
+            id={id}
+            pane={activePane}
+            templateInfo={templateInfo}
+          />
         </Card>
       </PageHeaderWrapper>
     );

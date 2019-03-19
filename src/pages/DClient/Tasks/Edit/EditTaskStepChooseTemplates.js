@@ -19,12 +19,16 @@ const defaultParams = {
 class EditTaskStepChooseTemplate extends React.PureComponent {
   state = {
     queryParams: defaultParams,
-    selected: undefined,
+    selected: this.props.templateId,
     loading: false,
   };
 
   componentDidMount() {
     this.performQuery();
+  }
+
+  componentWillReceiveProps(props) {
+    this.setState({ selected: this.state.selected || props.templateId });
   }
 
   handleSubmit = e => {
@@ -75,6 +79,7 @@ class EditTaskStepChooseTemplate extends React.PureComponent {
             onClick={() => {
               this.setState({ selected: item.id });
             }}
+            key={item.id}
           >
             <div
               className={`${styles.templateItem} ${styles.card}  ${selected &&
