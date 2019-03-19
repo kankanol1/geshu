@@ -21,7 +21,7 @@ class FilterTransformer extends React.Component {
       formValues: { ...props.configs },
       schema: undefined,
       loading: true,
-      diying: props.configs && props.configs.expression && props.configs.expression.mode === 'NULL',
+      diying: props.configs && props.configs.criteria && props.configs.criteria.mode === 'NONE',
     };
   }
 
@@ -45,8 +45,10 @@ class FilterTransformer extends React.Component {
   };
 
   handleModeChange = v => {
-    if (v === 'NULL') {
+    if (v === 'NONE') {
       this.setState({ diying: true });
+    } else {
+      this.setState({ diying: false });
     }
     this.handleChange();
   };

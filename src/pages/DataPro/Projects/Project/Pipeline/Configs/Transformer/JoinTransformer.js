@@ -21,6 +21,7 @@ class JoinTransformer extends React.Component {
       formValues: { ...props.configs },
       schema: undefined,
       loading: true,
+      diying: props.configs && props.configs.criteria && props.configs.criteria.mode === 'NONE',
     };
   }
 
@@ -66,6 +67,15 @@ class JoinTransformer extends React.Component {
         });
       }
     });
+  };
+
+  handleModeChange = v => {
+    if (v === 'NONE') {
+      this.setState({ diying: true });
+    } else {
+      this.setState({ diying: false });
+    }
+    this.handleChange();
   };
 
   render() {
