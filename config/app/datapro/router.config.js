@@ -1,15 +1,13 @@
 import Privileges from '../../../src/config/UserPrivileges';
+import loginRoute from '../includes/login';
+import errorRoutes from '../includes/errors';
+import baseRoutes from '../includes/base';
+import dclientRoutes from '../includes/dclient';
+import testRoutes from '../includes/tests';
 
 export default [
   // user
-  {
-    path: '/user',
-    component: '../layouts/UserLayout',
-    routes: [
-      { path: '/user', redirect: '/user/login' },
-      { path: '/user/login', name: 'login', component: './User/Login' },
-    ],
-  },
+  loginRoute,
   // app
   {
     path: '/',
@@ -19,39 +17,8 @@ export default [
     routes: [
       { path: '/', redirect: '/projects/list' },
       { path: '/projects', redirect: '/projects/list' },
-      { path: '/users', redirect: '/users/list' },
       // { path: '/teams', redirect: '/teams/list' },
-      { path: '/self', redirect: '/self/basic' },
-      {
-        path: '/testm',
-        name: 'testm',
-        hideInMenu: true,
-        component: './Test/TestMarkdown',
-      },
-      {
-        path: '/testme',
-        name: 'testme',
-        hideInMenu: true,
-        component: './Test/TestMarkdownEditor',
-      },
-      {
-        path: '/testt',
-        name: 'testt',
-        hideInMenu: true,
-        component: './Test/TestHugeTable',
-      },
-      {
-        path: '/demo',
-        name: 'demo',
-        hideInMenu: true,
-        component: './Test/TestDemoTable',
-      },
-      {
-        path: '/demo1',
-        name: 'demo1',
-        hideInMenu: true,
-        component: './Demo/Demo1',
-      },
+      ...testRoutes,
       {
         path: '/projects',
         name: 'project',
@@ -115,65 +82,15 @@ export default [
       //     },
       //   ],
       // },
-      {
-        path: 'users',
-        name: 'users',
-        icon: 'contacts',
-        authority: [Privileges.USER_VIEW],
-        hideChildrenInMenu: true,
-        routes: [
-          {
-            path: 'list',
-            authority: [Privileges.USER_VIEW],
-            name: 'list',
-            redirect: '/users/list/index',
-          },
-          { path: 'list/index', authority: [Privileges.USER_VIEW], component: './Users/UserList' },
-          {
-            path: 'list/edit/:userName',
-            authority: [Privileges.USER_MODIFY],
-            component: './Users/UserEdit',
-          },
-          {
-            path: 'create',
-            authority: [Privileges.USER_ADD],
-            name: 'create',
-            component: './Users/UserEdit',
-          },
-        ],
-      },
-      {
-        path: 'self',
-        icon: 'user',
-        name: 'self',
-        routes: [{ path: ':tab?', component: './Self/SelfManage' }],
-      },
-      {
-        icon: 'warning',
-        path: '/exception',
-        routes: [
-          // exception
-          {
-            path: '/exception/403',
-            component: './Exception/403',
-          },
-          {
-            path: '/exception/404',
-            component: './Exception/404',
-          },
-          {
-            path: '/exception/500',
-            component: './Exception/500',
-          },
-          {
-            path: '/exception/trigger',
-            component: './Exception/TriggerException',
-          },
-        ],
-      },
-      {
-        component: '404',
-      },
+      // ...dclientRoutes,
+      // {
+      //   path: '/files',
+      //   icon: 'database',
+      //   name: 'files',
+      //   component: './DClient/Files/StorageList',
+      // },
+      ...baseRoutes,
+      ...errorRoutes,
     ],
   },
 ];

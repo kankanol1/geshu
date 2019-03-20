@@ -17,7 +17,8 @@ for (let i = 0; i < 66; i += 1) {
     createdAt: moment(faker.date.past()),
     updatedAt: moment(faker.date.past()),
     labels: faker.random.words(parseInt(Math.random() * 10 + 1, 10)).split(' '),
-    status: rad1 < 3 ? 'RUNNING' : rad1 > 7 ? 'DONE' : rad1 < 5 ? 'READY' : 'NOT_READY',
+    status:
+      rad1 < 3 ? 'TEMPLATE_DEFINED' : rad1 > 7 ? 'SOURCE_DEFINED' : rad1 < 5 ? 'READY' : 'CREATED',
     templateId: 1,
   });
 }
