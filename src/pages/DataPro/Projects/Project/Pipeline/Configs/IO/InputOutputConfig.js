@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, Card, Form, Input, Modal, Select, Spin } from 'antd';
+import { Row, Col, Card, Form, Input, Modal, Select, Spin, message } from 'antd';
 
 import { queryAllDatasets, addOperator, updateOperator } from '@/services/datapro/pipelineAPI';
 
@@ -28,14 +28,22 @@ class InputOutputConfig extends React.Component {
         this.setState({ adding: true });
         const { projectId, code, componentId: id } = this.props;
         // send request.
+        const handleResponse = response => {
+          if (response) {
+            if (response.success) callback(response.data);
+            else {
+              message.error(response.message);
+            }
+          }
+        };
         if (type === 'new') {
           addOperator({ ...values, code, projectId }).then(response => {
-            this.setState({ adding: false }, callback(response.data));
+            this.setState({ adding: false }, () => handleResponse(response));
           });
         } else if (type === 'modify') {
           // TODO update.
           updateOperator({ ...values, id, code, projectId }).then(response => {
-            this.setState({ adding: false }, callback(response.data));
+            this.setState({ adding: false }, () => handleResponse(response));
           });
         } else {
           console.error('no type specified! expected `new` or `modify`'); // eslint-disable-line
