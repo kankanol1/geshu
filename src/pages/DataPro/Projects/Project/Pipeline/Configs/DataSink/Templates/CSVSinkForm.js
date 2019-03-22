@@ -4,7 +4,7 @@ import FilePickerForForm from '@/pages/Storage/FilePickerForForm';
 import { formItemWithError } from '../../Utils';
 
 const CSVSinkForm = props => {
-  const { form, currentRecord, formItemProps, errors, onChange } = props;
+  const { form, currentRecord, formItemProps, errors, onChange, validateErrors } = props;
   return (
     <React.Fragment>
       {/* {formItemWithError(
@@ -23,6 +23,7 @@ const CSVSinkForm = props => {
         formItemProps,
         {},
         errors,
+        validateErrors,
         currentRecord,
         'format.fieldDelimiter',
         ',',
@@ -36,6 +37,7 @@ const CSVSinkForm = props => {
           rules: [{ required: true, message: '存储路径不能为空' }],
         },
         errors,
+        validateErrors,
         currentRecord,
         'sink.path',
         undefined,

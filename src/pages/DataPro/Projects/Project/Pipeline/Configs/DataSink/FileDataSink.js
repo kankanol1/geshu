@@ -3,7 +3,7 @@ import { Form, Input, Select, Checkbox, Button, Card, Steps, message, Spin } fro
 
 import { configOperator } from '@/services/datapro/pipelineAPI';
 import CSVSinkForm from './Templates/CSVSinkForm';
-import { formItemWithError } from '../Utils';
+import { formItemWithError, expandValidateErrors } from '../Utils';
 
 import styles from '../Index.less';
 
@@ -21,6 +21,7 @@ class FileDataSink extends React.PureComponent {
         ...props.configs,
       },
       changed: false,
+      validateErrors: {},
     };
   }
 
@@ -32,6 +33,7 @@ class FileDataSink extends React.PureComponent {
     e.preventDefault();
     const { form } = this.props;
     form.validateFields((err, fieldsValue) => {
+      this.setState({ validateErrors: expandValidateErrors(err) });
       const { id, opId } = this.props;
       const newValues = { ...this.state.formValues, ...fieldsValue };
       configOperator({
@@ -52,7 +54,7 @@ class FileDataSink extends React.PureComponent {
 
   render() {
     const { form, errors: givenErrors } = this.props;
-    const { loading, changed } = this.state;
+    const { loading, changed, validateErrors } = this.state;
     const errors = changed ? {} : givenErrors;
     const type =
       (this.state.formValues && this.state.formValues.type) || Object.keys(formRegistry)[0];
@@ -72,6 +74,7 @@ class FileDataSink extends React.PureComponent {
             rules: [{ required: true, message: '数据集类型不能为空' }],
           },
           errors,
+          validateErrors,
           currentRecord,
           'format.formatClass',
           type,
@@ -93,6 +96,7 @@ class FileDataSink extends React.PureComponent {
           name={this.props.name}
           errors={errors}
           onChange={() => this.handleChange()}
+          validateErrors={validateErrors}
         />
         <div>
           <div className={styles.centerWrapper}>

@@ -7,7 +7,7 @@ import router from 'umi/router';
 import { getOperatorSchema, configOperator } from '@/services/datapro/pipelineAPI';
 import JoinColumnSelector from '@/components/Widgets/JoinColumnSelector';
 import ExpressionWidget from '@/components/Widgets/ExpressionWidget';
-import { formItemWithError } from '../Utils';
+import { formItemWithError, expandValidateErrors } from '../Utils';
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -21,6 +21,7 @@ class JoinTransformer extends React.Component {
       formValues: { ...props.configs },
       schema: undefined,
       loading: true,
+      validateErrors: undefined,
       diying: props.configs && props.configs.criteria && props.configs.criteria.mode === 'NONE',
     };
   }
@@ -49,6 +50,7 @@ class JoinTransformer extends React.Component {
     const { form } = this.props;
 
     form.validateFields((err, fieldsValue) => {
+      this.setState({ validateErrors: expandValidateErrors(err) });
       if (!err) {
         const { id, opId } = this.props;
         configOperator({
@@ -80,7 +82,7 @@ class JoinTransformer extends React.Component {
 
   render() {
     const { form, errors: givenErrors } = this.props;
-    const { formValues, changed, loading, schema } = this.state;
+    const { formValues, changed, loading, schema, validateErrors } = this.state;
     const formItemProps = {
       labelCol: { span: 5 },
       wrapperCol: { span: 15 },
@@ -96,6 +98,7 @@ class JoinTransformer extends React.Component {
           formItemProps,
           {},
           errors,
+          validateErrors,
           formValues,
           'joinType',
           'OUTER',
@@ -112,6 +115,7 @@ class JoinTransformer extends React.Component {
           formItemProps,
           {},
           errors,
+          validateErrors,
           formValues,
           'columns',
           [],
@@ -126,6 +130,7 @@ class JoinTransformer extends React.Component {
           formItemProps,
           {},
           errors,
+          validateErrors,
           formValues,
           'criteria.mode',
           'AND',
@@ -142,6 +147,7 @@ class JoinTransformer extends React.Component {
             formItemProps,
             {},
             errors,
+            validateErrors,
             formValues,
             'criteria.ude',
             '',
@@ -154,6 +160,7 @@ class JoinTransformer extends React.Component {
             formItemProps,
             {},
             errors,
+            validateErrors,
             formValues,
             'criteria.conditions',
             [],

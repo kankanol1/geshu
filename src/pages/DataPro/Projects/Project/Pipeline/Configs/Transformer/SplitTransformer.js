@@ -5,7 +5,7 @@ import TextArea from 'antd/lib/input/TextArea';
 import router from 'umi/router';
 
 import { getOperatorSchema, configOperator } from '@/services/datapro/pipelineAPI';
-import { formItemWithError } from '../Utils';
+import { formItemWithError, expandValidateErrors } from '../Utils';
 import ExpressionWidget from '@/components/Widgets/ExpressionWidget';
 
 const FormItem = Form.Item;
@@ -20,6 +20,7 @@ class SplitTransformer extends React.Component {
       formValues: { ...props.configs },
       schema: undefined,
       loading: true,
+      validateErrors: undefined,
       diying: props.configs && props.configs.criteria && props.configs.criteria.mode === 'NONE',
     };
   }
@@ -57,6 +58,7 @@ class SplitTransformer extends React.Component {
     const { form } = this.props;
 
     form.validateFields((err, fieldsValue) => {
+      this.setState({ validateErrors: expandValidateErrors(err) });
       if (!err) {
         const { id, opId } = this.props;
         configOperator({
@@ -79,7 +81,7 @@ class SplitTransformer extends React.Component {
 
   render() {
     const { form, errors: givenErrors } = this.props;
-    const { formValues, changed, loading, schema } = this.state;
+    const { formValues, changed, loading, schema, validateErrors } = this.state;
     const formItemProps = {
       labelCol: { span: 5 },
       wrapperCol: { span: 15 },
@@ -95,6 +97,7 @@ class SplitTransformer extends React.Component {
           formItemProps,
           {},
           errors,
+          validateErrors,
           formValues,
           'criteria.mode',
           'AND',
@@ -111,6 +114,7 @@ class SplitTransformer extends React.Component {
             formItemProps,
             {},
             errors,
+            validateErrors,
             formValues,
             'criteria.ude',
             '',
@@ -123,6 +127,7 @@ class SplitTransformer extends React.Component {
             formItemProps,
             {},
             errors,
+            validateErrors,
             formValues,
             'criteria.conditions',
             [],

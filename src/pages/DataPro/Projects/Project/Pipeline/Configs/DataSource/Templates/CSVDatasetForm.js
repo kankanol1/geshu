@@ -4,7 +4,7 @@ import FilePickerForForm from '@/pages/Storage/FilePickerForForm';
 import { formItemWithError } from '../../Utils';
 
 const CSVDatasetForm = props => {
-  const { form, currentRecord, formItemProps, errors, onChange } = props;
+  const { form, currentRecord, formItemProps, errors, onChange, validateErrors } = props;
   return (
     <React.Fragment>
       {formItemWithError(
@@ -12,6 +12,7 @@ const CSVDatasetForm = props => {
         formItemProps,
         { valuePropName: 'checked' },
         errors,
+        validateErrors,
         currentRecord,
         'format.ignoreFirstLine',
         false,
@@ -23,6 +24,7 @@ const CSVDatasetForm = props => {
         formItemProps,
         {},
         errors,
+        validateErrors,
         currentRecord,
         'format.fieldDelimiter',
         ',',
@@ -36,6 +38,7 @@ const CSVDatasetForm = props => {
           rules: [{ required: true, message: '文件路径不能为空' }],
         },
         errors,
+        validateErrors,
         currentRecord,
         'source.path',
         undefined,

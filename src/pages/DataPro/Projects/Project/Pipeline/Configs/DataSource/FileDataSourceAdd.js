@@ -5,7 +5,7 @@ import router from 'umi/router';
 import { getSchemaFromFile, configOperator } from '@/services/datapro/pipelineAPI';
 import DefineSchemaWidget from '@/components/JsonSchemaForm/Widgets/Schema/DefineSchemaWidget';
 import CSVDatasetForm from './Templates/CSVDatasetForm';
-import { formItemWithError } from '../Utils';
+import { formItemWithError, expandValidateErrors } from '../Utils';
 
 import styles from '../Index.less';
 
@@ -13,8 +13,6 @@ const formRegistry = {
   'com.gldata.gaia.pipeline.api.dataset.formats.CsvFormat': [CSVDatasetForm, 'CSV'],
 };
 
-const FormItem = Form.Item;
-const { TextArea } = Input;
 const { Step } = Steps;
 
 class FileDataSourceConfig extends React.Component {
@@ -29,6 +27,7 @@ class FileDataSourceConfig extends React.Component {
       schemaResponse: undefined,
       loading: false,
       changed: false,
+      validateErrors: undefined,
     };
   }
 
@@ -40,6 +39,7 @@ class FileDataSourceConfig extends React.Component {
     e.preventDefault();
     const { form } = this.props;
     form.validateFields((err, fieldsValue) => {
+      this.setState({ validateErrors: expandValidateErrors(err) });
       if (!err) {
         // TODO: fetch schema.
         this.setState({ loading: true });
@@ -78,7 +78,7 @@ class FileDataSourceConfig extends React.Component {
 
   renderUpload = () => {
     const { form, errors: givenErrors } = this.props;
-    const { loading, changed } = this.state;
+    const { loading, changed, validateErrors } = this.state;
     const errors = changed ? {} : givenErrors;
     const type =
       (this.state.formValues && this.state.formValues.type) || Object.keys(formRegistry)[0];
@@ -98,6 +98,7 @@ class FileDataSourceConfig extends React.Component {
             rules: [{ required: true, message: '数据集类型不能为空' }],
           },
           errors,
+          validateErrors,
           currentRecord,
           'format.formatClass',
           type,
@@ -118,6 +119,7 @@ class FileDataSourceConfig extends React.Component {
           id={this.props.id}
           name={this.props.name}
           errors={errors}
+          validateErrors={validateErrors}
           onChange={() => this.handleChange()}
         />
         <div>
