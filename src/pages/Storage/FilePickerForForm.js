@@ -1,6 +1,7 @@
 import React from 'react';
-import { Modal, Button } from 'antd';
+import { Modal, Button, Input, message } from 'antd';
 import PropTypes from 'prop-types';
+import { returnAtIndex } from 'lodash-decorators/utils';
 import StorageFilePicker from './StorageFilePicker';
 
 export default class FilePickerForForm extends React.PureComponent {
@@ -16,12 +17,14 @@ export default class FilePickerForForm extends React.PureComponent {
     view: undefined,
     project: undefined,
     descriptionHidePrefix: true,
+    createMode: true,
   };
 
   state = {
     selected: undefined,
     visible: false,
     candidate: undefined,
+    currentState: undefined,
   };
 
   onChange = v => {
@@ -31,14 +34,18 @@ export default class FilePickerForForm extends React.PureComponent {
   };
 
   generateDescription = selected => {
+    let str = '';
     if (this.props.descriptionHidePrefix) {
-      return selected.path;
-    }
-    if (selected.type !== 'project') {
-      return `[${selected.type === 'private' ? '个人文件' : '公开文件'}] ${selected.path}`;
+      str = selected.path;
+    } else if (selected.type !== 'project') {
+      str = `[${selected.type === 'private' ? '个人文件' : '公开文件'}] ${selected.path}`;
     } else {
-      return `[项目文件](${selected.projectName}) ${selected.path}`;
+      str = `[项目文件](${selected.projectName}) ${selected.path}`;
     }
+    if (this.props.createMode) {
+      str = `${str}/${selected.filename}`;
+    }
+    return str;
   };
 
   renderDefault() {
@@ -73,23 +80,41 @@ export default class FilePickerForForm extends React.PureComponent {
           visible={this.state.visible}
           title="选择文件"
           onOk={() => {
-            this.onChange(this.state.candidate);
+            if (this.props.createMode) {
+              if (this.state.currentState.filename && this.state.currentState.filename.length > 0) {
+                this.onChange(this.state.currentState);
+              } else {
+                message.error('请填写文件名');
+                return;
+              }
+            } else {
+              this.onChange(this.state.candidate);
+            }
             this.setState({ visible: false });
           }}
-          onCancel={() => this.setState({ candidate: undefined, visible: false })}
+          onCancel={() =>
+            this.setState({
+              currentState: undefined,
+              candidate: undefined,
+              visible: false,
+            })
+          }
         >
           <StorageFilePicker
             smallSize
             height={280}
-            folderOnly={this.props.folderOnly}
+            folderOnly={this.props.createMode || this.props.folderOnly}
             onChange={v => this.setState({ candidate: v })}
-            allowSelectFolder={this.props.allowSelectFolder}
+            onCreateChange={v => this.setState({ currentState: v })}
+            allowSelectFolder={!this.props.createMode && this.props.allowSelectFolder}
             enableUpload={this.props.enableUpload}
             enableMkdir={this.props.enableMkdir}
             mode={this.props.mode}
             type={this.props.folderType}
             view={this.props.view}
             project={this.props.project}
+            pickMode="create"
+            createFileName={this.props.value && this.props.value.filename}
           />
         </Modal>
       </React.Fragment>
@@ -119,7 +144,7 @@ export default class FilePickerForForm extends React.PureComponent {
 }
 
 FilePickerForForm.propTypes = {
-  type: PropTypes.string,
+  type: PropTypes.string, // type: 'default' || 'inline'
   folderOnly: PropTypes.bool,
   allowSelectFolder: PropTypes.bool,
   value: PropTypes.object,
@@ -130,4 +155,5 @@ FilePickerForForm.propTypes = {
   view: PropTypes.string,
   project: PropTypes.object,
   descriptionHidePrefix: PropTypes.bool,
+  createMode: PropTypes.bool,
 };

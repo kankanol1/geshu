@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { Button, Icon, Card, List, Tooltip } from 'antd';
+import { Button, Icon, Card, List, Tooltip, Input } from 'antd';
 import { Scrollbars } from 'react-custom-scrollbars';
 import PropTypes from 'prop-types';
 import download from 'downloadjs';
@@ -19,7 +19,7 @@ import {
 import defaultStyles from './StorageFilePicker.less';
 import { humanFileSize } from '../../utils/utils';
 
-export default class StorageFilePicker extends React.Component {
+export default class StorageFilePicker extends React.PureComponent {
   static defaultProps = {
     onChange: undefined,
     styles: defaultStyles,
@@ -38,6 +38,10 @@ export default class StorageFilePicker extends React.Component {
       name: '无项目',
     },
     path: '/',
+    onFileVisited: undefined,
+    pickMode: 'pick',
+    createFileName: undefined,
+    onCreateChange: undefined,
   };
 
   state = {
@@ -91,10 +95,13 @@ export default class StorageFilePicker extends React.Component {
     selectedType: undefined,
     selectedFile: undefined,
     selectedProject: undefined,
+
+    createFileName: undefined,
   };
 
   componentDidMount() {
-    const { view, type, project, path } = this.props;
+    const { view, type, project, path, createFileName } = this.props;
+    this.setState({ createFileName });
     if (view === 'index') {
       // init index.
       this.fetchIndex();
@@ -112,15 +119,32 @@ export default class StorageFilePicker extends React.Component {
   }
 
   onChange(type, path, project, fullPath) {
-    const selected = {
-      type,
-      path,
-      projectId: project.id,
-      projectName: project.name,
-      fullPath,
-    };
     const { onChange } = this.props;
-    if (onChange) onChange(selected);
+    if (onChange) {
+      const selected = {
+        type,
+        path,
+        projectId: project.id,
+        projectName: project.name,
+        fullPath,
+      };
+      onChange(selected);
+    }
+  }
+
+  onCreateChange(type, path, project, fullPath, filename) {
+    const { onCreateChange } = this.props;
+    if (onCreateChange) {
+      const selected = {
+        type,
+        path,
+        projectId: project.id,
+        projectName: project.name,
+        fullPath,
+        filename,
+      };
+      onCreateChange(selected);
+    }
   }
 
   generateTitle = () => {
@@ -201,11 +225,29 @@ export default class StorageFilePicker extends React.Component {
   fetchFileListForType = ({ payload, newStates }) => {
     this.setState({ loading: true });
     queryFileForType(payload).then(response => {
-      this.setState({
-        files: response,
-        ...newStates,
-        loading: false,
-      });
+      this.setState(
+        {
+          files: response,
+          ...newStates,
+          loading: false,
+        },
+        () => {
+          if (this.props.pickMode === 'create') {
+            const { type, path, project, fullPath, createFileName } = this.state;
+            this.onCreateChange(type, path, project, fullPath, createFileName);
+          }
+          if (this.props.onFileVisited) {
+            const status = {
+              type: this.state.type,
+              path: this.state.path,
+              projectId: this.state.project.id,
+              projectName: this.state.project.name,
+              fullPath: this.state.fullPath,
+            };
+            this.props.onFileVisited(status);
+          }
+        }
+      );
     });
   };
 
@@ -370,10 +412,19 @@ export default class StorageFilePicker extends React.Component {
               onClick={
                 allowSelectFolder &&
                 ((item.type !== 'pipeline' && item.type !== 'graph') || mode === 'project')
-                  ? () => this.handleTypeSelect(item.type)
-                  : () => this.changeView(item.type)
+                  ? e => {
+                      e.preventDefault();
+                      this.handleTypeSelect(item.type);
+                    }
+                  : e => {
+                      e.preventDefault();
+                      this.changeView(item.type);
+                    }
               }
-              onDoubleClick={allowSelectFolder ? () => this.changeView(item.type) : null}
+              onDoubleClick={e => {
+                e.preventDefault();
+                if (allowSelectFolder) this.changeView(item.type);
+              }}
               className={`${styles.indexItems} ${
                 selectedType === item.type ? styles.selectedItem : ''
               }`}
@@ -491,10 +542,19 @@ export default class StorageFilePicker extends React.Component {
             <div
               onClick={
                 allowSelectFolder
-                  ? () => this.handleProjectSelect(item)
-                  : () => this.visitProject(item, type)
+                  ? e => {
+                      e.preventDefault();
+                      this.handleProjectSelect(item);
+                    }
+                  : e => {
+                      e.preventDefault();
+                      this.visitProject(item, type);
+                    }
               }
-              onDoubleClick={allowSelectFolder ? () => this.visitProject(item, type) : null}
+              onDoubleClick={e => {
+                e.preventDefault();
+                if (allowSelectFolder) this.visitProject(item, type);
+              }}
               className={`${styles.indexItems} ${
                 selectedProject && selectedProject.id === item.id ? styles.selectedItem : ''
               }`}
@@ -685,7 +745,7 @@ export default class StorageFilePicker extends React.Component {
   }
 
   render() {
-    const { styles, height } = this.props;
+    const { styles, height, pickMode } = this.props;
     const listContent = (
       <React.Fragment>
         {this.state.view === 'index' ? this.renderIndexList() : null}
@@ -702,6 +762,21 @@ export default class StorageFilePicker extends React.Component {
         <Card className={styles.bodyCard}>
           {height ? <Scrollbars style={{ height }}>{listContent}</Scrollbars> : listContent}
         </Card>
+
+        {pickMode === 'create' && (
+          <Input
+            placeholder="输入文件名"
+            value={this.state.createFileName}
+            onChange={e => {
+              e.preventDefault();
+              this.setState({ createFileName: e.target.value }, () => {
+                const { type, path, project, fullPath, createFileName } = this.state;
+                this.onCreateChange(type, path, project, fullPath, createFileName);
+              });
+            }}
+          />
+        )}
+
         {this.renderModals()}
       </Card>
     );
@@ -764,4 +839,15 @@ StorageFilePicker.propTypes = {
   folderOnly: PropTypes.bool,
 
   height: PropTypes.number,
+
+  /**
+   * will be called when visiting new folders.
+   */
+  onFileVisited: PropTypes.func,
+
+  pickMode: PropTypes.string, // picker mode: 'pick', 'create'
+
+  onCreateChange: PropTypes.func, // callback when create changes.
+
+  createFileName: PropTypes.string,
 };

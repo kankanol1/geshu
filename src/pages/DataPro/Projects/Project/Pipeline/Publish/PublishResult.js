@@ -12,8 +12,8 @@ class PublishResult extends React.PureComponent {
   };
 
   componentDidMount() {
-    const { values } = this.props;
-    publishPipeline(values).then(response => {
+    const { values, id } = this.props;
+    publishPipeline({ id, ...values }).then(response => {
       if (response) {
         this.setState({ response, loading: false });
       }

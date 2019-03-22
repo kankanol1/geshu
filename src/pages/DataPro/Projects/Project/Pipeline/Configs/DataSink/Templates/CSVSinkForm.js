@@ -38,7 +38,7 @@ const CSVSinkForm = props => {
         errors,
         currentRecord,
         'sink.path',
-        '',
+        undefined,
         '存储路径',
         <FilePickerForForm
           type="inline"
@@ -56,13 +56,12 @@ const CSVSinkForm = props => {
           onChange={onChange}
         />
       )}
-      {formItemWithError(
+      {/* {formItemWithError(
         form,
         formItemProps,
         {
           rules: [
             { required: true, message: '文件名不能为空' },
-            { pattern: /[a-zA-Z0-9]*/, message: '文件名仅允许字母及数字' },
           ],
         },
         errors,
@@ -71,7 +70,7 @@ const CSVSinkForm = props => {
         '',
         '文件名',
         <Input onChange={onChange} />
-      )}
+      )} */}
     </React.Fragment>
   );
 };

@@ -38,7 +38,7 @@ const CSVDatasetForm = props => {
         errors,
         currentRecord,
         'source.path',
-        {},
+        undefined,
         '文件路径',
         <FilePickerForForm
           type="inline"
