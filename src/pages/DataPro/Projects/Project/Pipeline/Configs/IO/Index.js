@@ -6,13 +6,20 @@ import Input1Output1Config from './Input1Output1Config';
 import Input1Output2Config from './Input1Output2Config';
 import Input2Output1Config from './Input2Output1Config';
 import Output1Config from './Output1Config';
+import Input1Config from './Input1Config';
 
 // render config for other components.
 const renderConfig = {
+  // sources.
+  FileDataSource: Output1Config,
+
+  // sinks
+  FileDataSink: Input1Config,
+
+  // transformers.
   AddLiteralColumnTransformer: Input1Output1Config,
   PrepareTransformer: Input1Output1Config,
   FilterTransformer: Input1Output1Config,
-  FileDataSource: Output1Config,
   SplitTransformer: Input1Output2Config,
   JoinTransformer: Input2Output1Config,
 };

@@ -10,16 +10,12 @@ import { formItemWithError } from '../Utils';
 import styles from '../Index.less';
 
 const formRegistry = {
-  'com.gldata.gaia.pipeline.api.dataset.formats.CsvFormat': CSVDatasetForm,
+  'com.gldata.gaia.pipeline.api.dataset.formats.CsvFormat': [CSVDatasetForm, 'CSV'],
 };
 
 const FormItem = Form.Item;
 const { TextArea } = Input;
 const { Step } = Steps;
-
-const formats = {
-  'com.gldata.gaia.pipeline.api.dataset.formats.CsvFormat': 'CSV',
-};
 
 class FileDataSourceConfig extends React.Component {
   constructor(props) {
@@ -85,10 +81,9 @@ class FileDataSourceConfig extends React.Component {
     const { loading, changed } = this.state;
     const errors = changed ? {} : givenErrors;
     const type =
-      (this.state.formValues && this.state.formValues.type) ||
-      'com.gldata.gaia.pipeline.api.dataset.formats.CsvFormat';
+      (this.state.formValues && this.state.formValues.type) || Object.keys(formRegistry)[0];
 
-    const ExtraItems = formRegistry[type];
+    const ExtraItems = formRegistry[type][0];
     const formItemProps = {
       labelCol: { span: 5 },
       wrapperCol: { span: 15 },
@@ -108,9 +103,12 @@ class FileDataSourceConfig extends React.Component {
           type,
           '文件类型',
           <Select onChange={() => this.handleChange()}>
-            <Select.Option value="com.gldata.gaia.pipeline.api.dataset.formats.CsvFormat">
-              CSV
-            </Select.Option>
+            {Object.keys(formRegistry).map((k, i) => (
+              <Select.Option key={i} value={k}>
+                {' '}
+                {formRegistry[k][1]}{' '}
+              </Select.Option>
+            ))}
           </Select>
         )}
         <ExtraItems

@@ -298,8 +298,9 @@ export function getAllDatasets(req, res) {
 
 export function addOperator(req, res) {
   const { body } = req;
-  const { code, input: oinput, output, name } = body;
+  const { code, input: oinput, output: ooutput, name } = body;
   const input = oinput || [];
+  const output = ooutput || [];
   const pos = pipeline.components
     .filter(i => i.type === 'Dataset' && input.includes(i.name))
     .map(i => ({ x: i.x, y: i.y }));

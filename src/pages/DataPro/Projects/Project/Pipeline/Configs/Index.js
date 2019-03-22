@@ -10,11 +10,17 @@ import FilterTransformer from './Transformer/FilterTransformer';
 import PrepareTransformer from './Transformer/PrepareTransformer';
 import SplitTransformer from './Transformer/SplitTransformer';
 import JoinTransformer from './Transformer/JoinTransformer';
+import FileDataSink from './DataSink/FileDataSink';
 import TopBar from '../../../TopBar';
 import styles from './Index.less';
 
 const registered = {
+  // data source.
   FileDataSource: FileDataSource, // eslint-disable-line
+  // data sink
+  FileDataSink,
+
+  // transformers
   FilterTransformer: FilterTransformer, // eslint-disable-line
   PrepareTransformer: PrepareTransformer, // eslint-disable-line
   SplitTransformer,
@@ -49,11 +55,11 @@ class Index extends React.Component {
     });
   }
 
-  renderChildren = (id, operator) => {
+  renderChildren = (id, operator, pageType) => {
     const { code, id: opId, name, type, configs, errors } = operator;
     const Pane = registered[code];
     if (Pane) {
-      if (type === 'new' && Object.keys(configs) === 0) {
+      if (pageType === 'new' && Object.keys(configs).length === 0) {
         return (
           <Pane id={id} code={code} opId={opId} name={name} refresh={() => this.loadOperator()} />
         );
@@ -108,7 +114,7 @@ class Index extends React.Component {
               </span>
             </div>
           </div>
-          {this.renderChildren(id, operator)}
+          {this.renderChildren(id, operator, type)}
         </div>
       </Layout>
     );
