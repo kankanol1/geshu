@@ -34,7 +34,7 @@ class LineLayer extends React.Component {
           const lineStr = calculateLineCurly(from.x + r, from.y, to.x - r, to.y);
           return (
             <React.Fragment key={i}>
-              <path d={lineStr} style={{ fill: 'none', stroke: '#391085', strokeWidth: 1 }} />
+              <path d={lineStr} style={{ fill: 'none', stroke: '#8d72d8', strokeWidth: 5 }} />
             </React.Fragment>
           );
         })}
