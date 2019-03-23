@@ -3,10 +3,11 @@ import { Form, Input, Checkbox } from 'antd';
 import { formItemWithError } from '../Utils';
 
 const JDBCDataSource = props => {
-  const { form, currentRecord, formItemProps, errors, onChange } = props;
+  const { form, currentRecord, formItemProps, errors, onChange, prefix } = props;
   return (
     <React.Fragment>
       {formItemWithError(
+        prefix,
         form,
         formItemProps,
         {},
@@ -18,6 +19,7 @@ const JDBCDataSource = props => {
         <Input onChange={onChange} />
       )}
       {formItemWithError(
+        prefix,
         form,
         formItemProps,
         {},
@@ -29,6 +31,7 @@ const JDBCDataSource = props => {
         <Input onChange={onChange} />
       )}
       {formItemWithError(
+        prefix,
         form,
         formItemProps,
         {},

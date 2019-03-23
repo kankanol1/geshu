@@ -1,35 +1,62 @@
 import React from 'react';
-import { Form, Input, Checkbox } from 'antd';
+import { Form, Input, Checkbox, Select } from 'antd';
 import FilePickerForForm from '@/pages/Storage/FilePickerForForm';
 import { formItemWithError } from '../Utils';
+
+const formRegistry = {
+  'com.gldata.gaia.pipeline.api.dataset.formats.CsvFormat': ['CSV'],
+};
 
 const CSVDataSource = props => {
   const { form, currentRecord, formItemProps, errors, onChange, prefix } = props;
   return (
     <React.Fragment>
       {formItemWithError(
+        prefix,
+        form,
+        formItemProps,
+        {
+          rules: [{ required: true, message: '数据集类型不能为空' }],
+        },
+        errors,
+        currentRecord,
+        'format.formatClass',
+        'CSV',
+        '文件类型',
+        <Select onChange={onChange}>
+          {Object.keys(formRegistry).map((k, i) => (
+            <Select.Option key={i} value={k}>
+              {formRegistry[k]}
+            </Select.Option>
+          ))}
+        </Select>
+      )}
+      {formItemWithError(
+        prefix,
         form,
         formItemProps,
         { valuePropName: 'checked' },
         errors,
         currentRecord,
-        `${prefix}.format.ignoreFirstLine`,
+        `format.ignoreFirstLine`,
         false,
         '包含文件头',
         <Checkbox onChange={onChange} />
       )}
       {formItemWithError(
+        prefix,
         form,
         formItemProps,
         {},
         errors,
         currentRecord,
-        `${prefix}.format.fieldDelimiter`,
+        `format.fieldDelimiter`,
         ',',
         '分隔符',
         <Input onChange={onChange} />
       )}
       {formItemWithError(
+        prefix,
         form,
         formItemProps,
         {
@@ -37,7 +64,7 @@ const CSVDataSource = props => {
         },
         errors,
         currentRecord,
-        `${prefix}.source.path`,
+        `source.path`,
         '',
         '文件路径',
         <FilePickerForForm

@@ -2,27 +2,23 @@ import React from 'react';
 import { Form, Button, Radio, message, Spin, Row, Col } from 'antd';
 import CSVDataSource from './CSVDataSource';
 import JDBCDataSource from './JDBCDataSource';
+import { formItemWithError } from '../Utils';
 
 import styles from '../EditTask.less';
 
 const sources = {
-  CSV: CSVDataSource,
-  JDBC: JDBCDataSource,
-};
-
-const displaySources = {
-  CSV: 'CSV文件',
-  JDBC: '数据库',
+  FileDataSource: ['文件', CSVDataSource],
+  JDBCDataSource: ['数据库', JDBCDataSource],
 };
 
 class SourceUnit extends React.PureComponent {
   state = {
-    type: 'CSV',
+    type: 'FileDataSource',
   };
 
   render() {
     const { type } = this.state;
-    const Comp = sources[type];
+    const Comp = sources[type][1];
     const { form, id, info, currentRecord } = this.props;
     const errors = {};
 
@@ -37,20 +33,23 @@ class SourceUnit extends React.PureComponent {
           <Col span={20} offset={2}>
             <div className={styles.describer}>配置输入: {info.name}</div>
             <div className={styles.description}>
-              {' '}
-              <span>{info.description}</span>{' '}
+              <span>{info.description}</span>
             </div>
             <div className={styles.describerPadding} />
           </Col>
         </Row>
         <div className={`${styles.middleWrapper} ${styles.switchWrapper}`}>
-          <Radio.Group value={type} onChange={v => this.setState({ type: v.target.value })}>
-            {Object.keys(displaySources).map(key => (
-              <Radio.Button value={key} key={key}>
-                {displaySources[key]}
-              </Radio.Button>
-            ))}
-          </Radio.Group>
+          {form.getFieldDecorator(`${id}.componentType`, {
+            initialValue: 'FileDataSource',
+          })(
+            <Radio.Group value={type} onChange={v => this.setState({ type: v.target.value })}>
+              {Object.keys(sources).map(key => (
+                <Radio.Button value={key} key={key}>
+                  {sources[key][0]}
+                </Radio.Button>
+              ))}
+            </Radio.Group>
+          )}
         </div>
         <Comp
           errors={errors}

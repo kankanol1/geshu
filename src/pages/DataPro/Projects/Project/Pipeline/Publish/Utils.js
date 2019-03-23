@@ -11,10 +11,7 @@ export const renderDescriber = (v, i, form, initValues) => {
     <React.Fragment key={i}>
       <Row>
         <Col span={15} offset={5}>
-          <div className={styles.describer}>
-            描述数据集
-            {v.name}
-          </div>
+          <div className={styles.describer}>描述数据集 [{v.name}]</div>
           <div className={styles.describerPadding} />
         </Col>
       </Row>

@@ -5,6 +5,7 @@ import jsonpath from 'jsonpath';
 const FormItem = Form.Item;
 
 export function formItemWithError(
+  prefix,
   form,
   formItemProps,
   fieldOptions,
@@ -15,8 +16,11 @@ export function formItemWithError(
   label,
   component
 ) {
-  const jpValue = jsonpath.query(formValues, `$.${accessor}`);
-  const initValue = jpValue.length > 0 && jpValue[0];
+  let initValue = defaultValue;
+  if (formValues[prefix]) {
+    const jpValue = jsonpath.query(formValues[prefix], `$.${accessor}`);
+    initValue = jpValue.length > 0 && jpValue[0];
+  }
   return (
     <FormItem
       {...formItemProps}
@@ -24,7 +28,7 @@ export function formItemWithError(
       help={errors[accessor]}
       validateStatus={errors[accessor] && 'error'}
     >
-      {form.getFieldDecorator(accessor, {
+      {form.getFieldDecorator(`${prefix}.${accessor}`, {
         initialValue: initValue || defaultValue,
         ...fieldOptions,
       })(component)}

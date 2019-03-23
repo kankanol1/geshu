@@ -17,7 +17,7 @@ export default class FilePickerForForm extends React.PureComponent {
     view: undefined,
     project: undefined,
     descriptionHidePrefix: true,
-    createMode: true,
+    createMode: false,
   };
 
   state = {
@@ -113,7 +113,7 @@ export default class FilePickerForForm extends React.PureComponent {
             type={this.props.folderType}
             view={this.props.view}
             project={this.props.project}
-            pickMode="create"
+            pickMode={this.props.createMode ? 'create' : 'pick'}
             createFileName={this.props.value && this.props.value.filename}
           />
         </Modal>

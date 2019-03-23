@@ -19,8 +19,7 @@ class EditTaskStepDataSource extends React.PureComponent {
       if (err) return;
       configTaskSource({
         id,
-        type: this.state.type,
-        ...fieldsValue,
+        configs: fieldsValue,
       }).then(response => {
         if (response && response.success) {
           router.push(`/tasks/t/${mode}/${id}/${pane + 1}`);

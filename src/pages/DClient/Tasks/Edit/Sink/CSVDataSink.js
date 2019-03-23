@@ -4,10 +4,11 @@ import FilePickerForForm from '@/pages/Storage/FilePickerForForm';
 import { formItemWithError } from '../Utils';
 
 const CSVDataSink = props => {
-  const { form, currentRecord, formItemProps, errors, onChange } = props;
+  const { form, currentRecord, formItemProps, errors, onChange, prefix } = props;
   return (
     <React.Fragment>
       {formItemWithError(
+        prefix,
         form,
         formItemProps,
         { valuePropName: 'checked' },
@@ -19,6 +20,7 @@ const CSVDataSink = props => {
         <Checkbox onChange={onChange} />
       )}
       {formItemWithError(
+        prefix,
         form,
         formItemProps,
         {},
@@ -30,6 +32,7 @@ const CSVDataSink = props => {
         <Input onChange={onChange} />
       )}
       {formItemWithError(
+        prefix,
         form,
         formItemProps,
         {
@@ -52,6 +55,7 @@ const CSVDataSink = props => {
         />
       )}
       {formItemWithError(
+        prefix,
         form,
         formItemProps,
         {},
