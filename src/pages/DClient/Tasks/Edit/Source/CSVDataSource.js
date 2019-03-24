@@ -21,7 +21,7 @@ const CSVDataSource = props => {
         errors,
         currentRecord,
         'format.formatClass',
-        'CSV',
+        'com.gldata.gaia.pipeline.api.dataset.formats.CsvFormat',
         '文件类型',
         <Select onChange={onChange}>
           {Object.keys(formRegistry).map((k, i) => (
