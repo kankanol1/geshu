@@ -17,9 +17,30 @@ for (let i = 0; i < 66; i += 1) {
     createdAt: moment(faker.date.past()),
     updatedAt: moment(faker.date.past()),
     labels: faker.random.words(parseInt(Math.random() * 10 + 1, 10)).split(' '),
-    status:
-      rad1 < 3 ? 'TEMPLATE_DEFINED' : rad1 > 7 ? 'SOURCE_DEFINED' : rad1 < 5 ? 'READY' : 'CREATED',
+    status: 'CREATED',
+    // rad1 < 3 ? 'TEMPLATE_DEFINED' : rad1 > 7 ? 'SOURCE_DEFINED' : rad1 < 5 ? 'READY' : 'CREATED',
     templateId: 1,
+    sourceConfigs: {
+      id1: {
+        componentType: 'FileDataSource',
+        format: {
+          formatClass: 'CSV',
+          ignoreFirstLine: false,
+          fieldDelimiter: '|',
+        },
+        source: {
+          path: {
+            type: 'private',
+            path: '/private-rootFile',
+            projectId: -1,
+            projectName: '无项目',
+            fullPath: 'hdfs://18.217.118.40:9000/private-rootFile',
+          },
+        },
+      },
+      id2: {},
+    },
+    sinkConfigs: { output: {} },
   });
 }
 

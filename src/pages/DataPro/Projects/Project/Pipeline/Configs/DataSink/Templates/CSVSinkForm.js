@@ -56,6 +56,7 @@ const CSVSinkForm = props => {
             name: props.name,
           }}
           onChange={onChange}
+          createMode
         />
       )}
       {/* {formItemWithError(

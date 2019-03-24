@@ -16,11 +16,8 @@ export function formItemWithError(
   label,
   component
 ) {
-  let initValue = defaultValue;
-  if (formValues[prefix]) {
-    const jpValue = jsonpath.query(formValues[prefix], `$.${accessor}`);
-    initValue = jpValue.length > 0 && jpValue[0];
-  }
+  const jpValue = jsonpath.query(formValues, `$.${accessor}`);
+  const initValue = (jpValue.length > 0 && jpValue[0]) || defaultValue;
   return (
     <FormItem
       {...formItemProps}

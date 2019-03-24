@@ -8,10 +8,19 @@ import SinkUnit from './Sink/SinkUnit';
 @Form.create()
 class EditTaskStepDataSink extends React.PureComponent {
   state = {
-    type: 'CSV',
     formValues: {},
     submitting: false,
   };
+
+  componentDidMount() {
+    const { taskInfo } = this.props;
+    this.state.formValues = (taskInfo && taskInfo.sinkConfigs) || {};
+  }
+
+  componentWillReceiveProps(props) {
+    const { taskInfo } = props;
+    this.setState({ formValues: (taskInfo && taskInfo.sinkConfigs) || {} });
+  }
 
   handleSubmit(e) {
     e.preventDefault();
@@ -20,8 +29,7 @@ class EditTaskStepDataSink extends React.PureComponent {
       if (err) return;
       configTaskSink({
         id,
-        type: this.state.type,
-        ...fieldsValue,
+        configs: fieldsValue,
       }).then(response => {
         if (response && response.success) {
           router.push(`/tasks/t/${mode}/${id}/${pane + 1}`);
@@ -43,13 +51,7 @@ class EditTaskStepDataSink extends React.PureComponent {
     return (
       <React.Fragment>
         {Object.keys(outputs).map((k, i) => (
-          <SinkUnit
-            currentRecord={currentRecord[k] || {}}
-            key={i}
-            id={k}
-            info={outputs[k]}
-            form={form}
-          />
+          <SinkUnit currentRecord={currentRecord[k]} key={i} id={k} info={outputs[k]} form={form} />
         ))}
       </React.Fragment>
     );

@@ -6,25 +6,21 @@ import JDBCDataSink from './JDBCDataSink';
 import styles from '../EditTask.less';
 
 const sinks = {
-  CSV: CSVDataSink,
-  JDBC: JDBCDataSink,
-};
-
-const displaySinks = {
-  CSV: 'CSV文件',
-  JDBC: '数据库',
+  FileDataSink: ['文件', CSVDataSink],
+  JDBCDataSink: ['数据库', JDBCDataSink],
 };
 
 class SinkUnit extends React.PureComponent {
   state = {
-    type: 'CSV',
+    type: 'FileDataSink',
   };
 
   render() {
     const { type } = this.state;
-    const Comp = sinks[type];
-    const { form, id, info, currentRecord } = this.props;
+    const Comp = sinks[type][1];
+    const { form, id, info, currentRecord: gc } = this.props;
     const errors = {};
+    const currentRecord = gc || {};
 
     const formItemProps = {
       labelCol: { span: 5 },
@@ -37,20 +33,23 @@ class SinkUnit extends React.PureComponent {
           <Col span={20} offset={2}>
             <div className={styles.describer}>配置输出: {info.name}</div>
             <div className={styles.description}>
-              {' '}
-              <span>{info.description}</span>{' '}
+              <span>{info.description}</span>
             </div>
             <div className={styles.describerPadding} />
           </Col>
         </Row>
         <div className={`${styles.middleWrapper} ${styles.switchWrapper}`}>
-          <Radio.Group value={type} onChange={v => this.setState({ type: v.target.value })}>
-            {Object.keys(displaySinks).map(key => (
-              <Radio.Button value={key} key={key}>
-                {displaySinks[key]}
-              </Radio.Button>
-            ))}
-          </Radio.Group>
+          {form.getFieldDecorator(`${id}.componentType`, {
+            initialValue: (currentRecord && currentRecord.componentType) || 'FileDataSink',
+          })(
+            <Radio.Group value={type} onChange={v => this.setState({ type: v.target.value })}>
+              {Object.keys(sinks).map(key => (
+                <Radio.Button value={key} key={key}>
+                  {sinks[key][0]}
+                </Radio.Button>
+              ))}
+            </Radio.Group>
+          )}
         </div>
         <Comp
           errors={errors}

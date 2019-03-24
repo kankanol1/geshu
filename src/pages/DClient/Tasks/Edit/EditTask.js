@@ -1,5 +1,5 @@
 import React from 'react';
-import { Steps, Card, Button } from 'antd';
+import { Steps, Card, Button, Spin } from 'antd';
 import Link from 'umi/link';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import { queryTaskById } from '@/services/dclient/taskAPI';
@@ -26,6 +26,7 @@ class EditTask extends React.PureComponent {
   state = {
     templateInfo: undefined,
     templateId: undefined,
+    taskInfo: undefined,
   };
 
   componentDidMount() {
@@ -40,6 +41,7 @@ class EditTask extends React.PureComponent {
     const { id, pane } = props.match.params;
     queryTaskById({ id }).then(response => {
       if (response && response.templateId) {
+        this.setState({ taskInfo: response });
         getTemplateById({ id: response.templateId }).then(res2 => {
           if (res2) {
             this.setState({ templateInfo: res2, templateId: response.templateId });
@@ -49,11 +51,74 @@ class EditTask extends React.PureComponent {
     });
   }
 
+  calStartPane() {
+    const {
+      taskInfo: { status },
+    } = this.state;
+    switch (status) {
+      case 'CREATED':
+        return 0;
+      case 'TEMPLATE_DEFINED':
+        return 1;
+      case 'SOURCE_DEFINED':
+        return 2;
+      case 'SINK_DEFINED':
+        return 4;
+      default:
+        return 0;
+    }
+  }
+
+  renderError = (pane, id, mode) => {
+    return (
+      <Card>
+        <div className={styles.middleBtn}>
+          <div>未完成前序步骤，请先返回填写</div>
+          <Link to={`/tasks/t/${mode}/${id}/${pane}`}>
+            <Button type="primary"> 返回</Button>
+          </Link>
+        </div>
+      </Card>
+    );
+  };
+
+  renderContent = (activePane, id, mode) => {
+    const StepComp = stepsRender[activePane];
+    const { templateInfo, templateId, taskInfo } = this.state;
+    return (
+      <Card>
+        <div className={styles.topBtns}>
+          <Link
+            to={
+              activePane === 0 ? `/tasks/t/show/${id}` : `/tasks/t/${mode}/${id}/${activePane - 1}`
+            }
+          >
+            <Button> &lt;&nbsp; 返回</Button>
+          </Link>
+        </div>
+        <StepComp
+          templateId={templateId}
+          mode={mode}
+          id={id}
+          pane={activePane}
+          templateInfo={templateInfo}
+          taskInfo={taskInfo}
+        />
+      </Card>
+    );
+  };
+
+  renderLoaded = (activePane, id, mode) => {
+    const startPane = this.calStartPane();
+    return activePane < startPane
+      ? this.renderError(startPane, id, mode)
+      : this.renderContent(activePane, id, mode);
+  };
+
   render() {
     const { id, mode, pane } = this.props.match.params;
     const activePane = pane ? parseInt(pane, 10) : 0;
-    const StepComp = stepsRender[activePane];
-    const { templateInfo, templateId } = this.state;
+    const { taskInfo } = this.state;
     return (
       <PageHeaderWrapper
         title="配置任务"
@@ -67,26 +132,7 @@ class EditTask extends React.PureComponent {
           </Steps>
         }
       >
-        <Card>
-          <div className={styles.topBtns}>
-            <Link
-              to={
-                activePane === 0
-                  ? `/tasks/t/show/${id}`
-                  : `/tasks/t/${mode}/${id}/${activePane - 1}`
-              }
-            >
-              <Button> &lt;&nbsp; 返回</Button>
-            </Link>
-          </div>
-          <StepComp
-            templateId={templateId}
-            mode={mode}
-            id={id}
-            pane={activePane}
-            templateInfo={templateInfo}
-          />
-        </Card>
+        {taskInfo ? this.renderLoaded(activePane, id, mode) : <Spin />}
       </PageHeaderWrapper>
     );
   }

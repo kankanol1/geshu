@@ -16,11 +16,24 @@ class SourceUnit extends React.PureComponent {
     type: 'FileDataSource',
   };
 
+  componentDidMount() {
+    this.componentWillReceiveProps(this.props);
+  }
+
+  componentWillReceiveProps(props) {
+    const { currentRecord: gc } = props;
+    const currentRecord = gc || {};
+    if (currentRecord.componentType) {
+      this.setState({ type: currentRecord.componentType });
+    }
+  }
+
   render() {
     const { type } = this.state;
     const Comp = sources[type][1];
-    const { form, id, info, currentRecord } = this.props;
+    const { form, id, info, currentRecord: gc } = this.props;
     const errors = {};
+    const currentRecord = gc || {};
 
     const formItemProps = {
       labelCol: { span: 5 },
@@ -40,7 +53,7 @@ class SourceUnit extends React.PureComponent {
         </Row>
         <div className={`${styles.middleWrapper} ${styles.switchWrapper}`}>
           {form.getFieldDecorator(`${id}.componentType`, {
-            initialValue: 'FileDataSource',
+            initialValue: (currentRecord && currentRecord.componentType) || 'FileDataSource',
           })(
             <Radio.Group value={type} onChange={v => this.setState({ type: v.target.value })}>
               {Object.keys(sources).map(key => (

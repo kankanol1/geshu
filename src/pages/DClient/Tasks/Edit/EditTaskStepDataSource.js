@@ -12,6 +12,16 @@ class EditTaskStepDataSource extends React.PureComponent {
     submitting: false,
   };
 
+  componentDidMount() {
+    const { taskInfo } = this.props;
+    this.state.formValues = (taskInfo && taskInfo.sourceConfigs) || {};
+  }
+
+  componentWillReceiveProps(props) {
+    const { taskInfo } = props;
+    this.setState({ formValues: (taskInfo && taskInfo.sourceConfigs) || {} });
+  }
+
   handleSubmit(e) {
     e.preventDefault();
     const { mode, id, pane, form } = this.props;
@@ -42,7 +52,7 @@ class EditTaskStepDataSource extends React.PureComponent {
       <React.Fragment>
         {Object.keys(inputs).map((k, i) => (
           <SourceUnit
-            currentRecord={currentRecord[k] || {}}
+            currentRecord={currentRecord[k]}
             key={i}
             id={k}
             info={inputs[k]}

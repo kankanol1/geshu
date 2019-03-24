@@ -1,12 +1,35 @@
 import React from 'react';
-import { Form, Input, Checkbox } from 'antd';
+import { Select, Input, Checkbox } from 'antd';
 import FilePickerForForm from '@/pages/Storage/FilePickerForForm';
 import { formItemWithError } from '../Utils';
+
+const formRegistry = {
+  // first would be the default.
+  'com.gldata.gaia.pipeline.api.dataset.formats.CsvFormat': 'CSV',
+};
 
 const CSVDataSink = props => {
   const { form, currentRecord, formItemProps, errors, onChange, prefix } = props;
   return (
     <React.Fragment>
+      {formItemWithError(
+        prefix,
+        form,
+        formItemProps,
+        {},
+        errors,
+        currentRecord,
+        'format.formatClass',
+        'CSV',
+        '文件类型',
+        <Select onChange={onChange}>
+          {Object.keys(formRegistry).map((k, i) => (
+            <Select.Option key={i} value={k}>
+              {formRegistry[k]}
+            </Select.Option>
+          ))}
+        </Select>
+      )}
       {formItemWithError(
         prefix,
         form,
@@ -36,13 +59,13 @@ const CSVDataSink = props => {
         form,
         formItemProps,
         {
-          rules: [{ required: true, message: '文件路径不能为空' }],
+          rules: [{ required: true, message: '存储路径不能为空' }],
         },
         errors,
         currentRecord,
         'sink.path',
-        '',
-        '文件路径',
+        undefined,
+        '存储路径',
         <FilePickerForForm
           type="inline"
           allowSelectFolder={false}
@@ -52,19 +75,8 @@ const CSVDataSink = props => {
           view="file"
           folderType="private"
           onChange={onChange}
+          createMode
         />
-      )}
-      {formItemWithError(
-        prefix,
-        form,
-        formItemProps,
-        {},
-        errors,
-        currentRecord,
-        'sink.name',
-        '',
-        '输出文件名',
-        <Input onChange={onChange} />
       )}
     </React.Fragment>
   );
