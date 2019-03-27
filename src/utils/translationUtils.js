@@ -5,7 +5,10 @@ const statusDisplayType = {
   SOURCES_DEFINED: '#8c8c8c',
   SINKS_DEFINED: '#8c8c8c',
   RUNNING: '#2db7f5',
-  DONE: '#87d068',
+  FINISHED: '#87d068',
+  SUBMITTED: '#8c8c8c',
+  FAILED: 'red',
+  SUBMIT_FAILED: 'red',
 };
 
 const statusDisplayName = {
@@ -15,7 +18,10 @@ const statusDisplayName = {
   SOURCES_DEFINED: '配置中',
   SINKS_DEFINED: '配置中',
   RUNNING: '执行中',
-  DONE: '执行完毕',
+  FINISHED: '执行完毕',
+  SUBMITTED: '提交中',
+  SUBMIT_FAILED: '提交出错',
+  FAILED: '执行失败',
 };
 
 export const status = {

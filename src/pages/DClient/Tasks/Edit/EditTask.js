@@ -40,13 +40,15 @@ class EditTask extends React.PureComponent {
   loadTemplateInfo(props) {
     const { id, pane } = props.match.params;
     queryTaskById({ id }).then(response => {
-      if (response && response.templateId) {
+      if (response) {
         this.setState({ taskInfo: response });
-        getTemplateById({ id: response.templateId }).then(res2 => {
-          if (res2) {
-            this.setState({ templateInfo: res2, templateId: response.templateId });
-          }
-        });
+        if (response.templateId) {
+          getTemplateById({ id: response.templateId }).then(res2 => {
+            if (res2) {
+              this.setState({ templateInfo: res2, templateId: response.templateId });
+            }
+          });
+        }
       }
     });
   }
