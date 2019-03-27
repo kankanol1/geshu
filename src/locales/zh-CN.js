@@ -289,10 +289,10 @@ export default {
   // =============================the aboves are from antd-pro======================
   // =============================the followings are for our project===============
   menu: '菜单',
-  'menu.project': '项目',
+  'menu.project': '数据处理流程',
   'menu.project.list': '项目列表',
   'menu.project.workspace': '工作区',
-  'menu.tasks': '任务列表',
+  'menu.tasks': '数据转换任务',
   'menu.tasks.list': '任务列表',
   'menu.models': '模型管理',
   'menu.models.candidates': '待选模型库',

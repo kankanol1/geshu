@@ -3,7 +3,7 @@ export default [
   {
     path: '/tasks',
     name: 'tasks',
-    icon: 'bulb',
+    icon: 'schedule',
     hideChildrenInMenu: true,
     routes: [
       {
