@@ -25,6 +25,17 @@ class DataInspector extends React.Component {
     });
   }
 
+  renderColumnTitle = (schema, type) => {
+    return (
+      <div className={styles.columnHeader}>
+        <div className={styles.columnName}>{schema.name}</div>
+        <div className={styles.columnType}>{schema.type}</div>
+        {type.type && <div className={styles.columnType2}>{type.type}</div>}
+        {!type.type && <div className={styles.columnType2}>未知</div>}
+      </div>
+    );
+  };
+
   render() {
     const { loading } = this.props;
     const performCancel = () => {
@@ -37,7 +48,7 @@ class DataInspector extends React.Component {
     const { success, message, data } = result;
     let table = null;
     if (success) {
-      const { schema } = data;
+      const { schema, types } = data;
       table = (
         <Table
           className={styles.table}
@@ -45,7 +56,12 @@ class DataInspector extends React.Component {
           style={{ marginTop: '10px' }}
           columns={
             schema &&
-            schema.map(i => ({ width: 100, title: i.name, key: i.name, dataIndex: i.name }))
+            schema.map((s, i) => ({
+              width: 100,
+              title: this.renderColumnTitle(s, types[i]),
+              key: s.name,
+              dataIndex: s.name,
+            }))
           }
           dataSource={data.data || []}
           scroll={{ x: schema && schema.length * 100, y: 400 }}

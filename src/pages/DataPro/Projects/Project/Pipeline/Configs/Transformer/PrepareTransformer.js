@@ -118,21 +118,19 @@ class PrepareTransformer extends React.Component {
   renderTable = () => {
     const { pagination, table, loading, message: msg } = this.props.dataproPreviewTable;
     const nc = [];
-    const { schema, data } = table;
+    const { schema, data, types } = table;
     // set columns, etc.
     let contentRender;
     if (table && table.schema) {
       for (let i = 0; i < schema.length; i++) {
         const v = schema[i];
         nc.push({
-          id: v.name,
+          id: `n${i}`,
           Header: props => (
             <div>
-              <span style={{ color: 'black', display: 'block', fontWeight: '500' }}>{v.name}</span>
-              <span style={{ display: 'block', fontSize: '12px' }}> {v.type}</span>
-              {/* <span style={{ display: 'block', fontSize: '12px', color: '#1abc9c' }}>
-                {secondTypes[i]}
-              </span> */}
+              <span className={styles.columnName}>{v.name}</span>
+              <span className={styles.columnType}> {v.type}</span>
+              <span className={styles.columnType2}>{types[i].type || '未知'}</span>
             </div>
           ),
           accessor: v.name,

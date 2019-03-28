@@ -79,6 +79,20 @@ export default {
           { name: 'a11', type: 'String', nullable: false },
           { name: 'a12', type: 'String', nullable: false },
         ],
+        types: [
+          { name: 'a1', type: null },
+          { name: 'a2', type: null },
+          { name: 'a3', type: 'Name' },
+          { name: 'a4', type: 'Email' },
+          { name: 'a5', type: 'Address' },
+          { name: 'a6', type: null },
+          { name: 'a7', type: null },
+          { name: 'a8', type: null },
+          { name: 'a9', type: 'Address' },
+          { name: 'a10', type: 'Address' },
+          { name: 'a11', type: 'Name' },
+          { name: 'a12', type: 'Email' },
+        ],
         data,
       };
       const dataTable = {
