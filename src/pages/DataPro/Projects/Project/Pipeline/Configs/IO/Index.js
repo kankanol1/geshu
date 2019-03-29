@@ -12,6 +12,7 @@ import Input1Config from './Input1Config';
 const renderConfig = {
   // sources.
   FileDataSource: Output1Config,
+  JDBCDataSource: Output1Config,
 
   // sinks
   FileDataSink: Input1Config,

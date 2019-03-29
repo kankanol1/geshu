@@ -11,12 +11,14 @@ import PrepareTransformer from './Transformer/PrepareTransformer';
 import SplitTransformer from './Transformer/SplitTransformer';
 import JoinTransformer from './Transformer/JoinTransformer';
 import FileDataSink from './DataSink/FileDataSink';
+import JDBCDataSource from './DataSource/JDBCDataSource';
 import TopBar from '../../../TopBar';
 import styles from './Index.less';
 
 const registered = {
   // data source.
   FileDataSource: FileDataSource, // eslint-disable-line
+  JDBCDataSource,
   // data sink
   FileDataSink,
 
