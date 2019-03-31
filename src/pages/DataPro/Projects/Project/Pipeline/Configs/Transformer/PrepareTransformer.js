@@ -143,7 +143,7 @@ class PrepareTransformer extends React.Component {
       <Comp
         id={id}
         opId={opId}
-        configs={configs}
+        configs={configs || []}
         onCancel={() => {
           this.setState({ addingComponent: undefined });
         }}
@@ -264,7 +264,7 @@ class PrepareTransformer extends React.Component {
 
   renderHistory = () => {
     const { configs } = this.props;
-    const renderConfig = configs.map((i, index) => ({ value: i, index }));
+    const renderConfig = (configs || []).map((i, index) => ({ value: i, index }));
     return (
       <React.Fragment>
         <Spin spinning={this.state.deleting}>
@@ -320,6 +320,12 @@ class PrepareTransformer extends React.Component {
             {formatMessage({ id: `types.${t}` })}
           </div>
         ))}
+        <div
+          className={`${styles.typeItem} ${!type && styles.typeItemSelected}`}
+          onClick={e => this.handleTypeClicked(e, name, type, null)}
+        >
+          未知
+        </div>
       </div>
     );
   };

@@ -12,6 +12,8 @@ const keyTranslate = {
   stdev: '标准差',
 };
 
+let timeoutFunc;
+
 export default class DetailOverview extends PureComponent {
   state = {
     heatmap: {
@@ -23,9 +25,17 @@ export default class DetailOverview extends PureComponent {
     loading: true,
   };
 
-  componentWillMount() {
+  mounted = false;
+
+  componentDidMount() {
+    this.mounted = true;
     this.setState({ loading: true });
-    setTimeout(() => this.fetchIfStillLoading(), 100);
+    timeoutFunc = setTimeout(() => this.fetchIfStillLoading(), 100);
+  }
+
+  componentWillUnmount() {
+    clearTimeout(timeoutFunc);
+    this.mounted = false;
   }
 
   formatHeatMapData = data => {
@@ -100,14 +110,16 @@ export default class DetailOverview extends PureComponent {
       if (response) {
         const { data, loading, message } = response;
         if (loading) {
-          this.clearData();
-          this.setState({
-            loading: false,
-            dataLoading: loading,
-            loadingMessage: message,
-          });
-          // start timeout.
-          setTimeout(() => this.fetchIfStillLoading(), 1000);
+          if (this.mounted) {
+            this.clearData();
+            this.setState({
+              loading: false,
+              dataLoading: loading,
+              loadingMessage: message,
+            });
+            // start timeout.
+            timeoutFunc = setTimeout(() => this.fetchIfStillLoading(), 1000);
+          }
         } else {
           this.formatHeatMapData(data);
           this.formatStatisticsData(data);
