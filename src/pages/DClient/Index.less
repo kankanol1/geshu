@@ -1,0 +1,50 @@
+@import '~antd/lib/style/themes/default.less';
+.itemWrapper {
+  width: 40%;
+  margin-top: 100px;
+  margin-left: 30%;
+  margin-right: 30%;
+}
+
+.item {
+  margin: 0;
+  width: 50%;
+  height: 200px;
+  font-size: 1.5em;
+  display: inline-block;
+  cursor: pointer;
+  text-align: center;
+  position: relative;
+  &:hover {
+    color: white;
+    background: @primary-color;
+  }
+  color: white;
+
+  :global(.anticon) {
+    font-size: 2rem;
+    padding: 20px;
+  }
+}
+
+.color1 {
+  background: #ffa940;
+}
+.color2 {
+  background: #73d13d;
+}
+.color3 {
+  background: #40a9ff;
+}
+.color4 {
+  background: #ff7a45;
+}
+
+.itemContent {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 20%;
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+}

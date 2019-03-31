@@ -5,7 +5,7 @@ import Animate from 'rc-animate';
 import { connect } from 'dva';
 import router from 'umi/router';
 import GlobalHeader from '@/components/XGlobalHeader';
-import TopNavHeader from '@/components/TopNavHeader';
+import TopNavHeader from '@/components/XTopNavHeader';
 import styles from './Header.less';
 
 const { Header } = Layout;
@@ -100,9 +100,7 @@ class HeaderView extends PureComponent {
             theme={navTheme}
             mode="horizontal"
             onCollapse={handleMenuCollapse}
-            onNoticeClear={this.handleNoticeClear}
             onMenuClick={this.handleMenuClick}
-            onNoticeVisibleChange={this.handleNoticeVisibleChange}
             {...this.props}
           />
         ) : (

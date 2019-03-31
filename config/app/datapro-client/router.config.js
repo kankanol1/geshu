@@ -14,7 +14,13 @@ export default [
     Routes: ['src/pages/AsyncAuthorized'],
     authority: [Privileges.LOGIN_USER],
     routes: [
-      { path: '/', redirect: '/tasks/list' },
+      { path: '/', redirect: '/index' },
+      {
+        path: '/index',
+        icon: 'database',
+        showInMenu: false,
+        component: './DClient/Index',
+      },
       ...dclientRoutes,
       {
         path: '/files',

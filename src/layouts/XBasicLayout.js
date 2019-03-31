@@ -15,7 +15,7 @@ import Authorized from '@/utils/Authorized';
 import SettingDrawer from '@/components/SettingDrawer';
 import logo from '../assets/logo.svg';
 import Footer from './Footer';
-import Header from './Header';
+import Header from './XHeader';
 import Context from './MenuContext';
 import Exception403 from '../pages/Exception/403';
 
@@ -344,6 +344,15 @@ class XBasicLayout extends React.PureComponent {
             minHeight: '100vh',
           }}
         >
+          {fullScreen ? null : (
+            <Header
+              menuData={menuData}
+              handleMenuCollapse={this.handleMenuCollapse}
+              logo={logo}
+              isMobile={isMobile}
+              {...this.props}
+            />
+          )}
           {isHeightFixed
             ? this.renderFixedHeightContent(routerConfig, children)
             : this.renderContent(routerConfig, children)}
