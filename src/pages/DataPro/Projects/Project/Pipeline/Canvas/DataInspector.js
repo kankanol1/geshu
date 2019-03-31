@@ -1,5 +1,6 @@
 import React from 'react';
 import { Modal, Button, Icon, Table, Spin } from 'antd';
+import { formatMessage } from 'umi/locale';
 import { connect } from 'dva';
 import styles from './DataInspector.less';
 
@@ -30,7 +31,9 @@ class DataInspector extends React.Component {
       <div className={styles.columnHeader}>
         <div className={styles.columnName}>{schema.name}</div>
         <div className={styles.columnType}>{schema.type}</div>
-        {type.type && <div className={styles.columnType2}>{type.type}</div>}
+        {type.type && (
+          <div className={styles.columnType2}>{formatMessage({ id: `types.${type.type}` })}</div>
+        )}
         {!type.type && <div className={styles.columnType2}>未知</div>}
       </div>
     );

@@ -362,4 +362,9 @@ export default {
   'operator.DistinctColumnTransformer': '去重',
   'operator.SortTransformer': '排序',
   'operator.PivotTransformer': '行列转置',
+
+  // =============== types ==================
+  'types.EMAIL': '电子邮件',
+  'types.NAME': '姓名',
+  'types.ADDRESS': '地址',
 };

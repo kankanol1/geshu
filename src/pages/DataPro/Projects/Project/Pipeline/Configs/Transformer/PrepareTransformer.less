@@ -93,4 +93,27 @@
   font-size: 0.9em;
   color: @primary-color;
   padding: 2px;
+  width: 100%;
+  cursor: pointer;
+}
+
+.typeDialog {
+  position: absolute;
+  background: white;
+  max-height: 600px;
+  overflow: auto;
+}
+
+.typeItem {
+  width: 100%;
+  padding: 5px;
+  cursor: pointer;
+  &:hover {
+    background: lighten(@primary-color, 10%);
+    color: white;
+  }
+}
+.typeItemSelected {
+  background: @primary-color;
+  color: white;
 }

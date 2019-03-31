@@ -17,4 +17,5 @@ export function getSchema(req, res) {
 
 export default {
   'POST /api/datapro/projects/pipeline/conf/getschema': getSchema,
+  'POST /api/datapro/projects/pipeline/conf/types': ['EMAIL', 'NAME'],
 };

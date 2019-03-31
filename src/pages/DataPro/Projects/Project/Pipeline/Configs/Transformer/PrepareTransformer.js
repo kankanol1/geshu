@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'dva';
 import { message, Row, Col, Button, Icon, Spin } from 'antd';
+import { formatMessage } from 'umi/locale';
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
 import { transformationTitle, transformationDescription } from './PrepareTransformer/Utils';
@@ -43,11 +44,28 @@ class PrepareTransformer extends React.Component {
       size: 100,
       page: 0,
     },
+    changingType: {
+      x: 490,
+      y: 217,
+      changing: false,
+      name: 'xxx',
+      width: 89,
+    },
   };
+
+  // componentWillMount() {
+  //   // listen click outside
+  //   document.addEventListener('mousedown', this.handleGeneralClick, false);
+  // }
 
   componentDidMount() {
     // init.
     this.refreshTable();
+    // fetch all types
+    this.props.dispatch({
+      type: 'dataproPreviewTable/fetchTypes',
+      payload: { id: this.props.id },
+    });
   }
 
   componentWillUnmount() {
@@ -55,6 +73,7 @@ class PrepareTransformer extends React.Component {
     this.props.dispatch({
       type: 'dataproPreviewTable/clear',
     });
+    // document.removeEventListener('mousedown', this.handleGeneralClick, false);
   }
 
   handleTransformationDelete = ({ value, index }) => {
@@ -77,6 +96,11 @@ class PrepareTransformer extends React.Component {
     });
   };
 
+  // handleGeneralClick = (e) => {
+  //   console.log('general click captured');
+  //   this.setState({changingType: {}})
+  // }
+
   refreshTable() {
     const { id, opId, configs } = this.props;
     this.props.dispatch({
@@ -91,6 +115,23 @@ class PrepareTransformer extends React.Component {
 
   showAddComponent(comp) {
     this.setState({ addingComponent: comp });
+  }
+
+  handleTypeClicked(e, name, oldType, newType) {
+    // set state back.
+    e.stopPropagation();
+    this.setState({ changingType: {} });
+    if (oldType === newType) return;
+    const { dispatch, id, opId } = this.props;
+    dispatch({
+      type: 'dataproPreviewTable/updateType',
+      payload: {
+        projectId: id,
+        id: opId,
+        name,
+        type: newType,
+      },
+    });
   }
 
   renderTransformationComponent() {
@@ -130,7 +171,34 @@ class PrepareTransformer extends React.Component {
             <div>
               <span className={styles.columnName}>{v.name}</span>
               <span className={styles.columnType}> {v.type}</span>
-              <span className={styles.columnType2}>{types[i].type || '未知'}</span>
+              <span
+                className={styles.columnType2}
+                onClick={e => {
+                  e.stopPropagation();
+                  e.preventDefault();
+                  if (this.state.changingType.changing) {
+                    this.setState({
+                      changingType: { x: 0, y: 0, name: undefined, changing: false },
+                    });
+                  } else {
+                    // get target
+                    const targetDOM = e.target.getBoundingClientRect();
+                    const { x, y, width, height } = targetDOM;
+                    this.setState({
+                      changingType: {
+                        y: y + height,
+                        x,
+                        width,
+                        changing: true,
+                        name: v.name,
+                        type: v.type,
+                      },
+                    });
+                  }
+                }}
+              >
+                {types[i].type ? formatMessage({ id: `types.${types[i].type}` }) : '未知'}
+              </span>
             </div>
           ),
           accessor: v.name,
@@ -171,7 +239,6 @@ class PrepareTransformer extends React.Component {
     } else {
       contentRender = (
         <div style={{ height: '400px', textAlign: 'center', paddingTop: '200px' }}>
-          {' '}
           <Spin />
         </div>
       );
@@ -233,6 +300,30 @@ class PrepareTransformer extends React.Component {
     );
   };
 
+  renderType = () => {
+    const { types } = this.props.dataproPreviewTable;
+    const { changingType } = this.state;
+    const { x, y, width, type, name, changing } = changingType;
+    if (!changing) return null;
+    return (
+      <div
+        className={styles.typeDialog}
+        style={{ top: y, left: x, width }}
+        onBlur={() => this.setState({ changingType: {} })}
+      >
+        {types.map((t, i) => (
+          <div
+            key={i}
+            className={`${styles.typeItem} ${t === type && styles.typeItemSelected}`}
+            onClick={e => this.handleTypeClicked(e, name, type, t)}
+          >
+            {formatMessage({ id: `types.${t}` })}
+          </div>
+        ))}
+      </div>
+    );
+  };
+
   render() {
     return (
       <React.Fragment>
@@ -241,6 +332,7 @@ class PrepareTransformer extends React.Component {
           <Col span={18}>{this.renderTable()}</Col>
         </Row>
         {this.renderTransformationComponent()}
+        {this.renderType()}
       </React.Fragment>
     );
   }

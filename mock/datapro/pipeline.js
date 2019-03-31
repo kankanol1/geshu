@@ -490,16 +490,16 @@ export function inspectData(req, res) {
     types: [
       { name: 'a1', type: null },
       { name: 'a2', type: null },
-      { name: 'a3', type: 'Name' },
-      { name: 'a4', type: 'Email' },
-      { name: 'a5', type: 'Address' },
+      { name: 'a3', type: 'NAME' },
+      { name: 'a4', type: 'EMAIL' },
+      { name: 'a5', type: 'ADDRESS' },
       { name: 'a6', type: null },
       { name: 'a7', type: null },
       { name: 'a8', type: null },
-      { name: 'a9', type: 'Address' },
-      { name: 'a10', type: 'Address' },
-      { name: 'a11', type: 'Name' },
-      { name: 'a12', type: 'Email' },
+      { name: 'a9', type: 'ADDRESS' },
+      { name: 'a10', type: 'ADDRESS' },
+      { name: 'a11', type: 'NAME' },
+      { name: 'a12', type: 'EMAIL' },
     ],
     data: [
       {
@@ -939,6 +939,7 @@ export default {
   'POST /api/datapro/projects/pipeline/op/run': runOperator,
   'POST /api/datapro/projects/pipeline/op/inspect': inspectData,
   'POST /api/datapro/projects/pipeline/op/schema': getOperatorSchema,
+  'POST /api/datapro/projects/pipeline/op/typeupdate': { success: true, message: 'ok' },
   'POST /api/datapro/projects/pipeline/op/invalid': invalidOperator,
   // get schema for transformation in prepare op.
   'POST /api/datapro/projects/pipeline/op/trans/schema': getTransformationSchema,

@@ -1,5 +1,4 @@
-import { previewTransformationResult } from '@/services/datapro/pipelineAPI';
-import { isUndefined } from 'util';
+import { getRegisteredTypes, updateType } from '@/services/datapro/pipelineAPI';
 
 export default {
   namespace: 'dataproPreviewTable',
@@ -9,6 +8,7 @@ export default {
     table: {},
     loading: true,
     message: undefined,
+    types: [],
   },
 
   reducers: {
@@ -22,6 +22,21 @@ export default {
     },
     clear(state, { payload }) {
       return { loading: true, message: undefined, pagination: {}, table: {} };
+    },
+
+    storeTypes(state, { payload }) {
+      return { ...state, types: payload };
+    },
+
+    updateTypeState(state, { payload }) {
+      const { name, type } = payload;
+      const newTypes = state.table.types.map(t => {
+        if (t.name === name) {
+          return { name, type };
+        }
+        return t;
+      });
+      return { ...state, table: { ...state.table, types: newTypes } };
     },
   },
 
@@ -58,6 +73,19 @@ export default {
         type: 'preview',
         payload,
       });
+    },
+
+    *fetchTypes({ payload }, { put, call }) {
+      const response = yield call(getRegisteredTypes, payload);
+      if (response) {
+        yield put({ type: 'storeTypes', payload: response });
+      }
+    },
+    *updateType({ payload }, { put, call }) {
+      const response = yield call(updateType, payload);
+      if (response && response.success) {
+        yield put({ type: 'updateTypeState', payload });
+      }
     },
   },
 

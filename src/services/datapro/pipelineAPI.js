@@ -81,6 +81,20 @@ export async function getSchemaFromFile(params) {
   });
 }
 
+export async function getRegisteredTypes(params) {
+  return request('/api/datapro/projects/pipeline/conf/types', {
+    method: 'POST',
+    body: params,
+  });
+}
+
+export async function updateType(params) {
+  return request('/api/datapro/projects/pipeline/op/typeupdate', {
+    method: 'POST',
+    body: params,
+  });
+}
+
 export async function invalidOperator(params) {
   return request('/api/datapro/projects/pipeline/op/invalid', {
     method: 'POST',
