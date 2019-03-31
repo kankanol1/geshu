@@ -6,7 +6,7 @@ import { formatMessage } from 'umi/locale';
 import router from 'umi/router';
 
 import { getOperatorSchema, configOperator } from '@/services/datapro/pipelineAPI';
-import { formItemWithError } from '../Utils';
+import { formItemWithError, expandValidateErrors } from '../Utils';
 import ExpressionWidget from '@/components/Widgets/ExpressionWidget';
 
 const FormItem = Form.Item;
@@ -19,9 +19,10 @@ class JDBCDataSource extends React.Component {
     this.state = {
       changed: false,
       formValues: { ...props.configs },
+      validateErrors: {},
       schema: undefined,
       loading: true,
-      diying: props.configs && props.configs.criteria && props.configs.criteria.mode === 'NONE',
+      diying: props.configs && props.configs.criteria && props.configs.criteria.mode === 'SQL',
     };
   }
 
@@ -58,6 +59,7 @@ class JDBCDataSource extends React.Component {
     const { form } = this.props;
 
     form.validateFields((err, fieldsValue) => {
+      this.setState({ validateErrors: expandValidateErrors(err) });
       if (!err) {
         const { id, opId } = this.props;
         configOperator({
@@ -80,7 +82,7 @@ class JDBCDataSource extends React.Component {
 
   render() {
     const { form, errors: givenErrors } = this.props;
-    const { formValues, changed, loading, schema } = this.state;
+    const { formValues, changed, loading, schema, validateErrors } = this.state;
     const formItemProps = {
       labelCol: { span: 5 },
       wrapperCol: { span: 15 },
@@ -96,8 +98,9 @@ class JDBCDataSource extends React.Component {
           formItemProps,
           {},
           errors,
+          validateErrors,
           formValues,
-          'Dialect',
+          'source.Dialect',
           'MySQL',
           '数据库类型',
           // <Select onChange={e => this.handleModeChange(e)}>
@@ -111,8 +114,9 @@ class JDBCDataSource extends React.Component {
           formItemProps,
           {},
           errors,
+          validateErrors,
           formValues,
-          'Address', // host_key+port_key
+          'source.address', // host_key+port_key
           'jdbc://',
           '连接地址',
           <Input onChange={e => this.handleChange()} />
@@ -123,8 +127,9 @@ class JDBCDataSource extends React.Component {
           formItemProps,
           {},
           errors,
+          validateErrors,
           formValues,
-          'user',
+          'source.user',
           '',
           '用户名',
           <Input onChange={e => this.handleChange()} />
@@ -135,8 +140,9 @@ class JDBCDataSource extends React.Component {
           formItemProps,
           {},
           errors,
+          validateErrors,
           formValues,
-          'password',
+          'source.password',
           '',
           '密码',
           <Input onChange={e => this.handleChange()} />
@@ -147,8 +153,9 @@ class JDBCDataSource extends React.Component {
           formItemProps,
           {},
           errors,
+          validateErrors,
           formValues,
-          'database',
+          'source.database',
           '',
           '数据库',
           <Input onChange={e => this.handleChange()} />
@@ -159,8 +166,9 @@ class JDBCDataSource extends React.Component {
           formItemProps,
           {},
           errors,
+          validateErrors,
           formValues,
-          'encoding',
+          'source.encoding',
           'UTF-8',
           '编码方式',
           <Select>
@@ -174,9 +182,10 @@ class JDBCDataSource extends React.Component {
           formItemProps,
           {},
           errors,
+          validateErrors,
           formValues,
-          'queryMode',
-          '指定表名',
+          'source.queryMode',
+          'Table',
           '查询模式',
           <Select onChange={e => this.handleModeChange(e)}>
             <Option value="Table">指定表名</Option>
@@ -190,8 +199,9 @@ class JDBCDataSource extends React.Component {
             formItemProps,
             {},
             errors,
+            validateErrors,
             formValues,
-            'table',
+            'source.table',
             '',
             '表名',
             <Input onChange={e => this.handleChange()} />
@@ -203,8 +213,9 @@ class JDBCDataSource extends React.Component {
             formItemProps,
             {},
             errors,
+            validateErrors,
             formValues,
-            'sql',
+            'source.sql',
             '',
             '查询语句',
             <TextArea rows={5} onChange={e => this.handleChange()} />
