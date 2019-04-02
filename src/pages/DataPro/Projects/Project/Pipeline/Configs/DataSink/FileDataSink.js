@@ -1,9 +1,10 @@
 import React from 'react';
-import { Form, Input, Select, Checkbox, Button, Card, Steps, message, Spin } from 'antd';
+import { Form, Col, Select, Checkbox, Button, Card, Steps, message, Row } from 'antd';
 
 import { configOperator } from '@/services/datapro/pipelineAPI';
 import CSVSinkForm from './Templates/CSVSinkForm';
 import { formItemWithError, expandValidateErrors } from '../Utils';
+import OutputSchema from './OutputSchema';
 
 import styles from '../Index.less';
 
@@ -67,6 +68,11 @@ class FileDataSink extends React.PureComponent {
     const currentRecord = this.state.formValues;
     return (
       <Form onSubmit={e => this.handleFormSubmit(e)} style={{ padding: '20px' }}>
+        <Row>
+          <Col offset={5} span={15}>
+            <OutputSchema />
+          </Col>
+        </Row>
         {formItemWithError(
           form,
           formItemProps,

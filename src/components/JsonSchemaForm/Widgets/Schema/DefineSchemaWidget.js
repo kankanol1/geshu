@@ -29,7 +29,7 @@ export default class DefineSchemaWidget extends React.PureComponent {
 
   render() {
     // mode: normal (can add, delete, modify), modify (can only modify)
-    const { mode } = this.props.mode || 'normal';
+    const mode = this.props.mode || 'normal';
     const showExtraOp = mode === 'normal';
     return (
       <ConfigurationTable
@@ -37,7 +37,7 @@ export default class DefineSchemaWidget extends React.PureComponent {
         canDelete={showExtraOp}
         data={this.state.data}
         maxHeight={this.props.height}
-        opSpan={0}
+        opSpan={showExtraOp ? 2 : 0}
         onChange={v =>
           this.setState(
             {
@@ -50,7 +50,7 @@ export default class DefineSchemaWidget extends React.PureComponent {
           {
             name: 'nullable',
             title: '可为null',
-            span: 6,
+            span: showExtraOp ? 4 : 6,
             render: (v, item, onChange) => (
               <div style={{ textAlign: 'center' }}>
                 <Checkbox onChange={e => onChange(e.target.checked)} checked={v} />
