@@ -1,9 +1,11 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import { connect } from 'dva';
 import { message, Row, Col, Button, Icon, Spin } from 'antd';
 import { formatMessage } from 'umi/locale';
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
+import key from 'keymaster';
 import { transformationTitle, transformationDescription } from './PrepareTransformer/Utils';
 import { deleteTransformation } from '@/services/datapro/pipelineAPI';
 import SelectTransformation from './PrepareTransformer/SelectTransformation';
@@ -32,6 +34,19 @@ const transformationList = [
   { name: '列合并', value: 'MergeTransformation' },
 ];
 
+const singleColumnMenus = [
+  { name: '列重命名', value: 'RenameTransformation' },
+  { name: '仅选择此列', value: 'SelectTransformation' },
+  { name: '删除此列', value: 'SelectTransformation' },
+];
+
+const multipleColumnMenus = [
+  { name: '保留选中列', value: 'SelectTransformation' },
+  { name: '删除选中列', value: 'SelectTransformation' },
+  { name: '批量重命名', value: 'Rename1Transformation' },
+  { name: '列合并', value: 'MergeTransformation' },
+];
+
 @connect(({ dataproPreviewTable, loading }) => ({
   dataproPreviewTable,
   loading: loading.models.dataproPreviewTable,
@@ -51,12 +66,22 @@ class PrepareTransformer extends React.Component {
       name: 'xxx',
       width: 89,
     },
+    selectedHeaders: [],
+    contextMenu: {
+      x: 470,
+      y: 220,
+      showing: false,
+    },
   };
 
-  // componentWillMount() {
-  //   // listen click outside
-  //   document.addEventListener('mousedown', this.handleGeneralClick, false);
-  // }
+  typeDialog = React.createRef(); // for type div.
+
+  contextMenu = React.createRef(); // for context menu.
+
+  componentWillMount() {
+    // listen click outside
+    document.addEventListener('mousedown', this.handleGeneralClick, false);
+  }
 
   componentDidMount() {
     // init.
@@ -73,7 +98,7 @@ class PrepareTransformer extends React.Component {
     this.props.dispatch({
       type: 'dataproPreviewTable/clear',
     });
-    // document.removeEventListener('mousedown', this.handleGeneralClick, false);
+    document.removeEventListener('mousedown', this.handleGeneralClick, false);
   }
 
   handleTransformationDelete = ({ value, index }) => {
@@ -96,10 +121,20 @@ class PrepareTransformer extends React.Component {
     });
   };
 
-  // handleGeneralClick = (e) => {
-  //   console.log('general click captured');
-  //   this.setState({changingType: {}})
-  // }
+  handleGeneralClick = e => {
+    if (this.typeDialog.current) {
+      const typeDialog = ReactDOM.findDOMNode(this.typeDialog.current);
+      if (!typeDialog.contains(e.target)) {
+        this.setState({ changingType: { changing: false } });
+      }
+    }
+    if (this.contextMenu.current) {
+      const contextMenu = ReactDOM.findDOMNode(this.contextMenu.current);
+      if (!contextMenu.contains(e.target)) {
+        this.setState({ contextMenu: { showing: false } });
+      }
+    }
+  };
 
   refreshTable() {
     const { id, opId, configs } = this.props;
@@ -134,6 +169,34 @@ class PrepareTransformer extends React.Component {
     });
   }
 
+  handleHeaderClick(e, name) {
+    e.stopPropagation();
+    if (key.isPressed(17)) {
+      let newSelected = this.state.selectedHeaders.filter(i => i !== name);
+      if (newSelected.length === this.state.selectedHeaders.length) {
+        newSelected = [...this.state.selectedHeaders, name];
+      }
+      this.setState({ selectedHeaders: newSelected });
+    } else {
+      this.setState({ selectedHeaders: [name] });
+    }
+  }
+
+  handleHeaderRightClick(e, name) {
+    e.preventDefault();
+    e.stopPropagation();
+    const { selectedHeaders } = this.state;
+    if (selectedHeaders.includes(name)) {
+      this.setState({ contextMenu: { x: e.pageX, y: e.pageY, showing: true } });
+    } else {
+      // change to new selected one.
+      this.setState({
+        contextMenu: { x: e.pageX, y: e.pageY, showing: true },
+        selectedHeaders: [name],
+      });
+    }
+  }
+
   renderTransformationComponent() {
     const { addingComponent } = this.state;
     if (!addingComponent) return;
@@ -156,10 +219,36 @@ class PrepareTransformer extends React.Component {
     );
   }
 
+  renderContextMenu = () => {
+    const { selectedHeaders, contextMenu } = this.state;
+    const { y, x, showing } = contextMenu;
+    if (!showing) return null;
+    const list = selectedHeaders.length === 1 ? singleColumnMenus : multipleColumnMenus;
+    return (
+      <div className={styles.contextMenu} style={{ top: y, left: x }} ref={this.contextMenu}>
+        {list.map((l, i) => (
+          <div
+            key={i}
+            className={styles.menuItem}
+            onClick={() =>
+              this.setState({
+                contextMenu: { showing: false, y: 0, x: 0 },
+                addingComponent: l.value,
+              })
+            }
+          >
+            {l.name}
+          </div>
+        ))}
+      </div>
+    );
+  };
+
   renderTable = () => {
     const { pagination, table, loading, message: msg } = this.props.dataproPreviewTable;
     const nc = [];
     const { schema, data, types } = table;
+    const { selectedHeaders } = this.state;
     // set columns, etc.
     let contentRender;
     if (table && table.schema) {
@@ -168,7 +257,14 @@ class PrepareTransformer extends React.Component {
         nc.push({
           id: `n${i}`,
           Header: props => (
-            <div>
+            <div
+              onContextMenu={e => this.handleHeaderRightClick(e, v.name)}
+              onClick={e => {
+                this.handleHeaderClick(e, v.name);
+              }}
+              className={`${styles.headerWrapper} ${selectedHeaders.includes(v.name) &&
+                styles.selected}`}
+            >
               <span className={styles.columnName}>{v.name}</span>
               <span className={styles.columnType}> {v.type}</span>
               <span
@@ -198,6 +294,7 @@ class PrepareTransformer extends React.Component {
                 }}
               >
                 {types[i].type ? formatMessage({ id: `types.${types[i].type}` }) : '未知'}
+                &nbsp;&#11167;
               </span>
             </div>
           ),
@@ -208,6 +305,7 @@ class PrepareTransformer extends React.Component {
       // render table.
       contentRender = (
         <ReactTable
+          className={styles.table}
           style={{ minHeight: '600px' }}
           // pages={pagination.total}
           // manual
@@ -306,11 +404,7 @@ class PrepareTransformer extends React.Component {
     const { x, y, width, type, name, changing } = changingType;
     if (!changing) return null;
     return (
-      <div
-        className={styles.typeDialog}
-        style={{ top: y, left: x, width }}
-        onBlur={() => this.setState({ changingType: {} })}
-      >
+      <div className={styles.typeDialog} style={{ top: y, left: x, width }} ref={this.typeDialog}>
         {types.map((t, i) => (
           <div
             key={i}
@@ -339,6 +433,7 @@ class PrepareTransformer extends React.Component {
         </Row>
         {this.renderTransformationComponent()}
         {this.renderType()}
+        {this.renderContextMenu()}
       </React.Fragment>
     );
   }

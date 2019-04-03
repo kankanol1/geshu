@@ -98,13 +98,17 @@
 }
 
 .typeDialog {
+  padding: 5px;
   position: absolute;
   background: white;
   max-height: 600px;
   overflow: auto;
+  // border: @primary-color 1px solid;
+  box-shadow: 2px 2px 20px 0 #cacaca;
 }
 
 .typeItem {
+  border-bottom: #efefef 1px solid;
   width: 100%;
   padding: 5px;
   cursor: pointer;
@@ -116,4 +120,40 @@
 .typeItemSelected {
   background: @primary-color;
   color: white;
+}
+
+.table {
+  background: white;
+  & :global(.rt-td) {
+    padding: 4px !important;
+  }
+  :global(.rt-th) {
+    padding: 2px !important;
+    cursor: pointer;
+  }
+  .selected {
+    background: #d5ebff;
+  }
+  .headerWrapper {
+    padding: 5px;
+  }
+}
+
+.contextMenu {
+  box-shadow: 2px 2px 20px 0 #cacaca;
+  position: absolute;
+  background: white;
+  min-width: 100px;
+  padding: 5px;
+  z-index: 1000;
+}
+
+.menuItem {
+  padding: 5px;
+  cursor: pointer;
+  border-bottom: #efefef 1px solid;
+  &:hover {
+    color: white;
+    background: @primary-color;
+  }
 }
