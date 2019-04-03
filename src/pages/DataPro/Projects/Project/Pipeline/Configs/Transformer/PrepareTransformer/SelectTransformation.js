@@ -42,7 +42,10 @@ class SelectTransformation extends React.PureComponent {
         onCancel={onCancel}
         okButtonProps={{ loading: this.state.adding }}
       >
-        <WithSchema {...this.props} onLoad={schema => this.setState({ schema })}>
+        <WithSchema
+          {...this.props}
+          onLoad={schema => this.setState({ schema, formData: this.props.columns || [] })}
+        >
           <ColumnSelectCheckboxWidget
             uiSchema={{
               'ui:options': {

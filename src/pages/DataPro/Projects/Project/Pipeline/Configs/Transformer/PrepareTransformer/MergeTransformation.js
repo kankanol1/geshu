@@ -9,8 +9,7 @@ export default class MergeTransformation extends React.PureComponent {
   state = {
     formData: {
       columns: [],
-      by: '',
-      as: '',
+      name: undefined,
     },
     schema: [],
     adding: false,
@@ -40,7 +39,7 @@ export default class MergeTransformation extends React.PureComponent {
     return (
       <div>
         <Row>
-          <Col span={4}>
+          {/* <Col span={4}>
             <label>连接符</label>
           </Col>
           <Col span={8}>
@@ -50,15 +49,15 @@ export default class MergeTransformation extends React.PureComponent {
                 this.setState({ formData: { ...this.state.formData, by: v.target.value } })
               }
             />
+          </Col> */}
+          <Col span={6}>
+            <span>新列名</span>
           </Col>
-          <Col span={4}>
-            <label>新列名</label>
-          </Col>
-          <Col span={8}>
+          <Col span={18}>
             <Input
-              value={this.state.formData.as || ''}
+              value={this.state.formData.name}
               onChange={v =>
-                this.setState({ formData: { ...this.state.formData, as: v.target.value } })
+                this.setState({ formData: { ...this.state.formData, name: v.target.value } })
               }
             />
           </Col>
@@ -88,13 +87,24 @@ export default class MergeTransformation extends React.PureComponent {
     const { onCancel } = this.props;
     return (
       <Modal
-        title="多列连接"
+        title="列合并"
         visible
         onOk={() => this.handleOk()}
         onCancel={onCancel}
         okButtonProps={{ loading: this.state.adding }}
       >
-        <WithSchema {...this.props} onLoad={schema => this.setState({ schema })}>
+        <WithSchema
+          {...this.props}
+          onLoad={schema =>
+            this.setState({
+              schema,
+              formData: {
+                columns: this.props.columns || [],
+                name: (this.props.columns || []).join('-'),
+              },
+            })
+          }
+        >
           {this.renderForm()}
         </WithSchema>
       </Modal>

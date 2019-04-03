@@ -770,21 +770,18 @@ export function inspectData(req, res) {
 
 export function getOperatorSchema(req, res) {
   const fakeSchema = [
-    {
-      nullable: true,
-      name: 'id',
-      type: 'string',
-    },
-    {
-      nullable: true,
-      name: 'text',
-      type: 'string',
-    },
-    {
-      nullable: true,
-      name: 'label',
-      type: 'integer',
-    },
+    { name: 'a1', type: 'String', nullable: false },
+    { name: 'a2', type: 'String', nullable: false },
+    { name: 'a3', type: 'String', nullable: false },
+    { name: 'a4', type: 'String', nullable: false },
+    { name: 'a5', type: 'String', nullable: false },
+    { name: 'a6', type: 'String', nullable: false },
+    { name: 'a7', type: 'String', nullable: false },
+    { name: 'a8', type: 'String', nullable: false },
+    { name: 'a9', type: 'String', nullable: false },
+    { name: 'a10', type: 'String', nullable: false },
+    { name: 'a11', type: 'String', nullable: false },
+    { name: 'a12', type: 'String', nullable: false },
   ];
   res.json({
     success: true,
@@ -809,21 +806,18 @@ export function invalidOperator(req, res) {
 
 export function getTransformationSchema(req, res) {
   const fakeSchema = [
-    {
-      nullable: true,
-      name: 'id',
-      type: 'string',
-    },
-    {
-      nullable: true,
-      name: 'text',
-      type: 'string',
-    },
-    {
-      nullable: true,
-      name: 'label',
-      type: 'integer',
-    },
+    { name: 'a1', type: 'String', nullable: false },
+    { name: 'a2', type: 'String', nullable: false },
+    { name: 'a3', type: 'String', nullable: false },
+    { name: 'a4', type: 'String', nullable: false },
+    { name: 'a5', type: 'String', nullable: false },
+    { name: 'a6', type: 'String', nullable: false },
+    { name: 'a7', type: 'String', nullable: false },
+    { name: 'a8', type: 'String', nullable: false },
+    { name: 'a9', type: 'String', nullable: false },
+    { name: 'a10', type: 'String', nullable: false },
+    { name: 'a11', type: 'String', nullable: false },
+    { name: 'a12', type: 'String', nullable: false },
   ];
   res.json({
     success: true,

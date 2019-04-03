@@ -60,7 +60,15 @@ export default class RenameTransformation extends React.PureComponent {
         onCancel={onCancel}
         okButtonProps={{ loading: this.state.adding }}
       >
-        <WithSchema {...this.props} onLoad={schema => this.setState({ schema })}>
+        <WithSchema
+          {...this.props}
+          onLoad={schema =>
+            this.setState({
+              schema,
+              formData: (this.props.columns || []).map(i => ({ column: i, name: i })),
+            })
+          }
+        >
           {this.renderForm()}
         </WithSchema>
       </Modal>

@@ -29,22 +29,54 @@ const TransformationMapping = {
 const transformationList = [
   { name: '列选择', value: 'SelectTransformation' },
   { name: '列重命名', value: 'RenameTransformation' },
-  { name: '列重命名（前后缀）', value: 'Rename1Transformation' },
-  { name: '列重命名（模式替换）', value: 'Rename3Transformation' },
+  // { name: '列重命名（前后缀）', value: 'Rename1Transformation' },
+  // { name: '列重命名（模式替换）', value: 'Rename3Transformation' },
   { name: '列合并', value: 'MergeTransformation' },
 ];
 
 const singleColumnMenus = [
-  { name: '列重命名', value: 'RenameTransformation' },
-  { name: '仅选择此列', value: 'SelectTransformation' },
-  { name: '删除此列', value: 'SelectTransformation' },
+  {
+    name: '保留此列',
+    value: 'SelectTransformation',
+    props: (selected, tableSchema) => ({ columns: selected }),
+  },
+  {
+    name: '保留其余列',
+    value: 'SelectTransformation',
+    props: (selected, tableSchema) => ({
+      columns: tableSchema.map(i => i.name).filter(i => !selected.includes(i)),
+    }),
+  },
+  {
+    name: '列重命名',
+    value: 'RenameTransformation',
+    props: (selected, tableSchema) => ({ columns: selected }),
+  },
 ];
 
 const multipleColumnMenus = [
-  { name: '保留选中列', value: 'SelectTransformation' },
-  { name: '删除选中列', value: 'SelectTransformation' },
-  { name: '批量重命名', value: 'Rename1Transformation' },
-  { name: '列合并', value: 'MergeTransformation' },
+  {
+    name: '保留选中列',
+    value: 'SelectTransformation',
+    props: (selected, tableSchema) => ({ columns: selected }),
+  },
+  {
+    name: '保留其余列',
+    value: 'SelectTransformation',
+    props: (selected, tableSchema) => ({
+      columns: tableSchema.map(i => i.name).filter(i => !selected.includes(i)),
+    }),
+  },
+  {
+    name: '列重命名',
+    value: 'RenameTransformation',
+    props: (selected, tableSchema) => ({ columns: selected }),
+  },
+  {
+    name: '列合并',
+    value: 'MergeTransformation',
+    props: (selected, tableSchema) => ({ columns: selected }),
+  },
 ];
 
 @connect(({ dataproPreviewTable, loading }) => ({
@@ -54,6 +86,7 @@ const multipleColumnMenus = [
 class PrepareTransformer extends React.Component {
   state = {
     addingComponent: undefined,
+    componentProps: {},
     deleting: false,
     page: {
       size: 100,
@@ -198,7 +231,7 @@ class PrepareTransformer extends React.Component {
   }
 
   renderTransformationComponent() {
-    const { addingComponent } = this.state;
+    const { addingComponent, componentProps } = this.state;
     if (!addingComponent) return;
     const Comp = TransformationMapping[addingComponent];
     const { id, opId, configs } = this.props;
@@ -207,6 +240,7 @@ class PrepareTransformer extends React.Component {
         id={id}
         opId={opId}
         configs={configs || []}
+        {...componentProps}
         onCancel={() => {
           this.setState({ addingComponent: undefined });
         }}
@@ -234,6 +268,10 @@ class PrepareTransformer extends React.Component {
               this.setState({
                 contextMenu: { showing: false, y: 0, x: 0 },
                 addingComponent: l.value,
+                componentProps: l.props(
+                  selectedHeaders,
+                  this.props.dataproPreviewTable.table.schema
+                ), // selected names
               })
             }
           >
@@ -294,7 +332,7 @@ class PrepareTransformer extends React.Component {
                 }}
               >
                 {types[i].type ? formatMessage({ id: `types.${types[i].type}` }) : '未知'}
-                &nbsp;&#11167;
+                &nbsp;&#x25BC;
               </span>
             </div>
           ),
