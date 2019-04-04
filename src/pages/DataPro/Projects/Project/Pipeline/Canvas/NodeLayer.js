@@ -181,6 +181,8 @@ class NodeLayer extends React.Component {
         default:
           break;
       }
+    } else if (type === 'Schema') {
+      extraStyle = styles.datasetDiv;
     }
     return (
       <React.Fragment>
@@ -226,7 +228,7 @@ class NodeLayer extends React.Component {
               }
             }}
           >
-            {type === 'Dataset' ? (
+            {type === 'Dataset' || type === 'Schema' ? (
               <Icon type="table" className={`${styles.antdIcon} x-icon`} />
             ) : (
               <i className={`${icon} x-icon`} />

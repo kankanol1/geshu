@@ -7,6 +7,8 @@ import Input1Output2Config from './Input1Output2Config';
 import Input2Output1Config from './Input2Output1Config';
 import Output1Config from './Output1Config';
 import Input1Config from './Input1Config';
+import SchemaOutput1Config from './SchemaOutput1Config';
+import MappingIOConfig from './MappingIOConfig';
 
 // render config for other components.
 const renderConfig = {
@@ -23,6 +25,10 @@ const renderConfig = {
   FilterTransformer: Input1Output1Config,
   SplitTransformer: Input1Output2Config,
   JoinTransformer: Input2Output1Config,
+
+  // schema
+  DefineSchemaSource: SchemaOutput1Config,
+  MappingOperator: MappingIOConfig,
 };
 
 export default class Index extends React.Component {

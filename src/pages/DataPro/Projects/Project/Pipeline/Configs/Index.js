@@ -12,6 +12,7 @@ import SplitTransformer from './Transformer/SplitTransformer';
 import JoinTransformer from './Transformer/JoinTransformer';
 import FileDataSink from './DataSink/FileDataSink';
 import JDBCDataSource from './DataSource/JDBCDataSource';
+import DefineSchemaSource from './Schema/DefineSchemaSource';
 import TopBar from '../../../TopBar';
 import styles from './Index.less';
 
@@ -27,6 +28,9 @@ const registered = {
   PrepareTransformer: PrepareTransformer, // eslint-disable-line
   SplitTransformer,
   JoinTransformer,
+
+  // schema
+  DefineSchemaSource,
 };
 
 @connect(({ global, dataproProject, loading }) => ({
@@ -79,6 +83,7 @@ class Index extends React.Component {
         );
       }
     } else {
+      console.warn('no display for code', code); // eslint-disable-line
       return <div>404</div>;
     }
   };

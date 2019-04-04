@@ -45,6 +45,12 @@ export const getStylesForType = (str, code) => {
       return '#3B57FF';
     case 'Dataset':
       return '#87e8de';
+    case 'SchemaSource':
+      return '#48d16b';
+    case 'Schema':
+      return '#48d16b';
+    case 'MappingOperator':
+      return '#3B57FF';
     default:
       // eslint-disable-next-line
       console.warn('no color found for type: ', str);
@@ -109,6 +115,11 @@ const componentIconDict = {
   ParquetDataSink: 'icon-datasink-parquet',
 
   // TODO: fix the following
+
+  // for schema
+  DefineSchemaSource: 'icon-model-default',
+  MappingOperator: 'icon-preparation-filter',
+
   VectorAssemblerPStage: 'icon-classifier-cv',
   OneHotEncoderPStage: 'icon-preparation-filter',
   StringIndexerPStage: 'icon-preparation-transform',

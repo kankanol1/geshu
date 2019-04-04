@@ -322,6 +322,7 @@ export default {
   'operatortype.DataSource': '数据源',
   'operatortype.DataSink': '数据存储',
   'operatortype.Transformer': '数据处理',
+  'operatortype.Schema': '数据模式',
 
   // ==================== operators ==========================
   // sources
@@ -362,6 +363,9 @@ export default {
   'operator.DistinctColumnTransformer': '去重',
   'operator.SortTransformer': '排序',
   'operator.PivotTransformer': '行列转置',
+
+  'operator.DefineSchemaSource': '定义目标模式',
+  'operator.MappingOperator': '目标模式匹配',
 
   // =============== types ==================
   'types.EMAIL': '电子邮件',

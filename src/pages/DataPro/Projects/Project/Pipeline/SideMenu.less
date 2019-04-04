@@ -13,6 +13,16 @@
   transition: 0.5s;
 }
 
+.menu {
+  height: 100%;
+  overflow: auto;
+  -ms-overflow-style: none; // IE 10+
+  scrollbar-width: none; // Firefox
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
 .collapseBar {
   width: 12px;
   height: 50px;
@@ -36,12 +46,12 @@
   word-break: break-all;
   vertical-align: top;
   font-size: 12px;
-  border: 1px solid #ced4d900;
+  // border: 1px solid #ced4d900;
 }
 
 .component:hover {
-  background: lighten(@primary-color, 50%);
-  box-shadow: 1px 1px 1px grey;
+  background: lighten(@primary-color, 40%);
+  box-shadow: 1px 1px 6px 0 grey;
   // border: 1px solid #ced4d9;
   border-radius: 10px;
   cursor: pointer;

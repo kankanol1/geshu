@@ -122,68 +122,90 @@ const fakeComponents = {
 const components = {
   DataSource: [
     {
-      name: 'FileDataSource',
       code: 'FileDataSource',
+      type: 'DataSource',
+      name: 'FileDataSource',
     },
     {
-      name: 'JDBCDataSource',
       code: 'JDBCDataSource',
+      type: 'DataSource',
+      name: 'JDBCDataSource',
     },
     {
-      name: 'AvroDataSource',
       code: 'AvroDataSource',
+      type: 'DataSource',
+      name: 'AvroDataSource',
     },
   ],
   Transformer: [
     {
-      name: 'AddLiteralColumnTransformer',
-      code: 'AddLiteralColumnTransformer',
-    },
-    {
-      name: 'SplitTransformer',
-      code: 'SplitTransformer',
-    },
-    {
-      name: 'RandomSplitTransformer',
-      code: 'RandomSplitTransformer',
-    },
-    {
-      name: 'UnionTransformer',
-      code: 'UnionTransformer',
-    },
-    {
-      name: 'ColumnSplitTransformer',
-      code: 'ColumnSplitTransformer',
-    },
-    {
-      name: 'AggregateTransformer',
-      code: 'AggregateTransformer',
-    },
-    {
-      name: 'FilterTransformer',
-      code: 'FilterTransformer',
-    },
-    {
-      name: 'ProjectTransformer',
-      code: 'ProjectTransformer',
-    },
-    {
-      name: 'JoinTransformer',
-      code: 'JoinTransformer',
-    },
-    {
-      name: 'PrepareTransformer',
       code: 'PrepareTransformer',
+      type: 'Transformer',
+      name: 'PrepareTransformer',
+    },
+    {
+      code: 'SplitTransformer',
+      type: 'Transformer',
+      name: 'SplitTransformer',
+    },
+    {
+      code: 'FilterTransformer',
+      type: 'Transformer',
+      name: 'FilterTransformer',
+    },
+    {
+      code: 'ProjectTransformer',
+      type: 'Transformer',
+      name: 'ProjectTransformer',
+    },
+    {
+      code: 'JoinTransformer',
+      type: 'Transformer',
+      name: 'JoinTransformer',
+    },
+    {
+      code: 'UnionTransformer',
+      type: 'Transformer',
+      name: 'UnionTransformer',
+    },
+    {
+      code: 'ColumnSplitTransformer',
+      type: 'Transformer',
+      name: 'ColumnSplitTransformer',
+    },
+    {
+      code: 'RandomSplitTransformer',
+      type: 'Transformer',
+      name: 'RandomSplitTransformer',
+    },
+    {
+      code: 'AddLiteralColumnTransformer',
+      type: 'Transformer',
+      name: 'AddLiteralColumnTransformer',
+    },
+    {
+      code: 'AggregateTransformer',
+      type: 'Transformer',
+      name: 'AggregateTransformer',
     },
   ],
   DataSink: [
     {
-      name: 'HiveDataSink',
-      code: 'HiveDataSink',
+      code: 'FileDataSink',
+      type: 'DataSink',
+      name: 'FileDataSink',
+    },
+  ],
+  Schema: [
+    {
+      code: 'DefineSchemaSource',
+      type: 'SchemaSource',
+      name: 'DefineSchemaSource',
     },
     {
-      name: 'FileDataSink',
-      code: 'FileDataSink',
+      code: 'MappingOperator',
+      type: 'MappingOperator',
+      name: 'MappingOperator',
     },
   ],
 };

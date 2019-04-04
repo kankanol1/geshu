@@ -78,45 +78,47 @@ class SideMenu extends React.PureComponent {
     const { addingComponent, collapse } = this.state;
     return (
       <div className={styles.menuWrapper} style={{ left: collapse ? '-380px' : '0' }}>
-        <Spin spinning={loading}>
-          <Collapse
-            bordered={false}
-            activeKey={this.state.activeKeys}
-            onChange={key => {
-              this.setState({ activeKeys: key });
-            }}
-          >
-            {Object.keys(config).map(i => (
-              <Panel
-                header={formatMessage({
-                  id: `operatortype.${i}`,
-                  defaultMessage: i,
-                })}
-                key={i}
-              >
-                {config[i].map(item => this.renderComponent(i, item.name, item.code))}
-              </Panel>
-            ))}
-          </Collapse>
-          {// render dialog if needed.
-          addingComponent && (
-            <IOConfig
-              type="new"
-              id={this.props.id}
-              title={`添加组件 ${formatMessage({
-                id: `operator.${addingComponent.name}`,
-                defaultMessage: addingComponent.name,
-              })}`}
-              component={addingComponent}
-              onOk={operatorId => {
-                this.setState({ addingComponent: undefined }, () => {
-                  router.push(`/projects/p/pipeline/${id}/new/${operatorId}`);
-                });
+        <div className={styles.menu}>
+          <Spin spinning={loading}>
+            <Collapse
+              bordered={false}
+              activeKey={this.state.activeKeys}
+              onChange={key => {
+                this.setState({ activeKeys: key });
               }}
-              onCancel={() => this.setState({ addingComponent: undefined })}
-            />
-          )}
-        </Spin>
+            >
+              {Object.keys(config).map(i => (
+                <Panel
+                  header={formatMessage({
+                    id: `operatortype.${i}`,
+                    defaultMessage: i,
+                  })}
+                  key={i}
+                >
+                  {config[i].map(item => this.renderComponent(i, item.name, item.code))}
+                </Panel>
+              ))}
+            </Collapse>
+            {// render dialog if needed.
+            addingComponent && (
+              <IOConfig
+                type="new"
+                id={this.props.id}
+                title={`添加组件 ${formatMessage({
+                  id: `operator.${addingComponent.name}`,
+                  defaultMessage: addingComponent.name,
+                })}`}
+                component={addingComponent}
+                onOk={operatorId => {
+                  this.setState({ addingComponent: undefined }, () => {
+                    router.push(`/projects/p/pipeline/${id}/new/${operatorId}`);
+                  });
+                }}
+                onCancel={() => this.setState({ addingComponent: undefined })}
+              />
+            )}
+          </Spin>
+        </div>
         <div
           className={styles.collapseBar}
           onClick={() => this.setState({ collapse: !collapse })}

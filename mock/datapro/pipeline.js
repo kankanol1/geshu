@@ -296,6 +296,11 @@ export function getAllDatasets(req, res) {
   res.json(datasets);
 }
 
+export function getAllObjectiveSchemas(req, res) {
+  const datasets = pipeline.components.filter(i => i.type === 'Schema').map(i => i.name);
+  res.json(datasets);
+}
+
 export function addOperator(req, res) {
   const { body } = req;
   const { code, input: oinput, output: ooutput, name } = body;
@@ -321,47 +326,84 @@ export function addOperator(req, res) {
   newPos.x += 300;
   newPos.y /= pos.length + 1;
   const opId = `${code}-${new Date().getTime()}`;
+  let type = oinput ? 'Transformer' : 'DataSource';
+  if (code === 'DefineSchemaSource') {
+    type = 'SchemaSource';
+  }
   const newComponent = {
     ...newPos,
     id: opId,
     name,
     code,
-    type: oinput ? 'Transformer' : 'DataSource',
+    type,
     inputs: input ? input.map((v, i) => ({ id: `i${i + 1}`, connects: ['Dataset'] })) : [],
     outputs: output.map((v, i) => ({ id: `o${i + 1}`, type: 'Dataset' })),
     connectFrom: input.map((v, i) => ({ component: nameToIds[v], from: 'o1', to: `i${i + 1}` })),
   };
   const offset = output.length * 200;
   const baseY = newPos.y - offset / 2;
-  const datasets = output.map((v, i) => ({
-    x: newPos.x + 200,
-    y: baseY + 200 * (i + 1),
-    id: `Dataset-${new Date().getTime()}`,
-    name: v,
-    code: 'Dataset',
-    type: 'Dataset',
-    inputs: [
-      {
-        id: 'i1',
-        connects: ['Dataset'],
-      },
-    ],
-    outputs: [
-      {
-        id: 'o1',
-        connects: ['Dataset'],
-      },
-    ],
-    connectFrom: [
-      {
-        component: opId,
-        from: `o${i + 1}`,
-        to: 'i1',
-      },
-    ],
-  }));
+  let extraComponents = [];
+  if (type === 'SchemaSource') {
+    const datasets = output.map((v, i) => ({
+      x: newPos.x + 200,
+      y: baseY + 200 * (i + 1),
+      id: `Schema-${new Date().getTime()}`,
+      name: v,
+      code: 'Schema',
+      type: 'Schema',
+      inputs: [
+        {
+          id: 'i1',
+          connects: ['SchemaSource'],
+        },
+      ],
+      outputs: [
+        {
+          id: 'o1',
+          connects: ['MappingOperator'],
+        },
+      ],
+      connectFrom: [
+        {
+          component: opId,
+          from: `o${i + 1}`,
+          to: 'i1',
+        },
+      ],
+    }));
+    extraComponents = datasets;
+  } else {
+    const datasets = output.map((v, i) => ({
+      x: newPos.x + 200,
+      y: baseY + 200 * (i + 1),
+      id: `Dataset-${new Date().getTime()}`,
+      name: v,
+      code: 'Dataset',
+      type: 'Dataset',
+      inputs: [
+        {
+          id: 'i1',
+          connects: ['Dataset'],
+        },
+      ],
+      outputs: [
+        {
+          id: 'o1',
+          connects: ['Dataset'],
+        },
+      ],
+      connectFrom: [
+        {
+          component: opId,
+          from: `o${i + 1}`,
+          to: 'i1',
+        },
+      ],
+    }));
+    extraComponents = datasets;
+  }
   pipeline.components.push(newComponent);
-  datasets.forEach(i => pipeline.components.push(i));
+  extraComponents.forEach(i => pipeline.components.push(i));
   const done = {
     success: true,
     message: '添加成功',
@@ -924,6 +966,7 @@ export function publishPipeline(req, res) {
 export default {
   'GET /api/datapro/projects/pipeline/get': getPipeline,
   'GET /api/datapro/projects/pipeline/datasets': getAllDatasets,
+  'GET /api/datapro/projects/pipeline/objectiveschemas': getAllObjectiveSchemas,
   // 'GET /api/datapro/projects/pipeline/op/config': getOperatorConfig,
   'POST /api/datapro/projects/pipeline/op/config': updateOperatorConfig,
   'POST /api/datapro/projects/pipeline/op/add': addOperator,

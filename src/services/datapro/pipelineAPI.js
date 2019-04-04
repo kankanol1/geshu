@@ -9,6 +9,10 @@ export async function queryAllDatasets(params) {
   return request(`/api/datapro/projects/pipeline/datasets?${stringify(params)}`);
 }
 
+export async function queryAllObjectiveSchemas(params) {
+  return request(`/api/datapro/projects/pipeline/objectiveschemas?${stringify(params)}`);
+}
+
 export async function addOperator(params) {
   return request('/api/datapro/projects/pipeline/op/add', {
     method: 'POST',
