@@ -262,6 +262,112 @@ const pipeline = {
         },
       ],
     },
+    {
+      x: 590,
+      y: 600,
+      id: 'DefineSchemaSource-1544977551420',
+      name: '定义目标模式',
+      code: 'DefineSchemaSource',
+      type: 'SchemaSource',
+      inputs: [],
+      outputs: [
+        {
+          id: 'o1',
+          connects: ['Schema'],
+        },
+      ],
+      connectFrom: [],
+    },
+    {
+      x: 830,
+      y: 600,
+      id: 'Schema-1554387193108',
+      name: 'ds',
+      code: 'Schema',
+      type: 'Schema',
+      inputs: [
+        {
+          id: 'i1',
+          connects: ['SchemaSource'],
+        },
+      ],
+      outputs: [
+        {
+          id: 'o1',
+          connects: ['MappingOperator'],
+        },
+      ],
+      connectFrom: [
+        {
+          component: 'DefineSchemaSource-1544977551420',
+          from: 'o1',
+          to: 'i1',
+        },
+      ],
+    },
+    {
+      x: 1100,
+      y: 600,
+      id: 'MappingOperator-1554387495454',
+      name: '目标模式匹配',
+      code: 'MappingOperator',
+      type: 'MappingOperator',
+      inputs: [
+        {
+          id: 'i1',
+          connects: ['Dataset'],
+        },
+        {
+          id: 'i2',
+          connects: ['Dataset'],
+        },
+      ],
+      outputs: [
+        {
+          id: 'o1',
+          connects: ['Dataset'],
+        },
+      ],
+      connectFrom: [
+        {
+          component: 'Schema-1554387193108',
+          from: 'o1',
+          to: 'i1',
+        },
+        {
+          component: 'Dataset-1544977506208',
+          from: 'o1',
+          to: 'i2',
+        },
+      ],
+    },
+    {
+      x: 1300,
+      y: 600,
+      id: 'Dataset-1554387495455',
+      name: 'out1',
+      code: 'Dataset',
+      type: 'Dataset',
+      inputs: [
+        {
+          id: 'i1',
+          connects: ['Dataset'],
+        },
+      ],
+      outputs: [
+        {
+          id: 'o1',
+          connects: ['Dataset'],
+        },
+      ],
+      connectFrom: [
+        {
+          component: 'MappingOperator-1554387495454',
+          from: 'o1',
+          to: 'i1',
+        },
+      ],
+    },
   ],
   offset: {
     x: 0,
@@ -329,6 +435,8 @@ export function addOperator(req, res) {
   let type = oinput ? 'Transformer' : 'DataSource';
   if (code === 'DefineSchemaSource') {
     type = 'SchemaSource';
+  } else if (code === 'MappingOperator') {
+    type = 'MappingOpertor';
   }
   const newComponent = {
     ...newPos,
@@ -810,6 +918,22 @@ export function inspectData(req, res) {
   }
 }
 
+export function getOperatorObjectiveSchema(req, res) {
+  const fakeSchema = [
+    { name: 'b1', type: 'String', nullable: false },
+    { name: 'b2', type: 'String', nullable: false },
+    { name: 'b3', type: 'String', nullable: false },
+    { name: 'b4', type: 'Integer', nullable: false },
+  ];
+  res.json({
+    success: true,
+    message: 'success',
+    data: {
+      i1: fakeSchema,
+    },
+  });
+}
+
 export function getOperatorSchema(req, res) {
   const fakeSchema = [
     { name: 'a1', type: 'String', nullable: false },
@@ -976,6 +1100,7 @@ export default {
   'POST /api/datapro/projects/pipeline/op/run': runOperator,
   'POST /api/datapro/projects/pipeline/op/inspect': inspectData,
   'POST /api/datapro/projects/pipeline/op/schema': getOperatorSchema,
+  'POST /api/datapro/projects/pipeline/op/objectiveschema': getOperatorObjectiveSchema,
   'POST /api/datapro/projects/pipeline/op/typeupdate': { success: true, message: 'ok' },
   'POST /api/datapro/projects/pipeline/op/invalid': invalidOperator,
   // get schema for transformation in prepare op.

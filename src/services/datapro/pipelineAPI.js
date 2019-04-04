@@ -77,6 +77,13 @@ export async function getOperatorSchema(params) {
   });
 }
 
+export async function getOperatorObjectiveSchema(params) {
+  return request('/api/datapro/projects/pipeline/op/objectiveschema', {
+    method: 'POST',
+    body: params,
+  });
+}
+
 // operator configs
 export async function getSchemaFromFile(params) {
   return request('/api/datapro/projects/pipeline/conf/getschema', {

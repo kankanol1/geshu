@@ -18,6 +18,7 @@ import SelectionChange from '@/obj/workspace/op/SelectionChange';
 import ScaleChange from '@/obj/workspace/op/ScaleChange';
 import IOConfig from '../Configs/IO/Index';
 import DataInspector from './DataInspector';
+import SchemaInspector from './SchemaInspector';
 import SaveDataset from './SaveDataset';
 
 const keyUpListener = [];
@@ -394,6 +395,7 @@ class WorkCanvas extends React.Component {
       // state: { projectId },
       canvas,
       inspecting,
+      inspectingSchema,
       contextmenu,
       modifyingComponent,
       status,
@@ -512,6 +514,21 @@ class WorkCanvas extends React.Component {
             onClose={e =>
               this.props.dispatch({
                 type: 'dataproPipeline/setInspectingComponent',
+                payload: {
+                  component: undefined,
+                },
+              })
+            }
+          />
+        )}
+        {inspectingSchema && (
+          <SchemaInspector
+            visible={inspectingSchema && true}
+            component={inspectingSchema}
+            projectId={projectId}
+            onClose={e =>
+              this.props.dispatch({
+                type: 'dataproPipeline/setInspectingSchema',
                 payload: {
                   component: undefined,
                 },

@@ -74,7 +74,7 @@ export default class ConfigurationTable extends React.Component {
       <Row key={index} className={styles.contentRow}>
         {columns.map((c, i) => (
           <Col span={c.span} key={i}>
-            {c.render(item[c.name], item, this.onChange(item, index, c.name))}
+            {c.render(item[c.name], item, this.onChange(item, index, c.name), index)}
           </Col>
         ))}
         {showExtraOp ? (
@@ -140,11 +140,11 @@ export default class ConfigurationTable extends React.Component {
               </Col>
             </Row>
           </div>
-          <Scrollbars autoHeight autoHeightMin={0} autoHeightMax={maxHeight}>
-            <div className={styles.tableContent}>
-              {data.map((item, k) => this.renderItem(item, k, canDelete))}
-            </div>
-          </Scrollbars>
+          {/* <Scrollbars autoHeight autoHeightMin={0} autoHeightMax={maxHeight}> */}
+          <div className={styles.tableContent}>
+            {data.map((item, k) => this.renderItem(item, k, canDelete))}
+          </div>
+          {/* </Scrollbars> */}
         </div>
       </div>
     );

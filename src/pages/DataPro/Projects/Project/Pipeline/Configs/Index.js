@@ -13,6 +13,7 @@ import JoinTransformer from './Transformer/JoinTransformer';
 import FileDataSink from './DataSink/FileDataSink';
 import JDBCDataSource from './DataSource/JDBCDataSource';
 import DefineSchemaSource from './Schema/DefineSchemaSource';
+import SchemaMappingOperator from './Schema/SchemaMappingOperator';
 import TopBar from '../../../TopBar';
 import styles from './Index.less';
 
@@ -31,6 +32,7 @@ const registered = {
 
   // schema
   DefineSchemaSource,
+  MappingOperator: SchemaMappingOperator,
 };
 
 @connect(({ global, dataproProject, loading }) => ({

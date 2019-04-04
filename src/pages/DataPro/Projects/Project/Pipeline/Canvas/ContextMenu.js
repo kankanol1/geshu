@@ -102,7 +102,26 @@ class ContextMenu extends React.PureComponent {
       default:
         break;
     }
+    dispatch({
+      type: 'dataproPipeline/hideContextMenu',
+    });
+  }
 
+  handleSchemaClick({ item, key, keyPath }) {
+    const { dispatch, component, projectId } = this.props;
+    const { id: operatorId } = component;
+    switch (key) {
+      case 'inspectschema':
+        dispatch({
+          type: 'dataproPipeline/setInspectingSchema',
+          payload: {
+            component,
+          },
+        });
+        break;
+      default:
+        break;
+    }
     dispatch({
       type: 'dataproPipeline/hideContextMenu',
     });
@@ -158,6 +177,24 @@ class ContextMenu extends React.PureComponent {
     return null;
   }
 
+  renderSchemaMenu() {
+    return (
+      <Menu
+        style={{ width: 140 }}
+        mode="vertical"
+        theme="light"
+        onClick={v => this.handleSchemaClick(v)}
+      >
+        <Menu.Item key="inspectschema" style={style}>
+          查看目标模式
+        </Menu.Item>
+        {/* <Menu.Item key="fetchSchema" style={style}>
+          重新获取目标模式
+        </Menu.Item> */}
+      </Menu>
+    );
+  }
+
   renderOpMenu() {
     return (
       <Menu
@@ -195,7 +232,10 @@ class ContextMenu extends React.PureComponent {
           left: `${left}px`,
         }}
       >
-        {component.type === 'Dataset' ? this.renderDatasetMenu() : this.renderOpMenu()}
+        {component.type === 'Dataset' && this.renderDatasetMenu()}
+        {component.type === 'Schema' && this.renderSchemaMenu()}
+        {['DataSource', 'DataSink', 'Transformer', 'MappingOperator'].includes(component.type) &&
+          this.renderOpMenu()}
       </div>
     );
   }
