@@ -9,6 +9,8 @@ const schemaTypes = [
   { name: '浮点型(DOUBLE)', value: 'DOUBLE' },
   { name: '整型(INT)', value: 'INT' },
   { name: '布尔值(BOOLEAN)', value: 'BOOLEAN' },
+  { name: '长整型(LONG)', value: 'LONG' },
+  { name: '时间戳(TIMESTAMP)', value: 'TIMESTAMP' },
 ];
 
 export default class DefineSchemaWidget extends React.PureComponent {
