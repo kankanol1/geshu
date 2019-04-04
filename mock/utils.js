@@ -17,11 +17,11 @@ export function getUrlParams(url) {
     for (let i = 0; i < arr.length; i += 1) {
       const a = arr[i].split('=');
       let paramNum;
-      const paramName = a[0].replace(/\[\d*\]/, (v) => {
+      const paramName = a[0].replace(/\[\d*\]/, v => {
         paramNum = v.slice(1, -1);
         return '';
       });
-      const paramValue = typeof (a[1]) === 'undefined' ? true : a[1];
+      const paramValue = typeof a[1] === 'undefined' ? true : a[1];
       if (obj[paramName]) {
         if (typeof obj[paramName] === 'string') {
           obj[paramName] = d([obj[paramName]]);
@@ -39,7 +39,17 @@ export function getUrlParams(url) {
   return obj;
 }
 
+export function fillArray(oneTuple, num) {
+  const arr = [];
+  let step;
+  for (step = 0; step < num; step++) {
+    arr[step] = oneTuple;
+  }
+  return arr;
+}
+
 export default {
   getUrlParams,
   imgMap,
+  fillArray,
 };

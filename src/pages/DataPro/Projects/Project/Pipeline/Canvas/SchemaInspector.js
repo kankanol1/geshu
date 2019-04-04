@@ -6,18 +6,18 @@ import styles from './DataInspector.less';
 
 class SchemaInspector extends React.Component {
   componentWillMount() {
-    // this.performQuery();
+    this.performQuery();
   }
 
   componentWillUnmount() {
-    // this.props.dispatch({
-    //   type: 'dataproInspector/clearData',
-    // });
+    this.props.dispatch({
+      type: 'dataproInspector/clearData',
+    });
   }
 
   performQuery() {
     this.props.dispatch({
-      type: 'dataproInspector/inspectData',
+      type: 'dataproInspector/inspectSchema',
       payload: {
         id: this.props.projectId,
         component: this.props.component.id,
@@ -25,19 +25,6 @@ class SchemaInspector extends React.Component {
       },
     });
   }
-
-  renderColumnTitle = (schema, type) => {
-    return (
-      <div className={styles.columnHeader}>
-        <div className={styles.columnName}>{schema.name}</div>
-        <div className={styles.columnType}>{schema.type}</div>
-        {type.type && (
-          <div className={styles.columnType2}>{formatMessage({ id: `types.${type.type}` })}</div>
-        )}
-        {!type.type && <div className={styles.columnType2}>未知</div>}
-      </div>
-    );
-  };
 
   render() {
     const { loading } = this.props;
@@ -47,26 +34,30 @@ class SchemaInspector extends React.Component {
       }
     };
     const { name } = this.props.component;
-    const { result } = this.props.dataproInspector;
-    const { success, message, data } = result;
+    const { schema: fetchSchema } = this.props.dataproInspector;
+    const { success, message, data } = fetchSchema;
     let table = null;
     if (success) {
-      const { schema, types } = data;
+      const { schema } = data;
       table = (
         <Table
           className={styles.table}
           rowKey={(r, i) => i}
           style={{ marginTop: '10px' }}
           columns={
-            schema &&
-            schema.map((s, i) => ({
-              width: 100,
-              title: this.renderColumnTitle(s, types[i]),
-              key: s.name,
-              dataIndex: s.name,
-            }))
+            schema && [
+              { width: 100, title: '列名', key: 'name', dataIndex: 'name' },
+              { width: 100, title: '类型', key: 'type', dataIndex: 'type' },
+              {
+                width: 100,
+                title: '是否可为空',
+                key: 'nullable',
+                dataIndex: 'nullable',
+                render: (text, record, index) => (text ? '是' : '否'),
+              },
+            ]
           }
-          dataSource={data.data || []}
+          dataSource={data.schema || []}
           scroll={{ x: schema && schema.length * 100, y: 400 }}
           pagination={false}
           loading={loading}

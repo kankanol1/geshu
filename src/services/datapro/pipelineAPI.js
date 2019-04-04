@@ -70,6 +70,13 @@ export async function inspectDataset(params) {
   });
 }
 
+export async function inspectSchema(params) {
+  return request('/api/datapro/projects/pipeline/op/inspectschema', {
+    method: 'POST',
+    body: params,
+  });
+}
+
 export async function getOperatorSchema(params) {
   return request('/api/datapro/projects/pipeline/op/schema', {
     method: 'POST',

@@ -177,6 +177,27 @@ class ContextMenu extends React.PureComponent {
     return null;
   }
 
+  renderSchemaSourceMenu() {
+    return (
+      <Menu
+        style={{ width: 140 }}
+        mode="vertical"
+        theme="light"
+        onClick={v => this.handleComponentClick(v)}
+      >
+        <Menu.Item key="io" style={style}>
+          修改连接
+        </Menu.Item>
+        <Menu.Item key="settings" style={style}>
+          修改设置
+        </Menu.Item>
+        <Menu.Item key="delete" style={style}>
+          删除
+        </Menu.Item>
+      </Menu>
+    );
+  }
+
   renderSchemaMenu() {
     return (
       <Menu
@@ -234,6 +255,7 @@ class ContextMenu extends React.PureComponent {
       >
         {component.type === 'Dataset' && this.renderDatasetMenu()}
         {component.type === 'Schema' && this.renderSchemaMenu()}
+        {component.type === 'SchemaSource' && this.renderSchemaSourceMenu()}
         {['DataSource', 'DataSink', 'Transformer', 'MappingOperator'].includes(component.type) &&
           this.renderOpMenu()}
       </div>
