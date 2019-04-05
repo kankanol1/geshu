@@ -20,7 +20,7 @@ class JDBCDataSource extends React.Component {
       validateErrors: {},
       schema: undefined,
       loading: true,
-      diying: props.configs && props.configs.criteria && props.configs.criteria.mode === 'SQL',
+      diying: props.configs && props.configs.source && props.configs.source.queryMode === 'SQL',
     };
   }
 

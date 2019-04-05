@@ -2,6 +2,7 @@ import React from 'react';
 import { Modal, Button, Icon, Table, Spin } from 'antd';
 import { formatMessage } from 'umi/locale';
 import { connect } from 'dva';
+import moment from 'moment';
 import styles from './DataInspector.less';
 
 class DataInspector extends React.Component {
@@ -64,6 +65,17 @@ class DataInspector extends React.Component {
               title: this.renderColumnTitle(s, types[i]),
               key: s.name,
               dataIndex: s.name,
+              render: (text, record, index) => {
+                if (text !== null && text !== undefined) {
+                  if (s.type === 'TIMESTAMP') {
+                    return <span>{moment(new Date(text)).format('YYYY-MM-DD HH:mm:ss SSS')}</span>;
+                  } else {
+                    return <span>{`${text}`}</span>;
+                  }
+                } else {
+                  return <span className={styles.null}>NULL</span>;
+                }
+              },
             }))
           }
           dataSource={data.data || []}

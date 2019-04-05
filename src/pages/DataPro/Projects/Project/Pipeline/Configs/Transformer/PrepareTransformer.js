@@ -5,6 +5,7 @@ import { message, Row, Col, Button, Icon, Spin } from 'antd';
 import { formatMessage } from 'umi/locale';
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
+import moment from 'moment';
 import key from 'keymaster';
 import { transformationTitle, transformationDescription } from './PrepareTransformer/Utils';
 import { deleteTransformation } from '@/services/datapro/pipelineAPI';
@@ -297,6 +298,21 @@ class PrepareTransformer extends React.Component {
     );
   };
 
+  renderRow = (row, schema) => {
+    if (row) {
+      const text = row.value;
+      if (text !== null && text !== undefined) {
+        if (schema.type === 'TIMESTAMP') {
+          return <span>{moment(new Date(text)).format('YYYY-MM-DD HH:mm:ss SSS')}</span>;
+        } else {
+          return <span>{`${text}`}</span>;
+        }
+      } else {
+        return <span className={styles.null}>NULL</span>;
+      }
+    }
+  };
+
   renderTable = () => {
     const { pagination, table, loading, message: msg } = this.props.dataproPreviewTable;
     const nc = [];
@@ -351,6 +367,7 @@ class PrepareTransformer extends React.Component {
               </span>
             </div>
           ),
+          Cell: row => this.renderRow(row, v),
           accessor: v.name,
           sortable: false,
         });
