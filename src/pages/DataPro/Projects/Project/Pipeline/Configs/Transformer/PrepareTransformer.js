@@ -12,7 +12,7 @@ import SelectTransformation from './PrepareTransformer/SelectTransformation';
 import RenameTransformation from './PrepareTransformer/RenameTransformation';
 import Rename1Transformation from './PrepareTransformer/Rename1Transformation';
 import Rename3Transformation from './PrepareTransformer/Rename3Transformation';
-import MergeTransformation from './PrepareTransformer/MergeTransformation';
+import ConcatTransformation from './PrepareTransformer/ConcatTransformation';
 
 import styles from './PrepareTransformer.less';
 
@@ -21,7 +21,7 @@ const TransformationMapping = {
   RenameTransformation,
   Rename1Transformation,
   Rename3Transformation,
-  MergeTransformation,
+  ConcatTransformation,
 };
 /*
 值映射,修改列类型,增加列,列拆分,条件处理,格式化,数据提取,数学公式
@@ -31,7 +31,7 @@ const transformationList = [
   { name: '列重命名', value: 'RenameTransformation' },
   // { name: '列重命名（前后缀）', value: 'Rename1Transformation' },
   // { name: '列重命名（模式替换）', value: 'Rename3Transformation' },
-  { name: '列合并', value: 'MergeTransformation' },
+  { name: '列合并', value: 'ConcatTransformation' },
 ];
 
 const singleColumnMenus = [
@@ -74,7 +74,7 @@ const multipleColumnMenus = [
   },
   {
     name: '列合并',
-    value: 'MergeTransformation',
+    value: 'ConcatTransformation',
     props: (selected, tableSchema) => ({ columns: selected }),
   },
 ];
@@ -105,7 +105,10 @@ class PrepareTransformer extends React.Component {
       y: 220,
       showing: false,
     },
+    historyHeight: 0,
   };
+
+  table = React.createRef();
 
   typeDialog = React.createRef(); // for type div.
 
@@ -124,6 +127,16 @@ class PrepareTransformer extends React.Component {
       type: 'dataproPreviewTable/fetchTypes',
       payload: { id: this.props.id },
     });
+  }
+
+  componentDidUpdate() {
+    if (this.table.current) {
+      const tableDom = ReactDOM.findDOMNode(this.table.current).getBoundingClientRect();
+      const { height } = tableDom;
+      if (height !== this.state.historyHeight) {
+        this.setState({ historyHeight: height }); // eslint-disable-line
+      }
+    }
   }
 
   componentWillUnmount() {
@@ -204,7 +217,9 @@ class PrepareTransformer extends React.Component {
 
   handleHeaderClick(e, name) {
     e.stopPropagation();
-    if (key.isPressed(17)) {
+    // 17: ctrl on windows, linux
+    // 91: command on Mac
+    if (key.isPressed(17) || key.isPressed(91)) {
       let newSelected = this.state.selectedHeaders.filter(i => i !== name);
       if (newSelected.length === this.state.selectedHeaders.length) {
         newSelected = [...this.state.selectedHeaders, name];
@@ -343,6 +358,7 @@ class PrepareTransformer extends React.Component {
       // render table.
       contentRender = (
         <ReactTable
+          ref={this.table}
           className={styles.table}
           style={{ minHeight: '600px' }}
           // pages={pagination.total}
@@ -413,7 +429,7 @@ class PrepareTransformer extends React.Component {
               </Button>
             </div>
           </div>
-          <div className={styles.historyList}>
+          <div className={styles.historyList} style={{ height: `${this.state.historyHeight}px` }}>
             {renderConfig.reverse().map(item => (
               <div className={styles.historyItem} key={item.index}>
                 <div className={styles.operations}>

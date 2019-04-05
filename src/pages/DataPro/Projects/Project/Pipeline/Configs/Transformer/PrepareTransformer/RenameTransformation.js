@@ -1,8 +1,8 @@
 import React from 'react';
-import { Modal, message } from 'antd';
+import { Modal, message, Select, Input } from 'antd';
 import { addTransformation } from '@/services/datapro/pipelineAPI';
+import ConfigurationTable from '@/components/JsonSchemaForm/UI/ConfigurationTable';
 
-import ColumnMappingWidget from '@/components/JsonSchemaForm/Widgets/Column/ColumnMappingWidget';
 import WithSchema from './WithSchema';
 
 export default class RenameTransformation extends React.PureComponent {
@@ -16,10 +16,13 @@ export default class RenameTransformation extends React.PureComponent {
     const { id, opId, configs, onOk } = this.props;
     this.setState({ adding: true });
     // submit
+    // translate fields.
+    const fields = this.state.formData.map(i => i.fields);
+    const names = this.state.formData.map(i => i.names);
     addTransformation({
       projectId: id,
       id: opId,
-      config: { type: 'RenameTransformation', config: { fields: this.state.formData } },
+      config: { type: 'RenameTransformation', config: { fields, names } },
     }).then(response => {
       if (response) {
         if (response.success) {
@@ -33,19 +36,58 @@ export default class RenameTransformation extends React.PureComponent {
   }
 
   renderForm() {
+    const { schema, formData } = this.state;
     return (
-      <ColumnMappingWidget
-        uiSchema={{
-          'ui:options': {
-            inputColumnTitle: '原列名',
-            outputColumnTitle: '新列名',
-            getField: () => {
-              return this.state.schema;
-            },
+      // <ColumnMappingWidget
+      //   uiSchema={{
+      //     'ui:options': {
+      //       inputColumnTitle: '原列名',
+      //       outputColumnTitle: '新列名',
+      //       getField: () => {
+      //         return this.state.schema;
+      //       },
+      //     },
+      //   }}
+      //   formData={{ value: this.state.formData }}
+      //   onChange={v => this.setState({ formData: v.value })}
+      // />
+      <ConfigurationTable
+        canAdd={schema && formData.length < schema.length}
+        canDelete
+        onChange={v =>
+          this.setState({
+            formData: v,
+          })
+        }
+        data={formData}
+        columns={[
+          {
+            name: 'fields',
+            title: '原列名',
+            render: (v, item, onChange) => (
+              <Select placeholder="请选择" onChange={e => onChange(e)} value={v}>
+                {schema.map(i => (
+                  <Select.Option
+                    key={i.name}
+                    value={i.name}
+                    disabled={formData.filter(s => s.fields === i.name).length > 0}
+                  >
+                    {`${i.name} (${i.type})`}
+                  </Select.Option>
+                ))}
+              </Select>
+            ),
+            span: 11,
           },
-        }}
-        formData={{ value: this.state.formData }}
-        onChange={v => this.setState({ formData: v.value })}
+          {
+            name: 'names',
+            title: '新列名',
+            render: (v, item, onChange) => (
+              <Input defaultValue={v} value={v} onChange={e => onChange(e.target.value)} />
+            ),
+            span: 11,
+          },
+        ]}
       />
     );
   }
@@ -65,7 +107,7 @@ export default class RenameTransformation extends React.PureComponent {
           onLoad={schema =>
             this.setState({
               schema,
-              formData: (this.props.columns || []).map(i => ({ column: i, name: i })),
+              formData: (this.props.columns || []).map(i => ({ fields: i, names: i })),
             })
           }
         >

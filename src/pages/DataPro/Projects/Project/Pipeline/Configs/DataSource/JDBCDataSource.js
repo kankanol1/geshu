@@ -1,13 +1,11 @@
 import React from 'react';
-import { Form, Button, Input, Select, message } from 'antd';
+import { Form, Button, Input, Select, message, InputNumber } from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
 import PageLoading from '@/components/PageLoading';
-import { formatMessage } from 'umi/locale';
 import router from 'umi/router';
 
 import { getOperatorSchema, configOperator } from '@/services/datapro/pipelineAPI';
 import { formItemWithError, expandValidateErrors } from '../Utils';
-import ExpressionWidget from '@/components/Widgets/ExpressionWidget';
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -116,10 +114,22 @@ class JDBCDataSource extends React.Component {
           errors,
           validateErrors,
           formValues,
-          'source.address', // host_key+port_key
-          'jdbc://',
-          '连接地址',
+          'source.host', // host_key+port_key
+          '',
+          'IP地址',
           <Input onChange={e => this.handleChange()} />
+        )}
+        {formItemWithError(
+          form,
+          formItemProps,
+          {},
+          errors,
+          validateErrors,
+          formValues,
+          'source.port', // host_key+port_key
+          3306,
+          '端口号',
+          <InputNumber onChange={e => this.handleChange()} />
         )}
 
         {formItemWithError(
@@ -145,7 +155,7 @@ class JDBCDataSource extends React.Component {
           'source.password',
           '',
           '密码',
-          <Input onChange={e => this.handleChange()} />
+          <Input type="password" onChange={e => this.handleChange()} />
         )}
 
         {formItemWithError(
@@ -169,10 +179,10 @@ class JDBCDataSource extends React.Component {
           validateErrors,
           formValues,
           'source.encoding',
-          'UTF-8',
+          'UTF8',
           '编码方式',
           <Select>
-            <Option value="UTF-8">UTF-8</Option>
+            <Option value="UTF8">UTF-8</Option>
             <Option value="GBK">GBK</Option>
           </Select>
         )}

@@ -391,6 +391,17 @@ let prepareOpConfig = [
       output: ['ac1', 'ac2'],
     },
   },
+  ...fillArray(
+    {
+      type: 'SplitTransformation',
+      config: {
+        columns: ['a1'],
+        condition: [','],
+        output: ['ac1', 'ac2'],
+      },
+    },
+    20
+  ),
 ];
 
 export function getPipeline(req, res) {

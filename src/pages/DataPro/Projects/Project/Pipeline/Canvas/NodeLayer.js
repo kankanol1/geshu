@@ -1,6 +1,7 @@
 import React from 'react';
 import { DraggableCore } from 'react-draggable';
 import { Icon, Modal, Tooltip } from 'antd';
+import Link from 'umi/link';
 import styles from './styles.less';
 import { getIconNameForComponent, getStylesForType, componentSize } from './styles';
 import './icon.less';
@@ -8,7 +9,7 @@ import ComponentDraggingMove from '@/obj/workspace/op/ComponentDraggingMove';
 import ComponentMove from '@/obj/workspace/op/ComponentMove';
 import BatchUntrackedOperation from '@/obj/workspace/op/BatchUntrackedOperation';
 import BatchOperation from '@/obj/workspace/op/BatchOperation';
-import { calculateLineCurly } from '@/utils/PositionCalculation';
+// import { calculateLineCurly } from '@/utils/PositionCalculation';
 
 const jobTipDescription = {
   failed: '作业失败，点击查看',
@@ -161,6 +162,7 @@ class NodeLayer extends React.Component {
   }
 
   render() {
+    const { projectId } = this.props;
     const { name, id, code, type } = this.props.model;
     // console.log('model', this.props.model);
     const { x, y } =
@@ -197,7 +199,9 @@ class NodeLayer extends React.Component {
             {// render error
             status === 'ERROR' && (
               <Tooltip title="配置项错误，点击修改">
-                <Icon type="warning" className={styles.errorTip} />
+                <Link to={`/projects/p/pipeline/${projectId}/conf/${id}`}>
+                  <Icon type="warning" className={styles.errorTip} />
+                </Link>
               </Tooltip>
             )}
             {// render running.
