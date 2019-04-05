@@ -55,7 +55,7 @@ class FileDataSink extends React.PureComponent {
   render() {
     const { form, errors: givenErrors } = this.props;
     const { loading, changed, validateErrors } = this.state;
-    const errors = changed ? {} : givenErrors;
+    const errors = changed ? {} : givenErrors && givenErrors[0];
     const type =
       (this.state.formValues && this.state.formValues.type) || Object.keys(formRegistry)[0];
 

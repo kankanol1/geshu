@@ -86,7 +86,7 @@ class SplitTransformer extends React.Component {
       labelCol: { span: 5 },
       wrapperCol: { span: 15 },
     };
-    const errors = changed ? {} : givenErrors;
+    const errors = changed ? {} : givenErrors && givenErrors[0];
     if (loading) {
       return <PageLoading />;
     }
