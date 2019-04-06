@@ -113,7 +113,10 @@ class SchemaMappingOperator extends React.PureComponent {
           [],
           '模式映射',
           // We assume both returns one value.
-          <MappingSchemaWidget objSchema={objSchema.i1} inputSchema={inputSchema.i2} />
+          <MappingSchemaWidget
+            objSchema={objSchema[Object.keys(objSchema)[0]]}
+            inputSchema={inputSchema[Object.keys(inputSchema)[0]]}
+          />
         )}
         <div style={{ textAlign: 'center' }}>
           <Button type="primary" htmlType="submit" loading={false}>
