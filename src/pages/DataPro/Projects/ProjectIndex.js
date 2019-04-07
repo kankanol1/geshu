@@ -16,12 +16,17 @@ import TopBar from './TopBar';
 
 import { generateColorFor } from '../../../utils/utils';
 import styles from './ProjectIndex.less';
+import Template from './Project/Template';
 
 const getPaneConfig = project => {
   return {
     show: {
       key: 'show',
       title: project.name,
+    },
+    templates: {
+      key: 'templates',
+      title: '已发布模版列表',
     },
     versions: {
       key: 'versions',
@@ -77,6 +82,8 @@ class ProjectIndex extends PureComponent {
         return <Index {...props} />;
       case 'versions':
         return <Versions {...props} />;
+      case 'templates':
+        return <Template {...props} />;
       case 'settings':
         return <Settings {...props} />;
       // case 'dashboard':

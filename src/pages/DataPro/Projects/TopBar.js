@@ -57,6 +57,13 @@ export default class TopBar extends React.PureComponent {
             content: <Icon type="share-alt" />,
           },
           {
+            tooltip: '已发布模版',
+            key: 'templates',
+            selected: path === `/projects/p/templates/${id}`,
+            link: `/projects/p/templates/${id}`,
+            content: <Icon type="upload" />,
+          },
+          {
             tooltip: '数据集',
             key: 'dataset',
             selected: path === `/projects/p/dataset/${id}`,
