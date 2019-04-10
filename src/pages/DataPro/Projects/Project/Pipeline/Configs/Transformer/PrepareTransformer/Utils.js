@@ -8,7 +8,7 @@ export function transformationTitle(type) {
       return '列重命名(前后缀)';
     case 'Rename3Transformation':
       return '列重命名(模式替换)';
-    case 'MergeTransformation':
+    case 'ConcatTransformation':
       return '多列连接';
     default:
       return 'UnTranslated';
@@ -16,7 +16,7 @@ export function transformationTitle(type) {
 }
 
 export function transformationDescription(type, configs) {
-  let sep = '\xa0\xa0\xa0\xa0';
+  const sep = '\xa0\xa0\xa0\xa0';
   switch (type) {
     case 'SelectTransformation':
       return configs.fields.join(',');
@@ -26,35 +26,15 @@ export function transformationDescription(type, configs) {
       } else {
         return configs.columns.map(c => `${c.column} -> ${c.name}`).join(',  ');
       }
-    case 'Rename1Transformation':
+    case 'ConcatTransformation':
       if (configs === undefined) {
         return 'UnTranslated';
       } else {
-        let cols = configs.columns.join(','),
-          prefix = configs.prefix,
-          suffix = configs.suffix;
+        const cols = configs.fields.join(',');
 
-        return `列: ${cols}${sep}添加前缀: ${prefix}${sep}后缀: ${suffix}`;
-      }
-    case 'Rename3Transformation':
-      if (configs === undefined) {
-        return 'UnTranslated';
-      } else {
-        let cols = configs.columns.join(','),
-          on = configs.on,
-          by = configs.by;
+        const as = configs.as || '[自动]';
 
-        return `列: ${cols}${sep}替换: ${on}${sep}为: ${by}`;
-      }
-    case 'MergeTransformation':
-      if (configs === undefined) {
-        return 'UnTranslated';
-      } else {
-        let cols = configs.columns.join(','),
-          by = configs.by,
-          as = configs.as || '[自动]';
-
-        return `连接列: ${cols}${sep}连接符: ${by}${sep}新列名: ${as}`;
+        return `连接列: ${cols} => ${as}`;
       }
     default:
       return 'UnTranslated';

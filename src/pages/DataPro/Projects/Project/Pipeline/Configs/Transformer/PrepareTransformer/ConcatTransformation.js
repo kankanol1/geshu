@@ -5,11 +5,11 @@ import { getTransformationSchema, addTransformation } from '@/services/datapro/p
 import ColumnSelectCheckboxWidget from '@/components/JsonSchemaForm/Widgets/Column/ColumnSelectCheckboxWidget';
 import WithSchema from './WithSchema';
 
-export default class MergeTransformation extends React.PureComponent {
+export default class ConcatTransformation extends React.PureComponent {
   state = {
     formData: {
-      columns: [],
-      name: undefined,
+      fields: [],
+      as: undefined,
     },
     schema: [],
     adding: false,
@@ -22,7 +22,7 @@ export default class MergeTransformation extends React.PureComponent {
     addTransformation({
       projectId: id,
       id: opId,
-      config: { type: 'MergeTransformation', config: this.state.formData },
+      config: { type: 'ConcatTransformation', config: this.state.formData },
     }).then(response => {
       if (response) {
         if (response.success) {
@@ -55,9 +55,9 @@ export default class MergeTransformation extends React.PureComponent {
           </Col>
           <Col span={18}>
             <Input
-              value={this.state.formData.name}
+              value={this.state.formData.as}
               onChange={v =>
-                this.setState({ formData: { ...this.state.formData, name: v.target.value } })
+                this.setState({ formData: { ...this.state.formData, as: v.target.value } })
               }
             />
           </Col>
@@ -72,9 +72,9 @@ export default class MergeTransformation extends React.PureComponent {
                   },
                 },
               }}
-              formData={{ value: this.state.formData.columns }}
+              formData={{ value: this.state.formData.fields }}
               onChange={v =>
-                this.setState({ formData: { ...this.state.formData, columns: v.value } })
+                this.setState({ formData: { ...this.state.formData, fields: v.value } })
               }
             />
           </Col>
@@ -99,8 +99,8 @@ export default class MergeTransformation extends React.PureComponent {
             this.setState({
               schema,
               formData: {
-                columns: this.props.columns || [],
-                name: (this.props.columns || []).join('-'),
+                fields: this.props.columns || [],
+                as: (this.props.columns || []).join('-'),
               },
             })
           }
