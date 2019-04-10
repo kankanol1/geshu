@@ -20,6 +20,8 @@
     "build:ml": "npm run setup:ml && npm run build",
     "build:graph": "npm run setup:graph && npm run build",
     "build:datapro": "npm run setup:datapro && npm run build",
+    "build:datapro-all": "npm run setup:datapro-all && npm run build",
+    "build:datapro-client": "npm run setup:datapro-client && npm run build",
     "release": "node ./scripts/build.js",
     "site": "npm run presite && cross-env APP_TYPE=site npm run build && firebase deploy",
     "analyze": "cross-env ANALYZE=1 umi build",
