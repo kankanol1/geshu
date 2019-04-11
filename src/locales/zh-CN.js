@@ -371,4 +371,12 @@ export default {
   'types.EMAIL': '电子邮件',
   'types.NAME': '姓名',
   'types.ADDRESS': '地址',
+  'types.ID': '唯一标识',
+  'types.AGE': '年龄',
+  'types.BIRTH': '生日',
+  'types.PHONENUMBER': '电话号码',
+  'types.BUSINESSLICENSEID': '营业执照编号',
+  'types.ENTERPRISEFORM': '企业类型',
+  'types.POSTCODE': '邮政编码',
+  'types.SURNAME': '姓',
 };
