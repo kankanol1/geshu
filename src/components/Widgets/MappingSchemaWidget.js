@@ -16,7 +16,12 @@ class MappingSchemaWidget extends React.PureComponent {
     // set value.
     const { objSchema, inputSchema } = this.props;
     if (this.state.data.length === 0) {
-      const data = objSchema.map(i => ({ name: i.name, column: undefined, type: i.type }));
+      const data = objSchema.map(i => ({
+        name: i.name,
+        column: undefined,
+        fieldType: i.type,
+        nullable: i.nullable,
+      }));
       this.setState({ data });
     }
   }
@@ -49,7 +54,7 @@ class MappingSchemaWidget extends React.PureComponent {
             title: '目标列',
             render: (v, item, onChange, index) => (
               <div className={styles.fakeInput}>
-                {v}({item.type})
+                {v}({item.fieldType})
               </div>
             ),
             span: 11,
@@ -60,7 +65,7 @@ class MappingSchemaWidget extends React.PureComponent {
             render: (v, item, onChange) => (
               <Select placeholder="请选择" onChange={e => onChange(e)} value={v}>
                 {inputSchema.map(i => (
-                  <Select.Option key={i.name} value={i.name} disabled={i.type !== item.type}>
+                  <Select.Option key={i.name} value={i.name} disabled={i.type !== item.fieldType}>
                     {`${i.name} (${i.type})`}
                   </Select.Option>
                 ))}

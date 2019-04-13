@@ -109,7 +109,7 @@ class SchemaMappingOperator extends React.PureComponent {
           errors,
           validateErrors,
           formValues,
-          'schema',
+          'targetSchema.fields',
           [],
           '模式映射',
           // We assume both returns one value.
