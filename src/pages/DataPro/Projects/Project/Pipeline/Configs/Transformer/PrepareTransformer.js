@@ -226,6 +226,9 @@ class PrepareTransformer extends React.Component {
         newSelected = [...this.state.selectedHeaders, name];
       }
       this.setState({ selectedHeaders: newSelected });
+    } else if (this.state.selectedHeaders.length === 1 && this.state.selectedHeaders[0] === name) {
+      // unselect.
+      this.setState({ selectedHeaders: [] });
     } else {
       this.setState({ selectedHeaders: [name] });
     }
