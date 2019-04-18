@@ -22,6 +22,8 @@ const websocketRegister = {
 
 let connectingTip;
 
+let subscribingList = []; // [{topic, callback}]
+
 export default {
   namespace: 'ws',
 
@@ -49,14 +51,18 @@ export default {
       }
       const { topic, callback } = payload;
       state.ws.subscribe(topic, callback);
+      subscribingList = [...subscribingList, { topic, callback }];
+      // add to list.
       return state;
     },
 
     unsubscribe(state, { payload }) {
+      const { topic } = payload;
       if (state.ws) {
-        const { topic } = payload;
         state.ws.subscribe(topic, {});
       }
+      // remove from list.
+      subscribingList = subscribingList.filter(i => i.topic === topic);
       return state;
     },
 
@@ -89,69 +95,77 @@ export default {
     setup({ dispatch, history }) {
       let socket;
       let stompClient;
+
+      const initSocket = () => {
+        socket = new SockJS('/ws');
+        stompClient = Stomp.over(socket);
+        // set timout to prevent warning: "triggering nested component updates from render is not allowed."
+        setTimeout(() => {
+          connectingTip = message.loading('与服务器连接中...', 0);
+        }, 0);
+        const connectedCallback = frame => {
+          // check url.
+          if (!matchUrl(history.location.pathname, enabledUrls)) {
+            // disconnect.
+            stompClient.disconnect(() => {
+              console.log('connected, but url changed. disconnect finished, closing socket'); // eslint-disable-line
+              socket.close();
+              socket = undefined;
+              stompClient = undefined;
+            });
+            // end of story.
+            connectingTip(); // disable connection
+
+            dispatch({
+              type: 'saveWS',
+              payload: undefined,
+            });
+            return;
+          }
+          Object.keys(websocketRegister).forEach(k =>
+            stompClient.subscribe(k, msg => {
+              dispatch({
+                type: websocketRegister[k],
+                payload: msg,
+              });
+            })
+          );
+          subscribingList.forEach(k => {
+            const { topic, callback } = k;
+            stompClient.subscribe(topic, callback);
+          });
+
+          // store ws.
+          dispatch({
+            type: 'saveWS',
+            payload: stompClient,
+          });
+
+          // send blocked msg.
+          dispatch({
+            type: 'sendCached',
+          });
+          connectingTip();
+        };
+        const connect = () => {
+          stompClient.connect(
+            {},
+            frame => connectedCallback(frame),
+            error => {
+              // reconnect.
+              connect();
+            }
+          );
+        };
+        connect();
+      };
       // let lastPathname;
       history.listen(({ pathname }) => {
         if (connectingTip) {
           connectingTip();
         }
         if (matchUrl(pathname, enabledUrls) && !socket) {
-          socket = new SockJS('/ws');
-          stompClient = Stomp.over(socket);
-          // set timout to prevent warning: "triggering nested component updates from render is not allowed."
-          setTimeout(() => {
-            connectingTip = message.loading('与服务器连接中...', 0);
-          }, 0);
-          const connectedCallback = frame => {
-            // check url.
-            if (!matchUrl(history.location.pathname, enabledUrls)) {
-              // disconnect.
-              stompClient.disconnect(() => {
-                console.log('connected, but url changed. disconnect finished, closing socket'); // eslint-disable-line
-                socket.close();
-                socket = undefined;
-                stompClient = undefined;
-              });
-              // end of story.
-              connectingTip(); // disable connection
-
-              dispatch({
-                type: 'saveWS',
-                payload: undefined,
-              });
-              return;
-            }
-            Object.keys(websocketRegister).forEach(k =>
-              stompClient.subscribe(k, msg => {
-                dispatch({
-                  type: websocketRegister[k],
-                  payload: msg,
-                });
-              })
-            );
-
-            // store ws.
-            dispatch({
-              type: 'saveWS',
-              payload: stompClient,
-            });
-
-            // send blocked msg.
-            dispatch({
-              type: 'sendCached',
-            });
-            connectingTip();
-          };
-          const connect = () => {
-            stompClient.connect(
-              {},
-              frame => connectedCallback(frame),
-              error => {
-                // reconnect.
-                connect();
-              }
-            );
-          };
-          connect();
+          initSocket();
         } else if (socket && !matchUrl(pathname, enabledUrls)) {
           // if (socket.readyState === SockJS.CONNECTING) {
           //   // close after established.
@@ -174,6 +188,12 @@ export default {
             console.warn(
               'stomp client is not initialized, the connection may be established latter.'
             );
+          }
+        } else if (socket && matchUrl(pathname, enabledUrls)) {
+          // perform a regular health check.
+          if (!stompClient.connected) {
+            // reconnect.
+            initSocket();
           }
         }
       });
