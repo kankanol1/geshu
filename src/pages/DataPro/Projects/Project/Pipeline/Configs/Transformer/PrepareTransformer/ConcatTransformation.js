@@ -10,31 +10,12 @@ export default class ConcatTransformation extends React.PureComponent {
   state = {
     formData: {
       fields: [],
-      by: '-',
+      by: '',
+      as: undefined,
     },
-    previewAs: '',
-    mode: 'by', // mode: by | as
     schema: [],
     adding: false,
   };
-
-  calPreview = (fields, symbol) => {
-    if (fields.length === 0) return '';
-    else return fields.join(symbol);
-  };
-
-  changeMode(newMode) {
-    const { fields, by } = this.state.formData;
-    switch (newMode) {
-      case 'by':
-        this.setState({ mode: 'by', formData: { fields, by: '-' } });
-        break;
-      case 'as':
-        this.setState({ mode: 'as', formData: { fields, as: this.calPreview(fields, by) } });
-        break;
-      default:
-    }
-  }
 
   handleOk() {
     const { id, opId, configs, onOk } = this.props;
@@ -60,62 +41,34 @@ export default class ConcatTransformation extends React.PureComponent {
     return (
       <div>
         <Row className={styles.formItem}>
-          <Col className={styles.center}>
-            <Radio.Group
-              defaultValue={this.state.mode}
-              buttonStyle="solid"
-              onChange={v => this.changeMode(v.target.value)}
-            >
-              <Radio.Button value="by">指定连接符</Radio.Button>
-              <Radio.Button value="as">指定列名</Radio.Button>
-            </Radio.Group>
+          <Col span={6}>
+            <span>连接符</span>
+          </Col>
+          <Col span={18}>
+            <Input
+              value={this.state.formData.by}
+              onChange={v => {
+                const by = v.target.value;
+                this.setState({
+                  formData: { ...this.state.formData, by },
+                });
+              }}
+            />
           </Col>
         </Row>
-        {this.state.mode === 'by' && (
-          <React.Fragment>
-            <Row className={styles.formItem}>
-              <Col span={6}>
-                <span>连接符</span>
-              </Col>
-              <Col span={18}>
-                <Input
-                  value={this.state.formData.by}
-                  onChange={v => {
-                    const { fields } = this.state.formData;
-                    const by = v.target.value;
-                    this.setState({
-                      formData: { fields, by },
-                      previewAs: this.calPreview(fields, by),
-                    });
-                  }}
-                />
-              </Col>
-            </Row>
-            <Row className={styles.formItem}>
-              <Col span={6}>
-                <span>列名预览</span>
-              </Col>
-              <Col span={18}>
-                <Input value={this.state.previewAs} disabled />
-              </Col>
-            </Row>
-          </React.Fragment>
-        )}
-        {this.state.mode === 'as' && (
-          <Row className={styles.formItem}>
-            <Col span={6}>
-              <span>新列名</span>
-            </Col>
-            <Col span={18}>
-              <Input
-                value={this.state.formData.as}
-                onChange={v =>
-                  this.setState({ formData: { ...this.state.formData, as: v.target.value } })
-                }
-              />
-            </Col>
-          </Row>
-        )}
+        <Row className={styles.formItem}>
+          <Col span={6}>
+            <span>新列名</span>
+          </Col>
+          <Col span={18}>
+            <Input
+              value={this.state.formData.as}
+              onChange={v =>
+                this.setState({ formData: { ...this.state.formData, as: v.target.value } })
+              }
+            />
+          </Col>
+        </Row>
         <Row className={styles.formItem}>
           <Col span={24}>
             <ColumnSelectCheckboxWidget
@@ -128,10 +81,8 @@ export default class ConcatTransformation extends React.PureComponent {
               }}
               formData={{ value: this.state.formData.fields }}
               onChange={v => {
-                const { by } = this.state.formData;
                 this.setState({
-                  formData: { by, fields: v.value },
-                  previewAs: this.calPreview(v.value, by),
+                  formData: { ...this.state.formData, fields: v.value },
                 });
               }}
             />
@@ -158,9 +109,9 @@ export default class ConcatTransformation extends React.PureComponent {
               schema,
               formData: {
                 fields: this.props.columns || [],
-                by: '-',
+                by: '',
+                as: (this.props.columns || []).join('-'),
               },
-              previewAs: this.calPreview(this.props.columns || [], '-'),
             })
           }
         >
