@@ -17,7 +17,7 @@ const pipeline = {
     nu8: {
       status: 'CALCULATING',
     },
-    '618ee91e-1562-4f7d-8f12-14dc51b727dc': {
+    'PrepareTransformer-14dc51b727dc': {
       status: 'ERROR',
     },
     gg9: {
@@ -118,7 +118,7 @@ const pipeline = {
     {
       x: 1400,
       y: 200,
-      id: '618ee91e-1562-4f7d-8f12-14dc51b727dc',
+      id: 'PrepareTransformer-14dc51b727dc',
       name: '数据转换',
       code: 'AddLiteralColumnTransformer',
       type: 'Transformer',
@@ -159,7 +159,7 @@ const pipeline = {
       ],
       connectFrom: [
         {
-          component: '618ee91e-1562-4f7d-8f12-14dc51b727dc',
+          component: 'PrepareTransformer-14dc51b727dc',
           from: 'o1',
           to: 'i1',
         },
@@ -384,20 +384,20 @@ let prepareOpConfig = [
     },
   },
   {
-    type: 'SplitTransformation',
+    type: 'ConcatTransformation',
     config: {
-      columns: ['a1'],
-      condition: [','],
-      output: ['ac1', 'ac2'],
+      as: 'a1',
+      by: ',',
+      fields: ['ac1', 'ac2'],
     },
   },
   ...fillArray(
     {
-      type: 'SplitTransformation',
+      type: 'ConcatTransformation',
       config: {
-        columns: ['a1'],
-        condition: [','],
-        output: ['ac1', 'ac2'],
+        as: 'a1',
+        by: ',',
+        fields: ['ac1', 'ac2'],
       },
     },
     20
@@ -570,15 +570,25 @@ export function getPipelineOperator(req, res) {
   if (params.opId.includes('PrepareTransformer')) {
     configs = prepareOpConfig;
   }
+  const preparing = arr[0] === 'PrepareTransformer';
   const result = {
     id: params.opId,
     type: arr[0],
     code: arr[0],
-    name: arr[0] === 'PrepareTransformer' ? '数据转换' : '名称',
+    name: preparing ? '数据转换' : `${arr[0]}名称`,
     configs,
-    errors: {
-      'format.ignoreFirstLine': '无需选中',
-    },
+    errors: preparing
+      ? [
+          {
+            as: '错误',
+          },
+          {
+            as: '错误2',
+          },
+        ]
+      : {
+          'format.ignoreFirstLine': '无需选中',
+        },
   };
   res.json(result);
 }

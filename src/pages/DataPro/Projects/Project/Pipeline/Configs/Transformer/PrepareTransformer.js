@@ -17,6 +17,10 @@ import ConcatTransformation from './PrepareTransformer/ConcatTransformation';
 
 import styles from './PrepareTransformer.less';
 
+const hasError = (index, err) => {
+  return index < err.length && Object.keys(err[index]).length > 0;
+};
+
 const TransformationMapping = {
   SelectTransformation,
   RenameTransformation,
@@ -272,6 +276,30 @@ class PrepareTransformer extends React.Component {
     );
   }
 
+  renderModifyingComponent() {
+    const { modifyingComponent } = this.state;
+    if (!modifyingComponent) return;
+    const { type, config, index } = modifyingComponent;
+    const Comp = TransformationMapping[type];
+    const { id, opId, configs } = this.props;
+    return (
+      <Comp
+        id={id}
+        index={index}
+        opId={opId}
+        configs={config}
+        onCancel={() => {
+          this.setState({ modifyingComponent: undefined });
+        }}
+        onOk={() => {
+          this.setState({ modifyingComponent: undefined });
+          // refresh configs.
+          this.props.refresh();
+        }}
+      />
+    );
+  }
+
   renderContextMenu = () => {
     const { selectedHeaders, contextMenu } = this.state;
     const { y, x, showing } = contextMenu;
@@ -435,7 +463,7 @@ class PrepareTransformer extends React.Component {
   };
 
   renderHistory = () => {
-    const { configs } = this.props;
+    const { configs, errors } = this.props;
     const renderConfig = (configs || []).map((i, index) => ({ value: i, index }));
     return (
       <React.Fragment>
@@ -451,16 +479,20 @@ class PrepareTransformer extends React.Component {
           </div>
           <div className={styles.historyList} style={{ height: `${this.state.historyHeight}px` }}>
             {renderConfig.reverse().map(item => (
-              <div className={styles.historyItem} key={item.index}>
+              <div
+                className={`${styles.historyItem} ${hasError(item.index, errors) &&
+                  styles.errorItem}`}
+                key={item.index}
+              >
                 <div className={styles.operations}>
                   <Icon
                     type="delete"
                     style={{ color: 'red' }}
                     onClick={() => this.handleTransformationDelete(item)}
                   />
-                  {/* <Icon type="edit" /> */}
+                  {/* <Icon type="edit" onClick={() => this.setState({ modifyingComponent: { ...item.value, index: item.index} })} /> */}
                 </div>
-                <div className={styles.title}>{transformationTitle(item.value.type)}</div>
+                <div className={styles.title}> {transformationTitle(item.value.type)}</div>
                 <span className={styles.description}>
                   {transformationDescription(item.value.type, item.value.config)}
                 </span>
@@ -508,6 +540,7 @@ class PrepareTransformer extends React.Component {
         {this.renderTransformationComponent()}
         {this.renderType()}
         {this.renderContextMenu()}
+        {this.renderModifyingComponent()}
       </React.Fragment>
     );
   }

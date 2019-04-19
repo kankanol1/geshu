@@ -1,94 +1,93 @@
 import React from 'react';
-import { Modal, Radio, message, Row, Col, Input } from 'antd';
+import { Form, Modal, Radio, message, Row, Col, Input } from 'antd';
 import { getTransformationSchema, addTransformation } from '@/services/datapro/pipelineAPI';
 
-import ColumnSelectCheckboxWidget from '@/components/JsonSchemaForm/Widgets/Column/ColumnSelectCheckboxWidget';
+import CheckboxSelectColumnWidget from '@/components/Widgets/CheckboxSelectColumnWidget';
 import WithSchema from './WithSchema';
+import { formItemWithError, expandValidateErrors } from '../../Utils';
 import styles from '../PrepareTransformer.less';
 
-export default class ConcatTransformation extends React.PureComponent {
+@Form.create()
+class ConcatTransformation extends React.PureComponent {
   state = {
-    formData: {
-      fields: [],
-      by: '',
-      as: undefined,
-    },
+    formValues: {},
     schema: [],
     adding: false,
+    validateErrors: undefined,
   };
 
   handleOk() {
-    const { id, opId, configs, onOk } = this.props;
-    this.setState({ adding: true });
-    // submit
-    addTransformation({
-      projectId: id,
-      id: opId,
-      config: { type: 'ConcatTransformation', config: this.state.formData },
-    }).then(response => {
-      if (response) {
-        if (response.success) {
-          message.info('添加成功');
-          onOk();
-        } else {
-          message.error(`添加失败:${response.message}，请重试`);
-        }
+    const { id, opId, configs, onOk, form } = this.props;
+    form.validateFields((err, fieldsValue) => {
+      this.setState({ validateErrors: expandValidateErrors(err) });
+      if (!err) {
+        this.setState({ adding: true });
+        // submit
+        addTransformation({
+          projectId: id,
+          id: opId,
+          config: { type: 'ConcatTransformation', config: this.state.formData },
+        }).then(response => {
+          if (response) {
+            if (response.success) {
+              message.info('添加成功');
+              onOk();
+            } else {
+              message.error(`添加失败:${response.message}，请重试`);
+            }
+          }
+        });
       }
     });
   }
 
   renderForm() {
+    const { form } = this.props;
+    const { validateErrors, formValues } = this.state;
+    const errors = {};
+    const formItemProps = {
+      labelCol: { span: 4 },
+      wrapperCol: { span: 20 },
+    };
     return (
-      <div>
-        <Row className={styles.formItem}>
-          <Col span={6}>
-            <span>连接符</span>
-          </Col>
-          <Col span={18}>
-            <Input
-              value={this.state.formData.by}
-              onChange={v => {
-                const by = v.target.value;
-                this.setState({
-                  formData: { ...this.state.formData, by },
-                });
-              }}
-            />
-          </Col>
-        </Row>
-        <Row className={styles.formItem}>
-          <Col span={6}>
-            <span>新列名</span>
-          </Col>
-          <Col span={18}>
-            <Input
-              value={this.state.formData.as}
-              onChange={v =>
-                this.setState({ formData: { ...this.state.formData, as: v.target.value } })
-              }
-            />
-          </Col>
-        </Row>
-        <Row className={styles.formItem}>
-          <Col span={24}>
-            <ColumnSelectCheckboxWidget
-              uiSchema={{
-                'ui:options': {
-                  getField: () => {
-                    return this.state.schema;
-                  },
-                },
-              }}
-              formData={{ value: this.state.formData.fields }}
-              onChange={v => {
-                this.setState({
-                  formData: { ...this.state.formData, fields: v.value },
-                });
-              }}
-            />
-          </Col>
-        </Row>
-      </div>
+      <Form>
+        {formItemWithError(
+          form,
+          formItemProps,
+          {},
+          errors,
+          validateErrors,
+          formValues,
+          'as',
+          '',
+          '新列名',
+          <Input />
+        )}
+        {formItemWithError(
+          form,
+          formItemProps,
+          {},
+          errors,
+          validateErrors,
+          formValues,
+          'by',
+          '_',
+          '连接符',
+          <Input />
+        )}
+        {formItemWithError(
+          form,
+          formItemProps,
+          {},
+          errors,
+          validateErrors,
+          formValues,
+          'fields',
+          [],
+          '合并列',
+          <CheckboxSelectColumnWidget schema={this.state.schema} />
+        )}
+      </Form>
     );
   }
 
@@ -101,16 +100,17 @@ export default class ConcatTransformation extends React.PureComponent {
         onOk={() => this.handleOk()}
         onCancel={onCancel}
         okButtonProps={{ loading: this.state.adding }}
+        width={600}
       >
         <WithSchema
           {...this.props}
           onLoad={schema =>
             this.setState({
               schema,
-              formData: {
+              formValues: this.props.configs || {
                 fields: this.props.columns || [],
                 by: '',
-                as: (this.props.columns || []).join('-'),
+                as: (this.props.columns || []).join('_'),
               },
             })
           }
@@ -121,3 +121,5 @@ export default class ConcatTransformation extends React.PureComponent {
     );
   }
 }
+
+export default ConcatTransformation;

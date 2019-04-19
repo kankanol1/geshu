@@ -101,7 +101,7 @@ class JoinTransformer extends React.Component {
           validateErrors,
           formValues,
           'joinType',
-          'OUTER',
+          'INNER',
           '连接模式(Join Type)',
           <Select onChange={e => this.handleChange()}>
             <Option value="INNER">内连接（INNER JOIN）</Option>
