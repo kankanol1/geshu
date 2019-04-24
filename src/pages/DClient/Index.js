@@ -10,6 +10,9 @@ class Index extends React.PureComponent {
     const { dispatch } = this.props;
     dispatch({
       type: 'login/logout',
+      payload: {
+        requestServer: true,
+      },
     });
   }
 

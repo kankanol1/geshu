@@ -106,6 +106,9 @@ export default class TopBar extends React.PureComponent {
                         } else if (key === 'logout') {
                           dispatch({
                             type: 'login/logout',
+                            payload: {
+                              requestServer: true,
+                            },
                           });
                         }
                       }}

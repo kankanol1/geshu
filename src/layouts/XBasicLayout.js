@@ -229,6 +229,9 @@ class XBasicLayout extends React.PureComponent {
     if (key === 'logout') {
       dispatch({
         type: 'login/logout',
+        payload: {
+          requestServer: true,
+        },
       });
     }
   };

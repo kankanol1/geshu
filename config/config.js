@@ -144,6 +144,9 @@ export default {
   },
 
   chainWebpack: webpackPlugin,
+  // devServer: {
+  //   headers: { "Access-Control-Allow-Origin": "*" },
+  // },
   cssnano: {
     mergeRules: false,
   },

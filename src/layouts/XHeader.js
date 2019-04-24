@@ -50,6 +50,9 @@ class HeaderView extends PureComponent {
     if (key === 'logout') {
       dispatch({
         type: 'login/logout',
+        payload: {
+          requestServer: true,
+        },
       });
     }
   };

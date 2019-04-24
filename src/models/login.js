@@ -23,7 +23,7 @@ export default {
       }
     },
 
-    *logout(_, { put, select, call }) {
+    *logout({ payload }, { put, select, call }) {
       const pathname = yield select(state => state.routing.location.pathname);
       // do not redirect twice.
       if (pathname === '/user/login') {
@@ -36,12 +36,15 @@ export default {
         // // add the parameters in the url
         // const redirectPath = replaceUrlWithParams('/#/user/login',
         // { urlParams, redirect: pathname });
-        const response = yield call(userLogout);
-        if (response) {
-          if (response.success) {
-            message.info(response.message);
-          } else {
-            message.error(response.message);
+        const { requestServer } = payload || {};
+        if (requestServer) {
+          const response = yield call(userLogout);
+          if (response) {
+            if (response.success) {
+              message.info(response.message);
+            } else {
+              message.error(response.message);
+            }
           }
         }
       } finally {

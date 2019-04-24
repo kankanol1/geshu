@@ -26,14 +26,14 @@ let notifications = [];
 
 let checking = false;
 
-function showNotification({ message, description }) {
-  if (notifications.filter(i => description === i.description).length === 0) {
+function showNotification({ message, description, code }) {
+  if (notifications.filter(i => code === i.code).length === 0) {
     // add to notification
     notifications.push({ message, description });
   }
   if (!checking) {
     displayNextNotification();
-    setTimeout(displayNextNotification, 2);
+    setTimeout(displayNextNotification, 2000);
     checking = true;
   }
 }
@@ -47,6 +47,12 @@ const displayNextNotification = () => {
       description: nt.description,
       duration: 2,
     });
+    if (notifications.length > 0) {
+      // check
+      setTimeout(displayNextNotification, 2000);
+    } else {
+      checking = false;
+    }
   }
 };
 
@@ -58,6 +64,7 @@ function checkStatus(response) {
   showNotification({
     message: `请求错误 ${response.status}: ${response.url}`,
     description: errortext,
+    code: response.status,
   });
   const error = new Error(errortext);
   error.name = response.status;
@@ -113,14 +120,27 @@ export default function request(url, options = {}) {
       const store = getFromRegistory('store');
       const { dispatch } = store;
       const status = e.name;
-      if (status === 401) {
-        dispatch({
-          type: 'login/logout',
-        });
-        return;
-      }
       if (status === 403) {
         dispatch(routerRedux.push('/exception/403'));
+        return;
+      }
+      if (status === 401) {
+        let json = {};
+        try {
+          json = e.response.json();
+        } catch (err) {
+          console.error('error while parsing: ', json); // eslint-disable-line
+        }
+        Modal.error({
+          title: '请重新登录',
+          content: `${json.message || '登录过期，请重新登录'}`,
+          okText: '确定',
+          onOk: () => {
+            dispatch({
+              type: 'login/logout',
+            });
+          },
+        });
         return;
       }
       if (status <= 504 && status >= 500) {
