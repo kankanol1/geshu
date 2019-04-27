@@ -165,7 +165,10 @@ class JoinTransformer extends React.Component {
             'criteria.conditions',
             [],
             '过滤表达式',
-            <ExpressionWidget onChange={e => this.handleChange()} />
+            <ExpressionWidget
+              options={[...schema.i1.map(i => `L_${i.name}`), ...schema.i2.map(i => `R_${i.name}`)]}
+              onChange={e => this.handleChange()}
+            />
           )}
         <div style={{ textAlign: 'center' }}>
           <Button type="primary" htmlType="submit" loading={false}>

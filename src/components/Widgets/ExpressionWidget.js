@@ -1,5 +1,6 @@
 import React from 'react';
 import { Select, Tag, Icon, Input } from 'antd';
+import XInputSelect from '@/components/XInputSelect';
 import ConfigurationTable from '../JsonSchemaForm/UI/ConfigurationTable';
 
 const operatorList = [
@@ -29,6 +30,7 @@ class ExpressionWidget extends React.PureComponent {
 
   render() {
     const { data } = this.state;
+    const { options } = this.props;
     return (
       <ConfigurationTable
         canAdd
@@ -43,7 +45,12 @@ class ExpressionWidget extends React.PureComponent {
             name: 'leftExpression',
             title: '左表达式',
             render: (v, item, onChange) => (
-              <Input defaultValue={v} value={v} onChange={e => onChange(e.target.value)} />
+              <XInputSelect
+                options={options}
+                defaultValue={v}
+                value={v}
+                onChange={e => onChange(e)}
+              />
             ),
             span: 9,
           },
@@ -65,7 +72,12 @@ class ExpressionWidget extends React.PureComponent {
             name: 'rightExpression',
             title: '右表达式',
             render: (v, item, onChange) => (
-              <Input defaultValue={v} value={v} onChange={e => onChange(e.target.value)} />
+              <XInputSelect
+                options={options}
+                defaultValue={v}
+                value={v}
+                onChange={e => onChange(e)}
+              />
             ),
             span: 9,
           },
