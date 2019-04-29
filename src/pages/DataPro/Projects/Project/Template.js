@@ -50,16 +50,25 @@ class Template extends React.PureComponent {
       },
       {
         title: '操作',
+        width: 250,
         render: (text, record) => (
           <Fragment>
-            {/* <Button
+            <Button
+              type="primary"
+              size="small"
+              // onClick={() => router.push(`/tasks/t/show/${record.id}`)}
+            >
+              应用
+            </Button>
+            <Divider type="vertical" />
+            <Button
               // type="primary"
               size="small"
               // onClick={() => router.push(`/tasks/t/show/${record.id}`)}
             >
-              重命名
+              修改
             </Button>
-            <Divider type="vertical" /> */}
+            <Divider type="vertical" />
             <span>
               <Popconfirm title="确认删除吗?" onConfirm={() => this.handleRecordDelete(record)}>
                 <a style={{ color: 'red' }}>删除</a>

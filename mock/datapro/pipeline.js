@@ -23,6 +23,9 @@ const pipeline = {
     gg9: {
       status: 'EMPTY',
     },
+    'Dataset-1544977506208': {
+      status: 'CALCULATED_ERROR',
+    },
   },
   components: [
     {

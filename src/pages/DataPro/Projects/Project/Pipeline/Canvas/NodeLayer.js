@@ -179,6 +179,9 @@ class NodeLayer extends React.Component {
         case 'CALCULATING':
           extraStyle = styles.datasetEmptyDiv;
           break;
+        case 'CALCULATED_ERROR':
+          extraStyle = styles.datasetErrorDiv;
+          break;
         case 'CALCULATED':
         default:
           break;
@@ -208,6 +211,22 @@ class NodeLayer extends React.Component {
             status === 'RUNNING' && (
               <Tooltip title="作业运行中">
                 <Icon type="loading" className={styles.taskRunningTip} />
+              </Tooltip>
+            )}
+            {status === 'CALCULATED_ERROR' && (
+              <Tooltip title="计算过程出错，点击查看">
+                <Icon
+                  type="warning"
+                  className={styles.errorTip}
+                  onClick={() => {
+                    this.props.dispatch({
+                      type: 'dataproPipeline/setInspectingComponent',
+                      payload: {
+                        component: this.props.model,
+                      },
+                    });
+                  }}
+                />
               </Tooltip>
             )}
           </div>
