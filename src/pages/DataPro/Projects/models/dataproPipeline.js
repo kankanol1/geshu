@@ -99,8 +99,8 @@ export default {
       return { ...state, savingDataset: dataset };
     },
     setInspectingSchema(state, { payload }) {
-      const { component } = payload;
-      return { ...state, inspectingSchema: component };
+      const { component, error } = payload;
+      return { ...state, inspectingSchema: { ...component, error } };
     },
   },
 

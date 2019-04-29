@@ -79,6 +79,7 @@ class ContextMenu extends React.PureComponent {
           type: 'dataproPipeline/setInspectingComponent',
           payload: {
             component,
+            error: false,
           },
         });
         break;

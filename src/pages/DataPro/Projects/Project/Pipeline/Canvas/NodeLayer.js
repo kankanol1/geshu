@@ -223,6 +223,7 @@ class NodeLayer extends React.Component {
                       type: 'dataproPipeline/setInspectingComponent',
                       payload: {
                         component: this.props.model,
+                        error: true,
                       },
                     });
                   }}
