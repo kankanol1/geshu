@@ -90,8 +90,9 @@ export default {
     },
 
     setInspectingComponent(state, { payload }) {
-      const { component } = payload;
-      return { ...state, inspecting: component };
+      const { component, error } = payload;
+      const newComponent = component && { ...component, error };
+      return { ...state, inspecting: newComponent };
     },
 
     updateSavingDataset(state, { payload }) {
@@ -99,8 +100,8 @@ export default {
       return { ...state, savingDataset: dataset };
     },
     setInspectingSchema(state, { payload }) {
-      const { component, error } = payload;
-      return { ...state, inspectingSchema: { ...component, error } };
+      const { component } = payload;
+      return { ...state, inspectingSchema: component };
     },
   },
 

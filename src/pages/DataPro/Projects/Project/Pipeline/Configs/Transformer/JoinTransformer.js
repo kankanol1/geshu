@@ -151,8 +151,12 @@ class JoinTransformer extends React.Component {
             formValues,
             'criteria.ude',
             '',
-            '自定义过滤表达式',
-            <TextArea rows={5} onChange={e => this.handleChange()} />
+            '自定义连接条件',
+            <TextArea
+              placeholder="L_expression = R_expression"
+              rows={5}
+              onChange={e => this.handleChange()}
+            />
           )}
         {!this.state.diying &&
           formItemWithError(
@@ -164,7 +168,7 @@ class JoinTransformer extends React.Component {
             formValues,
             'criteria.conditions',
             [],
-            '过滤表达式',
+            '连接条件',
             <ExpressionWidget
               options={[...schema.i1.map(i => `L_${i.name}`), ...schema.i2.map(i => `R_${i.name}`)]}
               onChange={e => this.handleChange()}
