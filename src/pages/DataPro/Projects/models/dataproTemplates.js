@@ -21,13 +21,14 @@ export default {
   },
 
   effects: {
-    *fetchTemplates({ payload }, { call, put }) {
+    *fetchTemplates({ payload, callback }, { call, put }) {
       const response = yield call(queryTemplates, payload);
       if (response) {
         yield put({
           type: 'saveTemplateFetchResult',
           payload: response,
         });
+        if (callback) callback();
       }
     },
     *updateTemplate({ payload, callback }, { call, put }) {

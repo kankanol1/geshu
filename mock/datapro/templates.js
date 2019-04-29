@@ -110,8 +110,22 @@ export function deleteTemplateById(req, res) {
   });
 }
 
+export function getTemplateInfo(req, res) {
+  const params = getUrlParams(req.url);
+  const { id } = params;
+
+  const result = templates.filter(i => i.id === parseInt(id, 10))[0];
+
+  if (res && res.json) {
+    res.json(result);
+  } else {
+    return result;
+  }
+}
+
 export default {
   'GET /api/datapro/templates/list': getTemplateList,
+  'GET /api/datapro/templates/info': getTemplateInfo,
   'POST /api/datapro/templates/update': updateTemplateById,
   'POST /api/datapro/templates/delete': deleteTemplateById,
 };

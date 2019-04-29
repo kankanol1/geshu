@@ -1,15 +1,18 @@
 import React from 'react';
 import { connect } from 'dva';
 import router from 'umi/router';
-import { Card, Form, Input, Button, message } from 'antd';
+import { Card, Form, Input, Button, Radio, message } from 'antd';
 import Link from 'umi/link';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import XLoading from '@/components/XLoading';
-
+import SelectTemplate from './SelectTemplate';
+import { queryTemplateInfo } from '@/services/datapro/templatesAPI';
 import { buildTagSelect } from '../../../utils/uiUtils';
 
 const FormItem = Form.Item;
 const { TextArea } = Input;
+const RadioButton = Radio.Button;
+const RadioGroup = Radio.Group;
 
 @connect(({ dataproProjects, loading }) => ({
   project: dataproProjects,
@@ -18,11 +21,29 @@ const { TextArea } = Input;
 }))
 @Form.create()
 class CreateProject extends React.PureComponent {
+  state = {
+    type: 'blank',
+    loading: true,
+    template: undefined,
+  };
+
   componentDidMount() {
-    const { dispatch } = this.props;
+    const { dispatch, match } = this.props;
     dispatch({
       type: 'dataproProjects/fetchLabels',
     });
+    const { template } = match.params;
+    const templateId = parseInt(template, 10);
+    if (!isNaN(templateId)) {
+      // fetch template info.
+      queryTemplateInfo({
+        id: templateId,
+      }).then(response => {
+        this.setState({ loading: false, template: response, type: 'template' });
+      });
+    } else {
+      this.setState({ loading: false });
+    }
   }
 
   handleSubmit(e) {
@@ -40,10 +61,13 @@ class CreateProject extends React.PureComponent {
           }
           return l;
         });
+      const { template, ...rest } = this.fieldsValue;
+      const { id: templateId } = template || {};
       dispatch({
         type: 'dataproProjects/createProject',
         payload: {
-          ...fieldsValue,
+          ...rest,
+          template: templateId,
           labels: newLabels && newLabels.join(),
         },
         callback: response => {
@@ -60,11 +84,30 @@ class CreateProject extends React.PureComponent {
 
   render() {
     const { form, loadingLabels, submitting, project } = this.props;
+    const { loading, template } = this.state;
     const { labels } = project;
     return (
-      <PageHeaderWrapper title="新建项目">
+      <PageHeaderWrapper
+        title="新建项目"
+        breadcrumbList={[
+          {
+            name: '首页',
+            key: 'index',
+            href: `/`,
+          },
+          {
+            name: '数据流程',
+            key: 'projects',
+            href: `/projects`,
+          },
+          {
+            key: 'create',
+            name: '新建',
+          },
+        ]}
+      >
         <Card>
-          {loadingLabels ? (
+          {loadingLabels || loading ? (
             <XLoading />
           ) : (
             <React.Fragment>
@@ -72,6 +115,23 @@ class CreateProject extends React.PureComponent {
                 <Button> &lt;&nbsp; 返回</Button>
               </Link>
               <Form onSubmit={e => this.handleSubmit(e)}>
+                <div style={{ textAlign: 'center', marginBottom: '5px' }}>
+                  <RadioGroup
+                    onChange={v => this.setState({ type: v.target.value })}
+                    value={this.state.type}
+                  >
+                    <RadioButton value="blank">新建空白项目</RadioButton>
+                    <RadioButton value="template">从模版创建</RadioButton>
+                  </RadioGroup>
+                </div>
+                {this.state.type === 'template' && (
+                  <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="模版">
+                    {form.getFieldDecorator('template', {
+                      rules: [{ required: true, message: '请选择模版' }],
+                      initialValue: template,
+                    })(<SelectTemplate disabled={submitting} />)}
+                  </FormItem>
+                )}
                 <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="名称">
                   {form.getFieldDecorator('name', {
                     rules: [{ required: true, message: '请填写项目名称' }],

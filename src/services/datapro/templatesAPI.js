@@ -19,8 +19,13 @@ export async function deleteTemplateById(params) {
   });
 }
 
+export async function queryTemplateInfo(params) {
+  return request(`/api/datapro/templates/info?${stringify(params)}`);
+}
+
 export default {
   queryTemplates,
   updateTemplateById,
   deleteTemplateById,
+  queryTemplateInfo,
 };
