@@ -2,6 +2,7 @@ import React, { Fragment } from 'react';
 import { Popconfirm, Card, Button, Divider, Tag } from 'antd';
 import moment from 'moment';
 import { connect } from 'dva';
+import router from 'umi/router';
 import StandardTable from '@/components/StandardTable';
 import styles from './Template.less';
 import XHelp from '@/components/XHelp';
@@ -61,12 +62,8 @@ class Template extends React.PureComponent {
               应用
             </Button>
             <Divider type="vertical" />
-            <Button
-              // type="primary"
-              size="small"
-              // onClick={() => router.push(`/tasks/t/show/${record.id}`)}
-            >
-              修改
+            <Button size="small" onClick={() => router.push(`/projects/create/${record.id}`)}>
+              新建项目
             </Button>
             <Divider type="vertical" />
             <span>

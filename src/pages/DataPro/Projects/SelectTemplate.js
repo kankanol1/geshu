@@ -51,21 +51,18 @@ export default class SelectTemplate extends React.PureComponent {
         }}
         onCancel={() => this.setState({ showDialog: false, selecting: undefined })}
       >
-        <TemplateList
-          initValue={this.props.initValue}
-          onChange={v => this.setState({ selecting: v })}
-        />
+        <TemplateList value={this.props.value.id} onChange={v => this.setState({ selecting: v })} />
       </Modal>
     );
   }
 
   render() {
     const { value, showDialog, valueName } = this.state;
-    const { disabled, value: initialValue } = this.props;
+    const { disabled } = this.props;
     return (
       <React.Fragment>
-        {!value && <span className={styles.tip}>未选择</span>}
-        {value && <span className={styles.input}>{valueName}</span>}
+        {value === undefined && <span className={styles.tip}>未选择</span>}
+        {!isNaN(value) && <span className={styles.input}>{valueName}</span>}
         <Button
           type="primary"
           disabled={disabled}

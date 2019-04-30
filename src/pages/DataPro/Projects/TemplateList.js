@@ -18,12 +18,18 @@ class TemplateList extends React.PureComponent {
     super(props);
     this.state = {
       queryParams: defaultParams,
-      selected: this.props.initValue,
+      selected: undefined,
     };
   }
 
   componentDidMount() {
     this.performQuery();
+  }
+
+  componentWillReceiveProps(props) {
+    if (this.state.selected === undefined) {
+      this.setState({ selected: props.value });
+    }
   }
 
   performQuery() {
@@ -69,7 +75,7 @@ class TemplateList extends React.PureComponent {
             key={item.id}
           >
             <div
-              className={`${styles.templateItem} ${styles.card}  ${selected &&
+              className={`${styles.templateItem} ${styles.card}  ${!isNaN(selected) &&
                 selected === item.id &&
                 styles.selected}`}
               key={item.id}
