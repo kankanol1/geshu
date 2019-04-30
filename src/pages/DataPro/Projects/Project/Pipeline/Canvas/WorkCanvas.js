@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'dva';
+import { Spin } from 'antd';
 import { DraggableCore } from 'react-draggable';
 import key from 'keymaster';
 import NodeLayer from './NodeLayer';
@@ -38,7 +39,7 @@ addEvent(document, 'keydown', event => {
 
 @connect(({ dataproPipeline, loading }) => ({
   dataproPipeline,
-  loading,
+  loading: loading.effects['dataproPipeline/loadPipeline'],
 }))
 class WorkCanvas extends React.Component {
   state = {
@@ -390,7 +391,14 @@ class WorkCanvas extends React.Component {
   };
 
   render() {
-    const { id: projectId } = this.props;
+    const { id: projectId, loading } = this.props;
+    if (loading) {
+      return (
+        <div style={{ height: '100px', textAlign: 'center', lineHeight: '40' }}>
+          <Spin size="large" />
+        </div>
+      );
+    }
     const {
       // state: { projectId },
       canvas,

@@ -408,7 +408,7 @@ let prepareOpConfig = [
 ];
 
 export function getPipeline(req, res) {
-  res.json(pipeline);
+  setTimeout(() => res.json(pipeline), 5000);
 }
 
 export function getAllDatasets(req, res) {
