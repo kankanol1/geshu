@@ -19,13 +19,13 @@ export const renderDescriber = (v, i, form, initValues) => {
         {form.getFieldDecorator(`${v.id}.name`, {
           rules: [{ required: true, message: '请输入名称' }],
           initialValue: initValues && initValues[v.id] && initValues[v.id].name,
-        })(<Input placeholder="请输入" />)}
+        })(<Input placeholder="数据集名称" />)}
       </FormItem>
       <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="描述">
         {form.getFieldDecorator(`${v.id}.description`, {
-          rules: [{ required: true, message: '请输入描述' }],
+          // rules: [{ required: true, message: '请输入描述' }],
           initialValue: initValues && initValues[v.id] && initValues[v.id].description,
-        })(<TextArea placeholder="请输入" rows={2} />)}
+        })(<TextArea placeholder="数据集描述" rows={2} />)}
       </FormItem>
     </React.Fragment>
   );

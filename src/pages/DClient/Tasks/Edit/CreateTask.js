@@ -46,12 +46,12 @@ class CreateTask extends React.Component {
             <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="名称">
               {form.getFieldDecorator('name', {
                 rules: [{ required: true, message: '请填写项目名称' }],
-              })(<Input placeholder="请输入" disabled={submitting} />)}
+              })(<Input placeholder="任务名称" disabled={submitting} />)}
             </FormItem>
             <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="描述">
               {form.getFieldDecorator('description', {
-                rules: [{ required: true, message: '请填写项目描述' }],
-              })(<TextArea placeholder="请输入" rows={3} disabled={submitting} />)}
+                // rules: [{ required: true, message: '请填写项目描述' }],
+              })(<TextArea placeholder="任务描述" rows={3} disabled={submitting} />)}
             </FormItem>
             <div style={{ textAlign: 'center' }}>
               <Button type="primary" loading={submitting} htmlType="submit">

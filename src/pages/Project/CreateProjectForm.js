@@ -101,15 +101,15 @@ class CreateProjectForm extends React.Component {
       >
         <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="名称">
           {form.getFieldDecorator('name', {
-            rules: [{ required: true, message: '项目名称' }],
+            rules: [{ required: true, message: '项目名称不能为空' }],
             initialValue: currentRecord === undefined ? '' : currentRecord.name,
-          })(<Input placeholder="请输入" disabled={loading} />)}
+          })(<Input placeholder="项目名称" disabled={loading} />)}
         </FormItem>
         <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="描述">
           {form.getFieldDecorator('description', {
-            rules: [{ required: true, message: '项目描述' }],
+            // rules: [{ required: true, message: '项目描述不能为空' }],
             initialValue: currentRecord === undefined ? '' : currentRecord.description,
-          })(<TextArea placeholder="请输入" rows={2} disabled={loading} />)}
+          })(<TextArea placeholder="项目描述" rows={2} disabled={loading} />)}
         </FormItem>
         <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="标签">
           {form.getFieldDecorator('labels', {

@@ -23,13 +23,13 @@ class PublishDescribe extends React.Component {
       <React.Fragment>
         <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="名称">
           {form.getFieldDecorator('name', {
-            rules: [{ required: true, message: '模版名称' }],
-          })(<Input placeholder="请输入" />)}
+            rules: [{ required: true, message: '模版名称不能为空' }],
+          })(<Input placeholder="模版名称" />)}
         </FormItem>
         <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="描述">
           {form.getFieldDecorator('description', {
-            rules: [{ required: true, message: '模版描述' }],
-          })(<TextArea placeholder="请输入" rows={2} />)}
+            // rules: [{ required: true, message: '模版描述不能为空' }],
+          })(<TextArea placeholder="模版描述" rows={2} />)}
         </FormItem>
         <div className={styles.btnWrapper}>
           <Button onClick={e => back()}>上一步</Button>
