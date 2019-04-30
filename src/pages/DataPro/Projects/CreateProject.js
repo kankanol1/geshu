@@ -17,7 +17,7 @@ const RadioGroup = Radio.Group;
 @connect(({ dataproProjects, loading }) => ({
   project: dataproProjects,
   loadingLabels: loading.effects['dataproProjects/fetchLabels'],
-  submitting: loading.effects['dataproProjects/create'],
+  submitting: loading.effects['dataproProjects/createProject'],
 }))
 @Form.create()
 class CreateProject extends React.PureComponent {
@@ -61,7 +61,7 @@ class CreateProject extends React.PureComponent {
           }
           return l;
         });
-      const { template, ...rest } = this.fieldsValue;
+      const { template, ...rest } = fieldsValue;
       const { id: templateId } = template || {};
       dispatch({
         type: 'dataproProjects/createProject',

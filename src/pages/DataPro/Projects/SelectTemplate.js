@@ -39,13 +39,16 @@ export default class SelectTemplate extends React.PureComponent {
         title="选择模版"
         width={800}
         visible
-        onOk={() =>
+        onOk={() => {
           this.setState({
             showDialog: false,
             value: this.state.selecting.id,
             valueName: this.state.selecting.name,
-          })
-        }
+          });
+          if (this.props.onChange) {
+            this.props.onChange(this.state.selecting);
+          }
+        }}
         onCancel={() => this.setState({ showDialog: false, selecting: undefined })}
       >
         <TemplateList
