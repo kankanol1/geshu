@@ -22,6 +22,7 @@ class DataInspector extends React.Component {
       payload: {
         id: this.props.projectId,
         component: this.props.component.id,
+        error: this.props.component.error,
         limit: 100,
       },
     });
@@ -47,7 +48,7 @@ class DataInspector extends React.Component {
         this.props.onClose();
       }
     };
-    const { name } = this.props.component;
+    const { name, error: errorMode } = this.props.component;
     const { result } = this.props.dataproInspector;
     const { success, message, data } = result;
     let table = null;
@@ -93,21 +94,23 @@ class DataInspector extends React.Component {
       <div>
         数据预览:[
         {name}]
-        <Button
-          style={{ marginRight: '20px', float: 'right' }}
-          type="primary"
-          onClick={() => {
-            this.props.dispatch({
-              type: 'dataproPipeline/updateSavingDataset',
-              payload: {
-                dataset: this.props.component,
-              },
-            });
-          }}
-        >
-          <Icon type="save" />
-          存储为...
-        </Button>
+        {!errorMode && (
+          <Button
+            style={{ marginRight: '20px', float: 'right' }}
+            type="primary"
+            onClick={() => {
+              this.props.dispatch({
+                type: 'dataproPipeline/updateSavingDataset',
+                payload: {
+                  dataset: this.props.component,
+                },
+              });
+            }}
+          >
+            <Icon type="save" />
+            存储为...
+          </Button>
+        )}
       </div>
     );
 
