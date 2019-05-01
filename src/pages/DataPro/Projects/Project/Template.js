@@ -6,6 +6,7 @@ import router from 'umi/router';
 import StandardTable from '@/components/StandardTable';
 import styles from './Template.less';
 import XHelp from '@/components/XHelp';
+import CreateTask from './Template/CreateTask';
 
 @connect(({ dataproTemplates, loading }) => ({
   dataproTemplates,
@@ -14,6 +15,7 @@ import XHelp from '@/components/XHelp';
 class Template extends React.PureComponent {
   state = {
     selectedRows: [],
+    creatingTask: undefined,
   };
 
   refreshParams = [];
@@ -51,15 +53,15 @@ class Template extends React.PureComponent {
       },
       {
         title: '操作',
-        width: 250,
+        width: 270,
         render: (text, record) => (
           <Fragment>
             <Button
               type="primary"
               size="small"
-              // onClick={() => router.push(`/tasks/t/show/${record.id}`)}
+              onClick={() => this.setState({ creatingTask: record.id })}
             >
-              应用
+              创建任务
             </Button>
             <Divider type="vertical" />
             <Button size="small" onClick={() => router.push(`/projects/create/${record.id}`)}>
@@ -141,7 +143,7 @@ class Template extends React.PureComponent {
     const { loading, match } = this.props;
     const { data } = this.props.dataproTemplates;
     const { id: projectId } = match.params;
-    const { selectedRows } = this.state;
+    const { selectedRows, creatingTask } = this.state;
     return (
       <Card>
         <div className={styles.tableList}>
@@ -166,6 +168,12 @@ class Template extends React.PureComponent {
           onSelectRow={this.handleSelectRows}
           onChange={this.handleStandardTableChange}
         />
+        {!isNaN(creatingTask) && (
+          <CreateTask
+            template={creatingTask}
+            onDismiss={() => this.setState({ creatingTask: undefined })}
+          />
+        )}
       </Card>
     );
   }

@@ -112,7 +112,7 @@ class EditTask extends React.PureComponent {
 
   renderLoaded = (activePane, id, mode) => {
     const startPane = this.calStartPane();
-    return activePane < startPane
+    return activePane > startPane
       ? this.renderError(startPane, id, mode)
       : this.renderContent(activePane, id, mode);
   };
