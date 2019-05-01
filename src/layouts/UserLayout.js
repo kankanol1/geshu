@@ -46,28 +46,33 @@ class UserLayout extends React.PureComponent {
   render() {
     const { children, title, description } = this.props;
     return (
-      // @TODO <DocumentTitle title={this.getPageTitle()}>
-      <div className={styles.container}>
+      <React.Fragment>
         {
-          // @TODO support multi-lan
+          // @TODO <DocumentTitle title={this.getPageTitle()}>
         }
-        {/* <div className={styles.lang}>
-          <SelectLang />
-        </div> */}
-        <div className={styles.content}>
-          <div className={styles.top}>
-            <div className={styles.header}>
-              <Link to="/">
-                <img alt="logo" className={styles.logo} src={logo} />
-                <span className={styles.title}>{title}</span>
-              </Link>
+        <div className={styles.bgContainer} />
+        <div className={styles.container}>
+          {
+            // @TODO support multi-lan
+          }
+          {/* <div className={styles.lang}>
+            <SelectLang />
+          </div> */}
+          <div className={styles.content}>
+            <div className={styles.top}>
+              <div className={styles.header}>
+                <Link to="/">
+                  <img alt="logo" className={styles.logo} src={logo} />
+                  <span className={styles.title}>{title}</span>
+                </Link>
+              </div>
+              <div className={styles.desc}>{description}</div>
             </div>
-            <div className={styles.desc}>{description}</div>
+            {children}
           </div>
-          {children}
+          <GlobalFooter links={links} copyright={copyright} />
         </div>
-        <GlobalFooter links={links} copyright={copyright} />
-      </div>
+      </React.Fragment>
     );
   }
 }

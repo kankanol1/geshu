@@ -1,10 +1,16 @@
-@import "~antd/lib/style/themes/default.less";
+@import '~antd/lib/style/themes/default.less';
+
+@filterSize: 15px;
 
 .container {
+  position: fixed;
+  left: 0;
+  right: 0;
+  z-index: 10;
   display: flex;
   flex-direction: column;
   min-height: 100%;
-  background: #f0f2f5;
+  background: #f0f2f552;
 }
 
 .content {
@@ -12,14 +18,24 @@
   flex: 1;
 }
 
-@media (min-width: @screen-md-min) {
-  .container {
-    background-image: url('https://gw.alipayobjects.com/zos/rmsportal/TVYTbAXWheQpRcWDaDMu.svg');
-    background-repeat: no-repeat;
-    background-position: center 110px;
-    background-size: 100%;
-  }
+.bgContainer {
+  position: fixed;
+  left: 0;
+  right: 0;
+  z-index: 1;
+  height: 100%;
+  background-image: url('/img/bg.jpg');
+  background-repeat: no-repeat;
+  background-position: center 0;
+  background-size: 100%;
+  -webkit-filter: blur(@filterSize);
+  -moz-filter: blur(@filterSize);
+  -o-filter: blur(@filterSize);
+  -ms-filter: blur(@filterSize);
+  filter: blur(@filterSize);
+}
 
+@media (min-width: @screen-md-min) {
   .content {
     padding: 112px 0 24px 0;
   }
@@ -44,10 +60,10 @@
 }
 
 .title {
-  font-size: 33px;
+  font-size: 30px;
   color: @heading-color;
-  font-family: 'Myriad Pro', 'Helvetica Neue', Arial, Helvetica, sans-serif;
-  font-weight: 600;
+  font-family: 'Myriad Pro', 'Helvetica Neue', Arial, Helvetica, sans-serif, 'Microsoft YaHei';
+  font-weight: 300;
   position: relative;
   top: 2px;
 }

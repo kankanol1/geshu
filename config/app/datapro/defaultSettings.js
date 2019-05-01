@@ -9,7 +9,7 @@ module.exports = {
   fixSiderbar: false, // sticky siderbar
 
   // added.
-  title: 'GAIA',
-  description: '让数据更智能',
+  title: '格数',
+  description: '让数据整理更轻松',
   _env: 'datapro',
 };
