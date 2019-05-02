@@ -13,13 +13,14 @@ import { formatMessage } from 'umi/locale';
 import XSiderMenu from '@/components/XSiderMenu';
 import Authorized from '@/utils/Authorized';
 import SettingDrawer from '@/components/SettingDrawer';
-import logo from '../assets/logo.svg';
 import Footer from './Footer';
 import Header from './XHeader';
 import Context from './MenuContext';
 import Exception403 from '../pages/Exception/403';
 
 const { Content } = Layout;
+
+const logo = '/img/logo_alpha.png';
 
 // Conversion router to menu.
 function formatter(data, parentAuthority, parentName) {
