@@ -698,7 +698,7 @@ export function inspectData(req, res) {
     data: fillArray(
       {
         ___id___: 'id',
-        ___message___: '错误详细信息',
+        ___message___: '错误详细信息java.runtime.NullPointerException,shoudlsadsa',
         a1: 'v1',
         a2: 'v2',
         a3: 'v3',
