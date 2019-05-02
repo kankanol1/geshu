@@ -29,7 +29,7 @@ class DataInspector extends React.Component {
   }
 
   renderColumnTitle = (schema, type) => {
-    if (schema.type === '___message___') {
+    if (schema.name === '___message___') {
       return (
         <div className={styles.columnHeader}>
           <div className={styles.columnName}>错误信息</div>

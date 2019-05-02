@@ -408,7 +408,7 @@ let prepareOpConfig = [
 ];
 
 export function getPipeline(req, res) {
-  setTimeout(() => res.json(pipeline), 5000);
+  setTimeout(() => res.json(pipeline), 2000);
 }
 
 export function getAllDatasets(req, res) {
@@ -664,6 +664,8 @@ export function inspectSchema(req, res) {
 export function inspectData(req, res) {
   const response = {
     schema: [
+      { name: '___id___', type: 'Integer', nullable: true },
+      { name: '___message___', type: 'String', nullable: true },
       { name: 'a1', type: 'String', nullable: false },
       { name: 'a2', type: 'String', nullable: false },
       { name: 'a3', type: 'String', nullable: false },
@@ -678,6 +680,8 @@ export function inspectData(req, res) {
       { name: 'a12', type: 'String', nullable: false },
     ],
     types: [
+      { name: '___id___', type: null },
+      { name: '___message__', type: null },
       { name: 'a1', type: null },
       { name: 'a2', type: null },
       { name: 'a3', type: 'NAME' },
@@ -693,6 +697,8 @@ export function inspectData(req, res) {
     ],
     data: fillArray(
       {
+        ___id___: 'id',
+        ___message___: '错误详细信息',
         a1: 'v1',
         a2: 'v2',
         a3: 'v3',
