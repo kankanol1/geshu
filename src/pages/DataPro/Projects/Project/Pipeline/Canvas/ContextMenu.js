@@ -170,7 +170,7 @@ class ContextMenu extends React.PureComponent {
   renderDatasetMenu() {
     const { status, component } = this.props;
     const componentStatus = status && status[component.id] && status[component.id].status;
-    if (componentStatus === 'CALCULATED') {
+    if (['CALCULATED', 'CALCULATED_ERROR'].includes(componentStatus)) {
       return this.renderCalculatedDatasetMenu();
     } else if (componentStatus === 'EMPTY') {
       return this.renderEmpotyDatasetMenu();
