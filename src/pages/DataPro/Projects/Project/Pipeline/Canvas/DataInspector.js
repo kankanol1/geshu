@@ -29,6 +29,13 @@ class DataInspector extends React.Component {
   }
 
   renderColumnTitle = (schema, type) => {
+    if (schema.type === '___message___') {
+      return (
+        <div className={styles.columnHeader}>
+          <div className={styles.columnName}>错误信息</div>
+        </div>
+      );
+    }
     return (
       <div className={styles.columnHeader}>
         <div className={styles.columnName}>{schema.name}</div>
@@ -61,23 +68,33 @@ class DataInspector extends React.Component {
           style={{ marginTop: '10px' }}
           columns={
             schema &&
-            schema.map((s, i) => ({
-              width: 100,
-              title: this.renderColumnTitle(s, types[i]),
-              key: s.name,
-              dataIndex: s.name,
-              render: (text, record, index) => {
-                if (text !== null && text !== undefined) {
-                  if (s.type === 'TIMESTAMP') {
-                    return <span>{moment(new Date(text)).format('YYYY-MM-DD HH:mm:ss SSS')}</span>;
+            schema
+              .filter(
+                i =>
+                  !(errorMode
+                    ? ['___id___', '___status___']
+                    : ['___id___', '___status___', '___message___']
+                  ).includes(i.name)
+              )
+              .map((s, i) => ({
+                width: 100,
+                title: this.renderColumnTitle(s, types[i]),
+                key: s.name,
+                dataIndex: s.name,
+                render: (text, record, index) => {
+                  if (text !== null && text !== undefined) {
+                    if (s.type === 'TIMESTAMP') {
+                      return (
+                        <span>{moment(new Date(text)).format('YYYY-MM-DD HH:mm:ss SSS')}</span>
+                      );
+                    } else {
+                      return <span>{`${text}`}</span>;
+                    }
                   } else {
-                    return <span>{`${text}`}</span>;
+                    return <span className={styles.null}>NULL</span>;
                   }
-                } else {
-                  return <span className={styles.null}>NULL</span>;
-                }
-              },
-            }))
+                },
+              }))
           }
           dataSource={data.data || []}
           scroll={{ x: schema && schema.length * 100, y: 400 }}
