@@ -1,6 +1,6 @@
 import DataProCanvas from '@/obj/workspace/DataProCanvas';
 import SelectionChange from '@/obj/workspace/op/SelectionChange';
-import { message } from 'antd';
+import { message, Modal } from 'antd';
 
 import {
   getPipeline,
@@ -160,7 +160,10 @@ export default {
       if (response && response.success) {
         message.info(response.message);
       } else {
-        message.error('ERROR');
+        Modal.error({
+          title: '执行出错',
+          content: (response && response.message) || '执行出错，请重试',
+        });
       }
     },
 
@@ -169,7 +172,10 @@ export default {
       if (response && response.success) {
         message.info(response.message);
       } else {
-        message.error('ERROR');
+        Modal.error({
+          title: '执行出错',
+          content: (response && response.message) || '执行出错，请重试',
+        });
       }
     },
   },

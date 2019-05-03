@@ -639,10 +639,18 @@ export function updateOperator(req, res) {
 
 export function runOperator(req, res) {
   const { body } = req;
-  res.json({
-    success: true,
-    message: '提交运行中',
-  });
+  const random = Math.random() * 10;
+  if (random > 5) {
+    res.json({
+      success: true,
+      message: '提交运行中',
+    });
+  } else {
+    res.json({
+      success: false,
+      message: '无法执行，请先修复配置项',
+    });
+  }
 }
 
 export function inspectSchema(req, res) {
