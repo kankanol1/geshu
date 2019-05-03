@@ -66,8 +66,8 @@ class DataInspector extends React.Component {
           loading={loading}
           loadingText={message}
           data={data.data || []}
-          schema={schema}
-          types={types}
+          schema={schema || []}
+          types={types || []}
           selectedHeaders={[]}
           errorMode={errorMode}
         />

@@ -8,6 +8,9 @@ import styles from './index.less';
 const renderRow = (row, schema) => {
   if (row) {
     const text = row.value;
+    if (schema.name === '___message___') {
+      return <span className={styles.errorCell}>{`${text}`}</span>;
+    }
     if (text !== null && text !== undefined) {
       if (schema.type === 'TIMESTAMP') {
         return <span>{moment(new Date(text)).format('YYYY-MM-DD HH:mm:ss SSS')}</span>;
@@ -68,18 +71,30 @@ export default class XDataTable extends React.Component {
           >
             <span className={styles.columnName}>{v.name}</span>
             <span className={styles.columnType}> {v.type}</span>
-            <span
-              className={styles.columnType2}
-              onClick={e => {
-                if (onTypeClick) onTypeClick(e, v);
-              }}
-            >
-              {types[i].type ? formatMessage({ id: `types.${types[i].type}` }) : '未知'}
-              {
-                // show arrows only when clickable.
-              }
-              {onTypeClick && `&nbsp;&#x25BC;`}
-            </span>
+            {onTypeClick && (
+              <span
+                className={styles.columnType2}
+                onClick={e => {
+                  if (onTypeClick) onTypeClick(e, v);
+                }}
+              >
+                {types[i].type ? formatMessage({ id: `types.${types[i].type}` }) : '未知'}
+                {
+                  // show arrows only when clickable.
+                }
+                &nbsp;&#x25BC;
+              </span>
+            )}
+            {!onTypeClick && (
+              <span
+                className={styles.columnType2}
+                onClick={e => {
+                  if (onTypeClick) onTypeClick(e, v);
+                }}
+              >
+                {types[i].type ? formatMessage({ id: `types.${types[i].type}` }) : '未知'}
+              </span>
+            )}
           </div>
         ),
         Cell: row => renderRow(row, v),
@@ -117,7 +132,7 @@ export default class XDataTable extends React.Component {
         pageJumpText="跳至"
         rowsSelectorText="每页行数"
         getTrProps={(state, rowInfo, column) => {
-          if (errorMode && rowInfo.original.___message___) {
+          if (errorMode && rowInfo && rowInfo.original.___message___) {
             return {
               className: styles.trRed,
             };
