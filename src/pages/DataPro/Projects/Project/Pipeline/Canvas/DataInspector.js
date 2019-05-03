@@ -2,7 +2,7 @@ import React from 'react';
 import { Modal, Button, Icon, Table, Spin } from 'antd';
 import { formatMessage } from 'umi/locale';
 import { connect } from 'dva';
-import moment from 'moment';
+import XDataTable from '@/components/XDataTable';
 import styles from './DataInspector.less';
 
 class DataInspector extends React.Component {
@@ -62,46 +62,14 @@ class DataInspector extends React.Component {
     if (success) {
       const { schema, types } = data;
       table = (
-        <Table
-          className={styles.table}
-          rowKey={(r, i) => i}
-          style={{ marginTop: '10px' }}
-          columns={
-            schema &&
-            schema
-              .filter(
-                i =>
-                  !(errorMode
-                    ? ['___id___', '___status___']
-                    : ['___id___', '___status___', '___message___']
-                  ).includes(i.name)
-              )
-              .map((s, i) => ({
-                width: 100,
-                title: this.renderColumnTitle(s, types[i]),
-                key: s.name,
-                dataIndex: s.name,
-                render: (text, record, index) => {
-                  if (text !== null && text !== undefined) {
-                    if (s.type === 'TIMESTAMP') {
-                      return (
-                        <span>{moment(new Date(text)).format('YYYY-MM-DD HH:mm:ss SSS')}</span>
-                      );
-                    } else {
-                      return <span>{`${text}`}</span>;
-                    }
-                  } else {
-                    return <span className={styles.null}>NULL</span>;
-                  }
-                },
-              }))
-          }
-          dataSource={data.data || []}
-          scroll={{ x: schema && schema.length * 100, y: 400 }}
-          pagination={false}
+        <XDataTable
           loading={loading}
-          bordered
-          size="small"
+          loadingText={message}
+          data={data.data || []}
+          schema={schema}
+          types={types}
+          selectedHeaders={[]}
+          errorMode={errorMode}
         />
       );
     }
@@ -109,7 +77,8 @@ class DataInspector extends React.Component {
     // title of the modal.
     const title = (
       <div>
-        数据预览:[
+        {errorMode ? '错误数据预览' : `数据预览`}
+        :[
         {name}]
         {!errorMode && (
           <Button

@@ -3,8 +3,6 @@ import ReactDOM from 'react-dom';
 import { connect } from 'dva';
 import { message, Row, Col, Button, Icon, Spin } from 'antd';
 import { formatMessage } from 'umi/locale';
-import ReactTable from 'react-table';
-import 'react-table/react-table.css';
 import moment from 'moment';
 import key from 'keymaster';
 import { transformationTitle, transformationDescription } from './PrepareTransformer/Utils';
@@ -16,6 +14,7 @@ import Rename3Transformation from './PrepareTransformer/Rename3Transformation';
 import ConcatTransformation from './PrepareTransformer/ConcatTransformation';
 
 import styles from './PrepareTransformer.less';
+import XDataTable from '@/components/XDataTable';
 
 const hasError = (index, err) => {
   return index < err.length && Object.keys(err[index]).length > 0;
@@ -253,6 +252,30 @@ class PrepareTransformer extends React.Component {
     }
   }
 
+  handleTypeTitleClick(e, v) {
+    e.stopPropagation();
+    e.preventDefault();
+    if (this.state.changingType.changing) {
+      this.setState({
+        changingType: { x: 0, y: 0, name: undefined, changing: false },
+      });
+    } else {
+      // get target
+      const targetDOM = e.target.getBoundingClientRect();
+      const { x, y, width, height } = targetDOM;
+      this.setState({
+        changingType: {
+          y: y + height,
+          x,
+          width,
+          changing: true,
+          name: v.name,
+          type: v.type,
+        },
+      });
+    }
+  }
+
   renderTransformationComponent() {
     const { addingComponent, componentProps } = this.state;
     if (!addingComponent) return;
@@ -346,94 +369,25 @@ class PrepareTransformer extends React.Component {
 
   renderTable = () => {
     const { pagination, table, loading, message: msg } = this.props.dataproPreviewTable;
-    const nc = [];
     const { schema, data, types } = table;
     const { selectedHeaders } = this.state;
     // set columns, etc.
     let contentRender;
     if (table && table.schema) {
-      for (let i = 0; i < schema.length; i++) {
-        const v = schema[i];
-        nc.push({
-          id: `n${i}`,
-          Header: props => (
-            <div
-              onContextMenu={e => this.handleHeaderRightClick(e, v.name)}
-              onClick={e => {
-                this.handleHeaderClick(e, v.name);
-              }}
-              className={`${styles.headerWrapper} ${selectedHeaders.includes(v.name) &&
-                styles.selected}`}
-            >
-              <span className={styles.columnName}>{v.name}</span>
-              <span className={styles.columnType}> {v.type}</span>
-              <span
-                className={styles.columnType2}
-                onClick={e => {
-                  e.stopPropagation();
-                  e.preventDefault();
-                  if (this.state.changingType.changing) {
-                    this.setState({
-                      changingType: { x: 0, y: 0, name: undefined, changing: false },
-                    });
-                  } else {
-                    // get target
-                    const targetDOM = e.target.getBoundingClientRect();
-                    const { x, y, width, height } = targetDOM;
-                    this.setState({
-                      changingType: {
-                        y: y + height,
-                        x,
-                        width,
-                        changing: true,
-                        name: v.name,
-                        type: v.type,
-                      },
-                    });
-                  }
-                }}
-              >
-                {types[i].type ? formatMessage({ id: `types.${types[i].type}` }) : '未知'}
-                &nbsp;&#x25BC;
-              </span>
-            </div>
-          ),
-          Cell: row => this.renderRow(row, v),
-          accessor: v.name,
-          sortable: false,
-        });
-      }
       // render table.
       contentRender = (
-        <ReactTable
+        <XDataTable
           ref={this.table}
-          className={styles.table}
-          style={{ minHeight: '600px' }}
-          // pages={pagination.total}
-          // manual
-          // onFetchData={(state, instance) => {
-          //   const { id, opId, configs } = this.props;
-          //   this.props.dispatch({
-          //     type: 'dataproPreviewTable/fetchData',
-          //     payload: {
-          //       id,
-          //       component: opId,
-          //       ...this.state.page,
-          //     },
-          //   });
-          // }}
           loading={loading}
-          loadingText={msg || '初始化预览中...'}
+          loadingText={msg}
           data={data || []}
-          columns={nc}
-          previousText="上一页"
-          nextText="下一页"
-          noDataText="无数据"
-          pageText="页"
-          ofText="总页数："
-          rowsText="行"
-          pageJumpText="跳至"
-          rowsSelectorText="每页行数"
+          schema={schema}
+          types={types}
+          selectedHeaders={selectedHeaders}
+          // listeners:
+          onHeaderContextMenu={(e, v) => this.handleHeaderRightClick(e, v.name)}
+          onHeaderClick={(e, v) => this.handleHeaderClick(e, v.name)}
+          onTypeClick={(e, v) => this.handleTypeTitleClick(e, v)}
         />
       );
     } else {
