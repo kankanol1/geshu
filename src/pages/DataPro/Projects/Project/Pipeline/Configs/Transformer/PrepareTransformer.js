@@ -118,6 +118,8 @@ class PrepareTransformer extends React.Component {
 
   contextMenu = React.createRef(); // for context menu.
 
+  errorDisplay = React.createRef(); // for error display
+
   componentWillMount() {
     // listen click outside
     document.addEventListener('mousedown', this.handleGeneralClick, false);
@@ -137,6 +139,13 @@ class PrepareTransformer extends React.Component {
     if (this.table.current) {
       const tableDom = ReactDOM.findDOMNode(this.table.current).getBoundingClientRect();
       const { height } = tableDom;
+      if (height !== this.state.historyHeight) {
+        this.setState({ historyHeight: height }); // eslint-disable-line
+      }
+    }
+    if (this.errorDisplay.current) {
+      const errorDom = ReactDOM.findDOMNode(this.errorDisplay.current).getBoundingClientRect();
+      const { height } = errorDom;
       if (height !== this.state.historyHeight) {
         this.setState({ historyHeight: height }); // eslint-disable-line
       }
@@ -352,21 +361,6 @@ class PrepareTransformer extends React.Component {
     );
   };
 
-  renderRow = (row, schema) => {
-    if (row) {
-      const text = row.value;
-      if (text !== null && text !== undefined) {
-        if (schema.type === 'TIMESTAMP') {
-          return <span>{moment(new Date(text)).format('YYYY-MM-DD HH:mm:ss SSS')}</span>;
-        } else {
-          return <span>{`${text}`}</span>;
-        }
-      } else {
-        return <span className={styles.null}>NULL</span>;
-      }
-    }
-  };
-
   renderTable = () => {
     const { pagination, table, loading, message: msg } = this.props.dataproPreviewTable;
     const { schema, data, types } = table;
@@ -381,8 +375,8 @@ class PrepareTransformer extends React.Component {
           loading={loading}
           loadingText={msg}
           data={data || []}
-          schema={schema}
-          types={types}
+          schema={schema || []}
+          types={types || []}
           selectedHeaders={selectedHeaders}
           // listeners:
           onHeaderContextMenu={(e, v) => this.handleHeaderRightClick(e, v.name)}
@@ -390,14 +384,23 @@ class PrepareTransformer extends React.Component {
           onTypeClick={(e, v) => this.handleTypeTitleClick(e, v)}
         />
       );
-    } else {
+    } else if (loading) {
       contentRender = (
         <div style={{ height: '400px', textAlign: 'center', paddingTop: '200px' }}>
           <Spin />
         </div>
       );
+    } else {
+      // error.
+      contentRender = (
+        <div
+          ref={this.errorDisplay}
+          style={{ height: '600px', textAlign: 'center', paddingTop: '300px', background: 'white' }}
+        >
+          <span style={{ color: 'red' }}>{msg}</span>
+        </div>
+      );
     }
-
     const eleStyle = {
       margin: '4px',
     };

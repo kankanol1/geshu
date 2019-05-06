@@ -119,6 +119,8 @@ export default {
 
       setTimeout(() => {
         dataStatus.data.status = 'CALCULATED';
+        // dataStatus.data.status = 'ERROR';
+        // dataStatus.data.message = '计算错误';
         server.send(`/datapro/pipeline/preview/${projectId}/${id}`, {}, JSON.stringify(dataStatus));
         server.send(`/datapro/pipeline/preview/${projectId}/${id}`, {}, JSON.stringify(dataTable));
       }, 5000);
