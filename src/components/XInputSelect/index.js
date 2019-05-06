@@ -4,11 +4,20 @@ import { Select, Dropdown, Input, Menu } from 'antd';
 const { Option } = Select;
 
 export default class XInputSelect extends React.PureComponent {
-  componentWillMount() {
-    this.setState({
-      value: undefined,
+  constructor(props) {
+    super(props);
+    const { value } = this.props;
+    this.state = {
+      value,
       options: this.props.options || [],
       selected: '-',
+    };
+  }
+
+  componentWillReceiveProps(props) {
+    const { value } = props;
+    this.setState({
+      value,
     });
   }
 

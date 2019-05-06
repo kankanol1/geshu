@@ -30,7 +30,9 @@ class ExpressionWidget extends React.PureComponent {
 
   render() {
     const { data } = this.state;
-    const { options } = this.props;
+    const { options, loptions, roptions } = this.props;
+    const leftOptions = loptions || options;
+    const rightOptions = roptions || options;
     return (
       <ConfigurationTable
         canAdd
@@ -46,7 +48,7 @@ class ExpressionWidget extends React.PureComponent {
             title: '左表达式',
             render: (v, item, onChange) => (
               <XInputSelect
-                options={options}
+                options={leftOptions}
                 defaultValue={v}
                 value={v}
                 onChange={e => onChange(e)}
@@ -73,7 +75,7 @@ class ExpressionWidget extends React.PureComponent {
             title: '右表达式',
             render: (v, item, onChange) => (
               <XInputSelect
-                options={options}
+                options={rightOptions}
                 defaultValue={v}
                 value={v}
                 onChange={e => onChange(e)}
