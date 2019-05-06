@@ -132,7 +132,10 @@ class SplitTransformer extends React.Component {
             'criteria.conditions',
             [],
             '过滤表达式',
-            <ExpressionWidget onChange={e => this.handleChange()} />
+            <ExpressionWidget
+              loptions={schema.i1.map(i => `${i.name}`)}
+              onChange={e => this.handleChange()}
+            />
           )}
         <div style={{ textAlign: 'center' }}>
           <Button type="primary" htmlType="submit" loading={false}>
