@@ -26,7 +26,7 @@ class ConcatTransformation extends React.PureComponent {
         addTransformation({
           projectId: id,
           id: opId,
-          config: { type: 'ConcatTransformation', config: this.state.formData },
+          config: { type: 'ConcatTransformation', config: fieldsValue },
         }).then(response => {
           if (response) {
             if (response.success) {
@@ -71,7 +71,7 @@ class ConcatTransformation extends React.PureComponent {
           validateErrors,
           formValues,
           'by',
-          '_',
+          '',
           '连接符',
           <Input />
         )}
@@ -104,16 +104,16 @@ class ConcatTransformation extends React.PureComponent {
       >
         <WithSchema
           {...this.props}
-          onLoad={schema =>
+          onLoad={schema => {
             this.setState({
               schema,
-              formValues: this.props.configs || {
+              formValues: {
                 fields: this.props.columns || [],
                 by: '',
                 as: (this.props.columns || []).join('_'),
               },
-            })
-          }
+            });
+          }}
         >
           {this.renderForm()}
         </WithSchema>
