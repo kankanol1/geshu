@@ -21,11 +21,7 @@ export function transformationDescription(type, configs) {
     case 'SelectTransformation':
       return configs.fields.join(',');
     case 'RenameTransformation':
-      if (configs.columns === undefined) {
-        return 'UnTranslated';
-      } else {
-        return configs.columns.map(c => `${c.column} -> ${c.name}`).join(',  ');
-      }
+      return configs.fields.map(c => `${c.column} -> ${c.name}`).join(',  ');
     case 'ConcatTransformation':
       if (configs === undefined) {
         return 'UnTranslated';
