@@ -201,7 +201,7 @@ class NodeLayer extends React.Component {
           >
             {// render error
             status === 'ERROR' && (
-              <Tooltip title="配置项错误，点击修改">
+              <Tooltip title={rawStatus.message || '配置项错误，点击修改'}>
                 <Link to={`/projects/p/pipeline/${projectId}/conf/${id}`}>
                   <Icon type="warning" className={styles.errorTip} />
                 </Link>
