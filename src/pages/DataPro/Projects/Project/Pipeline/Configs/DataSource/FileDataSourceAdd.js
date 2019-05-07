@@ -5,12 +5,14 @@ import router from 'umi/router';
 import { getSchemaFromFile, configOperator } from '@/services/datapro/pipelineAPI';
 import DefineSchemaWidget from '@/components/JsonSchemaForm/Widgets/Schema/DefineSchemaWidget';
 import CSVDatasetForm from './Templates/CSVDatasetForm';
+import XLSXDatasetForm from './Templates/XLSXDatasetForm';
 import { formItemWithError, expandValidateErrors } from '../Utils';
 
 import styles from '../Index.less';
 
 const formRegistry = {
   'com.gldata.gaia.pipeline.api.dataset.formats.CsvFormat': [CSVDatasetForm, 'CSV'],
+  // 'com.gldata.gaia.pipeline.api.dataset.formats.XlsxFormat': [XLSXDatasetForm, 'Excel(XLSX)'],
 };
 
 const { Step } = Steps;
@@ -18,12 +20,15 @@ const { Step } = Steps;
 class FileDataSourceConfig extends React.Component {
   constructor(props) {
     super(props);
+    const { configs } = props;
+    const type =
+      (configs && configs.format && configs.format.formatClass) || Object.keys(formRegistry)[0];
     this.state = {
       current: 0,
       formValues: {
         ...props.configs,
       },
-
+      type,
       schemaResponse: undefined,
       loading: false,
       changed: false,
@@ -78,10 +83,8 @@ class FileDataSourceConfig extends React.Component {
 
   renderUpload = () => {
     const { form, errors: givenErrors } = this.props;
-    const { loading, changed, validateErrors } = this.state;
+    const { loading, changed, validateErrors, type } = this.state;
     const errors = changed ? {} : givenErrors && givenErrors[0];
-    const type =
-      (this.state.formValues && this.state.formValues.type) || Object.keys(formRegistry)[0];
 
     const ExtraItems = formRegistry[type][0];
     const formItemProps = {
@@ -103,11 +106,15 @@ class FileDataSourceConfig extends React.Component {
           'format.formatClass',
           type,
           '文件类型',
-          <Select onChange={() => this.handleChange()}>
+          <Select
+            onChange={v => {
+              this.setState({ type: v });
+              this.handleChange();
+            }}
+          >
             {Object.keys(formRegistry).map((k, i) => (
               <Select.Option key={i} value={k}>
-                {' '}
-                {formRegistry[k][1]}{' '}
+                {formRegistry[k][1]}
               </Select.Option>
             ))}
           </Select>

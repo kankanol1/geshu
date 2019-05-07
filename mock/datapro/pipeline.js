@@ -568,6 +568,10 @@ export function getPipelineOperator(req, res) {
     format: {
       ignoreFirstLine: true,
       fieldDelimiter: ',',
+      formatClass: 'com.gldata.gaia.pipeline.api.dataset.formats.CsvFormat',
+      // formatClass: "com.gldata.gaia.pipeline.api.dataset.formats.XlsxFormat",
+      // ignoreFirstRow: true,
+      // sheetName: 'test1',
     },
   };
   if (params.opId.includes('PrepareTransformer')) {
