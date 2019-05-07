@@ -68,7 +68,13 @@ export default class ConfigurationTable extends React.Component {
     this.notifyChange([...this.state.data, obj]);
   }
 
-  renderItem = (item, index, showExtraOp) => {
+  handleOrderChange(oldIndex, newIndex) {
+    const newd = this.state.data.filter((item, i) => i !== oldIndex);
+    newd.splice(newIndex, 0, this.state.data[oldIndex]);
+    this.notifyChange(newd);
+  }
+
+  renderItem = (item, index, totalSize, showExtraOp, orderSpan) => {
     const { columns, opSpan } = this.props;
     return (
       <Row key={index} className={styles.contentRow}>
@@ -77,7 +83,7 @@ export default class ConfigurationTable extends React.Component {
             {c.render(item[c.name], item, this.onChange(item, index, c.name), index)}
           </Col>
         ))}
-        {showExtraOp ? (
+        {showExtraOp && (
           <Col span={opSpan}>
             <Button
               type="danger"
@@ -88,7 +94,33 @@ export default class ConfigurationTable extends React.Component {
               <Icon type="close" />
             </Button>
           </Col>
-        ) : null}
+        )}
+        {orderSpan && (
+          <Col span={orderSpan}>
+            {index !== 0 && (
+              <Icon
+                size="large"
+                className={styles.orderIcon}
+                type="caret-up"
+                onClick={e => {
+                  e.preventDefault();
+                  this.handleOrderChange(index, index - 1);
+                }}
+              />
+            )}
+            {index !== totalSize - 1 && (
+              <Icon
+                size="large"
+                className={styles.orderIcon}
+                type="caret-down"
+                onClick={e => {
+                  e.preventDefault();
+                  this.handleOrderChange(index, index + 1);
+                }}
+              />
+            )}
+          </Col>
+        )}
       </Row>
     );
   };
@@ -103,7 +135,7 @@ export default class ConfigurationTable extends React.Component {
             checked={checkedNum === data.length}
             className={styles.checkbox}
             onChange={v => this.handleAllItemsCheckedStatus(item.name, v.target.checked)}
-          />{' '}
+          />
           {item.title}
         </div>
       </Col>
@@ -111,7 +143,7 @@ export default class ConfigurationTable extends React.Component {
   };
 
   render() {
-    const { canAdd, maxHeight, canDelete, columns, opSpan } = this.props;
+    const { canAdd, maxHeight, canDelete, columns, opSpan, orderSpan } = this.props;
     const { data } = this.state;
     return (
       <div className={styles.tableWidget}>
@@ -132,17 +164,18 @@ export default class ConfigurationTable extends React.Component {
                 );
               })}
               <Col span={opSpan}>
-                {canAdd ? (
+                {canAdd && (
                   <Button size="small" type="primary" onClick={() => this.handleNewItem()}>
                     <Icon type="plus" />
                   </Button>
-                ) : null}
+                )}
               </Col>
+              <Col span={orderSpan} />
             </Row>
           </div>
           {/* <Scrollbars autoHeight autoHeightMin={0} autoHeightMax={maxHeight}> */}
           <div className={styles.tableContent}>
-            {data.map((item, k) => this.renderItem(item, k, canDelete))}
+            {data.map((item, k) => this.renderItem(item, k, data.length, canDelete, orderSpan))}
           </div>
           {/* </Scrollbars> */}
         </div>

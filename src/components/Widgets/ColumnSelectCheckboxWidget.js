@@ -1,51 +1,37 @@
 import React from 'react';
 import { Input, Checkbox, Tag, Icon } from 'antd';
-import ConfigurationTable from '../../UI/ConfigurationTable';
-import { callFuncElseError } from '../../utils';
+import ConfigurationTable from '@/components/JsonSchemaForm/UI/ConfigurationTable';
 
 // render object. {value: []}
 export default class ColumnSelectCheckboxWidget extends React.Component {
   constructor(props) {
     super(props);
-    const { formData } = this.props;
+    const { formData, schema } = props;
     this.state = {
-      data: formData.value,
+      renderData: schema.map(i => ({
+        name: i.name,
+        disName: `${i.name}(${i.type})`,
+        checked: formData ? formData.includes(i.name) : false,
+      })),
     };
-    if (!formData.value) {
-      this.props.onChange({ value: [] });
-    }
   }
 
   componentWillReceiveProps(props) {
-    const { formData } = props;
-    this.setState({
-      data: formData.value,
-    });
-    if (!formData.value) {
-      this.props.onChange({ value: [] });
+    const { formData, schema } = props;
+    if (schema !== this.props.schema) {
+      this.setState({
+        renderData: schema.map(i => ({
+          name: i.name,
+          disName: `${i.name}(${i.type})`,
+          checked: formData ? formData.includes(i.name) : false,
+        })),
+      });
     }
   }
 
   render() {
-    const { getField } = this.props.uiSchema['ui:options'];
-    const { result, error } = callFuncElseError(getField);
-    const schema = result;
-    if (error) {
-      return (
-        <React.Fragment>
-          <p style={{ color: 'red', display: 'inline-block', paddingRight: '20px' }}>
-            {error.message}
-          </p>
-        </React.Fragment>
-      );
-    }
-    const { data } = this.state;
+    const { renderData } = this.state;
     // translate data to checkbox.
-    const renderData = schema.map(i => ({
-      name: i.name,
-      disName: `${i.name}(${i.type})`,
-      checked: data ? data.includes(i.name) : false,
-    }));
     return (
       <ConfigurationTable
         orderSpan={2}
@@ -53,9 +39,9 @@ export default class ColumnSelectCheckboxWidget extends React.Component {
           const newSelected = v.filter(i => i.checked).map(i => i.name);
           this.setState(
             {
-              data: newSelected,
+              renderData: v,
             },
-            () => this.props.onChange({ value: newSelected })
+            () => this.props.onChange(newSelected)
           );
         }}
         data={renderData}

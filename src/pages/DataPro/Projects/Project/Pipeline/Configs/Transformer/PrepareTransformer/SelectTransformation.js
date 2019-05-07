@@ -2,7 +2,7 @@ import React from 'react';
 import { Modal, message } from 'antd';
 import { addTransformation } from '@/services/datapro/pipelineAPI';
 
-import ColumnSelectCheckboxWidget from '@/components/JsonSchemaForm/Widgets/Column/ColumnSelectCheckboxWidget';
+import ColumnSelectCheckboxWidget from '@/components/Widgets/ColumnSelectCheckboxWidget';
 import WithSchema from './WithSchema';
 
 class SelectTransformation extends React.PureComponent {
@@ -47,15 +47,9 @@ class SelectTransformation extends React.PureComponent {
           onLoad={schema => this.setState({ schema, formData: this.props.columns || [] })}
         >
           <ColumnSelectCheckboxWidget
-            uiSchema={{
-              'ui:options': {
-                getField: () => {
-                  return this.state.schema;
-                },
-              },
-            }}
-            formData={{ value: this.state.formData }}
-            onChange={v => this.setState({ formData: v.value })}
+            schema={this.state.schema}
+            formData={this.state.formData}
+            onChange={v => this.setState({ formData: v })}
           />
         </WithSchema>
       </Modal>
