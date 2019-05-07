@@ -1,5 +1,5 @@
 import React from 'react';
-import ColumnSelectCheckboxWidget from '@/components/JsonSchemaForm/Widgets/Column/ColumnSelectCheckboxWidget';
+import ColumnSelectCheckboxWidget from '@/components/Widgets/ColumnSelectCheckboxWidget';
 
 class CheckboxSelectColumnWidget extends React.Component {
   constructor(props) {
@@ -22,19 +22,13 @@ class CheckboxSelectColumnWidget extends React.Component {
     const { schema } = this.props;
     return (
       <ColumnSelectCheckboxWidget
-        uiSchema={{
-          'ui:options': {
-            getField: () => {
-              return schema;
-            },
-          },
-        }}
-        formData={{ value: data }}
+        schema={schema}
+        formData={data}
         onChange={v => {
           this.setState({
-            data: v.value,
+            data: v,
           });
-          this.props.onChange(v.value);
+          this.props.onChange(v);
         }}
       />
     );

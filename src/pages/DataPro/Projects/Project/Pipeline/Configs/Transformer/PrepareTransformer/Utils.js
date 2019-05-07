@@ -16,7 +16,7 @@ export function transformationTitle(type) {
 }
 
 export function transformationDescription(type, configs) {
-  const sep = '\xa0\xa0\xa0\xa0';
+  // const sep = '\xa0\xa0\xa0\xa0';
   switch (type) {
     case 'SelectTransformation':
       return configs.fields.join(',');
