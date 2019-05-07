@@ -139,7 +139,7 @@ class CreateProject extends React.PureComponent {
                 </FormItem>
                 <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="描述">
                   {form.getFieldDecorator('description', {
-                    rules: [{ required: true, message: '请填写项目描述' }],
+                    // rules: [{ required: true, message: '请填写项目描述' }],
                   })(<TextArea placeholder="请输入" rows={3} disabled={submitting} />)}
                 </FormItem>
                 <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="标签">
