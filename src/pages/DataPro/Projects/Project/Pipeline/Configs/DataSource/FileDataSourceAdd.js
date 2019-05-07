@@ -12,7 +12,7 @@ import styles from '../Index.less';
 
 const formRegistry = {
   'com.gldata.gaia.pipeline.api.dataset.formats.CsvFormat': [CSVDatasetForm, 'CSV'],
-  // 'com.gldata.gaia.pipeline.api.dataset.formats.XlsxFormat': [XLSXDatasetForm, 'Excel(XLSX)'],
+  'com.gldata.gaia.pipeline.api.dataset.formats.XlsxFormat': [XLSXDatasetForm, 'Excel(XLSX)'],
 };
 
 const { Step } = Steps;
