@@ -17,7 +17,7 @@ import styles from './PrepareTransformer.less';
 import XDataTable from '@/components/XDataTable';
 
 const hasError = (index, err) => {
-  return index < err.length && Object.keys(err[index]).length > 0;
+  return err && index < err.length && Object.keys(err[index]).length > 0;
 };
 
 const TransformationMapping = {

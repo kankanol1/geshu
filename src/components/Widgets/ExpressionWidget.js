@@ -10,6 +10,7 @@ const operatorList = [
   { name: '>=', value: 'GE' },
   { name: '<', value: 'LT' },
   { name: '<=', value: 'LE' },
+  { name: 'LIKE', value: 'LIKE' },
 ];
 
 class ExpressionWidget extends React.PureComponent {
