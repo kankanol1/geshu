@@ -132,6 +132,7 @@ const componentIconDict = {
   SwitchCaseTransformer: 'icon-preparation-filter',
   PrepareTransformer: 'icon-preparation-filter',
   DistinctTransformer: 'icon-preparation-filter',
+  JDBCDataSink: 'icon-datasink-db',
 };
 
 export const getIconNameForComponent = str => {

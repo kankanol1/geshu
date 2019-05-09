@@ -1,5 +1,5 @@
 import { notification, Modal } from 'antd';
-import { routerRedux } from 'dva/router';
+import router from 'umi/router';
 import fetch from 'dva/fetch';
 import Cookie from 'js-cookie';
 import { getFromRegistory } from '../common/registry';
@@ -121,7 +121,7 @@ export default function request(url, options = {}) {
       const { dispatch } = store;
       const status = e.name;
       if (status === 403) {
-        dispatch(routerRedux.push('/exception/403'));
+        dispatch(router.push('/exception/403'));
         return;
       }
       if (status === 401) {
@@ -145,6 +145,17 @@ export default function request(url, options = {}) {
       }
       if (status <= 504 && status >= 500) {
         // dispatch(routerRedux.push('/exception/500'));
+        // check if it's in project.
+        if (url.includes('/projects/p/')) {
+          // TODO: to be deleted.
+          Modal.error({
+            title: '严重错误',
+            content: `该项目出现严重配置错误，请联系开发人员汇报。请新建项目重新操作，勿继续使用本项目`,
+            okText: '返回项目列表',
+            onOk: () => router.push('/projects/list'),
+          });
+          return;
+        }
         Modal.error({
           title: '服务器错误!',
           content: `服务器错误(错误码:${status})，请重试。若此错误频繁出现，请联系管理人员`,
@@ -154,7 +165,7 @@ export default function request(url, options = {}) {
         return;
       }
       if (status >= 404 && status < 422 && !url.startsWith('/api')) {
-        dispatch(routerRedux.push('/exception/404'));
+        dispatch(router.push('/exception/404'));
       }
     });
 }
