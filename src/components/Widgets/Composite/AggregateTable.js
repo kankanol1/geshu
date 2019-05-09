@@ -70,8 +70,7 @@ export default class AggregateTable extends React.PureComponent {
               <Select placeholder="请选择" onChange={nv => onChange(nv)}>
                 {AGGS.map((s, i) => (
                   <Option key={i} value={s.value}>
-                    {' '}
-                    {s.name}{' '}
+                    {s.name}
                   </Option>
                 ))}
               </Select>
