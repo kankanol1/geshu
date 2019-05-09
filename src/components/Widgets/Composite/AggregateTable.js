@@ -84,7 +84,9 @@ export default class AggregateTable extends React.PureComponent {
               if (!item.aggregate) {
                 return <Input value="请先选择聚集函数" disabled />;
               } else if (item.aggregate === 'COUNT') {
-                return <MultiColumnSelector schema={schema} multiple onChange={onChange} />;
+                return (
+                  <MultiColumnSelector schema={schema} enableStar multiple onChange={onChange} />
+                );
               } else {
                 return <SingleColumnSelectAsArray schema={schema} onChange={onChange} />;
               }
@@ -108,9 +110,13 @@ export default class AggregateTable extends React.PureComponent {
             render: (v, item, onChange) => {
               let value = v;
               if (!value && item.aggregate && item.fields) {
-                value = `${item.aggregate}${item.distinct ? '_distinct' : ''}_${item.fields.join(
-                  '_'
-                )}`;
+                if (item.fields.includes('*')) {
+                  value = `${item.aggregate}${item.distinct ? '_distinct' : ''}_all_columns`;
+                } else {
+                  value = `${item.aggregate}${item.distinct ? '_distinct' : ''}_${item.fields.join(
+                    '_'
+                  )}`;
+                }
               }
               return <Input defaultValue={v} value={value} onChange={onChange} />;
             },
