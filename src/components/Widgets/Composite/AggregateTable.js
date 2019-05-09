@@ -29,8 +29,7 @@ const SingleColumnSelectAsArray = props => {
     >
       {schema.map((s, i) => (
         <Option key={i} value={s.name}>
-          {' '}
-          {s.name}{' '}
+          {s.name}
         </Option>
       ))}
     </Select>

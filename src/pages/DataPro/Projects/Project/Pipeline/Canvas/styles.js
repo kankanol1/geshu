@@ -131,6 +131,7 @@ const componentIconDict = {
   AggregateTransformer: 'icon-preparation-filter',
   SwitchCaseTransformer: 'icon-preparation-filter',
   PrepareTransformer: 'icon-preparation-filter',
+  DistinctTransformer: 'icon-preparation-filter',
 };
 
 export const getIconNameForComponent = str => {

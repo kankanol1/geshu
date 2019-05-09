@@ -188,6 +188,11 @@ const components = {
       type: 'Transformer',
       name: 'AggregateTransformer',
     },
+    {
+      code: 'DistinctTransformer',
+      type: 'Transformer',
+      name: 'DistinctTransformer',
+    },
   ],
   DataSink: [
     {

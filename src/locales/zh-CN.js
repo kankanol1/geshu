@@ -341,6 +341,7 @@ export default {
   'operator.ProjectTransformer': '列选择',
   'operator.JoinTransformer': '连接',
   'operator.PrepareTransformer': '数据转换',
+  'operator.DistinctTransformer': '去重',
   // dataSinks
   'operator.HiveDataSink': 'Hive存储',
   'operator.FileDataSink': '文件存储',
