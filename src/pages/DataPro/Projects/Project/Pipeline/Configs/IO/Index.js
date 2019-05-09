@@ -25,6 +25,7 @@ const renderConfig = {
   FilterTransformer: Input1Output1Config,
   SplitTransformer: Input1Output2Config,
   JoinTransformer: Input2Output1Config,
+  AggregateTransformer: Input1Output1Config,
 
   // schema
   DefineSchemaSource: SchemaOutput1Config,

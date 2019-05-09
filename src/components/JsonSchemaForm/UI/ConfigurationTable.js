@@ -83,20 +83,8 @@ export default class ConfigurationTable extends React.Component {
             {c.render(item[c.name], item, this.onChange(item, index, c.name), index)}
           </Col>
         ))}
-        {showExtraOp && (
-          <Col span={opSpan}>
-            <Button
-              type="danger"
-              size="small"
-              className={styles.contentButton}
-              onClick={() => this.handleItemDelete(item, index)}
-            >
-              <Icon type="close" />
-            </Button>
-          </Col>
-        )}
         {orderSpan && (
-          <Col span={orderSpan}>
+          <Col span={orderSpan} style={{ textAlign: 'center' }}>
             {index !== 0 && (
               <Icon
                 size="large"
@@ -119,6 +107,18 @@ export default class ConfigurationTable extends React.Component {
                 }}
               />
             )}
+          </Col>
+        )}
+        {showExtraOp && (
+          <Col span={opSpan} style={{ textAlign: 'center' }}>
+            <Button
+              type="danger"
+              size="small"
+              className={styles.contentButton}
+              onClick={() => this.handleItemDelete(item, index)}
+            >
+              <Icon type="close" />
+            </Button>
           </Col>
         )}
       </Row>
@@ -163,6 +163,7 @@ export default class ConfigurationTable extends React.Component {
                   </Col>
                 );
               })}
+              <Col span={orderSpan} />
               <Col span={opSpan}>
                 {canAdd && (
                   <Button size="small" type="primary" onClick={() => this.handleNewItem()}>
@@ -170,7 +171,6 @@ export default class ConfigurationTable extends React.Component {
                   </Button>
                 )}
               </Col>
-              <Col span={orderSpan} />
             </Row>
           </div>
           {/* <Scrollbars autoHeight autoHeightMin={0} autoHeightMax={maxHeight}> */}

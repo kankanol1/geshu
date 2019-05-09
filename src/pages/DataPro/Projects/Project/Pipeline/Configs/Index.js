@@ -10,6 +10,7 @@ import FilterTransformer from './Transformer/FilterTransformer';
 import PrepareTransformer from './Transformer/PrepareTransformer';
 import SplitTransformer from './Transformer/SplitTransformer';
 import JoinTransformer from './Transformer/JoinTransformer';
+import AggregateTransformer from './Transformer/AggregateTransformer';
 import FileDataSink from './DataSink/FileDataSink';
 import JDBCDataSource from './DataSource/JDBCDataSource';
 import DefineSchemaSource from './Schema/DefineSchemaSource';
@@ -29,6 +30,7 @@ const registered = {
   PrepareTransformer: PrepareTransformer, // eslint-disable-line
   SplitTransformer,
   JoinTransformer,
+  AggregateTransformer,
 
   // schema
   DefineSchemaSource,
