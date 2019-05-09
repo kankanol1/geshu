@@ -354,7 +354,7 @@ export default {
   'operator.HiveDataSource': 'Hive数据源',
   'operator.KafkaDataSource': 'Kafka数据源',
 
-  'operator.JDBCDataSink': 'JDBC连接存储',
+  'operator.JDBCDataSink': 'JDBC存储',
   'operator.CSVFileDataSink': 'CSV存储',
   'operator.AvroFileDataSink': 'Avro存储',
   'operator.ParquetFileDataSink': 'Parquet存储',

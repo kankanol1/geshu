@@ -77,7 +77,7 @@ class SideMenu extends React.PureComponent {
     const { config, loading, id } = this.props;
     const { addingComponent, collapse } = this.state;
     return (
-      <div className={styles.menuWrapper} style={{ left: collapse ? '-380px' : '0' }}>
+      <div className={styles.menuWrapper} style={{ left: collapse ? '-180px' : '0' }}>
         <div className={styles.menu}>
           <Spin spinning={loading}>
             <Collapse

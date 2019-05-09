@@ -9,7 +9,7 @@ const FooterView = () => (
       links={[]}
       copyright={
         <Fragment>
-          Copyright <Icon type="copyright" /> 2018 观澜数据
+          Copyright <Icon type="copyright" /> 2019 观澜数据
         </Fragment>
       }
     />

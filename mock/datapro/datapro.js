@@ -200,6 +200,10 @@ const components = {
       type: 'DataSink',
       name: 'FileDataSink',
     },
+    {
+      name: 'JDBCDataSink',
+      code: 'HiveDataSink',
+    },
   ],
   Schema: [
     {
