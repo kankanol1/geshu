@@ -41,9 +41,10 @@ export default class ConfigurationTable extends React.Component {
   }
 
   notifyChange(newData) {
+    const { data: oldData } = this.state;
     this.setState({ data: newData });
     if (this.props.onChange) {
-      this.props.onChange(newData);
+      this.props.onChange(newData, oldData);
     }
   }
 

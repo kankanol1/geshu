@@ -13,6 +13,14 @@ const AGGS = [
   { name: '计数', value: 'COUNT' },
 ];
 
+const computeAs = item => {
+  if (item.fields.includes('*')) {
+    return `${item.aggregateFunction}${item.distinct ? '_distinct' : ''}_star_`;
+  } else {
+    return `${item.aggregateFunction}${item.distinct ? '_distinct' : ''}_${item.fields.join('_')}`;
+  }
+};
+
 const SingleColumnSelectAsArray = props => {
   const { placeholder, schema, onChange, value } = props;
   let defaultValue;
@@ -54,20 +62,31 @@ export default class AggregateTable extends React.PureComponent {
         canDelete
         orderSpan={1}
         onChange={v => {
+          // check stauts.
+          const nv = v
+            .map(i => (i.fields && i.fields.includes('*') ? { ...i, distinct: false } : i))
+            .map(i => (i.as ? i : { ...i, as: computeAs(i) }))
+            .map(i => {
+              // handle special cases.
+              if (i.aggregateFunction !== 'COUNT' && i.fields && i.fields.includes('*')) {
+                // reset
+                return { ...i, fields: undefined };
+              } else return i;
+            });
           this.setState(
             {
-              renderData: v,
+              renderData: nv,
             },
-            () => this.props.onChange(v)
+            () => this.props.onChange(nv)
           );
         }}
         data={renderData}
         columns={[
           {
-            name: 'aggregate',
+            name: 'aggregateFunction',
             title: '聚集函数',
             render: (v, item, onChange) => (
-              <Select placeholder="请选择" onChange={nv => onChange(nv)}>
+              <Select placeholder="请选择" onChange={nv => onChange(nv)} value={v}>
                 {AGGS.map((s, i) => (
                   <Option key={i} value={s.value}>
                     {s.name}
@@ -81,25 +100,35 @@ export default class AggregateTable extends React.PureComponent {
             name: 'fields',
             title: '字段',
             render: (v, item, onChange) => {
-              if (!item.aggregate) {
+              if (!item.aggregateFunction) {
                 return <Input value="请先选择聚集函数" disabled />;
-              } else if (item.aggregate === 'COUNT') {
+              } else if (item.aggregateFunction === 'COUNT') {
                 return (
-                  <MultiColumnSelector schema={schema} enableStar multiple onChange={onChange} />
+                  <MultiColumnSelector
+                    value={v}
+                    schema={schema}
+                    enableStar
+                    multiple
+                    onChange={onChange}
+                  />
                 );
               } else {
-                return <SingleColumnSelectAsArray schema={schema} onChange={onChange} />;
+                return <SingleColumnSelectAsArray value={v} schema={schema} onChange={onChange} />;
               }
             },
             span: 11,
           },
           {
             name: 'distinct',
-            title: '是否去重',
+            title: '去重',
             type: 'checkbox',
             render: (v, item, onChange) => (
               <div style={{ textAlign: 'center' }}>
-                <Checkbox checked={v} onChange={e => onChange(e.target.checked)} />
+                {item.fields && item.fields.includes('*') ? (
+                  <Checkbox checked={false} disabled />
+                ) : (
+                  <Checkbox checked={v} onChange={e => onChange(e.target.checked)} />
+                )}
               </div>
             ),
             span: 2,
@@ -109,14 +138,8 @@ export default class AggregateTable extends React.PureComponent {
             title: '新列名',
             render: (v, item, onChange) => {
               let value = v;
-              if (!value && item.aggregate && item.fields) {
-                if (item.fields.includes('*')) {
-                  value = `${item.aggregate}${item.distinct ? '_distinct' : ''}_all_columns`;
-                } else {
-                  value = `${item.aggregate}${item.distinct ? '_distinct' : ''}_${item.fields.join(
-                    '_'
-                  )}`;
-                }
+              if (!value && item.aggregateFunction && item.fields) {
+                value = computeAs(item);
               }
               return <Input defaultValue={v} value={value} onChange={onChange} />;
             },

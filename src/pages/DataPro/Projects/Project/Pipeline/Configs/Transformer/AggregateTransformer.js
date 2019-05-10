@@ -81,7 +81,7 @@ class AggregateTransformer extends React.PureComponent {
           errors,
           validateErrors,
           formValues,
-          'aggregates',
+          'aggregateItem',
           [],
           '聚集字段',
           <AggregateTable schema={schema.i1 || []} />
@@ -93,7 +93,7 @@ class AggregateTransformer extends React.PureComponent {
           errors,
           validateErrors,
           formValues,
-          'groupBy',
+          'groupByFields',
           [],
           '按列分组',
           <MultiColumnSelector schema={schema.i1 || []} multiple />
