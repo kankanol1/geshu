@@ -1,0 +1,13 @@
+{
+  "name": "GESHU",
+  "short_name": "GESHU",
+  "display": "standalone",
+  "start_url": "./",
+  "theme_color": "#002140",
+  "background_color": "#001529",
+  "icons": [{
+      "src": "favicon.png",
+      "sizes": "128x128"
+    }
+  ]
+} 

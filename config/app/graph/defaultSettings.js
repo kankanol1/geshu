@@ -6,6 +6,7 @@ module.exports = {
   fixedHeader: false, // sticky header
   autoHideHeader: false, // auto hide header
   fixSiderbar: false, // sticky siderbar
+  pwa: true,
 
   // added.
   title: 'Graph',
