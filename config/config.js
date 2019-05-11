@@ -153,7 +153,9 @@ export default {
   history: 'hash',
 
   context: {
-    // for loading different public scripts .
-    _env: defaultSettings._env,
+    _p: {
+      // export to .ejs
+      ...defaultSettings,
+    },
   },
 };

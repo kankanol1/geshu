@@ -5,11 +5,11 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>格数</title>
+  <title><%=context.config.context._p.title%></title>
   <script>
     // load the following lib acoording to different projects.
   </script>
-  <% if(['datapro', 'datapro-client', 'datapro-all'].includes(context.config.context._env)) { %>
+  <% if(['datapro', 'datapro-client', 'datapro-all'].includes(context.config.context._p._env)) { %>
     <script src="/lib/go.js"></script>
   <% } %>
   <link rel="icon" href="/favicon.png" type="image/x-icon">
