@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import { Button, Icon, Card, List, Tooltip, Input } from 'antd';
 import { Scrollbars } from 'react-custom-scrollbars';
 import PropTypes from 'prop-types';
-import download from 'downloadjs';
+// import download from 'downloadjs';
 import { extractFileName } from '../../utils/conversionUtils';
 import { getDisplayDataForTypes } from './StorageUtils';
 import UploadModal from './UploadModal';
@@ -19,6 +19,15 @@ import {
 } from '../../services/storageAPI';
 import defaultStyles from './StorageFilePicker.less';
 import { humanFileSize } from '../../utils/utils';
+
+const download = url => {
+  const f = document.createElement('iframe');
+  document.body.appendChild(f);
+  f.src = url;
+  setTimeout(() => {
+    document.body.removeChild(f);
+  }, 333);
+};
 
 export default class StorageFilePicker extends React.PureComponent {
   static defaultProps = {
@@ -45,60 +54,63 @@ export default class StorageFilePicker extends React.PureComponent {
     onCreateChange: undefined,
   };
 
-  state = {
-    /**
-     * value can be following:
-     * 1. 'index' => need to show index list.
-     * 2. 'project' => need to show all the available projects.
-     * 3. 'file' => show file list.
-     */
-    view: this.props.view,
-    path: this.props.path,
-    /**
-     * type is used only when view is 'file'.
-     * type can be following:
-     * 1. 'private' private files.
-     * 2. 'public' public files.
-     * 3. 'project' project files.
-     */
-    type: this.props.type,
-    project: this.props.project,
+  constructor(props) {
+    super(props);
+    this.state = {
+      /**
+       * value can be following:
+       * 1. 'index' => need to show index list.
+       * 2. 'project' => need to show all the available projects.
+       * 3. 'file' => show file list.
+       */
+      view: this.props.view,
+      path: this.props.path,
+      /**
+       * type is used only when view is 'file'.
+       * type can be following:
+       * 1. 'private' private files.
+       * 2. 'public' public files.
+       * 3. 'project' project files.
+       */
+      type: this.props.type,
+      project: this.props.project,
 
-    /**
-     * selected file item, will be used in renameModal, deleteModal and moveModal.
-     */
-    fileItem: {},
-    /** modals */
-    uploadModal: false,
-    createModal: false,
-    renameModal: false,
-    deleteModal: false,
-    moveModal: false,
+      /**
+       * selected file item, will be used in renameModal, deleteModal and moveModal.
+       */
+      fileItem: {},
+      /** modals */
+      uploadModal: false,
+      createModal: false,
+      renameModal: false,
+      deleteModal: false,
+      moveModal: false,
 
-    /**
-     * projects fetched from remote.
-     */
-    projects: [],
-    /**
-     * files fetched from remote.
-     */
-    files: [],
-    /**
-     * index fetched from remote.
-     */
-    indexData: [],
-    /**
-     * loading...
-     */
-    loading: false,
+      /**
+       * projects fetched from remote.
+       */
+      projects: [],
+      /**
+       * files fetched from remote.
+       */
+      files: [],
+      /**
+       * index fetched from remote.
+       */
+      indexData: [],
+      /**
+       * loading...
+       */
+      loading: false,
 
-    // running status
-    selectedType: undefined,
-    selectedFile: undefined,
-    selectedProject: undefined,
+      // running status
+      selectedType: undefined,
+      selectedFile: undefined,
+      selectedProject: undefined,
 
-    createFileName: undefined,
-  };
+      createFileName: undefined,
+    };
+  }
 
   componentDidMount() {
     const { view, type, project, path, createFileName } = this.props;
