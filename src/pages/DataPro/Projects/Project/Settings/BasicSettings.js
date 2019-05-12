@@ -65,7 +65,7 @@ class BasicSettings extends React.PureComponent {
         <FormItem {...itemProps} label="描述">
           {form.getFieldDecorator('description', {
             initialValue: project.description,
-            rules: [{ required: true, message: '请填写项目描述' }],
+            // rules: [{ required: true, message: '请填写项目描述' }],
           })(<TextArea placeholder="请输入" rows={3} disabled={loading} />)}
         </FormItem>
         <FormItem {...itemProps} label="标签">

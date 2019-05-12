@@ -43,10 +43,10 @@ class Index extends PureComponent {
                     type="share-alt"
                   />
                   <span>
-                    流程组件{' '}
+                    流程组件
                     <strong className={counts.pipeline > 0 ? styles.iconOrange : styles.iconGrey}>
                       {counts.pipeline}
-                    </strong>{' '}
+                    </strong>
                     个
                   </span>
                 </div>
@@ -60,10 +60,10 @@ class Index extends PureComponent {
                     type="file-text"
                   />
                   <span>
-                    数据集{' '}
+                    数据集
                     <strong className={counts.dataset > 0 ? styles.iconGreen : styles.iconGrey}>
                       {counts.dataset}
-                    </strong>{' '}
+                    </strong>
                     个
                   </span>
                 </div>
@@ -77,10 +77,10 @@ class Index extends PureComponent {
                     type="fund"
                   />
                   <span>
-                    项目文件{' '}
+                    项目文件
                     <strong className={counts.files > 0 ? styles.iconBlue : styles.iconGrey}>
                       {counts.files}
-                    </strong>{' '}
+                    </strong>
                     个
                   </span>
                 </div>
@@ -94,10 +94,10 @@ class Index extends PureComponent {
                     type="clock-circle"
                   />
                   <span>
-                    改动历史{' '}
+                    改动历史
                     <strong className={counts.commit > 0 ? styles.iconRed : styles.iconGrey}>
                       {counts.commit}
-                    </strong>{' '}
+                    </strong>
                     次
                   </span>
                 </div>

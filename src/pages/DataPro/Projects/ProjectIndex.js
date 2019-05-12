@@ -109,6 +109,7 @@ class ProjectIndex extends PureComponent {
           <div>
             <p>{project.description}</p>
             <XTagList
+              tooltip="编辑标签"
               editable
               tags={labels.map(i => ({ color: generateColorFor(i, '70%'), name: i }))}
               distinct
@@ -136,7 +137,7 @@ class ProjectIndex extends PureComponent {
     const { id, pane } = this.props.match.params;
 
     const { project } = this.props;
-    if (loading || !project) return <PageLoading />;
+    if (loading || !project || !project.id) return <PageLoading />;
     const renderConfig = getPaneConfig(project)[pane] || {};
 
     const { currentUser, collapsed, fullScreen } = this.props.global;

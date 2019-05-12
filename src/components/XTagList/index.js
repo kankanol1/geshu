@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Tag, Icon, Input, Button } from 'antd';
+import { Tag, Icon, Input, Button, Tooltip } from 'antd';
 
 import styles from './index.less';
 
@@ -30,7 +30,7 @@ export default class XTagList extends Component {
   };
 
   render() {
-    const { editable, className } = this.props;
+    const { editable, className, tooltip } = this.props;
     const { tags } = this.state;
     return (
       <div className={className}>
@@ -47,11 +47,13 @@ export default class XTagList extends Component {
         ))}
         {editable &&
           !this.state.edit && (
-            <Icon
-              className={styles.edit}
-              type="edit"
-              onClick={() => this.setState({ edit: true })}
-            />
+            <Tooltip title={tooltip}>
+              <Icon
+                className={styles.edit}
+                type="edit"
+                onClick={() => this.setState({ edit: true })}
+              />
+            </Tooltip>
           )}
         {editable &&
           this.state.edit && (

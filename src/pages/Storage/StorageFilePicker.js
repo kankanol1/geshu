@@ -9,7 +9,8 @@ import UploadModal from './UploadModal';
 import CreateModal from './CreateModal';
 import RenameModal from './RenameModal';
 import DeleteModal from './DeleteModal';
-import MoveModal from './MoveModal';
+import MoveModal from './MoveModal'; // eslint-disable-line
+
 import {
   queryFileForType,
   queryRegisteredTypes,
@@ -473,11 +474,13 @@ export default class StorageFilePicker extends React.PureComponent {
               <Icon
                 type="download"
                 onClick={() => {
-                  download(
-                    `/api/fs/download?projectId=${
-                      this.state.project ? this.state.project.id : -1
-                    }&type=${this.state.type}&path=${item.rpath}`
-                  );
+                  const requestUrl = `projectId=${
+                    this.state.project ? this.state.project.id : -1
+                  }&type=${this.state.type}&path=${item.rpath}`;
+                  // TODO save the correct chinese name.
+                  // const fileArr = item.rpath.split('/');
+                  // const fileName = fileArr[fileArr.length -1];
+                  download(`/api/fs/download?${encodeURI(requestUrl)}`);
                 }}
               />
             </Tooltip>
