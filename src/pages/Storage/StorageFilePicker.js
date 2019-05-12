@@ -26,7 +26,7 @@ const download = url => {
   f.src = url;
   setTimeout(() => {
     document.body.removeChild(f);
-  }, 333);
+  }, 2333);
 };
 
 export default class StorageFilePicker extends React.PureComponent {
