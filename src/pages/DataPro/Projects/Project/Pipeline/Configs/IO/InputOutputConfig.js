@@ -136,8 +136,8 @@ class InputOutputConfig extends React.Component {
         visible
         width={800}
         maskClosable={false}
-        okButtonDisabled={adding}
-        cancelButtonDisabled={adding}
+        okButtonProps={{ loading: adding }}
+        cancelButtonProps={{ disabled: adding }}
         closable={!adding}
         onOk={e => this.handleOk(e, onOk)}
         onCancel={() => onCancel()}
