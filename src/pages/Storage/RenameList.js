@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, Input } from 'antd';
+import { Row, Col, Input, Icon } from 'antd';
 
 export class RenameList extends React.PureComponent {
   constructor(props) {
@@ -24,11 +24,15 @@ export class RenameList extends React.PureComponent {
     return (
       <React.Fragment>
         {value.map((i, ind) => (
-          <Row key={ind}>
-            <Col>
+          <Row key={ind} span={24}>
+            <Col span={11}>
               <Input disabled value={i.origin} />
             </Col>
-            <Col>
+            <Col span={1}>
+              {' '}
+              <Icon type="arrow-right" />{' '}
+            </Col>
+            <Col span={11}>
               <Input value={i.name} onChange={v => this.handleChange(v, ind)} />{' '}
             </Col>
           </Row>
