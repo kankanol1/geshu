@@ -1,9 +1,10 @@
 import React, { PureComponent } from 'react';
-import { Button, Upload, Icon, message, Form, Modal } from 'antd';
+import { Button, Upload, Icon, message, Form, Modal, Radio } from 'antd';
 import fetch from 'dva/fetch';
 import PropTypes from 'prop-types';
 import urls from '../../utils/urlUtils';
 import { wrapOptions } from '../../utils/request';
+import { RenameList } from './RenameList';
 
 const FormItem = Form.Item;
 
@@ -17,6 +18,8 @@ class UploadModal extends PureComponent {
   state = {
     uploading: false,
     fileList: [],
+    renameList: undefined,
+    renaming: true,
   };
 
   handleSubmit = () => {
@@ -34,6 +37,16 @@ class UploadModal extends PureComponent {
       fileList.forEach(file => {
         formData.append('files', file);
       });
+      // do not pass these if not exist
+      if (values.policy) {
+        formData.append('policy', values.policy);
+      }
+      if (values.renameList) {
+        values.renameList.forEach(n => {
+          formData.append('renameList.origin', n.origin);
+          formData.append('renameList.name', n.name);
+        });
+      }
 
       this.setState({
         uploading: true,
@@ -67,6 +80,12 @@ class UploadModal extends PureComponent {
             if (onOk) {
               onOk();
             }
+          } else if (response && response.nameConflict) {
+            this.setState({
+              uploading: false,
+              renameList: response.renameList,
+            });
+            message.error(`上传失败!请重试, 失败详情: ${response && response.message}`);
           } else {
             this.setState({
               uploading: false,
@@ -97,8 +116,38 @@ class UploadModal extends PureComponent {
     return e && e.fileList;
   };
 
+  renderRenameList = (renameList, renaming, getFieldDecorator, formItemLayout) => {
+    return (
+      <React.Fragment>
+        <FormItem {...formItemLayout} label="上传策略">
+          {getFieldDecorator('policy', {
+            initialValue: 'RENAME',
+          })(
+            <Radio.Group
+              onChange={v => {
+                this.setState({ renaming: v.target.value !== 'OVERRIDE' });
+              }}
+              buttonStyle="solid"
+            >
+              <Radio.Button value="RENAME">重命名</Radio.Button>
+              <Radio.Button value="OVERRIDE">覆盖现有文件</Radio.Button>
+            </Radio.Group>
+          )}
+        </FormItem>
+        {renaming && (
+          <FormItem {...formItemLayout} label="重命名">
+            {getFieldDecorator('renameList', {
+              initialValue: renameList,
+              rules: [{ type: 'array', required: true, message: '文件名列表不能为空' }],
+            })(<RenameList />)}
+          </FormItem>
+        )}
+      </React.Fragment>
+    );
+  };
+
   render() {
-    const { uploading } = this.state;
+    const { uploading, renaming, renameList } = this.state;
     const { getFieldDecorator } = this.props.form;
     const formItemLayout = {
       labelCol: { span: 6 },
@@ -166,6 +215,8 @@ class UploadModal extends PureComponent {
               </Upload>
             )}
           </FormItem>
+          {renameList &&
+            this.renderRenameList(renameList, renaming, getFieldDecorator, formItemLayout)}
         </Form>
       </Modal>
     );

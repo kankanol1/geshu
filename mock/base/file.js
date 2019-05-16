@@ -71,10 +71,25 @@ export function postFileUpload(req, res, u, b) {
   const body = (b && b.body) || req.body;
   const { ids } = body;
 
-  const result = {
-    success: true,
-    message: '上传成功',
-  };
+  // TODO change this to test different display.
+  const success = false;
+  let result;
+  if (success) {
+    result = {
+      success: true,
+      message: '上传成功',
+    };
+  } else {
+    result = {
+      success: false,
+      message: '存在重名文件，请确认操作',
+      nameConflict: true,
+      renameList: [
+        { origin: 'originName', name: 'newName' },
+        { origin: 'originName2', name: 'newName2' },
+      ],
+    };
+  }
 
   if (res && res.json) {
     res.json(result);
@@ -130,5 +145,5 @@ export default {
   // file list. NOT USED(maybe)
   // 'GET /api/fs/ls': getFileList,
   // 'GET /api/fs/sample': getPreviewData,
-  // 'POST /api/fs/upload': postFileUpload,
+  'POST /api/fs/upload': postFileUpload,
 };
