@@ -51,7 +51,10 @@ export default class SelectTemplate extends React.PureComponent {
         }}
         onCancel={() => this.setState({ showDialog: false, selecting: undefined })}
       >
-        <TemplateList value={this.props.value.id} onChange={v => this.setState({ selecting: v })} />
+        <TemplateList
+          value={(this.props.value || {}).id}
+          onChange={v => this.setState({ selecting: v })}
+        />
       </Modal>
     );
   }

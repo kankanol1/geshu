@@ -1,37 +1,38 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import { List, Pagination, Spin } from 'antd';
 
 import styles from './index.less';
 
 class CardTable extends PureComponent {
+  renderBody() {
+    const { list, pagination, renderItem, onChange, className } = this.props;
+    return (
+      <Fragment>
+        <div key="list" className={className}>
+          {(list || []).map(item => renderItem(item))}
+        </div>
+        {pagination && (
+          <div key="page" className={styles.paginationWrapper}>
+            <Pagination
+              current={pagination.current || 0}
+              total={pagination.total || 0}
+              pageSize={pagination.pageSize || 0}
+              onChange={(current, pageSize) => {
+                onChange({ current, pageSize });
+              }}
+            />
+          </div>
+        )}
+      </Fragment>
+    );
+  }
+
   render() {
-    const {
-      list,
-      pagination,
-      loading,
-      renderItem,
-      onChange,
-      className,
-      wrapperClassName,
-    } = this.props;
+    const { list, loading, wrapperClassName, noData } = this.props;
     return (
       <div className={wrapperClassName}>
         <Spin spinning={loading}>
-          <div key="list" className={className}>
-            {(list || []).map(item => renderItem(item))}
-          </div>
-          {pagination && (
-            <div key="page" className={styles.paginationWrapper}>
-              <Pagination
-                current={pagination.current || 0}
-                total={pagination.total || 0}
-                pageSize={pagination.pageSize || 0}
-                onChange={(current, pageSize) => {
-                  onChange({ current, pageSize });
-                }}
-              />
-            </div>
-          )}
+          {(list || []).length === 0 ? noData || <div>暂无数据</div> : this.renderBody()}
         </Spin>
         {/* <List
           rowKey="id"

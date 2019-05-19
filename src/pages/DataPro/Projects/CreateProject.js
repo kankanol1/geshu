@@ -128,7 +128,7 @@ class CreateProject extends React.PureComponent {
                   <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="模版">
                     {form.getFieldDecorator('template', {
                       rules: [{ required: true, message: '请选择模版' }],
-                      initialValue: template,
+                      initialValue: template || {},
                     })(<SelectTemplate disabled={submitting} />)}
                   </FormItem>
                 )}
