@@ -6,7 +6,7 @@ import { formatMessage } from 'umi/locale';
 import router from 'umi/router';
 
 import { getOperatorSchema, configOperator } from '@/services/datapro/pipelineAPI';
-import { formItemWithError, expandValidateErrors } from '../Utils';
+import { formItemWithError, expandValidateErrors, fakeFormItemWithError } from '../Utils';
 import ExpressionWidget from '@/components/Widgets/ExpressionWidget';
 
 const FormItem = Form.Item;
@@ -136,6 +136,17 @@ class FilterTransformer extends React.Component {
             <ExpressionWidget
               loptions={schema.i1.map(i => `${i.name}`)}
               onChange={e => this.handleChange()}
+              // TODO enable the following when needed.
+              // cellWrapper={
+              //   (column, items, index, Cell) =>
+              //   fakeFormItemWithError(
+              //     formItemProps,
+              //     errors,
+              //     validateErrors,
+              //     `criteria.conditions.${index}.${column.name}`,
+              //     Cell
+              //   )
+              // }
             />
           )}
         <div style={{ textAlign: 'center' }}>

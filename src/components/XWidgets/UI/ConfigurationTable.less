@@ -1,0 +1,50 @@
+@import '~antd/lib/style/themes/default.less';
+.tableWidget {
+  // padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+.tableHeader {
+  background: #fafafa;
+  // padding: 6px;
+  text-align: center;
+
+  .header {
+    font-weight: 500;
+  }
+}
+
+.tableContent {
+  :global {
+    input {
+      border-radius: 0;
+    }
+
+    input[type='checkbox'],
+    .ant-checkbox-inner {
+      margin-top: -8px;
+    }
+  }
+
+  .contentRow {
+    padding: 1px;
+
+    .contentButton {
+      height: 32px;
+    }
+  }
+}
+
+.orderIcon {
+  &:hover {
+    color: @primary-color;
+    cursor: pointer;
+  }
+}
+
+// removed due to display in new version. did not test the behavior in old version.
+// .checkbox {
+//   :global(.ant-checkbox-inner) {
+//     margin-top: -18px;
+//   }
+// }

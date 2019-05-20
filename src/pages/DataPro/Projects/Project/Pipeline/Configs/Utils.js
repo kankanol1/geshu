@@ -1,6 +1,7 @@
 import React from 'react';
 import { Form } from 'antd';
 import jsonpath from 'jsonpath';
+import FakeFormItem from '@/components/XWidgets/UI/FakeFormItem';
 
 const FormItem = Form.Item;
 
@@ -30,9 +31,13 @@ export const expandValidateErrors = err => {
   return translated;
 };
 
-function filterErrorsWithPrefix(errors, prefix) {
+function filterErrorsWithPrefix(errors, prefix, showUpperLevel) {
   if (!errors || Object.keys(errors) === 0) return [];
-  const newKeys = Object.keys(errors).filter(i => i.startsWith(prefix) || prefix.startsWith(i));
+  const newKeys = showUpperLevel
+    ? Object.keys(errors).filter(i => i.startsWith(prefix) || prefix.startsWith(i))
+    : // TODO: use the following line if fakeFormItems are enabled.
+      //  Object.keys(errors).filter(i => i === prefix || prefix.startsWith(i))
+      Object.keys(errors).filter(i => i.startsWith(prefix));
   const result = newKeys.map(i => errors[i]);
   return result;
 }
@@ -51,7 +56,7 @@ export function formItemWithError(
 ) {
   const jpValue = jsonpath.query(formValues, `$.${accessor}`);
   const initValue = jpValue.length > 0 && jpValue[0];
-  const backendMessage = filterErrorsWithPrefix(errors, accessor);
+  const backendMessage = filterErrorsWithPrefix(errors, accessor, true);
   const validateMessage = validateErrors && validateErrors[accessor];
   const errorMessage = [];
   if (backendMessage) {
@@ -73,6 +78,28 @@ export function formItemWithError(
         ...fieldOptions,
       })(component)}
     </FormItem>
+  );
+}
+
+export function fakeFormItemWithError(formItemProps, errors, validateErrors, accessor, component) {
+  const backendMessage = filterErrorsWithPrefix(errors, accessor, false);
+  const validateMessage = validateErrors && validateErrors[accessor];
+  const errorMessage = [];
+  if (backendMessage) {
+    errorMessage.push(...backendMessage);
+  }
+  if (validateMessage) {
+    errorMessage.push(...validateMessage);
+  }
+  const hasError = Object.keys(errorMessage).length > 0;
+  return (
+    <FakeFormItem
+      {...formItemProps}
+      help={errorMessage}
+      validateStatus={(hasError && 'error') || ''}
+    >
+      {component}
+    </FakeFormItem>
   );
 }
 

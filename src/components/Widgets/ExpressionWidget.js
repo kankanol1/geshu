@@ -1,7 +1,7 @@
 import React from 'react';
 import { Select, Tag, Icon, Input } from 'antd';
 import XInputSelect from '@/components/XInputSelect';
-import ConfigurationTable from '../JsonSchemaForm/UI/ConfigurationTable';
+import ConfigurationTable from '@/components/XWidgets/UI/ConfigurationTable';
 
 const operatorList = [
   { name: '==', value: 'EQ' },
@@ -31,7 +31,7 @@ class ExpressionWidget extends React.PureComponent {
 
   render() {
     const { data } = this.state;
-    const { options, loptions, roptions } = this.props;
+    const { options, loptions, roptions, cellWrapper } = this.props;
     const leftOptions = loptions || options;
     const rightOptions = roptions || options;
     return (
@@ -43,6 +43,7 @@ class ExpressionWidget extends React.PureComponent {
           this.props.onChange(v);
         }}
         data={data}
+        cellWrapper={cellWrapper}
         columns={[
           {
             name: 'leftExpression',

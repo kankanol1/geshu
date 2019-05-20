@@ -573,6 +573,12 @@ export function getPipelineOperator(req, res) {
       // ignoreFirstRow: true,
       // sheetName: 'test1',
     },
+    criteria: {
+      conditions: [
+        { leftExpression: 'left', rightExpression: 'right', comparisonSymbol: '===' },
+        { leftExpression: 'left2', rightExpression: 'right2', comparisonSymbol: '>' },
+      ],
+    },
   };
   if (params.opId.includes('PrepareTransformer')) {
     configs = prepareOpConfig;
@@ -593,9 +599,12 @@ export function getPipelineOperator(req, res) {
             as: '错误2',
           },
         ]
-      : {
-          'format.ignoreFirstLine': '无需选中',
-        },
+      : [
+          {
+            'format.ignoreFirstLine': '无需选中',
+            'criteria.conditions.1.rightExpression': '本字段错误',
+          },
+        ],
   };
   res.json(result);
 }
