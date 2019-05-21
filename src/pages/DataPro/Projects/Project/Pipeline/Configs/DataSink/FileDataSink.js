@@ -1,6 +1,7 @@
 import React from 'react';
 import { Form, Col, Select, Checkbox, Button, Card, Steps, message, Row } from 'antd';
 
+import router from 'umi/router';
 import { configOperator } from '@/services/datapro/pipelineAPI';
 import CSVSinkForm from './Templates/CSVSinkForm';
 import { formItemWithError, expandValidateErrors } from '../Utils';
@@ -44,6 +45,8 @@ class FileDataSink extends React.PureComponent {
         if (response) {
           if (response.success) {
             message.info('配置完毕');
+            // back to pipeline.
+            router.push(`/projects/p/pipeline/${id}`);
           } else {
             message.error(response.message);
           }

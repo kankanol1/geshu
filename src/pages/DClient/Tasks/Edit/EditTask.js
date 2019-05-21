@@ -62,9 +62,11 @@ class EditTask extends React.PureComponent {
         return 0;
       case 'TEMPLATE_DEFINED':
         return 1;
-      case 'SOURCE_DEFINED':
+      case 'SOURCES_DEFINED':
         return 2;
-      case 'SINK_DEFINED':
+      // case 'SINKS_DEFINED':
+      //   return 4;
+      case 'READY':
         return 4;
       default:
         return 0;
@@ -112,7 +114,7 @@ class EditTask extends React.PureComponent {
 
   renderLoaded = (activePane, id, mode) => {
     const startPane = this.calStartPane();
-    return activePane > startPane
+    return activePane > startPane + 1
       ? this.renderError(startPane, id, mode)
       : this.renderContent(activePane, id, mode);
   };
