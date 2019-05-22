@@ -136,17 +136,15 @@ class FilterTransformer extends React.Component {
             <ExpressionWidget
               loptions={schema.i1.map(i => `${i.name}`)}
               onChange={e => this.handleChange()}
-              // TODO enable the following when needed.
-              // cellWrapper={
-              //   (column, items, index, Cell) =>
-              //   fakeFormItemWithError(
-              //     formItemProps,
-              //     errors,
-              //     validateErrors,
-              //     `criteria.conditions.${index}.${column.name}`,
-              //     Cell
-              //   )
-              // }
+              cellWrapper={(column, items, index, Cell) =>
+                fakeFormItemWithError(
+                  formItemProps,
+                  errors,
+                  validateErrors,
+                  `criteria.conditions.${index}.${column.name}`,
+                  Cell
+                )
+              }
             />
           )}
         <div style={{ textAlign: 'center' }}>

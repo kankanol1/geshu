@@ -1,6 +1,6 @@
 import React from 'react';
 import { Input, Checkbox, Select } from 'antd';
-import ConfigurationTable from '@/components/JsonSchemaForm/UI/ConfigurationTable';
+import ConfigurationTable from '@/components/XWidgets/UI/ConfigurationTable';
 import MultiColumnSelector from '../Column/MultiColumnSelector';
 
 const { Option } = Select;
@@ -53,13 +53,14 @@ export default class AggregateTable extends React.PureComponent {
   }
 
   render() {
-    const { schema } = this.props;
+    const { schema, cellWrapper } = this.props;
     const { renderData } = this.state;
     // translate data to checkbox.
     return (
       <ConfigurationTable
         canAdd
         canDelete
+        cellWrapper={cellWrapper}
         orderSpan={1}
         onChange={v => {
           // check stauts.

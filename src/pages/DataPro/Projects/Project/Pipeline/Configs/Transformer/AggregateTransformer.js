@@ -3,7 +3,7 @@ import { Form, Button, Input, Select, message } from 'antd';
 import router from 'umi/router';
 import PageLoading from '@/components/PageLoading';
 import { getOperatorSchema, configOperator } from '@/services/datapro/pipelineAPI';
-import { formItemWithError, expandValidateErrors } from '../Utils';
+import { formItemWithError, expandValidateErrors, fakeFormItemWithError } from '../Utils';
 import MultiColumnSelector from '@/components/Widgets/Column/MultiColumnSelector';
 import AggregateTable from '@/components/Widgets/Composite/AggregateTable';
 
@@ -84,7 +84,18 @@ class AggregateTransformer extends React.PureComponent {
           'aggregateItem',
           [],
           '聚集字段',
-          <AggregateTable schema={schema.i1 || []} />
+          <AggregateTable
+            schema={schema.i1 || []}
+            cellWrapper={(column, items, index, Cell) =>
+              fakeFormItemWithError(
+                formItemProps,
+                errors,
+                validateErrors,
+                `aggregateItem.${index}.${column.name}`,
+                Cell
+              )
+            }
+          />
         )}
         {formItemWithError(
           form,

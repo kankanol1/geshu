@@ -7,7 +7,7 @@ import router from 'umi/router';
 import { getOperatorSchema, configOperator } from '@/services/datapro/pipelineAPI';
 import JoinColumnSelector from '@/components/Widgets/JoinColumnSelector';
 import ExpressionWidget from '@/components/Widgets/ExpressionWidget';
-import { formItemWithError, expandValidateErrors } from '../Utils';
+import { formItemWithError, expandValidateErrors, fakeFormItemWithError } from '../Utils';
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -172,6 +172,15 @@ class JoinTransformer extends React.Component {
             <ExpressionWidget
               options={[...schema.i1.map(i => `L_${i.name}`), ...schema.i2.map(i => `R_${i.name}`)]}
               onChange={e => this.handleChange()}
+              cellWrapper={(column, items, index, Cell) =>
+                fakeFormItemWithError(
+                  formItemProps,
+                  errors,
+                  validateErrors,
+                  `criteria.conditions.${index}.${column.name}`,
+                  Cell
+                )
+              }
             />
           )}
         <div style={{ textAlign: 'center' }}>

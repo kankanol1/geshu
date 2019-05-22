@@ -34,10 +34,8 @@ export const expandValidateErrors = err => {
 function filterErrorsWithPrefix(errors, prefix, showUpperLevel) {
   if (!errors || Object.keys(errors) === 0) return [];
   const newKeys = showUpperLevel
-    ? Object.keys(errors).filter(i => i.startsWith(prefix) || prefix.startsWith(i))
-    : // TODO: use the following line if fakeFormItems are enabled.
-      //  Object.keys(errors).filter(i => i === prefix || prefix.startsWith(i))
-      Object.keys(errors).filter(i => i.startsWith(prefix));
+    ? Object.keys(errors).filter(i => i === prefix || prefix.startsWith(i))
+    : Object.keys(errors).filter(i => i.startsWith(prefix));
   const result = newKeys.map(i => errors[i]);
   return result;
 }
@@ -70,7 +68,7 @@ export function formItemWithError(
     <FormItem
       {...formItemProps}
       label={label}
-      help={errorMessage}
+      help={hasError && errorMessage}
       validateStatus={(hasError && 'error') || ''}
     >
       {form.getFieldDecorator(accessor, {
@@ -95,7 +93,7 @@ export function fakeFormItemWithError(formItemProps, errors, validateErrors, acc
   return (
     <FakeFormItem
       {...formItemProps}
-      help={errorMessage}
+      help={hasError && errorMessage}
       validateStatus={(hasError && 'error') || ''}
     >
       {component}
