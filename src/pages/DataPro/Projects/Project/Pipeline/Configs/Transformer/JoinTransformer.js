@@ -7,6 +7,7 @@ import router from 'umi/router';
 import { getOperatorSchema, configOperator } from '@/services/datapro/pipelineAPI';
 import JoinColumnSelector from '@/components/Widgets/JoinColumnSelector';
 import ExpressionWidget from '@/components/Widgets/ExpressionWidget';
+import XHelp from '@/components/XHelp';
 import { formItemWithError, expandValidateErrors, fakeFormItemWithError } from '../Utils';
 
 const FormItem = Form.Item;
@@ -168,7 +169,10 @@ class JoinTransformer extends React.Component {
             formValues,
             'criteria.conditions',
             [],
-            '连接条件',
+            <span>
+              过滤表达式
+              <XHelp tip="填入文本值时请使用英文单引号，如：x.field='文本内容'" />{' '}
+            </span>,
             <ExpressionWidget
               options={[...schema.i1.map(i => `L_${i.name}`), ...schema.i2.map(i => `R_${i.name}`)]}
               onChange={e => this.handleChange()}

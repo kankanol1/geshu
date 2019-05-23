@@ -4,7 +4,7 @@ import XInputSelect from '@/components/XInputSelect';
 import ConfigurationTable from '@/components/XWidgets/UI/ConfigurationTable';
 
 const operatorList = [
-  { name: '==', value: 'EQ' },
+  { name: '=', value: 'EQ' },
   { name: '!=', value: 'NE' },
   { name: '>', value: 'GT' },
   { name: '>=', value: 'GE' },

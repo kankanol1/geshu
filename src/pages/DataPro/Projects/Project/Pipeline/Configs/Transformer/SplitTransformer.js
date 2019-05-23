@@ -7,6 +7,7 @@ import router from 'umi/router';
 import { getOperatorSchema, configOperator } from '@/services/datapro/pipelineAPI';
 import { formItemWithError, expandValidateErrors, fakeFormItemWithError } from '../Utils';
 import ExpressionWidget from '@/components/Widgets/ExpressionWidget';
+import XHelp from '@/components/XHelp';
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -131,7 +132,10 @@ class SplitTransformer extends React.Component {
             formValues,
             'criteria.conditions',
             [],
-            '过滤表达式',
+            <span>
+              过滤表达式
+              <XHelp tip="填入文本值时请使用英文单引号，如：x.field='文本内容'" />{' '}
+            </span>,
             <ExpressionWidget
               loptions={schema.i1.map(i => `${i.name}`)}
               onChange={e => this.handleChange()}
