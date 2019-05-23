@@ -1,6 +1,5 @@
 import React from 'react';
 import { Select } from 'antd';
-import ColumnSelectSelectorWidget from '@/components/JsonSchemaForm/Widgets/Column/ColumnSelectSelectorWidget';
 
 export default class SelectColumnWidget extends React.PureComponent {
   constructor(props) {

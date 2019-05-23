@@ -65,8 +65,12 @@ export default class AggregateTable extends React.PureComponent {
         onChange={v => {
           // check stauts.
           const nv = v
-            .map(i => (i.fields && i.fields.includes('*') ? { ...i, distinct: false } : i))
-            .map(i => (i.as ? i : { ...i, as: computeAs(i) }))
+            .map(
+              i =>
+                i.fields && i.fields.includes('*')
+                  ? { ...i, distinct: false }
+                  : { ...i, distinct: i.distinct || false }
+            )
             .map(i => {
               // handle special cases.
               if (i.aggregateFunction !== 'COUNT' && i.fields && i.fields.includes('*')) {
@@ -87,7 +91,16 @@ export default class AggregateTable extends React.PureComponent {
             name: 'aggregateFunction',
             title: '聚集函数',
             render: (v, item, onChange) => (
-              <Select placeholder="请选择" onChange={nv => onChange(nv)} value={v}>
+              <Select
+                placeholder="请选择"
+                onChange={nv =>
+                  onChange(
+                    nv,
+                    nv && item.fields && { as: computeAs({ ...item, aggregateFunction: nv }) }
+                  )
+                }
+                value={v}
+              >
                 {AGGS.map((s, i) => (
                   <Option key={i} value={s.value}>
                     {s.name}
@@ -110,11 +123,27 @@ export default class AggregateTable extends React.PureComponent {
                     schema={schema}
                     enableStar
                     multiple
-                    onChange={onChange}
+                    onChange={nv =>
+                      onChange(
+                        nv,
+                        nv && item.aggregateFunction && { as: computeAs({ ...item, fields: nv }) }
+                      )
+                    }
                   />
                 );
               } else {
-                return <SingleColumnSelectAsArray value={v} schema={schema} onChange={onChange} />;
+                return (
+                  <SingleColumnSelectAsArray
+                    value={v}
+                    schema={schema}
+                    onChange={nv =>
+                      onChange(
+                        nv,
+                        nv && item.aggregateFunction && { as: computeAs({ ...item, fields: nv }) }
+                      )
+                    }
+                  />
+                );
               }
             },
             span: 11,
@@ -128,7 +157,16 @@ export default class AggregateTable extends React.PureComponent {
                 {item.fields && item.fields.includes('*') ? (
                   <Checkbox checked={false} disabled />
                 ) : (
-                  <Checkbox checked={v} onChange={e => onChange(e.target.checked)} />
+                  <Checkbox
+                    checked={v}
+                    onChange={e =>
+                      onChange(
+                        e.target.checked,
+                        item.aggregateFunction &&
+                          item.fields && { as: computeAs({ ...item, distinct: e.target.checked }) }
+                      )
+                    }
+                  />
                 )}
               </div>
             ),
@@ -138,11 +176,7 @@ export default class AggregateTable extends React.PureComponent {
             name: 'as',
             title: '新列名',
             render: (v, item, onChange) => {
-              let value = v;
-              if (!value && item.aggregateFunction && item.fields) {
-                value = computeAs(item);
-              }
-              return <Input defaultValue={v} value={value} onChange={onChange} />;
+              return <Input defaultValue={v} value={v} onChange={e => onChange(e.target.value)} />;
             },
             span: 4,
           },

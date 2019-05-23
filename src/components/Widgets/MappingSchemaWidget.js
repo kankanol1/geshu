@@ -1,6 +1,6 @@
 import React from 'react';
 import { Select, Input } from 'antd';
-import ConfigurationTable from '@/components/JsonSchemaForm/UI/ConfigurationTable';
+import ConfigurationTable from '@/components/XWidgets/UI/ConfigurationTable';
 import styles from './WidgetStyles.less';
 
 class MappingSchemaWidget extends React.PureComponent {

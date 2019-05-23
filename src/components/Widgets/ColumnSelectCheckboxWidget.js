@@ -1,6 +1,6 @@
 import React from 'react';
 import { Input, Checkbox, Tag, Icon } from 'antd';
-import ConfigurationTable from '@/components/JsonSchemaForm/UI/ConfigurationTable';
+import ConfigurationTable from '@/components/XWidgets/UI/ConfigurationTable';
 
 // render object. {value: []}
 export default class ColumnSelectCheckboxWidget extends React.Component {

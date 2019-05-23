@@ -1,6 +1,6 @@
 import React from 'react';
 import { Input, Checkbox } from 'antd';
-import ConfigurationTable from '@/components/JsonSchemaForm/UI/ConfigurationTable';
+import ConfigurationTable from '@/components/XWidgets/UI/ConfigurationTable';
 
 export default class JoinColumnSelector extends React.PureComponent {
   constructor(props) {

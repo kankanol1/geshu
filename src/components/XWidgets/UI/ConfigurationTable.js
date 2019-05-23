@@ -1,5 +1,5 @@
 import React from 'react';
-import { Input, Row, Col, Checkbox, Button, Icon, Select } from 'antd';
+import { Input, Row, Col, Checkbox, Button, Icon, Select, Tooltip } from 'antd';
 import { Scrollbars } from 'react-custom-scrollbars';
 import PropTypes from 'prop-types';
 import styles from './ConfigurationTable.less';
@@ -28,9 +28,10 @@ export default class ConfigurationTable extends React.Component {
   }
 
   onChange(originItem, index, key) {
-    return v => {
+    return (v, newItem) => {
       const newData = this.state.data.map((item, i) => {
         if (i === index) {
+          if (newItem) return { ...item, [key]: v, ...newItem };
           return { ...item, [key]: v };
         } else {
           return item;
@@ -96,26 +97,30 @@ export default class ConfigurationTable extends React.Component {
         {orderSpan && (
           <Col span={orderSpan} style={{ textAlign: 'center' }}>
             {index !== 0 && (
-              <Icon
-                size="large"
-                className={styles.orderIcon}
-                type="caret-up"
-                onClick={e => {
-                  e.preventDefault();
-                  this.handleOrderChange(index, index - 1);
-                }}
-              />
+              <Tooltip title="调整顺序">
+                <Icon
+                  size="large"
+                  className={styles.orderIcon}
+                  type="caret-up"
+                  onClick={e => {
+                    e.preventDefault();
+                    this.handleOrderChange(index, index - 1);
+                  }}
+                />
+              </Tooltip>
             )}
             {index !== totalSize - 1 && (
-              <Icon
-                size="large"
-                className={styles.orderIcon}
-                type="caret-down"
-                onClick={e => {
-                  e.preventDefault();
-                  this.handleOrderChange(index, index + 1);
-                }}
-              />
+              <Tooltip title="调整顺序">
+                <Icon
+                  size="large"
+                  className={styles.orderIcon}
+                  type="caret-down"
+                  onClick={e => {
+                    e.preventDefault();
+                    this.handleOrderChange(index, index + 1);
+                  }}
+                />
+              </Tooltip>
             )}
           </Col>
         )}
