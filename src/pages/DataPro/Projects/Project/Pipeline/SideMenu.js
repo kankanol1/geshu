@@ -121,7 +121,22 @@ class SideMenu extends React.PureComponent {
         </div>
         <div
           className={styles.collapseBar}
-          onClick={() => this.setState({ collapse: !collapse })}
+          onClick={() =>
+            this.setState({ collapse: !collapse }, () => {
+              if (this.state.collapse) {
+                // set new width.
+                this.props.dispatch({
+                  type: 'dataproLayoutParam/updateSideMenu',
+                  payload: 30,
+                });
+              } else {
+                this.props.dispatch({
+                  type: 'dataproLayoutParam/updateSideMenu',
+                  payload: 210,
+                });
+              }
+            })
+          }
         />
       </div>
     );

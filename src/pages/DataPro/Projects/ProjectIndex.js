@@ -137,7 +137,7 @@ class ProjectIndex extends PureComponent {
     const { id, pane } = this.props.match.params;
 
     const { project } = this.props;
-    if (loading || !project || !project.id) return <PageLoading />;
+    if (loading || !project || project.id === undefined) return <PageLoading />;
     const renderConfig = getPaneConfig(project)[pane] || {};
 
     const { currentUser, collapsed, fullScreen } = this.props.global;

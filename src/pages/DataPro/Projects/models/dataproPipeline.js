@@ -15,6 +15,7 @@ export default {
     // pipeline canvas.
     canvas: undefined,
     status: undefined,
+    logs: ['hi', 'ac', 'noting'],
     contextmenu: {
       show: false,
       component: null,

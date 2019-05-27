@@ -21,6 +21,7 @@ import IOConfig from '../Configs/IO/Index';
 import DataInspector from './DataInspector';
 import SchemaInspector from './SchemaInspector';
 import SaveDataset from './SaveDataset';
+import LogView from './LogView';
 
 const keyUpListener = [];
 const keyDownLisener = [];
@@ -512,6 +513,7 @@ class WorkCanvas extends React.Component {
         </DraggableCore>
         {contextMenuView}
         {this.renderToolbarView()}
+        {<LogView />}
         {modifyingComponent && this.renderModifyingComponent(modifyingComponent)}
 
         {inspecting && (

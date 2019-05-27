@@ -1,3 +1,5 @@
+@import '~antd/lib/style/themes/default.less';
+
 .workCanvasWrapper {
   width: 100%;
   height: 100%;
@@ -26,7 +28,69 @@
   }
   & i:hover {
     color: white;
-    background: #666;
+    background: @primary-color;
+    cursor: pointer;
+  }
+}
+
+.logViewWrapper {
+  position: absolute;
+  right: 5px;
+  bottom: 0;
+  width: 100%;
+  padding-left: 210px;
+  -webkit-transition: 0.5s; /* Safari */
+  transition: 0.5s;
+}
+
+.logViewToolBar {
+  float: right;
+  background: white;
+
+  & i {
+    font-size: 20px;
+    padding: 6px;
+    display: inline-block;
+  }
+
+  & i:hover,
+  & .active {
+    color: white;
+    background: @primary-color;
+    cursor: pointer;
+  }
+}
+
+.logTitle {
+  line-height: 20px;
+  font-size: 16px;
+  color: @primary-color;
+}
+
+.logTitleWrapper {
+  line-height: 32px;
+  background: white;
+  border-bottom: 1px solid #eee;
+  padding: 0 10px;
+}
+
+.logView {
+  background: white;
+  width: 100%;
+  height: 400px;
+  overflow: auto;
+  padding: 10px;
+}
+
+.logOps {
+  display: inline-block;
+  margin-left: 30px;
+  & i {
+    padding-right: 10px;
+    line-height: 20px;
+  }
+  & i:hover {
+    color: @primary-color;
     cursor: pointer;
   }
 }

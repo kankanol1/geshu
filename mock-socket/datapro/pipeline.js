@@ -7,6 +7,7 @@ export default {
         ['RUNNING', 'CALCULATING', 'READY', 'EMPTY', 'ERROR', 'EMPTY'],
       ];
       let lastStatus = 0;
+      const logs = ['init finished.'];
       setInterval(() => {
         if (lastStatus === 0) {
           lastStatus = 1;
@@ -34,7 +35,8 @@ export default {
             status: sp[5],
           },
         };
-        const result = { status };
+        logs.push(`status updated at ${new Date()}`);
+        const result = { status, logs };
         server.send('/datapro/pipeline/status/0', {}, JSON.stringify(result));
       }, 10000);
     },
