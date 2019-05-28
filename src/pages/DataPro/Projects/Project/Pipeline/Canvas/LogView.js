@@ -1,5 +1,5 @@
 import React from 'react';
-import { Icon, Tooltip } from 'antd';
+import { Icon, Tooltip, Dropdown, Menu } from 'antd';
 import { connect } from 'dva';
 import moment from 'moment';
 import styles from './WorkCanvas.less';
@@ -13,18 +13,47 @@ class LogView extends React.PureComponent {
     show: false,
   };
 
+  handleFilterClicked = ({ key }) => {
+    this.props.dispatch({
+      type: 'dataproPipeline/setLogLevel',
+      payload: {
+        level: key,
+        id: this.props.projectId,
+      },
+    });
+  };
+
+  handleLogClear = () => {
+    this.props.dispatch({
+      type: 'dataproPipeline/clearLog',
+      payload: {
+        id: this.props.projectId,
+      },
+    });
+  };
+
   renderDetail = () => {
     const { logs } = this.props.dataproPipeline;
+    const menu = (
+      <Menu onClick={v => this.handleFilterClicked(v)}>
+        <Menu.Item key="all">全部</Menu.Item>
+        <Menu.Item key="info">INFO</Menu.Item>
+        <Menu.Item key="error">ERROR</Menu.Item>
+      </Menu>
+    );
+
     return (
       <React.Fragment>
         <div className={styles.logTitleWrapper}>
           <span className={styles.logTitle}>输出日志</span>
           <div className={styles.logOps}>
             <Tooltip title="过滤日志">
-              <Icon type="filter" />
+              <Dropdown overlay={menu} trigger={['click']}>
+                <Icon type="filter" />
+              </Dropdown>
             </Tooltip>
             <Tooltip title="清空">
-              <Icon type="stop" />
+              <Icon type="stop" onClick={() => this.handleLogClear()} />
             </Tooltip>
           </div>
         </div>
@@ -50,7 +79,7 @@ class LogView extends React.PureComponent {
           <Tooltip title={show ? '隐藏日志' : '显示日志'}>
             <Icon
               type="code"
-              className={`${show ? 'active' : ''}`}
+              className={(show && 'active') || undefined}
               onClick={() => this.setState({ show: !show })}
             />
           </Tooltip>

@@ -156,3 +156,17 @@ export async function publishPipeline(params) {
 export async function queryPipelinePublishMeta(params) {
   return request(`/api/datapro/projects/pipeline/publish?${stringify(params)}`);
 }
+
+export async function setLogLevel(params) {
+  return request('/api/datapro/projects/pipeline/log/setlevel', {
+    method: 'POST',
+    body: params,
+  });
+}
+
+export async function clearLog(params) {
+  return request('/api/datapro/projects/pipeline/log/clear', {
+    method: 'POST',
+    body: params,
+  });
+}

@@ -7,6 +7,8 @@ import {
   deleteOperator,
   runToOperator,
   invalidOperator,
+  setLogLevel,
+  clearLog,
 } from '@/services/datapro/pipelineAPI';
 
 export default {
@@ -105,6 +107,10 @@ export default {
       const { component } = payload;
       return { ...state, inspectingSchema: component };
     },
+
+    saveLogs(state, { payload }) {
+      return { ...state, logs: payload };
+    },
   },
 
   effects: {
@@ -179,6 +185,22 @@ export default {
           content: (response && response.message) || '执行出错，请重试',
         });
       }
+    },
+
+    *setLogLevel({ payload }, { put, call }) {
+      const response = yield call(setLogLevel, payload);
+      yield put({
+        type: 'saveLogs',
+        payload: response.logs,
+      });
+    },
+
+    *clearLog({ payload }, { put, call }) {
+      const response = yield call(clearLog, payload);
+      yield put({
+        type: 'saveLogs',
+        payload: response.logs,
+      });
     },
   },
 

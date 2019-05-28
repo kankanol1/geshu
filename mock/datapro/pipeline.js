@@ -918,6 +918,21 @@ export function publishPipeline(req, res) {
   }
 }
 
+export function setLogLevel(req, res) {
+  const { body } = req;
+  const { level } = body;
+  res.json({
+    sucess: true,
+    logs: [
+      {
+        time: new Date().getTime(),
+        message: `Level set to ${level}`,
+        level,
+      },
+    ],
+  });
+}
+
 export default {
   'GET /api/datapro/projects/pipeline/get': getPipeline,
   'GET /api/datapro/projects/pipeline/datasets': getAllDatasets,
@@ -942,4 +957,6 @@ export default {
   'GET /api/datapro/projects/pipeline/op/trans/preview': previewPreOp,
   'GET /api/datapro/projects/pipeline/publish': getPublishMeta,
   'POST /api/datapro/projects/pipeline/publish': publishPipeline,
+  'POST /api/datapro/projects/pipeline/log/clear': { success: true, logs: [] },
+  'POST /api/datapro/projects/pipeline/log/setlevel': setLogLevel,
 };

@@ -513,7 +513,7 @@ class WorkCanvas extends React.Component {
         </DraggableCore>
         {contextMenuView}
         {this.renderToolbarView()}
-        {<LogView />}
+        {<LogView projectId={projectId} />}
         {modifyingComponent && this.renderModifyingComponent(modifyingComponent)}
 
         {inspecting && (
