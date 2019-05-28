@@ -1,6 +1,7 @@
 import React from 'react';
 import { Icon, Tooltip } from 'antd';
 import { connect } from 'dva';
+import moment from 'moment';
 import styles from './WorkCanvas.less';
 
 @connect(({ dataproPipeline, dataproLayoutParam }) => ({
@@ -9,7 +10,7 @@ import styles from './WorkCanvas.less';
 }))
 class LogView extends React.PureComponent {
   state = {
-    show: true,
+    show: false,
   };
 
   renderDetail = () => {
@@ -29,10 +30,11 @@ class LogView extends React.PureComponent {
         </div>
         <div className={styles.logView}>
           {(logs || []).map((l, i) => (
-            <span key={i}>
-              {l}
-              <br />
-            </span>
+            <div key={i}>
+              <span className={styles.logTime}>{moment(l.time).format('HH:mm:DD')}</span>
+              <span className={styles.logLevel}>{l.level}</span>
+              <span className={styles.logMessage}>{l.message}</span>
+            </div>
           ))}
         </div>
       </React.Fragment>

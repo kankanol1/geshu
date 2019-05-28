@@ -377,6 +377,7 @@ const pipeline = {
     y: 0,
   },
   scale: 0.8,
+  logs: [],
 };
 
 let prepareOpConfig = [

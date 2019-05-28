@@ -15,7 +15,7 @@ export default {
     // pipeline canvas.
     canvas: undefined,
     status: undefined,
-    logs: ['hi', 'ac', 'noting'],
+    logs: [],
     contextmenu: {
       show: false,
       component: null,
@@ -32,11 +32,12 @@ export default {
 
   reducers: {
     savePipeline(state, { payload }) {
-      const { components, offset, scale, status } = payload;
+      const { components, offset, scale, status, logs } = payload;
       return {
         ...state,
         canvas: DataProCanvas.fromJson(components, offset.x, offset.y, scale),
         status,
+        logs,
       };
     },
 
@@ -86,8 +87,8 @@ export default {
 
     onStatusUpdated(state, { payload }) {
       const responseStr = payload.body;
-      const response = JSON.parse(responseStr);
-      return { ...state, ...response };
+      const { status, logs } = JSON.parse(responseStr);
+      return { ...state, status, logs: [...state.logs, ...logs] };
     },
 
     setInspectingComponent(state, { payload }) {

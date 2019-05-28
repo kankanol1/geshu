@@ -7,7 +7,6 @@ export default {
         ['RUNNING', 'CALCULATING', 'READY', 'EMPTY', 'ERROR', 'EMPTY'],
       ];
       let lastStatus = 0;
-      const logs = ['init finished.'];
       setInterval(() => {
         if (lastStatus === 0) {
           lastStatus = 1;
@@ -35,7 +34,15 @@ export default {
             status: sp[5],
           },
         };
-        logs.push(`status updated at ${new Date()}`);
+        const logs = [
+          {
+            id: 5,
+            level: 'INFO',
+            message:
+              '#** Will reset operator 0c69305f-59e5-4cec-81b4-40d8046032ea and all the operators after it.',
+            time: new Date().getTime(),
+          },
+        ];
         const result = { status, logs };
         server.send('/datapro/pipeline/status/0', {}, JSON.stringify(result));
       }, 10000);
