@@ -2,6 +2,7 @@ import React from 'react';
 import { Icon, Tooltip, Dropdown, Menu } from 'antd';
 import { connect } from 'dva';
 import moment from 'moment';
+import { DraggableCore } from 'react-draggable';
 import styles from './WorkCanvas.less';
 
 @connect(({ dataproPipeline, dataproLayoutParam }) => ({
@@ -11,6 +12,10 @@ import styles from './WorkCanvas.less';
 class LogView extends React.PureComponent {
   state = {
     show: false,
+    height: 200,
+    lastHeight: 0,
+    lastY: 0,
+    maxHeight: 0,
   };
 
   handleFilterClicked = ({ key }) => {
@@ -32,8 +37,27 @@ class LogView extends React.PureComponent {
     });
   };
 
+  handleResize = e => {
+    e.preventDefault();
+    e.stopPropagation();
+    // console.log('e', e);
+    const { lastHeight, lastY, maxHeight } = this.state;
+    this.setState({ height: Math.min(lastHeight + lastY - e.pageY, maxHeight) });
+  };
+
+  handleResizeStart = e => {
+    e.preventDefault();
+    e.stopPropagation();
+    this.setState({
+      lastHeight: this.state.height,
+      lastY: e.pageY,
+      maxHeight: document.documentElement.offsetHeight - 100,
+    });
+  };
+
   renderDetail = () => {
     const { logs } = this.props.dataproPipeline;
+    const { height } = this.state;
     const menu = (
       <Menu onClick={v => this.handleFilterClicked(v)}>
         <Menu.Item key="all">全部</Menu.Item>
@@ -43,8 +67,14 @@ class LogView extends React.PureComponent {
     );
 
     return (
-      <React.Fragment>
+      <div className={styles.logPaneWrapper} style={{ height: `${height}px` }}>
         <div className={styles.logTitleWrapper}>
+          <DraggableCore
+            onStart={e => this.handleResizeStart(e)}
+            onDrag={e => this.handleResize(e)}
+          >
+            <div className={styles.dragger} />
+          </DraggableCore>
           <span className={styles.logTitle}>输出日志</span>
           <div className={styles.logOps}>
             <Tooltip title="过滤日志">
@@ -66,7 +96,7 @@ class LogView extends React.PureComponent {
             </div>
           ))}
         </div>
-      </React.Fragment>
+      </div>
     );
   };
 
@@ -78,6 +108,7 @@ class LogView extends React.PureComponent {
         <div className={styles.logViewToolBar}>
           <Tooltip title={show ? '隐藏日志' : '显示日志'}>
             <Icon
+              // type={show ? "close-square": "code"}
               type="code"
               className={(show && 'active') || undefined}
               onClick={() => this.setState({ show: !show })}
