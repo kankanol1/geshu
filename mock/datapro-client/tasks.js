@@ -143,6 +143,35 @@ export function deleteTaskById(req, res) {
 export function configTaskSource(req, res) {
   const success = Math.random() * 10 > 5;
   if (success) {
+    const { body } = req;
+    const { id } = body;
+    tasks.forEach(i => {
+      if (i.id === parseInt(id, 10)) {
+        i.status = 'SOURCES_DEFINED'; // eslint-disable-line
+      }
+    });
+    res.json({
+      message: 'done',
+      success: true,
+    });
+  } else {
+    res.json({
+      message: '配置存储出错，请重试',
+      success: false,
+    });
+  }
+}
+
+export function configTaskSink(req, res) {
+  const success = Math.random() * 10 > 5;
+  if (success) {
+    const { body } = req;
+    const { id } = body;
+    tasks.forEach(i => {
+      if (i.id === parseInt(id, 10)) {
+        i.status = 'READY'; // eslint-disable-line
+      }
+    });
     res.json({
       message: 'done',
       success: true,
@@ -194,7 +223,7 @@ export default {
   },
   'POST /api/datapro/client/tasks/conf/template': configTemplate,
   'POST /api/datapro/client/tasks/conf/source': configTaskSource,
-  'POST /api/datapro/client/tasks/conf/sink': configTaskSource,
+  'POST /api/datapro/client/tasks/conf/sink': configTaskSink,
   'POST /api/datapro/client/tasks/conf/validate/source': validateTaskSource,
   'POST /api/datapro/client/tasks/conf/validate/sink': validateTaskSource,
 };
