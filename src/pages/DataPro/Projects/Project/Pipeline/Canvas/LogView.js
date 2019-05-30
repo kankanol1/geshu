@@ -40,7 +40,6 @@ class LogView extends React.PureComponent {
   handleResize = e => {
     e.preventDefault();
     e.stopPropagation();
-    // console.log('e', e);
     const { lastHeight, lastY, maxHeight } = this.state;
     this.setState({ height: Math.min(lastHeight + lastY - e.pageY, maxHeight) });
   };
@@ -61,8 +60,8 @@ class LogView extends React.PureComponent {
     const menu = (
       <Menu onClick={v => this.handleFilterClicked(v)}>
         <Menu.Item key="all">全部</Menu.Item>
-        <Menu.Item key="info">INFO</Menu.Item>
-        <Menu.Item key="error">ERROR</Menu.Item>
+        <Menu.Item key="info">简略</Menu.Item>
+        <Menu.Item key="error">仅错误</Menu.Item>
       </Menu>
     );
 

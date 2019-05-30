@@ -81,7 +81,7 @@ class DistinctTransformer extends React.PureComponent {
           validateErrors,
           formValues,
           'fields',
-          [],
+          schema.i1.map(i => i.name),
           '去重字段',
           <MultiColumnSelector schema={schema.i1} multiple />
         )}
