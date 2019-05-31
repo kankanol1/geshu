@@ -19,7 +19,7 @@ export function transformationDescription(type, configs) {
   // const sep = '\xa0\xa0\xa0\xa0';
   switch (type) {
     case 'SelectTransformation':
-      return configs.fields.join(',');
+      return (configs.fields || []).join(',');
     case 'RenameTransformation':
       return configs.fields.map((c, i) => `${c} -> ${configs.names[i]}`).join(',  ');
     case 'ConcatTransformation':

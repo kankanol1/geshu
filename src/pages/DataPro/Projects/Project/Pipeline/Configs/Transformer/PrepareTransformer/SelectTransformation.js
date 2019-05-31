@@ -5,6 +5,23 @@ import { addTransformation } from '@/services/datapro/pipelineAPI';
 import ColumnSelectCheckboxWidget from '@/components/Widgets/ColumnSelectCheckboxWidget';
 import WithSchema from './WithSchema';
 
+export function applySelectTransformation(id, opId, columns, onOk) {
+  addTransformation({
+    projectId: id,
+    id: opId,
+    config: { type: 'SelectTransformation', config: { fields: columns } },
+  }).then(response => {
+    if (response) {
+      if (response.success) {
+        message.info('添加成功');
+        onOk();
+      } else {
+        message.error(`添加失败:${response.message}，请重试`);
+      }
+    }
+  });
+}
+
 class SelectTransformation extends React.PureComponent {
   state = {
     formData: [],

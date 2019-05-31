@@ -7,11 +7,15 @@ import moment from 'moment';
 import key from 'keymaster';
 import { transformationTitle, transformationDescription } from './PrepareTransformer/Utils';
 import { deleteTransformation } from '@/services/datapro/pipelineAPI';
-import SelectTransformation from './PrepareTransformer/SelectTransformation';
+import SelectTransformation, {
+  applySelectTransformation,
+} from './PrepareTransformer/SelectTransformation';
 import RenameTransformation from './PrepareTransformer/RenameTransformation';
 import Rename1Transformation from './PrepareTransformer/Rename1Transformation';
 import Rename3Transformation from './PrepareTransformer/Rename3Transformation';
-import ConcatTransformation from './PrepareTransformer/ConcatTransformation';
+import ConcatTransformation, {
+  applyConcatTransformation,
+} from './PrepareTransformer/ConcatTransformation';
 import FillNullTransformation from './PrepareTransformer/FillNullTransformation';
 
 import styles from './PrepareTransformer.less';
@@ -19,6 +23,10 @@ import XDataTable from '@/components/XDataTable';
 
 const hasError = (index, err) => {
   return err && index < err.length && Object.keys(err[index]).length > 0;
+};
+
+const removeSystemColumns = schema => {
+  return schema.filter(i => !['___id___', '___message___', '___status___'].includes(i.name));
 };
 
 const TransformationMapping = {
@@ -44,15 +52,22 @@ const transformationList = [
 const singleColumnMenus = [
   {
     name: '保留此列',
-    value: 'SelectTransformation',
-    props: (selected, tableSchema) => ({ columns: selected }),
+    // value: 'SelectTransformation',
+    // Choose one: props: require render, action: perform immediately.
+    // props: (selected, tableSchema) => ({ columns: selected }),
+    action: (id, opId, selected, tableSchema, onOk) => {
+      applySelectTransformation(id, opId, selected, onOk);
+    },
   },
   {
     name: '保留其余列',
-    value: 'SelectTransformation',
-    props: (selected, tableSchema) => ({
-      columns: tableSchema.map(i => i.name).filter(i => !selected.includes(i)),
-    }),
+    // value: 'SelectTransformation',
+    action: (id, opId, selected, tableSchema, onOk) => {
+      const columns = removeSystemColumns(tableSchema)
+        .map(i => i.name)
+        .filter(i => !selected.includes(i));
+      if (columns.length > 0) applySelectTransformation(id, opId, columns, onOk);
+    },
   },
   {
     name: '列重命名',
@@ -64,15 +79,18 @@ const singleColumnMenus = [
 const multipleColumnMenus = [
   {
     name: '保留选中列',
-    value: 'SelectTransformation',
-    props: (selected, tableSchema) => ({ columns: selected }),
+    action: (id, opId, selected, tableSchema, onOk) => {
+      applySelectTransformation(id, opId, selected, onOk);
+    },
   },
   {
     name: '保留其余列',
-    value: 'SelectTransformation',
-    props: (selected, tableSchema) => ({
-      columns: tableSchema.map(i => i.name).filter(i => !selected.includes(i)),
-    }),
+    action: (id, opId, selected, tableSchema, onOk) => {
+      const columns = removeSystemColumns(tableSchema)
+        .map(i => i.name)
+        .filter(i => !selected.includes(i));
+      if (columns.length > 0) applySelectTransformation(id, opId, columns, onOk);
+    },
   },
   {
     name: '列重命名',
@@ -83,6 +101,9 @@ const multipleColumnMenus = [
     name: '列合并',
     value: 'ConcatTransformation',
     props: (selected, tableSchema) => ({ columns: selected }),
+    // action: (id, opId, selected, tableSchema) => {
+    //   applyConcatTransformation(id, opId, selected);
+    // },
   },
 ];
 
@@ -346,16 +367,29 @@ class PrepareTransformer extends React.Component {
           <div
             key={i}
             className={styles.menuItem}
-            onClick={() =>
-              this.setState({
-                contextMenu: { showing: false, y: 0, x: 0 },
-                addingComponent: l.value,
-                componentProps: l.props(
+            onClick={() => {
+              if (l.action) {
+                // perform action.
+                this.setState({ contextMenu: { showing: false, y: 0, x: 0 } });
+                const { id, opId } = this.props;
+                l.action(
+                  id,
+                  opId,
                   selectedHeaders,
-                  this.props.dataproPreviewTable.table.schema
-                ), // selected names
-              })
-            }
+                  this.props.dataproPreviewTable.table.schema,
+                  () => this.props.refresh()
+                );
+              } else {
+                this.setState({
+                  contextMenu: { showing: false, y: 0, x: 0 },
+                  addingComponent: l.value,
+                  componentProps: l.props(
+                    selectedHeaders,
+                    this.props.dataproPreviewTable.table.schema
+                  ), // selected names
+                });
+              }
+            }}
           >
             {l.name}
           </div>

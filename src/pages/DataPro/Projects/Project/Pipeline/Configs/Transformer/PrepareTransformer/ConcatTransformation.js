@@ -7,6 +7,28 @@ import WithSchema from './WithSchema';
 import { formItemWithError, expandValidateErrors } from '../../Utils';
 import styles from '../PrepareTransformer.less';
 
+export function applyConcatTransformation(id, opId, columns, onOk) {
+  const fieldsValue = {
+    fields: columns || [],
+    by: '',
+    as: (columns || []).join('_'),
+  };
+  addTransformation({
+    projectId: id,
+    id: opId,
+    config: { type: 'ConcatTransformation', config: fieldsValue },
+  }).then(response => {
+    if (response) {
+      if (response.success) {
+        message.info('添加成功');
+        onOk();
+      } else {
+        message.error(`添加失败:${response.message}，请重试`);
+      }
+    }
+  });
+}
+
 @Form.create()
 class ConcatTransformation extends React.PureComponent {
   state = {
