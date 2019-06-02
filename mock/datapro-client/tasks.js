@@ -186,7 +186,7 @@ export function configTaskSink(req, res) {
 
 export function validateTaskSource(req, res) {
   // const success = Math.random() * 10 > 5;
-  const success = true;
+  const success = false;
   if (success) {
     res.json({
       message: 'done',
@@ -194,8 +194,56 @@ export function validateTaskSource(req, res) {
     });
   } else {
     res.json({
-      message: '验证失败，请返回配置',
+      message: '验证失败',
       success: false,
+      data: [
+        {
+          id: 'id1',
+          name: 'xxx',
+          description: 'dscp1',
+          expected: [
+            { name: 'a1', type: 'String', nullable: false },
+            { name: 'a2', type: 'String', nullable: false },
+            { name: 'a3', type: 'String', nullable: false },
+            { name: 'a4', type: 'String', nullable: false },
+            { name: 'a5', type: 'String', nullable: false },
+          ],
+          given: [
+            { name: 'a1', type: 'String', nullable: false },
+            { name: 'a2', type: 'String', nullable: false },
+            { name: 'a3', type: 'String', nullable: false },
+            { name: 'a4', type: 'String', nullable: false },
+            { name: 'a5', type: 'String', nullable: false },
+          ],
+          mapping: [
+            { expected: 'a1', given: 'a1', compatible: 'OK' },
+            { expected: 'a2', given: 'a1', compatible: 'OK' },
+            { expected: 'a3', given: 'a1', compatible: 'WARN' },
+            { expected: 'a4', given: 'a1', compatible: 'ERROR' },
+            { expected: 'a5', given: 'a1', compatible: 'OK' },
+          ],
+        },
+        {
+          id: 'id2',
+          name: 'xxx909d',
+          description: 'dscp12',
+          expected: [
+            { name: 'a1', type: 'String', nullable: false },
+            { name: 'a2', type: 'String', nullable: false },
+            { name: 'a3', type: 'String', nullable: false },
+          ],
+          given: [
+            { name: 'a1', type: 'String', nullable: false },
+            { name: 'a2', type: 'String', nullable: false },
+            { name: 'a3', type: 'String', nullable: false },
+          ],
+          mapping: [
+            { expected: 'a1', given: 'a1', compatible: 'OK' },
+            { expected: 'a2', given: 'a1', compatible: 'OK' },
+            { expected: 'a3', given: 'a1', compatible: 'WARN' },
+          ],
+        },
+      ],
     });
   }
 }
