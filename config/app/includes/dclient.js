@@ -23,6 +23,11 @@ export default [
         component: './DClient/Tasks/Edit/CreateTask',
       },
       {
+        path: '/tasks/t/timer/:id',
+        hideInMenu: true,
+        component: './DClient/Tasks/Edit/SetTimer',
+      },
+      {
         path: '/tasks/t/:mode(edit|create)/:id/:pane?',
         hideInMenu: true,
         component: './DClient/Tasks/Edit/EditTask',

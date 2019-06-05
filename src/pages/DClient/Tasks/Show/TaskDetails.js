@@ -1,7 +1,7 @@
 import React from 'react';
 import moment from 'moment';
 import { connect } from 'dva';
-import { Tag, Button, Icon, Modal, message } from 'antd';
+import { Tag, Button, Icon, Modal, message, Tooltip } from 'antd';
 import router from 'umi/router';
 import { status } from '@/utils/translationUtils';
 import { runTaskById } from '@/services/dclient/taskAPI';
@@ -78,7 +78,19 @@ class TaskDetails extends React.Component {
       size: 'small',
     };
     const list = [
-      { key: '名称', value: task.name },
+      {
+        key: '名称',
+        value: (
+          <React.Fragment>
+            {task.cronEnabled && (
+              <Tooltip title="已设置定时执行">
+                <Icon style={{ marginRight: '10px' }} type="clock-circle" />
+              </Tooltip>
+            )}
+            <span>{task.name}</span>
+          </React.Fragment>
+        ),
+      },
       { key: '描述', value: task.description },
       {
         key: '状态',

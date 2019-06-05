@@ -17,9 +17,11 @@ for (let i = 0; i < 66; i += 1) {
     createdAt: moment(faker.date.past()),
     updatedAt: moment(faker.date.past()),
     labels: faker.random.words(parseInt(Math.random() * 10 + 1, 10)).split(' '),
-    status: 'CREATED',
+    status: 'READY',
     // rad1 < 3 ? 'TEMPLATE_DEFINED' : rad1 > 7 ? 'SOURCE_DEFINED' : rad1 < 5 ? 'READY' : 'CREATED',
     templateId: 1,
+    cronEnabled: true,
+    cronExpression: '0 19 12 1,21 * ?',
     sourceConfigs: {
       id1: {
         componentType: 'FileDataSource',
@@ -255,6 +257,18 @@ export function configTemplate(req, res) {
   });
 }
 
+export function updateCronConfig(req, res) {
+  const { body } = req;
+  const { id, enabled, expression } = body;
+  const p = tasks.filter(i => `${i.id}` === `${id}`);
+  p.cron_enabled = enabled;
+  p.cron_expression = expression;
+  res.json({
+    message: 'done',
+    success: true,
+  });
+}
+
 export default {
   'GET /api/datapro/client/tasks/list': getTaskList,
   'GET /api/datapro/client/tasks/get': getTaskById,
@@ -274,4 +288,5 @@ export default {
   'POST /api/datapro/client/tasks/conf/sink': configTaskSink,
   'POST /api/datapro/client/tasks/conf/validate/source': validateTaskSource,
   'POST /api/datapro/client/tasks/conf/validate/sink': validateTaskSource,
+  'POST /api/datapro/client/tasks/cron': updateCronConfig,
 };

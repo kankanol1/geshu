@@ -55,12 +55,20 @@ class TaskIndex extends React.Component {
               <Icon type="setting" /> 配置
             </Button>
             <Button
-              style={{ float: 'right' }}
+              style={{ float: 'right', marginLeft: '20px' }}
               onClick={() => {
                 this.setState({ updating: true });
               }}
             >
               <Icon type="edit" /> 编辑
+            </Button>
+            <Button
+              style={{ float: 'right' }}
+              onClick={() => {
+                router.push(`/tasks/t/timer/${id}`);
+              }}
+            >
+              <Icon type="clock-circle" /> 设置定时
             </Button>
             <div>任务详细</div>
           </React.Fragment>

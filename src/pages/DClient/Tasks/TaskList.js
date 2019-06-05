@@ -1,7 +1,7 @@
 import React, { PureComponent, Fragment } from 'react';
 import moment from 'moment';
 import { connect } from 'dva';
-import { Popconfirm, Card, Button, Divider, Tag } from 'antd';
+import { Popconfirm, Card, Button, Divider, Tag, Icon, Tooltip } from 'antd';
 import router from 'umi/router';
 import StandardTable from '@/components/StandardTable';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
@@ -32,6 +32,16 @@ class TaskList extends React.Component {
       {
         title: '名称',
         dataIndex: 'name',
+        render: (val, task) => (
+          <React.Fragment>
+            {task.cronEnabled && (
+              <Tooltip title="已设置定时执行">
+                <Icon style={{ marginRight: '10px' }} type="clock-circle" />
+              </Tooltip>
+            )}
+            <span>{task.name}</span>
+          </React.Fragment>
+        ),
       },
       // {
       //   title: '描述',
@@ -63,7 +73,7 @@ class TaskList extends React.Component {
               size="small"
               onClick={() => router.push(`/tasks/t/show/${record.id}`)}
             >
-              打开
+              查看
             </Button>
             <Divider type="vertical" />
             <a onClick={() => router.push(`/tasks/t/edit/${record.id}`)}> 编辑</a>

@@ -71,3 +71,10 @@ export async function validateTaskSink(params) {
     body: params,
   });
 }
+
+export async function configTaskCron(params) {
+  return request('/api/datapro/client/tasks/cron', {
+    method: 'POST',
+    body: params,
+  });
+}
