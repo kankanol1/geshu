@@ -89,7 +89,7 @@ class LogView extends React.PureComponent {
         <div className={styles.logView}>
           {(logs || []).map((l, i) => (
             <div key={i}>
-              <span className={styles.logTime}>{moment(l.time).format('HH:mm:DD')}</span>
+              <span className={styles.logTime}>{moment(l.time).format('HH:mm:ss SSS')}</span>
               <span className={styles.logLevel}>{l.level}</span>
               <span className={styles.logMessage}>{l.message}</span>
             </div>

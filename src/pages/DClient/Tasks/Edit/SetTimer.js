@@ -1,6 +1,5 @@
 import React from 'react';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
-import 'react-cron-builder/dist/bundle.css';
 import Link from 'umi/link';
 import { Card, Tabs, Button, Icon, Menu, Switch, Row, Col, message } from 'antd';
 import { connect } from 'dva';
