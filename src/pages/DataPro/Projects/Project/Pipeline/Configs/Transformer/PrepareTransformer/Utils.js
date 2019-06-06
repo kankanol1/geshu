@@ -10,6 +10,8 @@ export function transformationTitle(type) {
       return '列重命名(模式替换)';
     case 'ConcatTransformation':
       return '多列连接';
+    case 'ExtractDateTransformation':
+      return '解析日期';
     default:
       return 'UnTranslated';
   }
@@ -32,6 +34,10 @@ export function transformationDescription(type, configs) {
 
         return `连接列: ${cols} => ${as}`;
       }
+    case 'ExtractDateTransformation':
+      return `解析日期: ${configs.timestampExtractors
+        .map(i => `${i.field}(${i.pattern})`)
+        .join(',')}`;
     default:
       return 'UnTranslated';
   }

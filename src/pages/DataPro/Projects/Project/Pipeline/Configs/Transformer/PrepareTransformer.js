@@ -17,6 +17,7 @@ import ConcatTransformation, {
   applyConcatTransformation,
 } from './PrepareTransformer/ConcatTransformation';
 import FillNullTransformation from './PrepareTransformer/FillNullTransformation';
+import ExtractDateTransformation from './PrepareTransformer/ExtractDateTransformation';
 
 import styles from './PrepareTransformer.less';
 import XDataTable from '@/components/XDataTable';
@@ -36,6 +37,7 @@ const TransformationMapping = {
   Rename3Transformation,
   ConcatTransformation,
   FillNullTransformation,
+  ExtractDateTransformation,
 };
 /*
 值映射,修改列类型,增加列,列拆分,条件处理,格式化,数据提取,数学公式
@@ -46,6 +48,7 @@ const transformationList = [
   // { name: '列重命名（前后缀）', value: 'Rename1Transformation' },
   // { name: '列重命名（模式替换）', value: 'Rename3Transformation' },
   { name: '列合并', value: 'ConcatTransformation' },
+  { name: '解析日期', value: 'ExtractDateTransformation' },
   // { name: '补空值', value: 'FillNullTransformation' },
 ];
 
@@ -415,6 +418,7 @@ class PrepareTransformer extends React.Component {
           schema={schema || []}
           types={types || []}
           selectedHeaders={selectedHeaders}
+          errorMode={(data || []).filter(i => i.___message___).length > 0}
           // listeners:
           onHeaderContextMenu={(e, v) => this.handleHeaderRightClick(e, v.name)}
           onHeaderClick={(e, v) => this.handleHeaderClick(e, v.name)}

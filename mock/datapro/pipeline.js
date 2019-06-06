@@ -388,6 +388,12 @@ let prepareOpConfig = [
     },
   },
   {
+    config: {
+      timestampExtractors: [{ field: 'ddd', pattern: 'yyyy-MM-dd HH:mm:ss' }],
+    },
+    type: 'ExtractDateTransformation',
+  },
+  {
     type: 'ConcatTransformation',
     config: {
       as: 'a1',
@@ -767,7 +773,7 @@ export function getOperatorObjectiveSchema(req, res) {
 
 export function getOperatorSchema(req, res) {
   const fakeSchema = [
-    { name: 'a1', type: 'String', nullable: false },
+    { name: 'a1', type: 'Integer', nullable: false },
     { name: 'a2', type: 'String', nullable: false },
     { name: 'a3', type: 'String', nullable: false },
     { name: 'a4', type: 'String', nullable: false },
@@ -803,7 +809,7 @@ export function invalidOperator(req, res) {
 
 export function getTransformationSchema(req, res) {
   const fakeSchema = [
-    { name: 'a1', type: 'String', nullable: false },
+    { name: 'a1', type: 'Integer', nullable: false },
     { name: 'a2', type: 'String', nullable: false },
     { name: 'a3', type: 'String', nullable: false },
     { name: 'a4', type: 'String', nullable: false },
