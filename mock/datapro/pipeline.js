@@ -401,6 +401,15 @@ let prepareOpConfig = [
       fields: ['ac1', 'ac2'],
     },
   },
+  {
+    type: 'FillNullTransformation',
+    config: {
+      items: [
+        { field: 'x', function: 'OTHER', userDefined: 'xxi' },
+        { field: 'x2', function: 'MAX' },
+      ],
+    },
+  },
   ...fillArray(
     {
       type: 'ConcatTransformation',

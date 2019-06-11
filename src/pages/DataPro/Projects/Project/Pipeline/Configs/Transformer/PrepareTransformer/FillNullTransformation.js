@@ -14,26 +14,21 @@ class FillNullTransformation extends React.PureComponent {
   };
 
   handleOk() {
-    const { id, opId, configs, onOk, form } = this.props;
-    form.validateFields((err, fieldsValue) => {
-      // this.setState({ validateErrors: expandValidateErrors(err) });
-      if (!err) {
-        this.setState({ adding: true });
-        // submit
-        addTransformation({
-          projectId: id,
-          id: opId,
-          config: { type: 'ConcatTransformation', config: fieldsValue },
-        }).then(response => {
-          if (response) {
-            if (response.success) {
-              message.info('添加成功');
-              onOk();
-            } else {
-              message.error(`添加失败:${response.message}，请重试`);
-            }
-          }
-        });
+    const { id, opId, configs, onOk } = this.props;
+    const { formValues } = this.state;
+    // submit
+    addTransformation({
+      projectId: id,
+      id: opId,
+      config: { type: 'FillNullTransformation', config: { items: formValues } },
+    }).then(response => {
+      if (response) {
+        if (response.success) {
+          message.info('添加成功');
+          onOk();
+        } else {
+          message.error(`添加失败:${response.message}，请重试`);
+        }
       }
     });
   }

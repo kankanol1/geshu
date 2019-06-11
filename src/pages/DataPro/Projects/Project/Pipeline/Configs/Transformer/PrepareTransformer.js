@@ -49,7 +49,7 @@ const transformationList = [
   // { name: '列重命名（模式替换）', value: 'Rename3Transformation' },
   { name: '列合并', value: 'ConcatTransformation' },
   { name: '解析日期', value: 'ExtractDateTransformation' },
-  // { name: '补空值', value: 'FillNullTransformation' },
+  { name: '补空值', value: 'FillNullTransformation' },
 ];
 
 const singleColumnMenus = [
