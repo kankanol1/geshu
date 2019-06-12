@@ -73,7 +73,7 @@ class FilterTransformer extends React.Component {
             // back to pipeline.
             router.push(`/projects/p/pipeline/${id}`);
           } else {
-            message.error(response || response.message || 'error');
+            message.error((response && response.message) || '执行出错，请重试');
           }
           // TODO check return value.
         });

@@ -72,7 +72,7 @@ class SplitTransformer extends React.Component {
             // back to pipeline.
             router.push(`/projects/p/pipeline/${id}`);
           } else {
-            message.error(response.message);
+            message.error((response && response.message) || '执行出错，请重试');
           }
           // TODO check return value.
         });

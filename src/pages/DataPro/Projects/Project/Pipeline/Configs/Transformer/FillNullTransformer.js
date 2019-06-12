@@ -4,10 +4,10 @@ import router from 'umi/router';
 import PageLoading from '@/components/PageLoading';
 import { getOperatorSchema, configOperator } from '@/services/datapro/pipelineAPI';
 import { formItemWithError, expandValidateErrors } from '../Utils';
-import MultiColumnSelector from '@/components/Widgets/Column/MultiColumnSelector';
+import FillNullConfig from '@/components/Widgets/Composite/FillNullConfig';
 
 @Form.create()
-class DistinctTransformer extends React.PureComponent {
+class FillNullTransformer extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -80,10 +80,14 @@ class DistinctTransformer extends React.PureComponent {
           errors,
           validateErrors,
           formValues,
-          'fields',
-          schema.i1.map(i => i.name),
-          '去重字段',
-          <MultiColumnSelector schema={schema.i1} multiple />
+          'items',
+          [],
+          '列配置',
+          <FillNullConfig
+            schema={schema.i1 || []}
+            value={formValues}
+            onChange={v => this.setState({ formValues: v })}
+          />
         )}
         <div style={{ textAlign: 'center' }}>
           <Button type="primary" htmlType="submit" loading={false}>
@@ -95,4 +99,4 @@ class DistinctTransformer extends React.PureComponent {
   }
 }
 
-export default DistinctTransformer;
+export default FillNullTransformer;

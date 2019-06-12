@@ -346,6 +346,7 @@ export default {
   'operator.JoinTransformer': '连接',
   'operator.PrepareTransformer': '数据转换',
   'operator.DistinctTransformer': '去重',
+  'operator.FillNullTransformer': '补空值',
   // dataSinks
   'operator.HiveDataSink': 'Hive存储',
   'operator.FileDataSink': '文件存储',

@@ -193,6 +193,11 @@ const components = {
       type: 'Transformer',
       name: 'DistinctTransformer',
     },
+    {
+      code: 'FillNullTransformer',
+      type: 'Transformer',
+      name: 'FillNullTransformer',
+    },
   ],
   DataSink: [
     {
