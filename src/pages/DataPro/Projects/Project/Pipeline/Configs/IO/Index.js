@@ -28,6 +28,7 @@ const renderConfig = {
   AggregateTransformer: Input1Output1Config,
   DistinctTransformer: Input1Output1Config,
   FillNullTransformer: Input1Output1Config,
+  UnionTransformer: Input2Output1Config,
 
   // schema
   DefineSchemaSource: SchemaOutput1Config,

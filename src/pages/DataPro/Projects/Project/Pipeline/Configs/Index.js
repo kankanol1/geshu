@@ -17,6 +17,7 @@ import JDBCDataSource from './DataSource/JDBCDataSource';
 import DefineSchemaSource from './Schema/DefineSchemaSource';
 import SchemaMappingOperator from './Schema/SchemaMappingOperator';
 import FillNullTransformer from './Transformer/FillNullTransformer';
+import UnionTransformer from './Transformer/UnionTransformer';
 import TopBar from '../../../TopBar';
 import styles from './Index.less';
 
@@ -35,6 +36,7 @@ const registered = {
   AggregateTransformer,
   DistinctTransformer,
   FillNullTransformer,
+  UnionTransformer,
 
   // schema
   DefineSchemaSource,
