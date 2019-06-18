@@ -88,7 +88,7 @@ class UnionTransformer extends React.PureComponent {
         {formItemWithError(
           form,
           formItemProps,
-          {},
+          { valuePropName: 'checked' },
           errors,
           validateErrors,
           formValues,
@@ -108,7 +108,7 @@ class UnionTransformer extends React.PureComponent {
             errors,
             validateErrors,
             formValues,
-            'resultTag',
+            'tag',
             'tag',
             '标记位列名',
             <Input onChange={e => this.handleChange()} />
@@ -121,7 +121,7 @@ class UnionTransformer extends React.PureComponent {
             errors,
             validateErrors,
             formValues,
-            'tag.0',
+            'resultTags.0',
             'LEFT',
             '左数据集标记',
             <Input onChange={e => this.handleChange()} />
@@ -134,7 +134,7 @@ class UnionTransformer extends React.PureComponent {
             errors,
             validateErrors,
             formValues,
-            'tag.1',
+            'resultTags.1',
             'RIGHT',
             '右数据集标记',
             <Input onChange={e => this.handleChange()} />
