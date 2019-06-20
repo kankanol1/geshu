@@ -673,9 +673,14 @@ export default class StorageFilePicker extends React.PureComponent {
         ) : null}
         {moveModal ? (
           <MoveModal
+            // set mode & related info to move modal.
+            mode={this.props.mode}
+            view={this.props.view}
+            type={this.props.type}
+            folderType={this.props.folderType}
             visible={moveModal}
-            type={type}
-            projectId={project ? project.id : -1}
+            // type={type}
+            project={project}
             fileItem={this.state.fileItem}
             path={path}
             onCancel={() => this.setState({ moveModal: false })}

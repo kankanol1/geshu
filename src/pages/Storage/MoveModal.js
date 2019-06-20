@@ -4,7 +4,7 @@ import fetch from 'dva/fetch';
 import PropTypes from 'prop-types';
 import urls from '../../utils/urlUtils';
 import { wrapOptions } from '../../utils/request';
-import FilePickerForForm from './FilePickerForForm';
+import FilePickerForForm from './FilePickerForForm'; // eslint-disable-line
 
 const FormItem = Form.Item;
 
@@ -20,7 +20,7 @@ class MoveModal extends PureComponent {
   };
 
   handleSubmit = () => {
-    const { onOk, form, type, projectId, path, fileItem } = this.props;
+    const { onOk, form, type, project, path, fileItem } = this.props;
 
     form.validateFields((err, values) => {
       if (err) {
@@ -29,7 +29,7 @@ class MoveModal extends PureComponent {
       const formJson = {
         oldPath: {
           type,
-          projectId,
+          projectId: project.id || -1,
           path: fileItem.rpath,
         },
         newPath: {
@@ -133,7 +133,17 @@ class MoveModal extends PureComponent {
                   message: '请选择移动位置',
                 },
               ],
-            })(<FilePickerForForm />)}
+            })(
+              <FilePickerForForm
+                // pass the attribute to inner picker
+                enableMkdir
+                mode={this.props.mode}
+                view={this.props.view}
+                type={this.props.type}
+                folderType={this.props.folderType}
+                project={this.props.project}
+              />
+            )}
           </FormItem>
         </Form>
       </Modal>
@@ -147,7 +157,7 @@ MoveModal.propTypes = {
   onOk: PropTypes.func,
   type: PropTypes.string.isRequired,
   path: PropTypes.string.isRequired,
-  projectId: PropTypes.number.isRequired,
+  project: PropTypes.object.isRequired,
   fileItem: PropTypes.object.isRequired,
 };
 
