@@ -589,7 +589,7 @@ class WorkCanvas extends React.Component {
                       },
                     });
                   } else {
-                    message.info(response.message);
+                    message.error(response.message);
                   }
                 }
               });
