@@ -581,6 +581,13 @@ class WorkCanvas extends React.Component {
                       type: 'dataproPipeline/setRenaming',
                       payload: undefined,
                     });
+                    // fetch pipeline
+                    this.props.dispatch({
+                      type: 'dataproPipeline/loadPipeline',
+                      payload: {
+                        id: renaming.projectId,
+                      },
+                    });
                   } else {
                     message.info(response.message);
                   }
