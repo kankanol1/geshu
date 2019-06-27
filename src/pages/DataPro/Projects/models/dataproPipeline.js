@@ -30,6 +30,7 @@ export default {
     inspecting: undefined,
     savingDataset: undefined,
     inspectingSchema: undefined,
+    renaming: undefined,
   },
 
   reducers: {
@@ -110,6 +111,10 @@ export default {
 
     saveLogs(state, { payload }) {
       return { ...state, logs: payload };
+    },
+
+    setRenaming(state, { payload }) {
+      return { ...state, renaming: payload };
     },
   },
 

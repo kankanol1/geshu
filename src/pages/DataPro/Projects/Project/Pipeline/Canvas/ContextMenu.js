@@ -65,6 +65,15 @@ class ContextMenu extends React.PureComponent {
     const { dispatch, component, projectId } = this.props;
     const { id: operatorId } = component;
     switch (key) {
+      case 'rename':
+        dispatch({
+          type: 'dataproPipeline/setRenaming',
+          payload: {
+            id: operatorId,
+            projectId,
+          },
+        });
+        break;
       case 'runtothis':
         dispatch({
           type: 'dataproPipeline/runToOp',
@@ -136,6 +145,9 @@ class ContextMenu extends React.PureComponent {
         theme="light"
         onClick={v => this.handleDatasetClick(v)}
       >
+        <Menu.Item key="rename" style={style}>
+          重命名
+        </Menu.Item>
         <Menu.Item key="saveas" style={style}>
           存储为数据集
         </Menu.Item>
@@ -152,7 +164,7 @@ class ContextMenu extends React.PureComponent {
     );
   };
 
-  renderEmpotyDatasetMenu = () => {
+  renderNotCalculatedDatasetMenu = () => {
     return (
       <Menu
         style={{ width: 140 }}
@@ -160,6 +172,24 @@ class ContextMenu extends React.PureComponent {
         theme="light"
         onClick={v => this.handleDatasetClick(v)}
       >
+        <Menu.Item key="rename" style={style}>
+          重命名
+        </Menu.Item>
+      </Menu>
+    );
+  };
+
+  renderEmptyDatasetMenu = () => {
+    return (
+      <Menu
+        style={{ width: 140 }}
+        mode="vertical"
+        theme="light"
+        onClick={v => this.handleDatasetClick(v)}
+      >
+        <Menu.Item key="rename" style={style}>
+          重命名
+        </Menu.Item>
         <Menu.Item key="runtothis" style={style}>
           计算数据集
         </Menu.Item>
@@ -173,9 +203,9 @@ class ContextMenu extends React.PureComponent {
     if (['CALCULATED', 'CALCULATED_ERROR'].includes(componentStatus)) {
       return this.renderCalculatedDatasetMenu();
     } else if (componentStatus === 'EMPTY') {
-      return this.renderEmpotyDatasetMenu();
+      return this.renderEmptyDatasetMenu();
     }
-    return null;
+    return this.renderNotCalculatedDatasetMenu();
   }
 
   renderSchemaSourceMenu() {

@@ -959,6 +959,7 @@ export default {
   'POST /api/datapro/projects/pipeline/op/delete': deleteOperator,
   'GET /api/datapro/projects/pipeline/op/get': getPipelineOperator,
   'POST /api/datapro/projects/pipeline/op/run': runOperator,
+  'POST /api/datapro/projects/pipeline/op/rename': { success: true, message: '重命名成功' },
   'POST /api/datapro/projects/pipeline/op/inspect': inspectData,
   'POST /api/datapro/projects/pipeline/op/inspectschema': inspectSchema,
   'POST /api/datapro/projects/pipeline/op/schema': getOperatorSchema,

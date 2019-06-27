@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'dva';
-import { Spin } from 'antd';
+import { Spin, message } from 'antd';
 import { DraggableCore } from 'react-draggable';
 import key from 'keymaster';
 import NodeLayer from './NodeLayer';
@@ -22,6 +22,8 @@ import DataInspector from './DataInspector';
 import SchemaInspector from './SchemaInspector';
 import SaveDataset from './SaveDataset';
 import LogView from './LogView';
+import OPRenameModal from './OPRenameModal';
+import { renameOperator } from '@/services/datapro/pipelineAPI';
 
 const keyUpListener = [];
 const keyDownLisener = [];
@@ -409,6 +411,7 @@ class WorkCanvas extends React.Component {
       modifyingComponent,
       status,
       savingDataset,
+      renaming,
     } = this.props.dataproPipeline;
     const { mode, opMode } = this.state;
     if (canvas === undefined) return null;
@@ -559,6 +562,37 @@ class WorkCanvas extends React.Component {
                 },
               })
             }
+          />
+        )}
+        {renaming && (
+          <OPRenameModal
+            projectId={renaming.projectId}
+            id={renaming.id}
+            onOk={value => {
+              renameOperator({
+                id: renaming.id,
+                projectId: renaming.projectId,
+                name: value,
+              }).then(response => {
+                if (response) {
+                  if (response.success) {
+                    message.info(response.message);
+                    this.props.dispatch({
+                      type: 'dataproPipeline/setRenaming',
+                      payload: undefined,
+                    });
+                  } else {
+                    message.info(response.message);
+                  }
+                }
+              });
+            }}
+            onCancel={() => {
+              this.props.dispatch({
+                type: 'dataproPipeline/setRenaming',
+                payload: undefined,
+              });
+            }}
           />
         )}
       </div>

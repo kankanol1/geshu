@@ -27,6 +27,13 @@ export async function updateOperator(params) {
   });
 }
 
+export async function renameOperator(params) {
+  return request('/api/datapro/projects/pipeline/op/rename', {
+    method: 'POST',
+    body: params,
+  });
+}
+
 export async function addSourceOperator(params) {
   return request('/api/datapro/projects/pipeline/op/addsource', {
     method: 'POST',
