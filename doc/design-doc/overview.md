@@ -18,6 +18,14 @@ registry=http://repo.gl-data.com:8088/repository/npm-gldata-main/
 _auth=<authcode>
 email=<youremail>
 ```
+或
+```
+registry=http://repo.gl-data.com:8088/repository/npm-gldata-main-cn/
+_auth=<authcode>
+email=<youremail>
+```
+
+上述两个配置区别是：第一个使用npmjs.org作为上游npm仓库镜像，第二个使用国内淘宝的npm仓库。需根据网络环境自行选择。
 
 其中，`<youremail>`填入你的邮件地址，执行`echo -n 'yourusername:yourpassword' | openssl base64`，将输出字符串填入`<authcode>`。
 
