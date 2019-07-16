@@ -129,6 +129,19 @@ class FileDataSourceConfig extends React.Component {
           validateErrors={validateErrors}
           onChange={() => this.handleChange()}
         />
+        {formItemWithError(
+          form,
+          formItemProps,
+          {},
+          errors,
+          validateErrors,
+          currentRecord,
+          'format.limitNum',
+          1000,
+          '限制条数',
+          <Input onChange={e => this.handleChange()} />
+        )}
+
         <div>
           <div className={styles.rightFloatWrapper}>
             <Button type="primary" htmlType="submit" loading={loading}>

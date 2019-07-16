@@ -1,8 +1,8 @@
 import React from 'react';
 import { Form, Button, Input, Select, message, InputNumber } from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
-import PageLoading from '@/components/PageLoading';
 import router from 'umi/router';
+import PageLoading from '@/components/PageLoading';
 
 import { getOperatorSchema, configOperator } from '@/services/datapro/pipelineAPI';
 import { formItemWithError, expandValidateErrors } from '../Utils';
@@ -119,6 +119,7 @@ class JDBCDataSource extends React.Component {
           'IP地址',
           <Input onChange={e => this.handleChange()} />
         )}
+
         {formItemWithError(
           form,
           formItemProps,
@@ -230,7 +231,18 @@ class JDBCDataSource extends React.Component {
             '查询语句',
             <TextArea rows={5} onChange={e => this.handleChange()} />
           )}
-
+        {formItemWithError(
+          form,
+          formItemProps,
+          {},
+          errors,
+          validateErrors,
+          formValues,
+          'source.limitNum',
+          1000,
+          '条数限制',
+          <Input onChange={() => this.handleChange()} />
+        )}
         <div style={{ textAlign: 'center' }}>
           <Button type="primary" htmlType="submit" loading={false}>
             完成
