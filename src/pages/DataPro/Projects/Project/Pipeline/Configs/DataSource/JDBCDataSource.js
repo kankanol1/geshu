@@ -238,7 +238,7 @@ class JDBCDataSource extends React.Component {
           errors,
           validateErrors,
           formValues,
-          'source.limitNum',
+          'limitNum',
           1000,
           '条数限制',
           <Input onChange={() => this.handleChange()} />

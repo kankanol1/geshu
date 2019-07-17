@@ -136,7 +136,7 @@ class FileDataSourceConfig extends React.Component {
           errors,
           validateErrors,
           currentRecord,
-          'format.limitNum',
+          'limitNum',
           1000,
           '限制条数',
           <Input onChange={e => this.handleChange()} />
